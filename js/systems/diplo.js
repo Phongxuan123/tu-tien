@@ -27,7 +27,8 @@
       const da = a.kind === 'tong' && D.SECTS[a.id], db = b.kind === 'tong' && D.SECTS[b.id];
       if (!da || !db || !da.gt || !db.gt) return 0;
       let s = 0; for (let i = 0; i < 5; i++) s += Math.abs(da.gt[i] - db.gt[i]);
-      return Math.round(clamp((K.daoMid - s / 5) * K.daoK, -K.daoMax, K.daoMax));
+      const pen = Math.max(0, Math.abs((da.nhan || 0) - (db.nhan || 0)) - K.daoNhanFree) * K.daoNhanK; // chênh hành vi (nhan)
+      return Math.round(clamp((K.daoMid - s / 5) * K.daoK - pen, -K.daoMax, K.daoMax));
     },
     // Đọc một cặp, không khởi tạo gì. fresh = true nghĩa là cặp chưa từng có chuyện (thiện cảm là mặc định suy ra).
     peek(a, b) {

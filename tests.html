@@ -2344,6 +2344,11 @@ test('Tông môn hiện đại hóa (S2): giá trị, hành vi, công–tội, c
   ok(Math.abs(sum / n) < 8, 'đạo thống nền bình quân gần 0: ' + (sum / n).toFixed(1));
   ok(dp.daoBase(TT.fac.get('tc_thanh_van'), TT.fac.get('ts_kim_phong')) > 20, 'Thanh Vân và Kim Phong gần nhau về giá trị');
   ok(dp.daoBase(TT.fac.get('hs_liet_hoa'), TT.fac.get('hm_nhat_luan')) <= -40, 'Liệt Hỏa và Nhật Luân khắc nhau về giá trị');
+  // tông tàn nhẫn không được thành bạn của mọi tông chỉ vì giá trị gần nhau: Âm Hồn khắc đa số, kể cả các tông chính đạo
+  const vt = TT.fac.get('vt_am_hon'), others = T.filter(x => x !== vt), daoV = others.map(x => dp.daoBase(vt, x));
+  ok(daoV.filter(v => v > 0).length <= 2, 'Âm Hồn chỉ hợp tối đa hai tông: ' + daoV.join(','));
+  ok(daoV.reduce((p, q) => p + q, 0) / daoV.length < -10, 'Âm Hồn bình quân khắc các tông');
+  ['tc_thanh_van', 'dh_thuy_nguyet', 'nl_bach_thao'].forEach(i => ok(dp.daoBase(vt, TT.fac.get(i)) < 0, 'Âm Hồn khắc tông chính đạo ' + i));
   const tr = TT.fac.list('trieu')[0]; eq(dp.daoBase(tr, T[0]), 0, 'chỉ tông với tông mới có đạo thống nền (S2)');
   const a = TT.fac.get('tc_thanh_van'), b = TT.fac.get('ts_kim_phong'), pk = dp.peek(a, b); ok(pk.dao === dp.daoBase(a, b));
   ok(Math.abs(dp.total(a, b) - Math.max(-100, Math.min(100, pk.tinh + K.w.dao * pk.dao))) < 1e-9, 'tổng hợp có đạo thống');

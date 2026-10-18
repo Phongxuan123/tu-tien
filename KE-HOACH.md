@@ -248,7 +248,7 @@ Gợi ý thứ tự (bạn đổi tùy ý):
 - **2026-10-18** Kế hoạch S gộp (Quốc gia, Tông môn hiện đại theo nguyên mẫu quốc gia thật, Tôn giáo) và thêm nội dung sự kiện, chuỗi sự kiện, giáo sĩ, Thần Chức đạo vào Q mục 24; chờ duyệt.
 - **2026-10-18** Lộ trình triển khai tổng thể Q, R, S, E, F (13 đợt, hạ tầng, cổng chơi thử, chỉ tiêu); S1 giao diện gộp vào Biên niên sử; chờ duyệt rồi bắt đầu Đợt 0.
 - **2026-10-18** Đợt 0 (công cụ chạy kiểm thử, đường cơ sở) và **S1** (mạng quan hệ nhiều chiều, ma trận trong Biên niên sử) xong: 97 bài đạt, hash cơ sở trùng khít.
-- **2026-10-18** **S2** (Đợt 2) xong: thẻ tông, giá trị, công–tội, bộ máy tên cổ, đạo thống giữa các tông; 98 bài đạt; đo 40 hạt giống 52,2 chiến tranh mỗi 300 năm.
+- **2026-10-18** **S2** (Đợt 2) xong: thẻ tông, giá trị, công–tội, bộ máy tên cổ, đạo thống giữa các tông; 98 bài đạt; đo 40 hạt giống 58,9 chiến tranh, 8,8 diệt vong mỗi 300 năm (đã sửa lỗi Âm Hồn hợp mọi tông sau rà soát).
 - Sắp xếp lại file kế hoạch tổng này; nhật ký cũ chuyển nguyên văn vào `ke-hoach/_nhat-ky-goc.md`.
 
 ---
