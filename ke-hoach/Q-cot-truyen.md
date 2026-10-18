@@ -22,7 +22,7 @@
 | IV. Cốt truyện | 10 Kiến trúc tuyến, kỳ ngộ, lựa chọn; 11 Tuyến thân phận (T1 đến T14); 12 Tuyến thế giới (W1 đến W8); 13 Lồng nhau; 14 Sự kiện lẻ cũ | nội dung |
 | V. Triển khai | 15 Tác động qua lại; 16 Giao diện; 17 Cân bằng; 18 Kỹ thuật; 19 Các chặng làm | cách làm |
 | VI. Chốt và mở | 20 Đã chốt và câu hỏi còn mở; 21 Gợi ý bổ sung; 22 Nhật ký; 23 Kết quả | quyết định |
-| VII. Nội dung từ kế hoạch S | 24 Giáo sĩ (T15), Thần Chức đạo (T16), tuyến T17 đến T21, tuyến thế giới W13 đến W24, 12 cụm chuỗi (11 đến 22), 36 sự kiện nghịch lý của chín tông, sự kiện quốc gia, tôn giáo, hội, gia tộc | nội dung cho hệ Quốc gia, Tông môn hiện đại, Tôn giáo |
+| VII. Nội dung từ kế hoạch S | 24 Giáo sĩ (T15), Thần Chức đạo (T16), tuyến T17 đến T22 (T22 Thanh Xà hóa long), tuyến thế giới W13 đến W25 (W25 Đại chiến Phù Lệnh), 14 cụm chuỗi (11 đến 24), 36 sự kiện nghịch lý của chín tông, sự kiện quốc gia, tôn giáo, hội, gia tộc | nội dung cho hệ Quốc gia, Tông môn hiện đại, Tôn giáo |
 
 ### Thứ tự phụ thuộc (làm cái trên trước)
 ```
@@ -1017,7 +1017,7 @@ CỤM 10 ĐẠO TÂM
 - [ ] **Q6 Tuyến thế giới** W1 đến W8 nối kinh tế, dân số, hiệp ước, tông, báo; bí cảnh mới thay `dgevents`; chặng ghép và loại trừ.
 - [ ] **Q7 Tuyến thân phận còn lại** T4, T6 đến T14 (kèm Nghiệt duyên T13, T14, vòng quay riêng); hoàn thiện bảng giao nhau.
 - [ ] **Q9 (tùy chọn, sau khi chơi thử)** mở rộng nội dung (mục 21.5): AI viết lại chữ, AI sinh tuyến (khóa API của bạn, kiểm và kẹp số, rơi về kho trope khi lỗi).`r`n- [ ] **Q8 Hoàn thiện**: cân bằng toàn bộ, chơi thử trên máy tính và điện thoại, công cụ viết nội dung (mục 21), bài kiểm thử cuối.
-- [ ] **Q10 Nội dung hệ Quốc gia, Tông môn, Tôn giáo (mục 24):** làm sau các chặng S3 đến S5 của [S-quoc-gia-tong-mon-ton-giao](S-quoc-gia-tong-mon-ton-giao.md); đợt đầu khoảng 70 chặng/sự kiện (T15, T17, T18; W13, W16, W18, W20; cụm 11, 12, 15; 12 sự kiện nghịch lý), sau đó T16 Thần Chức, T19 đến T21, các cụm còn lại.
+- [ ] **Q10 Nội dung hệ Quốc gia, Tông môn, Tôn giáo (mục 24):** làm sau các chặng S3 đến S5 của [S-quoc-gia-tong-mon-ton-giao](S-quoc-gia-tong-mon-ton-giao.md); đợt đầu khoảng 70 chặng/sự kiện (T15, T17, T18; W13, W16, W18, W20; cụm 11, 12, 15, 23 (Thanh Xà) và 24 (Kẻ bị gạt, kèm W25); 12 sự kiện nghịch lý), sau đó T16 Thần Chức, T19 đến T21, các cụm còn lại.
 - **Song song (kế hoạch R)**: R1 đến R3 sau Q1.3; R4 sau Q2.
 
 ---
@@ -1241,7 +1241,7 @@ Theo ý bạn (2026-10-18): **giáo sĩ và Thần Chức đạo** đưa vào đ
 - **Móc:** W2, W3, W1 (cứu làng), tín ngưỡng dân gian của vùng (S 8.3), cụm 22.
 - **Cân bằng:** thần chức không cho vượt cảnh giới; tăng tốc có trần; mê muội có thang cảnh báo; tông và triều có thể chiêu hay trấn (T21, cụm 17).
 
-### 24.3 Năm tuyến thân phận mới cho hệ quốc gia (T17 đến T21)
+### 24.3 Sáu tuyến thân phận mới cho hệ quốc gia (T17 đến T22)
 Quy ước như mục 11: mỗi tuyến 5 chặng, kết cục 3 nhánh, người định mệnh, móc.
 
 **T17. Võ quan: "Cờ trên lưng ngựa"**
@@ -1279,7 +1279,14 @@ Quy ước như mục 11: mỗi tuyến 5 chặng, kết cục 3 nhánh, ngườ
 - *Người định mệnh:* Vua hay quyền thần, Tướng, Đồng nghiệp tu sĩ, Tông cũ.
 - *Móc:* phản phệ quốc vận, quốc sách, cụm 11, 17.
 
-### 24.4 Mười hai tuyến thế giới mới (W13 đến W24)
+**T22. Phò Long: "Thanh Xà hóa long"** *(chuỗi trọng điểm, xem 24.5a)*
+- *Mở khi:* nước bạn ở có quốc vận từ "Suy" trở xuống (W13), Luyện Khí trở lên, Đạo đức từ 0; gặp mầm thiên mệnh qua `linh_thu`, `tho_san` hoặc lời thầy tướng.
+- *Chặng (ứng với bốn giai đoạn):* (1) **Hóa Hình**: cứu và dạy một sinh linh rắn xanh làm người; (2) **Mãng**: giữ thú tính khi sức mạnh thô trỗi dậy, chọn đồng minh; (3) **Giao**: lũ lụt, long mạch, phản bội, thiên kiếp nhỏ, đứng trước lựa chọn giữa tình riêng và đại nghiệp; (4) **Long**: đăng đàn, thiên kiếp hóa long, nghịch chuyển quốc vận. Kèm **tuyến tình cảm** song song 8 nhịp.
+- *Kết cục:* Long khởi / Long vỡ / Long đi; kèm kết cục tình cảm (24.5a).
+- *Người định mệnh:* Thanh Xà, Thầy tướng, Thợ săn hoặc Tông sứ truy bắt, Quyền thần, Người thứ ba.
+- *Móc:* quốc vận (S 5.2), W13, W14, W17, cụm 3, 5, 11, 17, 22, R (đạo lữ).
+
+### 24.4 Mười ba tuyến thế giới mới (W13 đến W25)
 Quy ước như mục 12: tiến theo thế giới kể cả khi người chơi không làm gì; mỗi pha có 2 đến 4 móc.
 | Tuyến | Mở khi | Pha | Móc cho người chơi | Ghi vào thế giới |
 |---|---|---|---|---|
@@ -1295,10 +1302,11 @@ Quy ước như mục 12: tiến theo thế giới kể cả khi người chơi 
 | **W22 Đại hội liên tông** | chu kỳ 4 hoặc 10 năm, minh chủ hay triều bảo trợ (M5b) | báo danh → vòng loại → chung kết → trao giải và thương lượng ngầm | dự thi, làm trọng tài, buôn tin, cược | uy tín, mỏ, liên minh, ân oán |
 | **W23 Đại chiến liên tông** | hai tông thù, không nhượng, quan hệ `tinh` tới Tử thù | tuyên chiến → triều đứng ngoài hay nhúng → trận lớn → diệt, thôn tính, hòa | nhập quân, cứu đệ tử, giữ di vật, tố triều | diệt tông, chư hầu, tàn tích (W6), sổ ân oán |
 | **W24 Thiên hạ công ước vỡ** | một tu sĩ cao đánh phàm triều hoặc ngược lại bị triều đánh tu sĩ | vi phạm → liên minh tông + quân → truy → thỏa hiệp hoặc chiến tranh tổng | làm chứng, trốn, truy, hòa giải | công ước, quốc vận, phản phệ, thời đại |
+| **W25 Đại chiến Phù Lệnh** (chiến tranh tổng, bí mật Kim Phong) | dấu hiệu `kp.sec` theo hạt giống (năm 40 đến 120) | điềm báo → Phù Lệnh → chiến tuyến mở → phù hàng loạt → bước ngoặt → hậu chiến | điều tra, làm sứ, nhập ngũ, buôn phù, hộ vệ hay ám sát Lục Mặc | `rel2` đảo, chiến tranh tổng, quân vs tu sĩ, Kim Phong chia đôi hoặc cải cách, thời đại có thể đổi (chi tiết 24.5b) |
 - Mỗi tuyến sống **6 đến 36 tháng thế giới**; tối đa **2 tuyến thế giới mới** cùng chạy ở một vùng (và 2 tuyến thế giới cũ); không để nhịp hỏi vượt 6 lần mỗi phút.
 - **Báo:** mỗi pha sinh một tin trên Nhật báo (G), có tin đồn báo trước.
 
-### 24.5 Mười hai cụm chuỗi sự kiện nặng đô (cụm 11 đến 22)
+### 24.5 Mười bốn cụm chuỗi sự kiện nặng đô (cụm 11 đến 24; hai cụm trọng điểm 23, 24 viết riêng ở 24.5a, 24.5b)
 Quy ước như 14.2: các sự kiện nối bằng cờ cụm, cùng trỏ vào một nhân vật định mệnh. Mỗi cụm có **mầm** (sự kiện mở), **dồn ép**, **nút**, **kết**, và **nhánh rẽ**; thường dài **7 đến 10 sự kiện** trong 1 đến 3 thập kỷ.
 
 ```
@@ -1428,6 +1436,103 @@ CỤM 22  THẦN VÀ HƯƠNG HỎA  (Thần Chức đạo; nối T16)
 - **Sợi liên kết:** mỗi cụm có **cờ cụm** (`cum.vang`, `cum.co`, ...) và nhiều sự kiện trỏ vào cùng một nhân vật định mệnh; cụm 11, 17, 19 chồng lên nhau (tông thao túng triều, triều ép tông, tông thanh trừng).
 - **Hội tụ:** các cụm 11, 12, 16, 19 là **điểm rơi** của xương sống mốc 5 và 6: người chơi gặp lại mọi ân oán.
 
+### 24.5a Cụm 23 và tuyến T22: "Phò Long, Thanh Xà hóa long" (nghịch chuyển quốc vận)
+**Ý:** một chuỗi dài có **cốt truyện** và **tuyến tình cảm**, trong đó người chơi **phò tá một mầm thiên mệnh** (Thanh Xà) đi qua bốn giai đoạn **Hóa Hình → Mãng → Giao → Long** để **nghịch chuyển quốc vận** của một nước đang suy. Là chuỗi trọng điểm thử toàn bộ hệ S: quốc vận, long mạch, tông thao túng, hương hỏa, mạng quan hệ, tình cảm.
+
+**Nhân vật Thanh Xà:** một sinh linh rắn xanh mang **mầm thiên mệnh** của nước (ứng với `van` của nước đó). Bản chất **ẩn** lúc đầu: có thể là *yêu xà tu thành*, hoặc *hậu duệ long mạch bị phong ấn dưới hình rắn* (bốc ẩn theo hạt giống; người chơi chỉ đoán qua dấu). Tên người do hạt giống đặt (gọi tắt "Thanh"). **Giới của Thanh** bốc ngẫu nhiên hoặc theo thiên hướng bạn chọn ở nhịp tình cảm đầu; mọi xưng hô theo giới đã chọn.
+
+**Mở khi:** nước bạn ở có quốc vận "Suy" trở xuống (W13); bạn từ Luyện Khí; Đạo đức từ 0; gặp Thanh qua `linh_thu`/`tho_san`/lời thầy tướng (cụm 3, 5). Mỗi thế giới tối đa **1 chuỗi Thanh Xà** đang chạy.
+
+**Các chỉ số của chuỗi** (ẩn hoặc hiển thị bằng chữ):
+| Chỉ số | Ý nghĩa | Tăng nhờ | Giảm nhờ |
+|---|---|---|---|
+| `hoa` (0-100) | Mức hóa: <25 Hóa Hình, 25-50 Mãng, 50-80 Giao, 80+ Long | nuôi dưỡng (linh dược, linh khí), dân thờ (hương hỏa), chiến công, tin | bỏ bê, bị trấn áp, thú tính bùng, mất tin |
+| `tin` | Thanh tin bạn | giữ lời, bảo vệ, tôn trọng | lừa, bỏ rơi, dùng Thanh làm công cụ |
+| `tinh` | Tình cảm (không bắt buộc là tình yêu) | nhịp tình cảm, hy sinh, ở bên | ghen, hiểu lầm, chọn đại nghiệp bỏ người |
+| `thu` | Thú tính (cao: hung bạo; thấp: hiền nhưng yếu) | săn mồi, giận dữ, đói | dạy lễ nghĩa, tiết chế |
+| `uy` | Uy tín với nhân gian | cứu dân, giữ lời | giết bừa, bị đồn là yêu họa |
+- **Cửa giữa các giai đoạn:** muốn sang giai đoạn kế phải qua **một thử thách** (không nhảy cóc `hoa`).
+- **Thời lượng:** 25 đến 60 năm game (Giao dài nhất, 10 đến 25 năm); chạy theo thế giới kể cả khi bạn bỏ đi, nhưng không có bạn thì xác suất thành rất thấp.
+
+**Bốn giai đoạn**
+| Giai đoạn | `hoa` | Cốt truyện | Sự kiện (mã) | Thử thách (cửa) | Quốc vận |
+|---|---|---|---|---|---|
+| **1. Hóa Hình** (rắn thành người) | 0-25 | Một con rắn xanh bị thương chưa biết mình là ai; học làm người | `xa_gap` Rắn xanh bị thương (cứu / bỏ / bán); `xa_dem_hoa_hinh` Đêm đầu hóa hình, ký ức rối, hoảng loạn; `xa_hoc_lam_nguoi` Dạy ăn, nói, chữ, lễ (ba cách dạy: lễ nghĩa / tự do / sinh tồn, đổi `thu`, `tin`); `xa_bi_phat_hien` Làng, thợ săn, giáo sĩ nghi là yêu (giấu / bảo vệ / bỏ chạy); `xa_loi_thay_tuong` Lời mơ hồ "rắn xanh gặp nước thành rồng" | **Đêm bị vây**: thợ săn và thầy cúng bao vây; chọn chạy, nói thật, hay cầu cứu | không đổi (Suy tiếp tục) |
+| **2. Mãng** (đại mãng) | 25-50 | Sức mạnh thô, đói và huyết tính; bắt đầu có người theo | `xa_san_moi` Thanh săn thú lớn, quá tay (dạy tiết chế / thả / cho đi tiếp); `xa_dan_tho` Dân thờ như thần giữ làng (nhận / từ chối; nối cụm 22); `xa_quan_phiet` Tướng quân hay quân phiệt muốn thu phục (nhập quân / giấu / chống); `xa_tong_moi` Tông muốn thu về hoặc diệt như yêu họa (bảo vệ / giao nộp / thương lượng); `xa_doi_thu_tinh` Người thứ ba xuất hiện (ghen, hiểu lầm) | **Cơn đói**: thú tính bùng lên; `thu` và `tin` quyết định Thanh nuốt một người hay dừng lại | nhích +3 nhờ dân thờ |
+| **3. Giao** (giao long, chưa thành rồng) | 50-80 | Mạnh gần ngang tu sĩ cao; không còn quay lại làm rắn; bị mọi bên để mắt | `xa_lu_lon` Đại hạn hoặc hồng thủy, Thanh khống chế thủy mạch (cứu dân / bắt dân thần phục); `xa_cat_long_mach` Kẻ thù cắt long mạch (W14, cụm 11); `xa_phan_boi` Người thân cận phản (bạn đồng hành, phe cánh); `xa_kiep_nho` Lôi kiếp nhỏ của giao, bạn hộ pháp (có thể gánh một phần); `xa_chon_tinh_nghiep` Hôn ước chính trị vá vận hay giữ tình riêng | **Không còn đường lui**: tiếp tục thì thành người cai trị, dừng lại thì thành **thủy thần địa phương** (nối T16) | dao động mạnh (±10) theo lựa chọn; ngã ở đây thì quốc vận tụt Mạt |
+| **4. Long** (hóa rồng, nghịch chuyển) | 80-100 | Đăng đàn, thiên kiếp, quốc vận quay chiều | `xa_dang_dan` Nghi lễ tế trời, quốc giáo, tông và giáo hội tranh vị trí; `xa_kiep_long` Thiên kiếp hóa long (dùng **vòng quay vận mệnh** mục 7; bạn gánh một phần = thương nặng, giảm tu vi, hoặc chết); `xa_nghich_chuyen` **Sự kiện đỉnh**: quốc vận nhảy từ Suy/Mạt lên Thịnh hoặc Rồng bay; `xa_doi_thu_cuoi` Quyền thần hoặc tông cuối cùng; `xa_ket` Ba kết cục lớn và kết cục tình cảm | **Thiên kiếp hóa long** | +30 đến +50 nếu thành |
+
+**Tuyến tình cảm (8 nhịp song song, không bắt buộc là tình yêu)**
+| Nhịp | Mã | Nội dung | Lựa chọn chính |
+|---|---|---|---|
+| 1 | `xa_tc_1` Vết thương dưới trăng | Chăm sóc lần đầu; Thanh vừa sợ vừa tò mò | ở lại đêm / đặt thuốc rồi đi / mang về |
+| 2 | `xa_tc_2` Giọt nước mắt đầu tiên | Thanh lần đầu khóc khi hiểu "mất mát" | an ủi / để Thanh tự hiểu / dạy kiềm chế |
+| 3 | `xa_tc_3` Người đầu tiên Thanh gọi tên | Thanh gọi tên bạn; chọn **loại tình**: tình bạn, thầy trò, tri kỷ, tình yêu | đón nhận / giữ khoảng cách / chia sẻ bí mật |
+| 4 | `xa_tc_4` Người thứ ba | Hiểu lầm, ghen, công chúa hay hiệp khách xuất hiện | giải thích / im lặng / thử lòng |
+| 5 | `xa_tc_5` Thề dưới đình cũ | Lời thề (ở bên, không phản, cùng nhau vượt kiếp) | thề / thề nửa lời / từ chối |
+| 6 | `xa_tc_6` Hôn ước vá vận | Cần hôn nhân chính trị để vá vận; Thanh bị đề nghị gả hoặc cưới người khác | ủng hộ vì đại nghiệp / phản đối / cướp hôn lễ |
+| 7 | `xa_tc_7` Nếu phải chọn | Thanh bị đặt giữa bạn và quốc gia | khuyên chọn quốc / khuyên chọn tình / để Thanh tự quyết |
+| 8 | `xa_tc_8` Lời cuối bên sông | Kết quả sau thiên kiếp | xem kết cục tình cảm |
+- **Kết cục tình cảm:** (a) *Đạo lữ long phượng* (bạn thành đạo lữ hay hoàng hậu; nối R, con cái mang một chút huyết xà); (b) *Tri kỷ* (Thanh làm vua, bạn làm quốc sư, tình thành nghĩa, T21); (c) *Hy sinh* (một trong hai thế mạng để vượt kiếp); (d) *Long đi, người ở lại* (Thanh bay lên, để lại một mảnh long lân; truyền thuyết và miếu thờ, cụm 22); (e) *Đọa* (mất bạn thì Thanh hóa ma, W11-like, nước vỡ mệnh).
+- Nội dung giữ mức lãng mạn, **không** nội dung tình dục (đã chốt ở 21.5).
+
+**Kết cục tổng của chuỗi (nghịch chuyển quốc vận)**
+- **Long khởi:** thành công; nước vào vận Thịnh hoặc Rồng bay một đến hai thập kỷ; người phò tá được ghi sử, danh vọng lớn, **điểm khí vận** (mục 5.3) cộng.
+- **Long vỡ:** hóa long thất bại hoặc Thanh đọa; quốc vận tụt Mạt, mất mệnh (W17), người phò tá bị đồn là họa.
+- **Long đi:** Thanh rời nhân gian; quốc vận hồi một phần; thành truyền thuyết, nơi thờ.
+- **Thất bại sớm:** không ai phò thì Thanh chết, bị bán, hoặc thành yêu họa (W11) hay thủy thần địa phương.
+
+**Cơ chế ràng buộc và cân bằng**
+- **Phò thuận thiên giảm phản phệ 50%** cho hành động phục vụ Thanh (S 5.2); hại người vô tội thì tính nguyên mức.
+- Tông và quyền thần **phản ứng** theo mạng quan hệ (S Phần A): kẻ thao túng triều (cụm 11) sẽ chống; tông tà đạo hay thế tục có thể ủng hộ nếu có lợi.
+- **NPC cũng có thể phò** nếu bạn không: chuỗi vẫn chạy ở nền, xác suất thành thấp hơn nhiều và kết cục khác.
+- Quốc vận chỉ **nhảy mạnh ở giai đoạn Long**; các giai đoạn trước chỉ đổi nhẹ để không phá cân bằng.
+- Điểm khí vận thưởng nhỏ và có trần (mục 5.3).
+- **Hộp quyết định:** chỉ ở cửa giữa giai đoạn và các nhịp tình cảm; còn lại là sự kiện nền; bám trần nhịp 6 hộp mỗi phút.
+
+### 24.5b Cụm 24 và tuyến thế giới W25: "Kẻ bị gạt" và Đại chiến Phù Lệnh (bí mật của Kim Phong Môn)
+**Bí mật (thay cho "hồ sơ niêm kín" cũ):** một người từng **bị từ chối quyền học luyện chế phù** vì **không đạt "phù căn" chuẩn** (thiếu vài điểm, quy trình Kim Phong "không ngoại lệ") đã **cố gắng nhiều năm**, **âm thầm leo lên chức chưởng môn** bằng chính quy trình, rồi **phát động một cuộc chiến quy mô chưa từng có** (Đại chiến Phù Lệnh).
+
+**Nhân vật:** người bị gạt tên **Lục Mặc** (đổi được); phó thủ lâu năm **Tạ Quy**; trưởng lão già từng từ chối Lục Mặc và hối hận; **phe "Vô Chuẩn"** (những người bị Kim Phong gạt khác); đối thủ ngoài là các thế lực giữ **độc quyền phù** (xem 6.5 mục 3 và S).
+
+**Cách thể hiện trong thế giới:** Bí mật là **kịch bản thế giới ẩn** (`kp.sec`), bốc theo hạt giống: người bị gạt **đã là hoặc sẽ là** chưởng môn Kim Phong ở một thời điểm (năm 40 đến 120). Người chơi có thể **sống trước, giữa hoặc sau** cuộc chiến. Thế giới **tiến cả khi bạn không làm gì** (W25).
+
+**Quá khứ (hồi ký, khám phá bằng `tm_kp_3`):**
+1. Lục Mặc xin vào **Phù Các** (viện phù lục), thiếu vài điểm phù căn, bị từ chối đúng quy trình; xin thử lại, vẫn từ chối.
+2. Mười năm tự học lén, tự làm phù hỏng, bị chế giễu; tìm ra **Phù Hỗn Nguyên** (chế phù không cần phù căn, nhiều người hợp sức bằng trận) nhưng bị niêm "không đúng chuẩn".
+3. Im lặng, tuân thủ quy trình **hoàn hảo**; thăng qua Chấp Pháp Đường (nơi quy trình có quyền), âm thầm gom người bị gạt thành phe **Vô Chuẩn**.
+4. Dùng chính quy trình bầu chưởng môn để lên ngôi, **đúng luật**.
+
+**Chuỗi hiện tại (cụm 24):**
+```
+CỤM 24  KẺ BỊ GẠT  (Kim Phong Môn; nối W25, T17, T19, T20, S 6.5 mục 3)
+  [dấu hiệu] tm_kp_dau_hieu (Phù Các đóng cửa nhiều hơn, mua giấy chu sa hàng loạt, tuyển người "không đạt chuẩn")
+     ─> tm_kp_5 Hồ sơ niêm kín (tìm thấy hồi ký) ─> tm_kp_6 Lời kể của trưởng lão hối hận
+     ─> tm_kp_7 Phe Vô Chuẩn mời bạn (nhận | từ chối | nằm vùng)
+        ├─ giúp Lục Mặc ─> tm_kp_8 Phù Hỗn Nguyên (học phù không cần phù căn) ─> tm_kp_9 Phù Lệnh (công bố)
+        ├─ can ngăn từ bên trong ─> tm_kp_10 Nới chuẩn (đề nghị bỏ quy trình cứng) ─> [tông bác | chấp nhận một phần]
+        └─ tố ra ngoài ─> mạng quan hệ lung lay ─> các thế lực chuẩn bị chiến
+     ─> W25 Đại chiến Phù Lệnh
+  Kết: Lục Mặc chết trận | bị phản | được tha | thành thủ lĩnh phe mới
+  Người định mệnh: Lục Mặc, Tạ Quy, Trưởng lão hối hận, Người của phe Vô Chuẩn, Kẻ từ chối ngày xưa.
+  Ghi: `gt` Kim Phong (tu giảm), `nhan`, `an_oan` giữa Kim Phong và các thế lực giữ độc quyền phù.
+```
+
+**W25 Đại chiến Phù Lệnh (tuyến thế giới, quy mô chưa từng có)**
+| Pha | Nội dung | Móc cho người chơi | Ghi vào thế giới |
+|---|---|---|---|
+| 1. Điềm báo (3 đến 10 năm trước) | Dấu hiệu ở Kim Phong, tin đồn, giá giấy chu sa tăng | điều tra, nằm vùng, bán thông tin | tin Nhật báo, `tt` |
+| 2. Phù Lệnh | Công bố công thức phù cho mọi người; các thế lực độc quyền phản đối; tối hậu thư | làm sứ giả (T19), chọn phe | `rel2` đảo, hiệp ước vỡ |
+| 3. Chiến tuyến mở | Kim Phong cùng đồng minh và phe Vô Chuẩn đánh khắp nhiều vùng; **chiến tranh tổng** (6 đến 9 thế lực, nhiều vùng cùng lúc) | nhập ngũ (T17), cứu trợ, buôn phù, hộ tống | chiến tranh, dân số, giá, sát khí |
+| 4. Phù hàng loạt | Phù phổ cập: **quân phàm dùng phù** đánh tu sĩ (đảo ngược cân bằng S 5.4: bậc `trận` tăng, bảng lính tương đương hạ) | chế phù, chống phù, phá xưởng | quân vs tu sĩ, kỹ nghệ |
+| 5. Bước ngoặt | Lục Mặc đối mặt: phản tỉnh, bị phản bội, hay thắng quá lớn | thuyết phục, ám sát, hộ vệ | số phận Kim Phong |
+| 6. Hậu chiến | Hòa nghị; phù thành tri thức chung; Phù Các sụp hay cải tổ; Kim Phong chia đôi hay yếu đi | tái thiết, kể lại, nhận thưởng | `gt`, tông mới, thời đại có thể đổi |
+- **Quy mô:** kéo dài **10 đến 18 năm**; **6 đến 9 thế lực** tham chiến; ảnh hưởng **3 vùng trở lên**; dân vùng chiến sự giảm tối đa khoảng 25% (có trần); chỉ xảy ra **một lần mỗi thế giới**, không tính vào chỉ tiêu "52 chiến tranh mỗi 300 năm" (đo riêng).
+- **Không ai thuần ác hay thuần thiện:** Lục Mặc là nạn nhân của quy trình cứng, anh hùng của những người bị gạt, và kẻ gây ra thảm họa; các thế lực độc quyền vừa bảo vệ chuẩn chất lượng vừa giữ đặc quyền.
+- **Ba kết cục của bạn:** *Ngăn được* (nới chuẩn, chiến tranh nhỏ hoặc không xảy ra, Kim Phong cải cách nhẹ); *Không ngăn* (đại chiến diễn ra theo thế giới); *Tiếp tay* (đại chiến thắng lợi theo hướng phe Vô Chuẩn, phù thành phổ cập sớm).
+- **Kỹ thuật:** cần mở rộng engine chiến tranh để có **chiến tranh tổng** (đa bên, nhiều chiến tuyến, nhiều năm; xem S mục 5.6); `kp.sec = { ten, giai_doan, nam_phat_dong, chuan_bi }` lưu thế giới.
+- **Nhịp:** cụm 24 chỉ mở khi dấu hiệu thật có (tin Nhật báo, Phù Các đóng cửa...), không bốc ngẫu nhiên đơn.
+
 ### 24.6 Bốn sự kiện nghịch lý của mỗi tông (36 sự kiện, "tình thế khó xử" + "bí mật")
 Mỗi sự kiện: tình huống → 3 lựa chọn (có giá) → hệ quả lên `gt`, `nhan`, chỉ số, sổ công–tội. Mở khi bạn là đệ tử của tông, hoặc gần tông, hoặc nghe tin.
 
@@ -1446,7 +1551,7 @@ Mỗi sự kiện: tình huống → 3 lựa chọn (có giá) → hệ quả l�
 **Kim Phong Môn**
 - `tm_kp_1` **Quy trình hay lương tâm**: lệnh thu hồi kiếm lỗi của dân theo quy trình, tốn dân. Thi hành | làm trái cứu dân | báo trên.
 - `tm_kp_2` **Mẻ kiếm chuẩn**: đồng môn gian lận để cứu mẻ. Tố | che | sửa giúp.
-- `tm_kp_3` **Hồ sơ niêm kín** *(bí mật)*: tìm thấy hồ sơ bi kịch cũ. Mở | đưa trưởng lão | đốt.
+- `tm_kp_3` **Hồ sơ niêm kín** *(bí mật)*: tìm thấy hồ sơ về người bị Phù Các từ chối nhiều năm trước (mở cụm 24 và W25, xem 24.5b). Mở | đưa trưởng lão | đốt.
 - `tm_kp_4` **Giữ hiệp ước dù thiệt**: giữ | lách | phá.
 
 **Bách Thảo Môn**
@@ -1536,7 +1641,7 @@ Mỗi sự kiện: tình huống → 3 lựa chọn (có giá) → hệ quả l�
 - `gtc_chia_chi` **Gia tộc tách chi**: về phe nào.
 
 ### 24.10 Khối lượng, nhịp, kỹ thuật
-- **Khối lượng nội dung thêm:** T15 đến T21: 7 tuyến x 5 chặng = 35 chặng gốc, cộng biến thể từ bảng giao nhau khoảng 28; W13 đến W24: 12 tuyến x (4 pha + 3 móc) = 84; sự kiện: 36 (tông) + 18 (quốc gia) + 18 (tôn giáo) + 8 (hội, gia tộc) = 80; cụm chuỗi 12 cụm x ~8 sự kiện = ~96 (một phần trùng với các sự kiện lẻ). Tổng **khoảng 260 chặng/sự kiện**; đợt đầu chọn khoảng **70**.
+- **Khối lượng nội dung thêm:** T15 đến T22: 8 tuyến x 5 chặng = 40 chặng gốc (T22 có thêm 8 nhịp tình cảm), cộng biến thể từ bảng giao nhau khoảng 32; W13 đến W25: 13 tuyến x (4 pha + 3 móc) = 91; sự kiện: 36 (tông) + 18 (quốc gia) + 18 (tôn giáo) + 8 (hội, gia tộc) = 80; cụm chuỗi 14 cụm x ~8 sự kiện = ~112 (một phần trùng với các sự kiện lẻ). Tổng **khoảng 300 chặng/sự kiện**; đợt đầu chọn khoảng **70**.
 - **Đợt đầu đề xuất để chơi thử:** T15 (Giáo sĩ), T17 (Võ quan), T18 (Nho sĩ); W13, W16, W18, W20; cụm 11, 12, 15; 12 sự kiện nghịch lý (bốn tông: Thanh Vân, Kim Phong, Liệt Hỏa, Âm Hồn); T16 (Thần Chức), T19 đến T21 và các cụm còn lại làm sau.
 - **Bảng giao nhau (mục 13.5) mở rộng:** W13 gõ cửa T17, T18, T19, T21; W16 gõ T17, T21, T7, T1; W18 gõ T15, T17, T19, T6; W20 gõ T15, T16, T2; W21 gõ T2, T20, T7; W22 gõ T2, T19, T5.
 - **Nhịp:** các sự kiện lẻ của hệ này chỉ bốc khi điều kiện hệ thật xảy ra (không ngẫu nhiên đơn); tối đa 1 chặng nóng, hàng đợi 3; mọi chặng có hạn; bám ngân sách K của mục 14.4.

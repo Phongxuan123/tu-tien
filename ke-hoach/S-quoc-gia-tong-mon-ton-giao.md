@@ -182,6 +182,13 @@ CL      = q x phẩm x (1 + 0,5 x trận) x (1 + 0,3 x sat/100) x (0,7 + 0,6 x q
 8. **Thiên hạ đại thế (thấp):** thôn tính được 2 vùng thì có danh "bá chủ"; thống nhất thiên hạ cực khó, gắn thời đại.
 9. **Lễ nghi, tế lễ (thấp):** tế trời, tế long mạch, đổi niên hiệu; sự kiện định kỳ cộng quốc vận hoặc lộ điềm báo.
 
+### 5.6 Chiến tranh tổng (đại chiến chưa từng có)
+Engine hiện tại có chiến tranh hai bên (kèm đồng minh), 1 đến 8 năm, tối đa vài cuộc cùng lúc. Một số biến cố cần **chiến tranh tổng**:
+- Đa bên (6 đến 9 thế lực chia hai hay ba phe), **nhiều chiến tuyến** (3 vùng trở lên), kéo dài **10 đến 18 năm**, chia **pha** (điềm báo, tối hậu thư, chiến tuyến mở, bước ngoặt, hòa nghị, hậu chiến).
+- Có thể **đổi luật chơi**: ví dụ Đại chiến Phù Lệnh (Q 24.5b) làm phù phổ cập, quân phàm dùng phù chống tu sĩ (bậc `trận` tăng, bảng lính tương đương ở 5.4 hạ).
+- Chỉ xảy ra **tối đa một lần mỗi thế giới** (kịch bản ẩn bốc theo hạt giống), **không tính vào chỉ tiêu** 52 chiến tranh và 10 diệt vong mỗi 300 năm (đo riêng); dân vùng chiến sự giảm có trần (khoảng 25%).
+- Kết thúc bằng hòa nghị lớn, có hậu quả dài (tông chia đôi, thời đại đổi, hiệp ước mới).
+
 ---
 
 ## 6. Phần C: Tông môn hiện đại hóa
@@ -229,6 +236,7 @@ Giữ **4 đường M1** và thêm thân thể; mỗi cơ quan là công trình 
 | **Đan Các** | Viện nghiên cứu dược và đan | Đề tài, công pháp mới, quỹ nghiên cứu |
 | **Khí Các** | Viện chế tác, kỹ nghệ | Xưởng, khí giới, sản xuất hàng loạt, tiêu chuẩn |
 | **Trận Các** | Viện trận pháp | Thiết kế đại trận hộ sơn, quân trận |
+| **Phù Các** | Viện phù lục | Dòng "Chuẩn phù" (Kim Phong, cần phù căn) và "Lôi phù" (Tử Lôi); chế phù, kiểm định, độc quyền công thức. Cần xem lại `sect: 'ld_tu_loi'` của nghề bùa trong `craft.js` khi làm |
 | **Tàng Kinh Các** | Học cung và thư khố | Đào tạo, tuyển chọn, kiểm duyệt hay cởi mở |
 | **Ngoại Vụ Đường** | Ngoại giao và thương vụ | Đại sứ, thương hội, hộ chiếu cửa ải |
 | **Tài Các** | Kinh tài: kho, thuế, ngân phiếu | Phát hành ngân phiếu tông, quyên góp, nợ, quỹ tương trợ |
@@ -283,11 +291,11 @@ Mỗi nguyên mẫu chỉ là **cảm hứng thiết kế về cấu trúc**; tr
 - *Thể chế và kinh tế:* tập quyền theo quy trình, pháp quyền rõ; công nghiệp luyện kiếm quy mô lớn.
 - *Quân sự và khoa học:* thường trực tinh nhuệ, kiếm trận chuẩn mực; Trận Các và Khí Các mạnh.
 - *Văn hóa:* trọng kỷ luật, tay nghề, tiêu chuẩn; ký ức một cuộc chiến cũ làm tông thận trọng với "trật tự không giới hạn".
-- *Cơ quan đặc trưng:* Trận Các, Khí Các, Chấp Pháp Đường, Tài Các, Tàng Kinh Các.
+- *Cơ quan đặc trưng:* Trận Các, Khí Các, **Phù Các** (viện phù lục, giữ dòng "Chuẩn phù" cần phù căn), Chấp Pháp Đường, Tài Các, Tàng Kinh Các.
 - *Công:* kỹ thuật và kiếm trận chuẩn mực; pháp quyền rõ, giữ lời hiệp ước; sản phẩm bền giúp dân đồng bằng.
 - *Tội:* quan liêu cứng, coi quy trình hơn con người; từng dùng "trật tự" gây họa; hà khắc với người không đạt chuẩn.
-- *Bí mật:* một trưởng lão thi hành đúng quy trình dẫn tới bi kịch, hồ sơ bị niêm kín.
-- *Khó xử:* tuân lệnh hay theo lương tâm.
+- *Bí mật (bạn chốt):* một người từng **bị từ chối quyền luyện chế phù** vì không đạt "phù căn" chuẩn dù đã **cố gắng nhiều năm**, **âm thầm lên chức chưởng môn** bằng chính quy trình, rồi **phát động cuộc chiến quy mô chưa từng có** (Đại chiến Phù Lệnh). Chi tiết ở Q mục 24.5b (cụm 24, W25).
+- *Khó xử:* tuân lệnh hay theo lương tâm; giữ chuẩn để bảo đảm chất lượng hay mở cửa cho người bị gạt.
 
 **4. Bách Thảo Môn (kiểu quốc gia đông dân, đa dạng).**
 - *Thể chế và kinh tế:* hội đồng phân tán nhiều phái; thị trường dược, thương mại thảo mộc.
@@ -511,7 +519,7 @@ Thứ tự theo phụ thuộc: **mạng quan hệ trước**, vì quốc gia, t�
 - [ ] **S3 Quốc vận và nho khí (5.1 đến 5.3):** khối `nat` cho 9 triều, nguồn tăng giảm, thiên mệnh, phản phệ, long mạch, văn vị cá nhân, tin tức/biên niên. Đo cân bằng bật/tắt.
 - [ ] **S4 Chỉ số đa chiều và chính sách của tông (6.2):** bảy chỉ số, năm chính sách, `power` suy ra có hệ số bù, thanh trừng (hiếm); đo cân bằng.
 - [ ] **S5 Tôn giáo lõi (Phần D, trừ giáo sĩ/Thần Chức):** chín tín ngưỡng, ba ô mỗi vùng và quy tắc lồng, nơi thờ tự và đại điện, giáo hội và hương hỏa, quốc giáo của thế lực, tín ngưỡng cá nhân (giữ giới, nghi lễ, hành hương), sử ký và tin tức.
-- [ ] **S6 Quân đội và quân trận (5.4):** quân lực, phẩm, sát khí, tướng, trận, bảng lính tương đương; thay `strength`; đo lại số chiến tranh; bản sắc quân 9 nước.
+- [ ] **S6 Quân đội, quân trận và chiến tranh tổng (5.4, 5.6):** quân lực, phẩm, sát khí, tướng, trận, bảng lính tương đương; thay `strength`; engine chiến tranh tổng cho Đại chiến Phù Lệnh; đo lại số chiến tranh (tách đại chiến); bản sắc quân 9 nước.
 - [ ] **S7 Triều chính, quốc sách, quốc giáo (5.5):** hoàng quyền, kế vị, thế gia, quốc sách với tu sĩ, quốc giáo.
 - [ ] **S8 M5b liên tông trên nền S1 đến S7 (Phần E):** tông ↔ triều (quốc sư, cung phụng, thao túng), minh ước liên tông, giải đấu, đại chiến có hậu quả, Thiên hạ công ước.
 - [ ] **S9 Người chơi vào cuộc:** nhập ngũ, nho quan, sứ giả, cảnh báo phản phệ, nhiệm vụ thế lực, tín nhiệm (F5); gắn nội dung Q mục 24 (tuyến, sự kiện, chuỗi).
@@ -554,4 +562,5 @@ Thứ tự theo phụ thuộc: **mạng quan hệ trước**, vì quốc gia, t�
 
 ## 14. Nhật ký làm việc
 - 2026-10-18 (bản 1, tách S và T): đọc code và kế hoạch cũ, viết S (quốc gia) và T (tông hiện đại, tôn giáo).
+- 2026-10-18 (bản 3): theo ý bạn thêm chuỗi **Thanh Xà hóa long** (T22, cụm 23: nghịch chuyển quốc vận, 4 giai đoạn Hóa Hình, Mãng, Giao, Long, có tuyến tình cảm) vào Q mục 24.5a; đổi bí mật Kim Phong thành "kẻ bị gạt luyện phù" và đại chiến Phù Lệnh (cụm 24, W25, Q 24.5b); thêm Phù Các và chiến tranh tổng (5.6) vào S.
 - 2026-10-18 (bản 2, gộp): theo ý bạn gộp S và T thành một bản; giữ tên cổ trang cho cơ quan; đổi nguyên mẫu Âm Hồn Giáo (hãn quốc kiểu Mông Cổ, nghiêng ác) và Tử Lôi Quan (đảo quốc kiểu Anh); chín tông làm sâu; gia tộc, thương hội, vương triều theo nguyên mẫu; tôn giáo dùng tên thật, 9 tín ngưỡng, 3 ô mỗi vùng, quy tắc lồng, nơi thờ tự; giáo sĩ, Thần Chức đạo, sự kiện và chuỗi sự kiện chuyển sang Q mục 24. Chưa code.
