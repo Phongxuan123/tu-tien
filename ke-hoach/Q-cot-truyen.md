@@ -22,6 +22,7 @@
 | IV. Cốt truyện | 10 Kiến trúc tuyến, kỳ ngộ, lựa chọn; 11 Tuyến thân phận (T1 đến T14); 12 Tuyến thế giới (W1 đến W8); 13 Lồng nhau; 14 Sự kiện lẻ cũ | nội dung |
 | V. Triển khai | 15 Tác động qua lại; 16 Giao diện; 17 Cân bằng; 18 Kỹ thuật; 19 Các chặng làm | cách làm |
 | VI. Chốt và mở | 20 Đã chốt và câu hỏi còn mở; 21 Gợi ý bổ sung; 22 Nhật ký; 23 Kết quả | quyết định |
+| VII. Nội dung từ kế hoạch S | 24 Giáo sĩ (T15), Thần Chức đạo (T16), tuyến T17 đến T21, tuyến thế giới W13 đến W24, 12 cụm chuỗi (11 đến 22), 36 sự kiện nghịch lý của chín tông, sự kiện quốc gia, tôn giáo, hội, gia tộc | nội dung cho hệ Quốc gia, Tông môn hiện đại, Tôn giáo |
 
 ### Thứ tự phụ thuộc (làm cái trên trước)
 ```
@@ -1016,6 +1017,7 @@ CỤM 10 ĐẠO TÂM
 - [ ] **Q6 Tuyến thế giới** W1 đến W8 nối kinh tế, dân số, hiệp ước, tông, báo; bí cảnh mới thay `dgevents`; chặng ghép và loại trừ.
 - [ ] **Q7 Tuyến thân phận còn lại** T4, T6 đến T14 (kèm Nghiệt duyên T13, T14, vòng quay riêng); hoàn thiện bảng giao nhau.
 - [ ] **Q9 (tùy chọn, sau khi chơi thử)** mở rộng nội dung (mục 21.5): AI viết lại chữ, AI sinh tuyến (khóa API của bạn, kiểm và kẹp số, rơi về kho trope khi lỗi).`r`n- [ ] **Q8 Hoàn thiện**: cân bằng toàn bộ, chơi thử trên máy tính và điện thoại, công cụ viết nội dung (mục 21), bài kiểm thử cuối.
+- [ ] **Q10 Nội dung hệ Quốc gia, Tông môn, Tôn giáo (mục 24):** làm sau các chặng S3 đến S5 của [S-quoc-gia-tong-mon-ton-giao](S-quoc-gia-tong-mon-ton-giao.md); đợt đầu khoảng 70 chặng/sự kiện (T15, T17, T18; W13, W16, W18, W20; cụm 11, 12, 15; 12 sự kiện nghịch lý), sau đó T16 Thần Chức, T19 đến T21, các cụm còn lại.
 - **Song song (kế hoạch R)**: R1 đến R3 sau Q1.3; R4 sau Q2.
 
 ---
@@ -1155,6 +1157,7 @@ Xem bảng 1.2. Thêm các chi tiết đã chốt sau khi bạn chỉnh: thang t
 4. **Mức nội dung tối đa** cho AI sinh: bằng mức các tuyến T13, T14 (gián tiếp), hay thấp hơn? *(mặc định: bằng, có nút truyện nhẹ)*
 ## 22. Nhật ký làm việc
 (Các số mục trong những dòng nhật ký cũ là số theo bản của từng lần ghi; từ bản 10 dùng số mới ở bảng đối chiếu.)
+- 2026-10-18 (bản 12): theo ý bạn gộp kế hoạch quốc gia và tông môn hiện đại thành [S-quoc-gia-tong-mon-ton-giao](S-quoc-gia-tong-mon-ton-giao.md); thêm PHẦN VII, mục 24: giáo sĩ (T15) và Thần Chức đạo (T16) chuyển vào Q, tuyến T17 đến T21, tuyến thế giới W13 đến W24, 12 cụm chuỗi (11 đến 22), 36 sự kiện nghịch lý của chín tông, và các sự kiện quốc gia, tôn giáo, hội, gia tộc.
 - 2026-10-18: bạn yêu cầu làm mới toàn bộ hệ cốt truyện, lựa chọn và kỳ ngộ. Khảo sát hiện trạng, viết kế hoạch bản 1, chưa code.
 - 2026-10-18 (bản 11): bạn hỏi cách thêm nhiều kịch bản tu tiên kiểu phim ngắn, có thể kéo API cho AI tự thiết kế lúc chơi. Thêm mục 21.5: bốn tầng (kho trope, gói truyện JSON, AI viết lại chữ, AI sinh tuyến) với rào chắn và thứ tự làm.`r`n- 2026-10-18 (bản 9): chốt tỉ lệ tiên thiên (Quý 15%, Thiên 5%, mỗi cái ra thì lần sau giảm một nửa, 4.1b); chốt điều kiện T13, T14: từ Trúc Cơ trở lên, và việc dùng Trùng đồng hay xương (móc, đào, cấy) do vòng quay vận mệnh quyết (11.2), có bảng vùng và yếu tố cộng điểm cho từng vai.
 - 2026-10-18 (bản 8): theo ý bạn: **tiên thiên làm lại** (4: 6 ô, 4 phẩm, tương hợp xuất thân/xương sống/tuyến, ẩn/mất/cấy/truyền) và **khí vận làm lại** (5: điểm khí vận chỉ từ chuyện lớn, không theo thời gian; vòng quay quay lại 1 lần, giá 2 đến 5); thêm 2 tuyến **T13 Móc mắt (trùng đồng)** và **T14 Đào cốt (đạo cốt)** với cơ chế Nghiệt duyên (11.1). Câu về điều kiện 'chỉ xảy ra khi đạt...' bị cắt, tạm đặt Kim Đan và hỏi lại ở mục 11.
@@ -1168,3 +1171,374 @@ Xem bảng 1.2. Thêm các chi tiết đã chốt sau khi bạn chỉnh: thang t
 
 ## 23. Kết quả và việc để sau
 (Điền khi xong.)
+
+
+---
+
+# PHẦN VII. NỘI DUNG TỪ KẾ HOẠCH S (QUỐC GIA, TÔNG MÔN HIỆN ĐẠI, TÔN GIÁO)
+
+## 24. Giáo sĩ, Thần Chức đạo, sự kiện và chuỗi sự kiện của hệ Quốc gia, Tông môn, Tôn giáo
+
+Theo ý bạn (2026-10-18): **giáo sĩ và Thần Chức đạo** đưa vào đây để làm cùng cốt truyện; **thêm sự kiện và chuỗi sự kiện nặng đô** cho hệ quốc gia, tông môn và tôn giáo. Cơ chế nền (quốc vận, nho khí, quân trận, `gt`, công–tội, ba ô tín ngưỡng...) nằm ở [S-quoc-gia-tong-mon-ton-giao](S-quoc-gia-tong-mon-ton-giao.md); mục này chỉ viết **truyện và sự kiện** dùng các cơ chế đó.
+
+**Quy ước riêng của mục 24**
+- **Tên thật chỉ cho tôn giáo**; tên nước, tông, hội, gia tộc là tên giả cổ trang. Sự kiện tôn giáo viết bằng **khe `{tn}`** (tín ngưỡng của vùng/nhân vật) và có biến thể chữ theo tín ngưỡng, để không gắn một tôn giáo cụ thể vào vai xấu. Kẻ cực đoan luôn là **một cá nhân hoặc một phái** (`{phai}`), không phải cả tôn giáo.
+- **Công–tội cân bằng:** mọi lựa chọn có hai mặt; riêng nhánh Âm Hồn Giáo thì nghiêng tối hơn.
+- **Móc hệ:** `qv` quốc vận, `nho` nho khí, `ql` quân lực, `sat` sát khí, `gt` giá trị tông, `nhan` hành vi tông, `rel2` mạng quan hệ, `faith` ba ô, `huong` hương hỏa.
+- **Mã sự kiện:** `qg_` (quốc gia), `tm_` (tông môn), `tg_` (tôn giáo), `th_` (thương hội), `gtc_` (gia tộc).
+
+### 24.1 Giáo sĩ (tuyến thân phận T15: "Tiếng chuông trên đồi")
+**Ý tưởng:** nghề cho người **sùng đạo**, thay một phần đường tông môn: thăng bậc bằng công đức và hương hỏa chứ không chỉ bằng cảnh giới. Có thể **kiêm tu tiên** (giáo sĩ Luyện Khí, Trúc Cơ... vẫn tu bình thường); nhưng giáo sĩ cao bị ràng buộc giới luật và trách nhiệm với cộng đồng.
+
+**Mở khi:** `tam` từ "Sùng đạo" (S mục 8.7), có nơi thờ tự trong vùng, không bị gạt vì khác đạo; hoặc xuất thân "hậu duệ tăng lữ/thầy cúng" (mục 8).
+
+**Bốn bậc theo tín ngưỡng** (tên thật cho quen thuộc):
+| Tín ngưỡng | Tập sự | Giáo sĩ | Chủ lễ/Trụ trì | Giáo trưởng |
+|---|---|---|---|---|
+| Phật giáo | Sa di | Tỳ kheo | Trụ trì | Đại sư |
+| Thiên Chúa giáo | Thầy giúp lễ | Linh mục | Chánh xứ | Giám mục |
+| Hồi giáo | Học trò kinh | Imam | Imam lớn của thánh đường | Đại học giả |
+| Ấn Độ giáo | Đệ tử | Tư tế | Đạo sư (guru) | Đại đạo sư |
+| Đạo giáo | Đạo đồng | Đạo sĩ | Đạo trưởng | Chưởng giáo |
+| Nho giáo | Học trò | Thầy đồ | Giáo thụ (chủ văn miếu) | Đại nho |
+| Thờ cúng tổ tiên | Con cháu giúp lễ | Thủ từ | Trưởng tộc | Tộc trưởng toàn họ |
+| Thần đạo | Học trò đền | Thần chủ | Cung ty | Đại cung ty |
+| Dân gian | Người học việc | Thầy cúng | Trưởng lễ làng | Trưởng lão các làng |
+
+**Năm chặng**
+1. **Tiếng gọi:** gặp nơi thờ tự và một người dẫn đường; nhận hay từ chối; ghi một món nợ hoặc một lời nguyện.
+2. **Mùa lễ đầu tiên:** lần đầu chủ trì một nghi lễ; chọn giữ nguyên nghi thức hay thích nghi cho dân hợp; đúng sai đều có giá.
+3. **Khủng hoảng:** thiên tai hay dịch (W2, W3); đền có kho lương và hương hỏa; chọn **mở kho cứu dân** (cạn hương hỏa, dân tâm lên), **giữ kho cho lễ lớn**, hoặc **đàm phán với triều/tông**.
+4. **Quyền lực:** triều hay tông muốn dùng đền làm chỗ dựa (quốc giáo, thu thuế, tuyên truyền); chọn theo (đại điện giàu hơn, mất tự chủ), từ chối (bị đàn áp, được dân quý), hoặc chia đôi.
+5. **Di sản:** chọn người kế vị, cải cách hay giữ nguyên, hay đứng ra chống một phái cực đoan.
+- **Kết cục:** (a) *Người dẫn đường*: được dân tôn, đại điện vững; (b) *Giáo sĩ quyền lực*: giáo hội mạnh nhưng dính chính trị, dễ sa vào tham; (c) *Tử đạo/ẩn tu*: bỏ lại danh vọng, hương hỏa tan thành phúc cho dân.
+- **Người định mệnh:** Thầy dẫn đường, Tín đồ trung thành, Kẻ cực đoan (một người trong một phái), Quan hay tông sứ.
+- **Móc:** hương hỏa (S 8.5), W2, W3, W18 Thánh chiến, W19 Dị giáo, W20 Đại điện đổi chủ, cụm 15 và 16.
+- **Cân bằng:** giáo sĩ nhận bổng bằng hương hỏa, không bằng linh thạch; thăng bậc cần **công đức** (cứu người, làm lễ, hòa giải) chứ không chỉ tu vi; phạm giới nặng bị thu chức. Không phải con đường mạnh hơn tông môn, mà **khác** (dân tâm, hòa giải, cứu trợ).
+
+### 24.2 Thần Chức đạo (tuyến thân phận T16: "Hương hỏa trên vai")
+**Phạm vi (rất quan trọng):** Thần Chức đạo là **hệ riêng gắn với tín ngưỡng dân gian, Thần đạo và Đạo giáo dân gian** (thờ thổ địa, sơn thần, thủy thần, thành hoàng, thần y, thần chiến). **Không** áp vào Thiên Chúa giáo, Hồi giáo, Phật giáo, Ấn Độ giáo: những tôn giáo đó có quan niệm riêng về thần thánh và không được dùng như "cấp bậc thần" trong game. Điều này tránh mạo phạm và giữ hệ rõ ràng.
+
+**Ý tưởng:** tu sĩ **không** chỉ tu bằng linh khí mà có thể được dân lập miếu thờ, nhận **hương hỏa** để tăng tu vi và quyền hạn, đổi lại bị ràng buộc bởi **nguyện vọng** của người thờ. Là "con đường thứ ba" giữa tu tiên và giáo sĩ.
+
+**Cơ chế**
+1. **Thần vị** (Thổ địa làng, Sơn thần, Thủy thần, Thành hoàng, Thần y, Thần giữ cửa ải, Thần chiến): mỗi thần vị có **phạm vi** (làng, vùng, thành), **nguyện vọng điển hình** (mưa thuận, đẻ khỏe, buôn may, bình an), **hương hỏa tối đa**.
+2. **Lập miếu:** dân tự nguyện lập miếu nếu bạn có công lớn (W2, W3, W1), hoặc bạn tự dựng (tốn). Miếu là công trình thờ tự nhỏ (S 8.4).
+3. **Hương hỏa** (`huong`): tích khi dân thờ và cầu được ứng; mất khi dân thất vọng, miếu bị phá, dị giáo cướp tín đồ. Dùng để: tăng tốc tu luyện (có trần, tối đa +25%, không thay đột phá), **thần thông phạm vi** (che chở làng, đẩy lùi yêu thú, chữa dịch trong phạm vi), và duy trì thần vị.
+4. **Nguyện vọng (ràng buộc):** mỗi tuần/tháng có "lời cầu" của dân thành **việc phải làm** (nhiệm vụ nhỏ có hạn); bỏ lỡ thì hương hỏa hao, bỏ lỡ nhiều thì **thần chức rơi**.
+5. **Mê muội:** tham hương hỏa dẫn tới đạo tâm lệch (đòi cúng bái nhiều hơn, bắt dân hiến tế, ganh với thần khác); đi quá xa thì thành **thần ma** (nghiêng ác, bị thế lực và giáo sĩ săn).
+6. **Giải thoát:** trả hương hỏa lại cho dân, rời thần chức, giữ lại chút duyên; có thể phi thăng.
+
+**Năm chặng**
+1. **Lời cầu đầu tiên:** một làng cầu bạn trong lúc nguy cấp; chọn ứng hay không, ghi hương hỏa lần đầu.
+2. **Miếu nhỏ:** dân lập miếu; chọn nhận thần vị nào (làm lễ, nhận hay chối).
+3. **Thần cạnh tranh:** gặp thần khác (có thể là tu sĩ khác hoặc đồ vật hóa linh); tranh tín đồ hay hợp tác.
+4. **Nguyện vọng trái nhau:** hai làng cầu hai điều đối nghịch (mưa và nắng, hòa và chiến); chọn bên nào, mất bên kia.
+5. **Chọn đường:** tiếp tục làm thần (mạnh, ràng buộc), trả hương hỏa (giải thoát), hay thành thần ma.
+- **Kết cục:** *Chính thần* (dân thờ nhiều đời, hương hỏa bền, nhưng không rời được); *Thần ma* (bị săn, bi kịch); *Giải thoát* (trả đủ, phi thăng hoặc ẩn dật).
+- **Người định mệnh:** Người cầu đầu tiên, Thầy cúng/giáo sĩ phụ trách, Thần cạnh tranh, Kẻ lợi dụng miếu.
+- **Mở khi:** Trúc Cơ trở lên, có ân với một nơi, hoặc thức tỉnh tiên thiên đặc biệt, hoặc kỳ ngộ "được dân thờ".
+- **Móc:** W2, W3, W1 (cứu làng), tín ngưỡng dân gian của vùng (S 8.3), cụm 22.
+- **Cân bằng:** thần chức không cho vượt cảnh giới; tăng tốc có trần; mê muội có thang cảnh báo; tông và triều có thể chiêu hay trấn (T21, cụm 17).
+
+### 24.3 Năm tuyến thân phận mới cho hệ quốc gia (T17 đến T21)
+Quy ước như mục 11: mỗi tuyến 5 chặng, kết cục 3 nhánh, người định mệnh, móc.
+
+**T17. Võ quan: "Cờ trên lưng ngựa"**
+- *Mở khi:* nhập ngũ (trưng binh, tình nguyện) hoặc xuất thân quân; Luyện Khí trở lên.
+- *Chặng:* (1) **Lệnh nhập ngũ** (tình nguyện, bị trưng, hay mua người thế chân); (2) **Quân doanh**: kỷ luật, tình đồng đội, một người bạn và một viên cấp trên; (3) **Trận đầu**: chiến sự (W1) hay vây tu sĩ (W16), chọn theo lệnh hay cứu đồng đội; (4) **Quân công và tội**: thắng, được thưởng, nhưng có lệnh đồ sát tù binh hay thôn xóm; (5) **Cởi giáp**: giải ngũ, thăng tướng, hay đào ngũ.
+- *Kết cục:* Tướng quân / Kẻ cởi giáp về làng / Kẻ đào ngũ bị truy.
+- *Người định mệnh:* Bạn đồng đội, Cấp trên, Tu sĩ làm tướng, Kẻ thù trên chiến trường.
+- *Móc:* quân trận (S 5.4), W1, W16, cụm 12.
+
+**T18. Nho sĩ: "Ba khoa thi"**
+- *Mở khi:* `van` từ 1 (Đồng sinh), nước có khoa cử; không cần tu tiên.
+- *Chặng:* (1) **Học đường**: thầy đồ, bạn cùng lớp, nghèo hay giàu; (2) **Kỳ thi hương**: đỗ hay hỏng, gian lận quanh bạn; (3) **Bảng vàng**: đỗ Tiến sĩ hay chọn đường khác; (4) **Quan trường**: làm quan, đối mặt tham nhũng, phe phái, văn cấm (W15); (5) **Lời để lại**: bản tấu, sách, hay ngồi dưới gốc cây dạy học trò.
+- *Kết cục:* Thanh quan lưu danh / Quyền thần / Kẻ về ẩn.
+- *Người định mệnh:* Thầy đồ, Bạn thi, Quyền thần, Hoàng thượng.
+- *Móc:* nho khí (S 5.3), W15, cụm 13, hạo nhiên khí.
+
+**T19. Sứ giả: "Quốc thư trong tay áo"**
+- *Mở khi:* làm ở Ngoại Vụ Đường hoặc có tín nhiệm hai bên (tông và triều); từ Trúc Cơ.
+- *Chặng:* (1) **Giao thư đầu**: đưa quốc thư qua vùng nguy hiểm; (2) **Bàn tiệc**: gặp sứ bên kia, nghe được hơn lời nói; (3) **Điều khoản khó**: một điều khoản sẽ hại một bên vô tội; (4) **Bội ước**: một bên xé hiệp ước (W5); bạn làm chứng, ém, hay báo; (5) **Hòa nghị**: kéo hai bên về bàn hay bỏ cuộc.
+- *Kết cục:* Hòa giải đời đời / Kẻ bị bỏ rơi giữa hai phía / Kẻ lộ mặt gián điệp.
+- *Người định mệnh:* Sứ bên kia, Quan hầu, Kẻ mua chuộc, Tướng muốn đánh.
+- *Móc:* hiệp ước (F2), mạng quan hệ (S Phần A), W5, W22, W24, cụm 14.
+
+**T20. Mật thám: "Hai gương mặt"**
+- *Mở khi:* được Mật Các (tông) hay mật thám triều chiêu mộ; hoặc bị bắt buộc vì nợ; từ Luyện Khí.
+- *Chặng:* (1) **Lời mời trong bóng tối**; (2) **Cài vào**: lẫn vào một thế lực khác, tạo thân phận; (3) **Tin đầu tiên**: gửi tin hay giữ lại, có người hại; (4) **Bị nghi**: sắp lộ, phải chọn phản chủ hay hy sinh; (5) **Ngày lộ diện**: về hay ở lại.
+- *Kết cục:* Anh hùng thầm lặng / Kẻ phản bội hai phía / Kẻ ở lại sống đời khác.
+- *Người định mệnh:* Chủ nhân, Người tin bạn, Kẻ nghi ngờ, Người bạn bị bạn hại.
+- *Móc:* thông tin (`tt`), cụm 18, thanh trừng (cụm 19).
+
+**T21. Tu sĩ cung phụng: "Bổng lộc của triều"**
+- *Mở khi:* Trúc Cơ trở lên, triều có quốc sách "thu biên".
+- *Chặng:* (1) **Lời mời của sứ triều**; (2) **Nhận chức**: bổng, nhà, nhiệm vụ; (3) **Lệnh khó**: đánh một thôn kháng thuế, dẹp một phái, săn một tà tu; (4) **Lằn ranh phản phệ**: lệnh liên quan tới giết người vô tội, phá long mạch (S 5.2); (5) **Cởi áo triều**: ở lại, rời, hoặc đứng lên chống.
+- *Kết cục:* Quốc sư / Kẻ bị nghiệp phản / Kẻ cởi áo triều tự do.
+- *Người định mệnh:* Vua hay quyền thần, Tướng, Đồng nghiệp tu sĩ, Tông cũ.
+- *Móc:* phản phệ quốc vận, quốc sách, cụm 11, 17.
+
+### 24.4 Mười hai tuyến thế giới mới (W13 đến W24)
+Quy ước như mục 12: tiến theo thế giới kể cả khi người chơi không làm gì; mỗi pha có 2 đến 4 móc.
+| Tuyến | Mở khi | Pha | Móc cho người chơi | Ghi vào thế giới |
+|---|---|---|---|---|
+| **W13 Quốc vận suy** | `van` một nước xuống "Suy" | điềm báo → thiên tai và loạn quan → dân biến → mất mệnh hoặc hồi vận | làm lễ cầu vận, tố gian thần, nhờ tông, rời nước | quốc vận, đổi chủ, chia cắt, giá cả, dân tâm |
+| **W14 Long mạch bị cắt** | ai đó nhận cắt long mạch (tông thù hay kẻ ngoại) | tin → động đất nhỏ → lộ thủ phạm → hậu quả | điều tra, ngăn, tham gia, tố cáo | `mach`, quốc vận, linh mạch (N), mối thù |
+| **W15 Văn cấm** | nho khí giảm đột ngột hoặc đổi chủ nghiêng tà | lệnh cấm → đốt sách → ẩn sách và thầy trò → bung ra hoặc lụi tàn | giấu sách, tố, thi hành, mở trường ẩn | `nho`, thư viện, dân tâm, nhân tài bỏ đi |
+| **W16 Vây thành tu sĩ** | một Kim Đan trở lên gây họa phàm hay triều ra lệnh bắt | lệnh bắt → quân trận hợp → giao tranh → thắng thảm hoặc tu sĩ thoát | giúp quân, giúp tu sĩ, chạy tin, đứng xem | quân lực, sát khí, uy danh, thù truyền đời, phản phệ |
+| **W17 Chia cắt và thôn tính** | quốc vận Mạt kéo dài | nứt triều → hai phe → nước láng giềng nhúng tay → hợp nhất hoặc tách | chọn phe, chạy loạn, buôn quân nhu, làm sứ | số triều, chư hầu, biên giới, ân oán |
+| **W18 Thánh chiến** | hai thế lực khác tín ngưỡng, khoan dung thấp, quan hệ `dao` rất xấu | tuyên cáo → triệu tập tín đồ → chiến tuyến → hòa giải hoặc thảm họa | nhập quân, hòa giải, cứu dân, tố kẻ kích động | chiến tranh, `faith.slots`, thù tôn giáo, tị nạn |
+| **W19 Dị giáo và phái mới** | `faith.church.phai` cực đoan hoặc cải cách | tin lạ → tín đồ ly khai → bị đàn áp hoặc được bảo trợ → chia tách hoặc hòa | nghe giảng, che giấu, tố cáo, hòa giải | phái mới, khoan dung, `slots` |
+| **W20 Đại điện đổi chủ** | thứ hạng ô 1 đổi ở một vùng | tín đồ đổ về ô mới → tranh chấp đền → chuyển giao hay xung đột | giúp chuyển giao, bảo vệ di vật, tố cướp đền | đại điện, hương hỏa, quan hệ giáo hội |
+| **W21 Thanh trừng trong tông** | `on` thấp hoặc đổi chủ tông | tin đồn → lập danh sách → bắt, trục xuất → tông đổi hướng hoặc nứt | tố giác, che chở, chạy, đứng ngoài | `gt`, `nhan`, chính sách, người bỏ đi, M4 |
+| **W22 Đại hội liên tông** | chu kỳ 4 hoặc 10 năm, minh chủ hay triều bảo trợ (M5b) | báo danh → vòng loại → chung kết → trao giải và thương lượng ngầm | dự thi, làm trọng tài, buôn tin, cược | uy tín, mỏ, liên minh, ân oán |
+| **W23 Đại chiến liên tông** | hai tông thù, không nhượng, quan hệ `tinh` tới Tử thù | tuyên chiến → triều đứng ngoài hay nhúng → trận lớn → diệt, thôn tính, hòa | nhập quân, cứu đệ tử, giữ di vật, tố triều | diệt tông, chư hầu, tàn tích (W6), sổ ân oán |
+| **W24 Thiên hạ công ước vỡ** | một tu sĩ cao đánh phàm triều hoặc ngược lại bị triều đánh tu sĩ | vi phạm → liên minh tông + quân → truy → thỏa hiệp hoặc chiến tranh tổng | làm chứng, trốn, truy, hòa giải | công ước, quốc vận, phản phệ, thời đại |
+- Mỗi tuyến sống **6 đến 36 tháng thế giới**; tối đa **2 tuyến thế giới mới** cùng chạy ở một vùng (và 2 tuyến thế giới cũ); không để nhịp hỏi vượt 6 lần mỗi phút.
+- **Báo:** mỗi pha sinh một tin trên Nhật báo (G), có tin đồn báo trước.
+
+### 24.5 Mười hai cụm chuỗi sự kiện nặng đô (cụm 11 đến 22)
+Quy ước như 14.2: các sự kiện nối bằng cờ cụm, cùng trỏ vào một nhân vật định mệnh. Mỗi cụm có **mầm** (sự kiện mở), **dồn ép**, **nút**, **kết**, và **nhánh rẽ**; thường dài **7 đến 10 sự kiện** trong 1 đến 3 thập kỷ.
+
+```
+CỤM 11  NGÔI VÀNG VÀ LONG MẠCH  (triều chính, quốc vận; nối T21, W13, W14, W17)
+  qg_dieu_van (sao chổi, vận suy) ─> qg_thai_tu (tranh ngôi) ─> qg_quyen_than (chuyên quyền)
+     ─> [tông nào đó chống lưng một phe] ─> qg_tong_thao_tung (tông thao túng)
+        ├─ phe A thắng ─> qg_dang_quang (đăng quang, tháng ngày yên) ─> qg_phan_phe (phản phệ lên tông)
+        ├─ phe B thắng ─> qg_dao_chinh (đảo chính) ─> W17 (chia cắt)
+        └─ không phe nào ─> W13 (dân biến) ─> qg_cat_long_mach (có kẻ nhận cắt long mạch)
+     ─> qg_ket: vua mới giỏi (vận hồi) | vua yếu (vận tụt) | nước mất mệnh
+     Người định mệnh: Thái tử, Quyền thần, Quốc sư (tông), Tướng quân, Người cắt long mạch.
+     Ghi: quốc vận, hoàng quyền, mạng quan hệ (tông ↔ triều), phản phệ.
+
+CỤM 12  CỜ TRÊN LƯNG NGỰA  (quân đội; nối T17, W1, W16)
+  qg_trung_binh (lệnh nhập ngũ) ─> qg_quan_doanh (kỷ luật và bạn) ─> qg_tran_dau
+     ─> [tu sĩ lạ xuất hiện giữa chiến trường] ─> qg_vay_tu_si (quân trận hợp)
+        ├─ giúp quân ─> thắng thảm ─> qg_dong_dai (đồng đội chết) ─> qg_thuong_cong
+        ├─ giúp tu sĩ ─> bị coi phản ─> truy nã (T7) ─> qg_tha_giet
+        └─ đứng xem ─> bị cả hai bên nghi
+     ─> qg_do_sat (lệnh đồ sát tù binh) ─> [theo | trái lệnh | báo trên]
+     ─> qg_coi_giap: tướng quân | về làng | đào ngũ
+     Người định mệnh: Bạn đồng đội, Cấp trên, Tu sĩ bị vây, Người lính bên kia.
+     Ghi: sát khí, uy danh quân, nhân vật chết, nhật ký đời (Sổ đời).
+
+CỤM 13  BẢNG VÀNG VÀ LỬA  (nho khí, văn cấm; nối T18, W15)
+  qg_khoa_thi (kỳ thi) ─> qg_gian_lan (có kẻ mua đề) ─> qg_bang_vang (đỗ hay hỏng)
+     ─> qg_quan_truong (làm quan, tham nhũng, phe phái) ─> qg_van_cam (lệnh đốt sách)
+        ├─ nộp sách ─> an toàn, nho tụt ─> nhân tài bỏ nước
+        ├─ giấu sách ─> mở trường ẩn ─> qg_thay_tro (mầm nho khí lại lên)
+        └─ phản đối công khai ─> bị cách chức ─> thành biểu tượng (qg_bieu_tuong)
+     ─> qg_ghi: nho khí hồi | lụi | tà khí trỗi
+     Người định mệnh: Thầy đồ, Bạn thi, Quyền thần ra lệnh cấm, Học trò ẩn.
+     Ghi: nho khí, thư viện, văn vị, dân tâm, tà khí.
+
+CỤM 14  QUỐC THƯ  (ngoại giao, hôn nhân chính trị; nối T19, W5, W22, W24)
+  qg_su_gia (đưa thư) ─> qg_ban_tiec (ăn tiệc, nghe lén) ─> qg_dieu_khoan_kho
+     ─> [bên kia xé ước] ─> qg_boi_uoc ─> qg_lam_chung (làm chứng | ém | tố)
+     ─> qg_hon_nhan (hôn nhân chính trị để vá) ─> [người thân bạn bị gả | bị trao làm con tin]
+     ─> qg_hoa_nghi: hòa | chiến | vỡ lần nữa
+     Người định mệnh: Sứ bên kia, Công chúa hay con tin, Tướng muốn đánh, Kẻ mua chuộc.
+     Ghi: hiệp ước, `an_oan`, `thong` (thông gia), tin nhật báo.
+
+CỤM 15  NGÔI CHÙA TRÊN ĐỒI  (ô tôn giáo, nơi thờ tự; nối T15, W20)
+  tg_truyen_giao (tín ngưỡng mới tới làng) ─> tg_mieu_nho (dựng miếu hay nhà nguyện)
+     ─> tg_dan_chuyen (dân đổ về, thứ hạng ô đổi) ─> tg_dai_dien_doi_chu (đại điện đổi chủ)
+        ├─ hòa giải ─> hai bên chung đại điện (lồng) hoặc chia sân
+        ├─ tranh chấp ─> tg_dap_den (đền bị đóng hay phá) ─> thù tôn giáo (không trở thành thánh chiến nếu khoan dung)
+        └─ tông/triều can thiệp ─> nghiêng một bên ─> bất mãn
+     ─> tg_ghi: ô mới ổn | bất ổn kéo dài | giáo hội cải cách
+     Người định mệnh: Giáo sĩ cũ, Giáo sĩ mới, Trưởng làng, Người thợ dựng đền.
+     Ghi: `slots`, `khoan`, hương hỏa, dân tâm.
+
+CỤM 16  TIẾNG CHUÔNG VÀ LƯỠI GƯƠM  (thánh chiến; nối T15, W18)
+  tg_phai_cuc_doan (một phái {phai} lớn mạnh) ─> tg_tuyen_cao (tuyên cáo gay gắt)
+     ─> tg_trieu_tap (lệnh triệu tập tín đồ) ─> tg_chien_tuyen
+        ├─ tham gia ─> chiến công, tội nặng ─> tg_hoi_han
+        ├─ hòa giải ─> tg_sieu_do (cứu nạn nhân hai bên) ─> thành người trung gian
+        └─ tố kẻ kích động ─> bị cô lập ─> tg_thuc_tinh (cộng đồng nhìn lại)
+     ─> tg_ket: hòa nghị | thảm họa | chia ô vĩnh viễn
+     Người định mệnh: Giáo sĩ kích động (một phái), Giáo sĩ hòa giải, Người bạn khác đạo, Binh sĩ bên kia.
+     Ghi: chiến tranh, `faith.slots`, `an_oan`, tị nạn, kết nối cụm 12.
+
+CỤM 17  QUỐC SƯ  (tông và triều; nối T21, M5b)
+  tm_moi_cung_phung (triều mời) ─> tm_nhan_chuc ─> tm_lenh_kho
+     ─> [lệnh có phản phệ: giết người vô tội | phá long mạch | đàn áp phái]
+        ├─ làm ─> phản phệ ─> tm_chuoc (tế lễ, việc thiện, hoặc trả giá)
+        ├─ từ chối ─> mất chức, thù triều ─> tm_vong_ban (bỏ nước)
+        └─ làm một nửa ─> lương tâm dày vò, đạo tâm lệch
+     ─> tm_thao_tung (tông muốn nâng người lên ngôi) ─> (đi vào cụm 11)
+     ─> tm_ket: quốc sư | kẻ cởi áo | kẻ chống triều
+     Người định mệnh: Vua hay quyền thần, Tướng, Đồng nghiệp tu sĩ, Chưởng môn.
+     Ghi: phản phệ, hiệp ước tông ↔ triều, mạng quan hệ.
+
+CỤM 18  HAI MẶT GƯƠNG  (tình báo, bí mật của tông; nối T20, sổ công–tội)
+  tm_moi_mat_cac ─> tm_cai_vao (cài vào tông khác) ─> tm_tin_dau (gửi tin hay giữ)
+     ─> [bí mật của tông bị lộ: mỗi tông một bí mật, xem 24.6] ─> tm_lo_bi_mat
+        ├─ công bố ─> tông mất uy tín, người vô tội bị vạ
+        ├─ giữ ─> bí mật mục ruỗng, kẻ khác biết
+        └─ tống tiền ─> giàu và nguy
+     ─> tm_bi_nghi ─> tm_lo_dien: về | ở lại | bị giết
+     Người định mệnh: Chủ nhân, Người tin bạn, Kẻ nghi ngờ.
+     Ghi: `tt`, `an_oan`, nhật báo (tin lộ).
+
+CỤM 19  NỒI NẤU THANH TRỪNG  (nội bộ tông, thanh trừng; nối W21, M4)
+  tm_on_giam (`on` thấp) ─> tm_tin_don ─> tm_danh_sach (danh sách "bất tuân")
+     ─> tm_bat_bo ─> [bạn nằm trong danh sách | bạn viết danh sách | bạn biết]
+        ├─ che chở ─> bị kéo vào ─> trốn
+        ├─ tố giác ─> lên chức, nhưng mất bạn
+        └─ đứng ngoài ─> bị nghi ngờ lúc sau
+     ─> tm_doi_huong: `gt` đổi, `nhan` đổi, chính sách đổi
+     ─> tm_ket: tông nứt (ra tông mới) | tông yên nhưng nghèo | tông bền hơn
+     Người định mệnh: Chưởng môn, Trưởng lão cải cách, Bạn đồng môn, Chấp pháp.
+     Ghi: `gt`, chính sách, thành viên, tông mới (spawn).
+
+CỤM 20  THÀNH BANG VÀ CẢNG  (thương hội theo đô thị thương mại cổ; nối T5, T6, E)
+  th_dau_gia_lon (đấu giá lớn ở cảng) ─> th_phong_toa (đường buôn bị chặn, W4)
+     ─> th_hoi_dam_phan (hội họp) ─> [hai hội tranh một tuyến]
+        ├─ chọn Vạn Bảo (gắn triều) ─> triều bảo hộ, hội kia ghét
+        ├─ chọn Thanh Phong (liên minh thành thị) ─> tự do, thiếu quân
+        └─ chọn Hắc Kim (cảng ngầm) ─> lợi lớn, rủi ro
+     ─> th_chien_tranh_cang (hội chiến cảng) ─> th_hoa (tiền hay quân quyết)
+     Người định mệnh: Lãnh đạo hội, Đối thủ hội, Thuyền trưởng, Quan cảng.
+     Ghi: hội `infl`, giá, đường buôn, `loi` quan hệ.
+
+CỤM 21  GIA TỘC BỐN ĐỜI  (tài phiệt, thương gia, thế gia học thuật; nối T8, R)
+  gtc_thua_ke (người đứng đầu qua đời) ─> gtc_tranh_chap (anh em tranh)
+     ─> [kiểu gia tộc: tài phiệt cho triều vay | thương gia mở đường | học thuật dạy nho khí]
+        ├─ cho triều vay ─> triều trả bằng đặc quyền ─> gtc_bi_to (thao túng)
+        ├─ mở đường ─> gtc_bao_cang ─> thiệt hại hay lợi lớn
+        └─ học thuật ─> gtc_ve_thu_vien ─> W15 (văn cấm)
+     ─> gtc_hon_ket (hôn nhân với gia tộc khác, R) ─> gtc_ket_noi
+     ─> gtc_ket: gia tộc thăng thành thế lực | lụi | tách chi
+     Người định mệnh: Tộc trưởng, Anh em, Quan triều, Hội trưởng.
+     Ghi: gia tộc `power`, hiệp ước thuế, mạng quan hệ.
+
+CỤM 22  THẦN VÀ HƯƠNG HỎA  (Thần Chức đạo; nối T16)
+  tg_loi_cau_dau (làng cầu) ─> tg_dung_mieu (dân lập miếu) ─> tg_nhan_than_vi
+     ─> tg_nguyen_vong (mỗi mùa một lời cầu) ─> [hai lời cầu đối nghịch]
+        ├─ chọn bên A ─> bên B mất tin
+        ├─ giữ cân bằng ─> không ai ứng đủ
+        └─ tự đứng ra ─> hương hỏa hao, mê muội
+     ─> tg_than_canh_tranh ─> tg_me_muoi (đòi cúng nhiều, hiến tế) ─> [dừng | đi tiếp]
+     ─> tg_ket: chính thần | thần ma (bị săn) | giải thoát
+     Người định mệnh: Người cầu đầu tiên, Giáo sĩ phụ trách, Thần cạnh tranh, Kẻ lợi dụng miếu.
+     Ghi: hương hỏa, dân tâm, quan hệ giáo sĩ, đạo tâm.
+```
+- **Sợi liên kết:** mỗi cụm có **cờ cụm** (`cum.vang`, `cum.co`, ...) và nhiều sự kiện trỏ vào cùng một nhân vật định mệnh; cụm 11, 17, 19 chồng lên nhau (tông thao túng triều, triều ép tông, tông thanh trừng).
+- **Hội tụ:** các cụm 11, 12, 16, 19 là **điểm rơi** của xương sống mốc 5 và 6: người chơi gặp lại mọi ân oán.
+
+### 24.6 Bốn sự kiện nghịch lý của mỗi tông (36 sự kiện, "tình thế khó xử" + "bí mật")
+Mỗi sự kiện: tình huống → 3 lựa chọn (có giá) → hệ quả lên `gt`, `nhan`, chỉ số, sổ công–tội. Mở khi bạn là đệ tử của tông, hoặc gần tông, hoặc nghe tin.
+
+**Thanh Vân Tông**
+- `tm_tv_1` **Kho sách bị niêm**: Thiên Cơ Các niêm kho sách "bất lợi". Tuân (ổn định, nho khí giảm) | lén sao chép (rủi ro bị tố, ân của người đọc) | tố công khai lên báo (danh, bị truy).
+- `tm_tv_2` **Bảng vàng gian lận**: kẻ mua đề trong kỳ thi tuyển. Tố giác (công bằng, cô lập) | im lặng | ăn chia.
+- `tm_tv_3` **Làng bị ém tin dịch** *(bí mật)*: Chấp Pháp Đường cấm nói. Báo làng (cứu người, phạm lệnh) | tuân lệnh | tự mang thuốc.
+- `tm_tv_4` **Phiếu đồng thuận**: ép đệ tử ký chủ trương mới. Ký | từ chối (bị đẩy ngoại môn) | ký kèm ghi chú.
+
+**Thủy Nguyệt Cung**
+- `tm_tn_1` **Kiếm mềm thất truyền**: nghệ nhân già sắp mất, luật cấm truyền ngoại. Học trái luật | tuân | xin ngoại lệ.
+- `tm_tn_2` **Đêm cứu nạn**: bão biển, đội cứu hộ thiếu người, đúng ngày lễ. Ra khơi (thương, danh) | giữ lễ | đưa ngư dân vào cung.
+- `tm_tn_3` **Phái cải cách bị im**: đệ tử trẻ xin nhận người ngoài. Ủng hộ | can ngăn | tố.
+- `tm_tn_4` **Kiệt sức vì kỳ thi**: nhiều người suy sụp. Xin giảm | gánh thay | im lặng.
+
+**Kim Phong Môn**
+- `tm_kp_1` **Quy trình hay lương tâm**: lệnh thu hồi kiếm lỗi của dân theo quy trình, tốn dân. Thi hành | làm trái cứu dân | báo trên.
+- `tm_kp_2` **Mẻ kiếm chuẩn**: đồng môn gian lận để cứu mẻ. Tố | che | sửa giúp.
+- `tm_kp_3` **Hồ sơ niêm kín** *(bí mật)*: tìm thấy hồ sơ bi kịch cũ. Mở | đưa trưởng lão | đốt.
+- `tm_kp_4` **Giữ hiệp ước dù thiệt**: giữ | lách | phá.
+
+**Bách Thảo Môn**
+- `tm_bt_1` **Bí phương độc quyền**: thảo dân cần phương thuốc đắt. Bán | tiết lộ miễn phí (phạm quy) | đưa vào Y Quán.
+- `tm_bt_2` **Dịch bị ém** *(bí mật)*: lộ hồ sơ cũ. Công bố | im | bán.
+- `tm_bt_3` **Hai phái tranh cách chữa**: đứng phe | trung lập | thử cả hai (rủi ro).
+- `tm_bt_4` **Ranh giới đẳng cấp**: thảo dân giỏi xin vào Đan Các. Tiến cử | từ chối | nhận làm học trò riêng.
+
+**Huyền Băng Cung**
+- `tm_hb_1` **Kho hụt** *(bí mật)*: kiểm kho phát hiện thất thoát nhiều đời. Tố (nguy) | sửa sổ | ăn chia.
+- `tm_hb_2` **Mùa đông khắc nghiệt**: mở kho cứu dân biên giới | giữ lương | thương lượng với triều.
+- `tm_hb_3` **Tiếng nói trái chiều**: trưởng lão phê bình đường lối bị giam. Thăm | ủng hộ công khai | im.
+- `tm_hb_4` **Sức mạnh hay thỏa thuận**: sứ tông láng giềng xin đàm phán. Hộ tống | cản | ám sát sứ (tội).
+
+**Liệt Hỏa Tông**
+- `tm_lh_1` **Lò nổ che giấu** *(bí mật)*: ô nhiễm. Tố | che | đền bù lặng lẽ.
+- `tm_lh_2` **Cuộc đua phát minh**: đồng môn cắp đề tài. Tố | bắt chước | hợp tác.
+- `tm_lh_3` **Cứu trợ hay lợi nhuận**: thiên tai. Cứu miễn phí | bán đắt | bán giá vừa.
+- `tm_lh_4` **Can thiệp xa**: ra tay vùng khác để bảo vệ thị trường. Đi | ngăn | đòi bồi thường.
+
+**Nhật Luân Giáo**
+- `tm_nl_1` **Thiên văn trái giáo lý** *(bí mật)*: phát hiện bị giấu. Công bố | giữ kín | chuyển cho đạo sĩ ngoại.
+- `tm_nl_2` **Khách khác đạo xin trú**: đón (hiếu khách) | từ chối theo giáo luật | báo giáo chủ.
+- `tm_nl_3` **Giáo chủ muốn cải cách**: tăng lữ phản đối. Ủng hộ | chống | trung lập.
+- `tm_nl_4` **Thương lộ bị cướp**: hộ tống | đàm phán | nhờ hãn (Âm Hồn).
+
+**Âm Hồn Giáo** *(nghiêng tối hơn)*
+- `tm_ah_1` **Thành kháng cự**: lệnh đồ thành để cảnh cáo. Thi hành (tội nặng) | can ngăn (rủi ro) | trốn.
+- `tm_ah_2` **Hồn nô**: bắt hồn từ chiến trường. Nhận | cứu một hồn (bí mật) | báo.
+- `tm_ah_3` **Hãn thăng người ngoài theo tài**: nhận ân | ghen | kết thân.
+- `tm_ah_4` **Lễ tưởng niệm** *(bí mật)*: giữ hồn không tan. Ở lại giữ lễ | giải thoát hồn (trái giáo) | che giấu.
+
+**Tử Lôi Quan**
+- `tm_tl_1` **Luật và lợi** *(bí mật)*: hiệp ước cũ bị bội để lấy lợi. Tố | im | lách luật.
+- `tm_tl_2` **Chư hầu bị vơ vét**: giảm cống | ép thêm | đứng về chư hầu.
+- `tm_tl_3` **Tranh luận công khai**: nói thẳng | nói khéo | vắng mặt.
+- `tm_tl_4` **Bão biển**: cứu tàu thương lộ | giữ trận | nhờ hội.
+
+### 24.7 Sự kiện quốc gia (`qg_`, 18 sự kiện lẻ ngoài các cụm)
+- `qg_dieu_van` **Điềm vận suy**: sao chổi. Làm lễ cầu vận | đồn đại | rời nước.
+- `qg_thue_chien` **Thuế nặng thời chiến**: thu | giảm | trốn.
+- `qg_khoa_hoi` **Khoa thi ba năm**: dự thi | buôn đề | giúp học trò nghèo.
+- `qg_cat_long_mach_moi` **Lời mời cắt long mạch**: nhận (tiền, nghiệp) | từ chối | báo triều.
+- `qg_phan_phe` **Phản phệ**: bạn ra tay quá tay. Chuộc (tế lễ, việc thiện) | ẩn | lao tới.
+- `qg_vay_la` **Quân trận vây một tu sĩ lạ**: xem | giúp tu sĩ | giúp quân.
+- `qg_quan_su` **Tướng quân mời làm quân sư**: nhận | từ chối | nhận nhưng đặt điều kiện.
+- `qg_tiep_te` **Tiếp tế bị cắt**: mua chợ đen | cướp thương đoàn | xin tông.
+- `qg_cung_phung` **Triều mời làm cung phụng**: nhận | từ chối | thương lượng.
+- `qg_su_gia_mat` **Sứ giả mất tích**: tìm | im | lợi dụng.
+- `qg_hon_nhan_chinh_tri` **Người thân bị gả để vá hiệp ước**: ngăn | chấp nhận | cùng đi.
+- `qg_dich_thanh` **Dịch trong thành**: phong tỏa | mở cửa | trộm thuốc.
+- `qg_mat_tham` **Mật thám tìm bạn**: nhận | tố | giả mù.
+- `qg_ly_gian` **Tin ly gián**: tin đồn hai tông thù nhau; truy nguồn | thổi phồng | dập.
+- `qg_van_hoi` **Đại hội văn nhân**: đọc thơ | tranh luận | phản biện quyền thần.
+- `qg_thue_cua_ai` **Thuế cửa ải đột ngột**: nộp | lách | tố.
+- `qg_bao_vat_trieu` **Bảo vật triều đình mất**: truy | giấu | mua lại.
+- `qg_phe_truat` **Vua bị phế**: đứng phe | chạy | giúp vua.
+
+### 24.8 Sự kiện tôn giáo (`tg_`, 18 sự kiện lẻ ngoài các cụm; dùng khe `{tn}`)
+- `tg_le_hoi` **Lễ hội mùa lớn ở đại điện**: tham dự (phúc, quan hệ) | bán hàng | đứng ngoài.
+- `tg_hanh_huong` **Hành hương**: đi (hao thời gian, được phúc) | cử người thay | bỏ qua.
+- `tg_pha_gioi` **Phá giới**: nhận lỗi (mất phúc, giữ cộng đồng) | giấu | rời đạo.
+- `tg_tranh_luan` **Tranh luận giáo lý**: tham gia | cổ vũ | can ngăn.
+- `tg_truyen_giao_lang` **Người truyền giáo tới làng**: đón | xua | lấy làm chứng.
+- `tg_mieu_dong` **Miếu bị đóng**: bảo vệ | phản đối | im.
+- `tg_di_giao` **Dị giáo**: nghe | tố | che giấu một người.
+- `tg_than_tich` **Thần tích**: tin | nghi | khai thác.
+- `tg_cau_mua` **Cầu mưa đại hạn** (W2): tham gia | tổ chức | mua nước.
+- `tg_cuu_tro_dich` **Nơi thờ tự cứu dịch** (W3): giúp | khám bệnh | trộm thuốc.
+- `tg_hon_nhan_khac_dao` **Hôn nhân khác đạo**: thuyết phục | chấp nhận mỗi người một đạo | bỏ.
+- `tg_cai_dao` **Lời mời cải đạo**: nhận | từ chối | giả vờ.
+- `tg_thanh_chien_tri` **Triệu tập thánh chiến**: nhập | hòa giải | tị nạn.
+- `tg_phai_cai_cach` **Phái cải cách**: theo | chống | đứng giữa.
+- `tg_gio_to_tien` **Giỗ tổ tiên và gia tộc**: về dự | gửi tiền | bỏ.
+- `tg_khoan_dung` **Hòa giải hai tín ngưỡng**: làm cầu | chọn bên | im.
+- `tg_giao_si_tham` **Giáo sĩ tham nhũng hương hỏa**: tố | che | ăn chia.
+- `tg_di_vat` **Di vật thánh bị mất**: tìm | giữ | bán.
+
+### 24.9 Sự kiện thương hội và gia tộc (`th_`, `gtc_`, 8 sự kiện lẻ)
+- `th_dau_gia` **Đấu giá lớn ở cảng**: tham gia | mua tin | bán hộ.
+- `th_phong_toa` **Tuyến bị chặn** (W4): hộ tống | buôn lậu | đàm phán.
+- `th_quan_cang` **Quan cảng đòi lót**: lót | tố | đổi cảng.
+- `th_tau_dam` **Tàu đắm hàng chìm**: cứu | mua xác | nhận bảo hiểm.
+- `gtc_tai_phiet_vay` **Tài phiệt cho triều vay**: làm chứng | tố | hưởng lợi.
+- `gtc_thuong_gia_hon` **Thương gia gả con để mở đường**: ủng hộ | can | trốn.
+- `gtc_thu_vien_gia` **Thế gia giữ thư viện**: giúp giữ | mượn | đốt khi cấm.
+- `gtc_chia_chi` **Gia tộc tách chi**: về phe nào.
+
+### 24.10 Khối lượng, nhịp, kỹ thuật
+- **Khối lượng nội dung thêm:** T15 đến T21: 7 tuyến x 5 chặng = 35 chặng gốc, cộng biến thể từ bảng giao nhau khoảng 28; W13 đến W24: 12 tuyến x (4 pha + 3 móc) = 84; sự kiện: 36 (tông) + 18 (quốc gia) + 18 (tôn giáo) + 8 (hội, gia tộc) = 80; cụm chuỗi 12 cụm x ~8 sự kiện = ~96 (một phần trùng với các sự kiện lẻ). Tổng **khoảng 260 chặng/sự kiện**; đợt đầu chọn khoảng **70**.
+- **Đợt đầu đề xuất để chơi thử:** T15 (Giáo sĩ), T17 (Võ quan), T18 (Nho sĩ); W13, W16, W18, W20; cụm 11, 12, 15; 12 sự kiện nghịch lý (bốn tông: Thanh Vân, Kim Phong, Liệt Hỏa, Âm Hồn); T16 (Thần Chức), T19 đến T21 và các cụm còn lại làm sau.
+- **Bảng giao nhau (mục 13.5) mở rộng:** W13 gõ cửa T17, T18, T19, T21; W16 gõ T17, T21, T7, T1; W18 gõ T15, T17, T19, T6; W20 gõ T15, T16, T2; W21 gõ T2, T20, T7; W22 gõ T2, T19, T5.
+- **Nhịp:** các sự kiện lẻ của hệ này chỉ bốc khi điều kiện hệ thật xảy ra (không ngẫu nhiên đơn); tối đa 1 chặng nóng, hàng đợi 3; mọi chặng có hạn; bám ngân sách K của mục 14.4.
+- **Kỹ thuật:** dữ liệu tại `js/data/natevents.js` (cùng định dạng chặng mục 10), nhân vật định mệnh dùng chung dàn 8 vai (mục 13.3), cờ cụm lưu trong `c.story`; mọi trường khởi tạo muộn, không đổi `TT.VERSION`. Điều kiện mở dựa trên cơ chế S (quốc vận, `gt`, `slots`, `huong`), nên **Q10 phải làm sau S3 đến S5**.
+- **Rủi ro:** nội dung tôn giáo dễ nhạy cảm: dùng khe `{tn}`, viết cho cả hai phía, kẻ cực đoan là cá nhân/phái, cho bạn duyệt chữ từng biến thể; nội dung tàn khốc (đồ sát, hiến tế) kể gián tiếp, có chế độ truyện nhẹ (mục 20).
