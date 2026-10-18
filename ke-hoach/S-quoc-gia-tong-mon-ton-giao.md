@@ -22,6 +22,7 @@
 12. Rủi ro
 13. Còn lại cần bạn chốt
 14. Nhật ký làm việc
+15. Kế hoạch triển khai S1 (sẵn sàng code)
 
 ---
 
@@ -564,3 +565,143 @@ Thứ tự theo phụ thuộc: **mạng quan hệ trước**, vì quốc gia, t�
 - 2026-10-18 (bản 1, tách S và T): đọc code và kế hoạch cũ, viết S (quốc gia) và T (tông hiện đại, tôn giáo).
 - 2026-10-18 (bản 3): theo ý bạn thêm chuỗi **Thanh Xà hóa long** (T22, cụm 23: nghịch chuyển quốc vận, 4 giai đoạn Hóa Hình, Mãng, Giao, Long, có tuyến tình cảm) vào Q mục 24.5a; đổi bí mật Kim Phong thành "kẻ bị gạt luyện phù" và đại chiến Phù Lệnh (cụm 24, W25, Q 24.5b); thêm Phù Các và chiến tranh tổng (5.6) vào S.
 - 2026-10-18 (bản 2, gộp): theo ý bạn gộp S và T thành một bản; giữ tên cổ trang cho cơ quan; đổi nguyên mẫu Âm Hồn Giáo (hãn quốc kiểu Mông Cổ, nghiêng ác) và Tử Lôi Quan (đảo quốc kiểu Anh); chín tông làm sâu; gia tộc, thương hội, vương triều theo nguyên mẫu; tôn giáo dùng tên thật, 9 tín ngưỡng, 3 ô mỗi vùng, quy tắc lồng, nơi thờ tự; giáo sĩ, Thần Chức đạo, sự kiện và chuỗi sự kiện chuyển sang Q mục 24. Chưa code.
+
+---
+
+## 15. Kế hoạch triển khai S1: Mạng quan hệ nhiều chiều (sẵn sàng code)
+
+**Quyết định thứ tự (2026-10-18):** làm S trước R. S không phụ thuộc phần chưa có (chỉ cần F4, F2 đã xong); R1 đến R3 cần nền Q1 và R4 cần khung tuyến Q2. S1 lại cấp sổ ân oán và chiều `thong` cho R. Đường đi: **S1 → S2 → S3**; khi tới Q1 thì làm Q1.1 đến Q1.3 song song R1.
+
+### 15.1 Mục tiêu và ranh giới của S1
+- **Có:** `rel2` nhiều chiều, sổ ân oán, bậc quan hệ, hồ sơ cặp, hồ sơ thế lực, ma trận quan hệ (UI), kiểm thử, tương thích ngược.
+- **Không đổi cân bằng:** `relV(a,b)` phải **trả đúng giá trị cũ** (các chiều mới mặc định 0 và trọng số 0 ở S1). Mọi sự kiện thế giới giữ nguyên. Chỉ **thêm ghi chép**.
+- **Chưa làm ở S1:** đổi `declareWars` theo nhiều chiều, thù truyền đời có tác dụng, `dao` từ `gt` (S2), tôn giáo (S5), hiển thị trên `so-do-the-gioi.html` (S11).
+
+### 15.2 Rào chắn quan trọng: không đụng bộ sinh số ngẫu nhiên
+- `fac.rel(a, b)` hiện **gọi `rng.RI(-12, 12)` lần đầu có người hỏi cặp** nên thứ tự truy cập ảnh hưởng dòng số ngẫu nhiên. Nếu giao diện mở ma trận làm khởi tạo cặp mới thì **làm đổi diễn biến thế giới**.
+- **Quy tắc:** mọi hàm đọc của `diplo` (giao diện, ma trận, kiểm thử) dùng `diplo.peek` **không gọi rng và không khởi tạo cặp**: nếu `f.rel[k]` chưa có thì trả mặc định xác định `tagBase(a, b)` (cùng công thức nhưng bỏ phần `rng.RI`) và đánh dấu `fresh`.
+- `diplo.log` và các hàm ghi **không bao giờ gọi rng**.
+- **Bằng chứng kiểm:** chạy cùng hạt giống trước và sau S1, hash `f.rel` + số chiến tranh + sử ký phải **trùng khít** (15.6).
+
+### 15.3 Dữ liệu
+`world.fac.rel2` (khởi tạo muộn, `{}` nếu chưa có; **không đổi `TT.VERSION`**):
+```
+rel2["a|b"] = { loi: 0, dao: 0, thong: 0, tin: 60, an: [ { m, k, v, t, heir? } ] }   // a < b theo id, như f.rel
+```
+- `tinh` **không lưu lại**: vẫn là `f.rel[k]` (giữ nguyên toàn bộ code cũ và bản lưu cũ).
+- `an` tối đa **12** mục (D.DIPLO.logMax). Khi đầy thì bỏ mục cũ nhất **không** `heir` trước; mục `heir` (thù truyền đời) chỉ bị bỏ khi không còn mục thường.
+- `tin` 0-100: mặc định 60, giảm khi bất tuân/đoạn tuyệt/bội ước, tăng khi giữ lời nhiều năm. Ở S1 chỉ hiển thị, chưa vào công thức.
+- Cặp chưa có chuyện: không có bản ghi trong `rel2`, `peek` trả mặc định.
+
+`D.DIPLO` (file mới `js/data/diplo.js`, chỉnh được):
+```
+dims: ['tinh','loi','dao','thong','tin']           // thứ tự hiển thị và tên chữ
+w:    { tinh: 1, loi: 0, dao: 0, thong: 0 }        // S1: chỉ tinh có trọng số; S2 bật loi/dao/thong (0,3 / 0,3 / 0,2)
+levels: [ {min: 60, id:'than_huu'}, {min: 35, ...}, ... ]   // bậc từ tổng hợp
+kinds: { chien, hoa_nghi, thang, thua, diet, than_phuc, ket_minh, tan_minh, xung_dot, bo_mac, trung_phat,
+         bat_tuan, doan_tuyet, tich_thu, cat_hang, ... } mỗi loại: nhãn, dấu (tốt/xấu), heir?, ảnh hưởng đến tin
+logMax: 12
+```
+**Bậc quan hệ** (từ `total = clamp(tinh + 0,3 loi + 0,3 dao + 0,2 thong, -100, 100)`; S1 chỉ còn `tinh`):
+| Tổng | Bậc |
+|---|---|
+| từ 60 | Thân hữu (nếu có `ally` thì "Đồng minh") |
+| 35 đến 59 | Thân hữu |
+| 12 đến 34 | Hòa hảo |
+| -11 đến 11 | Trung lập |
+| -34 đến -12 | Lạnh nhạt |
+| -59 đến -35 | Bất hòa |
+| -79 đến -60 | Thù địch |
+| dưới -80 | Tử thù |
+- Đang **chiến tranh** với nhau: nhãn thêm "(đang đánh nhau)"; bậc không hạ thấp hơn "Bất hòa" khi đang đồng minh cũ vừa bất hòa.
+- Nhãn hiệp ước (Chủ, Chư hầu, Bảo hộ, Cống, Minh ước) đọc từ `TT.pact.of`.
+
+### 15.4 API `TT.diplo` (file mới `js/systems/diplo.js`)
+Nạp **sau** `pacts.js`, trước `ai.js` (sửa `js/files.js`); `js/data/diplo.js` nạp cùng nhóm dữ liệu sau `sects.js`.
+| Hàm | Việc làm | Dùng rng |
+|---|---|---|
+| `key(a, b)` | khóa cặp `lo|hi` (không khởi tạo) | không |
+| `peek(a, b)` | `{tinh, loi, dao, thong, tin, an, fresh}` chỉ đọc | không |
+| `total(a, b)` | tổng hợp theo `D.DIPLO.w` (S1 = `tinh`) | không |
+| `level(a, b)` | `{id, n, war, ally, pacts[]}` | không |
+| `log(a, b, kind, v, text)` | ghi sổ ân oán (cap 12), cập nhật `tin` theo loại, trả bản ghi | không |
+| `add(a, b, dim, n, why)` | cộng chiều; `dim='tinh'` đi qua `fac.relAdd`; chiều khác kẹp [-100, 100] | không |
+| `history(a, b)` | sổ ân oán theo năm mới nhất trước | không |
+| `cua(a, b)` | a kiêng dè b (suy từ `power`, không lưu) | không |
+| `describe(a, b)` | một câu mô tả: bậc + chiều đậm nhất + ân oán gần nhất | không |
+| `of(x, kind?)` | danh sách bạn, thù, chủ, chư hầu, đồng minh của một thế lực | không |
+| `matrix(kinds?)` | `{ ids, cells[i][j] }` cho giao diện/kiểm thử | không |
+| `migrate()` | tạo `rel2` rỗng nếu thiếu; gọi trong `fac.S()` | không |
+
+### 15.5 Móc vào mô phỏng sẵn có (chỉ thêm ghi chép)
+Sửa `fac.relAdd(a, b, n, why?)` nhận tham số thứ tư tùy chọn `why = [kind, text]`; nếu có thì gọi `diplo.log`. `fac.relV` đi qua `diplo.total` (cùng giá trị). Gắn `why` ở các chỗ gọi `relAdd` hiện có:
+| Vị trí | Hiện tại | Ghi vào sổ |
+|---|---|---|
+| `tickRelations` xung đột nhỏ (`d <= -12`) | `relAdd(a,b,d)` | `xung_dot` |
+| `tickRelations` kết minh | `a.ally`, `chron` | `ket_minh` (v=0) |
+| `tickRelations` đồng minh nguội | xóa `ally` | `tan_minh` (v=0) |
+| `startWar` | `relAdd(a,b,-25)` | `chien` + lý do chiến tranh |
+| `endWar` hòa | `relAdd(a,b,15)` | `hoa_nghi` |
+| `endWar` thắng/thua | `relAdd(a,b,-10)` | `thang` (bên thắng), `thua` (bên thua) |
+| `endWar` thần phục (`vassalize`) | `pacts.js` | `than_phuc` |
+| `destroy` (diệt môn) | `chron` | `diet` (bên diệt với bên bị diệt) + `heir: true` |
+| `pacts.js` bỏ mặc | `relAdd(a,b,-3)` | `bo_mac` |
+| `pacts.js` bất tuân | `defy=true`, `chron` | `bat_tuan` (giảm `tin`) |
+| `pacts.js` trừng phạt | `relAdd(a,b,-8)` | `trung_phat` |
+| `pacts.js` đoạn tuyệt | `relAdd(a,b,-40)` | `doan_tuyet` + `heir` nếu chư hầu |
+| `tickHoi` tịch thu | `relAdd(x,t,-30)` | `tich_thu` |
+| `tickHoi` cắt hàng | `relAdd(x,t,-8)` | `cat_hang` |
+- Chuỗi mô tả lấy từ chính câu `chron` đã có (cắt gọn), không viết lại văn bản.
+- Thế giới cũ (đã lưu): `rel2` rỗng, sổ ân oán bắt đầu từ lúc tải; không dựng lại quá khứ (có thể nhập từ `f.chron` theo từ khóa ở bản sau).
+
+### 15.6 Giao diện (file mới `js/ui/diplo.js`, tab "Quan hệ" hoặc phần trong Biên niên sử)
+Quyết định: **tab mới "Thế lực"** cạnh "Biên niên sử" (nhẹ và tránh làm sử ký dài thêm), `ui.addTab({ id: 'diplo', label: 'Thế lực', key, build })`.
+- **Khóa vẽ lại** (`key`): `rel2` đổi (số mục sổ), năm đổi, vùng người chơi biết thay đổi, cặp đang chọn.
+- **Ma trận:** hàng/cột là thế lực còn sống, sắp theo loại rồi vùng; bộ lọc loại (Tất cả / Triều / Tông / Gia tộc / Hội); ô tô màu theo bậc (xanh lục = thân, xám = trung lập, đỏ = thù), viền đậm nếu đang đánh nhau, chấm nếu có hiệp ước; **cuộn ngang** trên điện thoại.
+- **Che theo hiểu biết:** chỉ hiện thế lực ở vùng người chơi **đã biết** (`c.knownRegions`) và tông/triều liên quan; cặp nằm ngoài hiểu biết hiện "chưa rõ".
+- **Hồ sơ cặp** (bấm ô): bậc, các chiều bằng thanh chữ (không số), hiệp ước, ân oán theo năm (mới nhất trên), có chấm "thù truyền đời".
+- **Hồ sơ thế lực** (bấm tên): bạn, thù, chủ, chư hầu, đồng minh, kẻ đang để mắt (`diplo.of`).
+- **Hiển thị:** bậc và chữ, không hiện số (đã chốt); số cụ thể chỉ ở tooltip khi `TT.config.debug`.
+
+### 15.7 Kiểm thử và bằng chứng
+**Công cụ (không đẩy lên repo):** kịch bản Playwright trong thư mục scratchpad chạy Chromium có sẵn, mở `tests.html?only=S1`, chờ `window.__done`.
+- Thêm vào `tests.html` tham số `?only=<từ khóa>`: `test()` bỏ qua bài không khớp (để lặp nhanh, không ảnh hưởng chạy đầy đủ).
+- **Đường cơ sở trước khi sửa code:** với 6 hạt giống (301, 911, 77, 5, 12, 33) dựng thế giới, chạy 300 năm `TT.fac.yearly()`, lưu hash của `f.rel`, số chiến tranh, độ dài `chron`, trạng thái thế lực. **Chạy lại sau S1 phải khớp từng hash** (chứng minh S1 không đổi cân bằng).
+Bài kiểm thử mới `Mạng quan hệ nhiều chiều (S1)`:
+1. Hash 6 hạt giống trùng đường cơ sở (hoặc so ngay trong bài bằng cách tắt móc ghi sổ).
+2. `peek` **không khởi tạo cặp và không làm đổi rng**: gọi `peek` cho mọi cặp rồi chạy 50 năm, kết quả trùng lần chạy không gọi.
+3. Ma trận đối xứng (`total(a,b) === total(b,a)`), không NaN, trong [-100, 100].
+4. `relV` trùng `f.rel` với mọi cặp (S1 chưa có chiều khác).
+5. Sổ ân oán: `startWar` ghi `chien` cho cả hai chiều xem; đầy 12 thì bỏ mục thường cũ trước; `heir` được giữ.
+6. Bậc quan hệ đúng ngưỡng; `ally` và `war` ghi đè nhãn.
+7. `tin` giảm khi bất tuân/đoạn tuyệt; kẹp 0-100.
+8. Lưu/tải: `rel2` giống hệt sau `snapshot`/`restore`; bản lưu cũ không có `rel2` vẫn chạy.
+9. Hiệu năng: 400 năm dưới 1 giây (mốc hiện tại khoảng 260 ms cho 300 năm).
+**Chạy đầy đủ** `tests.html` một lần ở cuối S1 (khoảng 3 phút): mọi bài cũ vẫn đạt (93 bài, cộng bài mới). **Kiểm giao diện** bằng Playwright: mở `index.html`, mở tab Thế lực, chụp màn hình máy tính và di động, kiểm không lỗi console.
+
+### 15.8 Các bước làm S1 (theo thứ tự, mỗi bước chạy được)
+1. **Đường cơ sở:** viết kịch bản băm 6 hạt giống, chạy trên code hiện tại, lưu kết quả (scratchpad).
+2. **Bộ chạy kiểm thử:** thêm `?only=` vào `tests.html`; kịch bản Playwright chạy được `tests.html` và đọc kết quả.
+3. **Dữ liệu:** `js/data/diplo.js` (`D.DIPLO`); thêm vào `js/files.js`.
+4. **Hệ thống:** `js/systems/diplo.js` (API 15.4), thêm vào `js/files.js`; `fac.S()` gọi `diplo.migrate`.
+5. **Móc:** sửa `fac.relAdd`, `fac.relV`, và 14 chỗ ở 15.5; so lại hash với đường cơ sở (phải trùng).
+6. **Bài kiểm thử mới** (15.7) trong `tests.html`; chạy `?only=S1` đến khi xanh.
+7. **Giao diện:** `js/ui/diplo.js`, thêm vào `js/files.js` (nhóm giao diện); chạy `index.html`, kiểm tay bằng Playwright và chụp màn hình.
+8. **Chạy đầy đủ** `tests.html`; sửa lỗi nếu có.
+9. **Tài liệu:** ghi "Đã làm" ở mục này, cập nhật `KE-HOACH.md` (S1 xong), nhật ký; chụp snapshot theo quy ước dự án.
+10. **Đẩy lên GitHub** theo quy trình trong `CLAUDE.md` (fetch và merge main, push, đồng bộ local).
+
+Ước lượng: khoảng 1,5 lượt làm việc (như mục 11).
+
+### 15.9 Rủi ro riêng của S1
+| Rủi ro | Cách giảm |
+|---|---|
+| Làm đổi dòng rng, vỡ các bài phụ thuộc hạt giống | `peek` không rng; so hash 6 hạt giống trước và sau; chạy đầy đủ `tests.html` |
+| Bản lưu tăng kích thước | Chỉ lưu cặp có chuyện; cap 12 mục mỗi cặp (tối đa khoảng 406 x 12 mục, thực tế ít hơn nhiều) |
+| Nhãn sai vì dữ liệu cũ | Thế giới cũ bắt đầu sổ từ lúc tải, không bịa quá khứ |
+| Giao diện nặng trên điện thoại | Lọc theo loại, mặc định chỉ triều + tông trong vùng đã biết; cuộn ngang |
+| Gắn `why` sót chỗ gọi `relAdd` | Rà bằng `grep relAdd` và bài kiểm thử đếm số loại ghi sổ sau 300 năm |
+
+### 15.10 Sau S1 (xem trước)
+- **S2:** bật chiều `dao` từ `gt` và chuyển điều kiện gia nhập/trục xuất sang độ hợp giá trị; thêm `gt`, công–tội cho 9 tông; cơ quan tên cổ; gia tộc `kieu`.
+- **S3:** quốc vận và nho khí (`world.fac.nat`), phản phệ, thiên mệnh; đo cân bằng bật/tắt như F4.
