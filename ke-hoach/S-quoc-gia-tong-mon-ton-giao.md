@@ -654,9 +654,9 @@ Sửa `fac.relAdd(a, b, n, why?)` nhận tham số thứ tư tùy chọn `why = 
 - Chuỗi mô tả lấy từ chính câu `chron` đã có (cắt gọn), không viết lại văn bản.
 - Thế giới cũ (đã lưu): `rel2` rỗng, sổ ân oán bắt đầu từ lúc tải; không dựng lại quá khứ (có thể nhập từ `f.chron` theo từ khóa ở bản sau).
 
-### 15.6 Giao diện (file mới `js/ui/diplo.js`, tab "Quan hệ" hoặc phần trong Biên niên sử)
-Quyết định: **tab mới "Thế lực"** cạnh "Biên niên sử" (nhẹ và tránh làm sử ký dài thêm), `ui.addTab({ id: 'diplo', label: 'Thế lực', key, build })`.
-- **Khóa vẽ lại** (`key`): `rel2` đổi (số mục sổ), năm đổi, vùng người chơi biết thay đổi, cặp đang chọn.
+### 15.6 Giao diện (file mới `js/ui/diplo.js`, gộp vào tab Biên niên sử)
+Quyết định của bạn (2026-10-18): **gộp vào tab "Biên niên sử"**, không thêm tab. `js/ui/diplo.js` xuất `ui.buildDiplo(box, c)`; `history.js` gọi hàm này để chèn mục **"Quan hệ thế lực"** (gập được) **trước** mục "Sử ký"; khóa vẽ lại của tab Biên niên sử thêm số mục sổ ân oán và cặp đang chọn.
+- **Khóa vẽ lại:** thêm vào `key` của tab Biên niên sử: số mục sổ ân oán, năm, vùng người chơi biết, cặp đang chọn.
 - **Ma trận:** hàng/cột là thế lực còn sống, sắp theo loại rồi vùng; bộ lọc loại (Tất cả / Triều / Tông / Gia tộc / Hội); ô tô màu theo bậc (xanh lục = thân, xám = trung lập, đỏ = thù), viền đậm nếu đang đánh nhau, chấm nếu có hiệp ước; **cuộn ngang** trên điện thoại.
 - **Che theo hiểu biết:** chỉ hiện thế lực ở vùng người chơi **đã biết** (`c.knownRegions`) và tông/triều liên quan; cặp nằm ngoài hiểu biết hiện "chưa rõ".
 - **Hồ sơ cặp** (bấm ô): bậc, các chiều bằng thanh chữ (không số), hiệp ước, ân oán theo năm (mới nhất trên), có chấm "thù truyền đời".
@@ -677,7 +677,7 @@ Bài kiểm thử mới `Mạng quan hệ nhiều chiều (S1)`:
 7. `tin` giảm khi bất tuân/đoạn tuyệt; kẹp 0-100.
 8. Lưu/tải: `rel2` giống hệt sau `snapshot`/`restore`; bản lưu cũ không có `rel2` vẫn chạy.
 9. Hiệu năng: 400 năm dưới 1 giây (mốc hiện tại khoảng 260 ms cho 300 năm).
-**Chạy đầy đủ** `tests.html` một lần ở cuối S1 (khoảng 3 phút): mọi bài cũ vẫn đạt (93 bài, cộng bài mới). **Kiểm giao diện** bằng Playwright: mở `index.html`, mở tab Thế lực, chụp màn hình máy tính và di động, kiểm không lỗi console.
+**Chạy đầy đủ** `tests.html` một lần ở cuối S1 (khoảng 3 phút): mọi bài cũ vẫn đạt (93 bài, cộng bài mới). **Kiểm giao diện** bằng Playwright: mở `index.html`, mở tab Biên niên sử và mục "Quan hệ thế lực", chụp màn hình máy tính và di động, kiểm không lỗi console.
 
 ### 15.8 Các bước làm S1 (theo thứ tự, mỗi bước chạy được)
 1. **Đường cơ sở:** viết kịch bản băm 6 hạt giống, chạy trên code hiện tại, lưu kết quả (scratchpad).
@@ -686,7 +686,7 @@ Bài kiểm thử mới `Mạng quan hệ nhiều chiều (S1)`:
 4. **Hệ thống:** `js/systems/diplo.js` (API 15.4), thêm vào `js/files.js`; `fac.S()` gọi `diplo.migrate`.
 5. **Móc:** sửa `fac.relAdd`, `fac.relV`, và 14 chỗ ở 15.5; so lại hash với đường cơ sở (phải trùng).
 6. **Bài kiểm thử mới** (15.7) trong `tests.html`; chạy `?only=S1` đến khi xanh.
-7. **Giao diện:** `js/ui/diplo.js`, thêm vào `js/files.js` (nhóm giao diện); chạy `index.html`, kiểm tay bằng Playwright và chụp màn hình.
+7. **Giao diện:** `js/ui/diplo.js` (`ui.buildDiplo`), thêm vào `js/files.js` (nhóm giao diện), sửa `js/ui/history.js` để gọi; chạy `index.html`, kiểm bằng Playwright, mở tab Biên niên sử, chụp màn hình máy tính và di động.
 8. **Chạy đầy đủ** `tests.html`; sửa lỗi nếu có.
 9. **Tài liệu:** ghi "Đã làm" ở mục này, cập nhật `KE-HOACH.md` (S1 xong), nhật ký; chụp snapshot theo quy ước dự án.
 10. **Đẩy lên GitHub** theo quy trình trong `CLAUDE.md` (fetch và merge main, push, đồng bộ local).
@@ -702,6 +702,9 @@ Bài kiểm thử mới `Mạng quan hệ nhiều chiều (S1)`:
 | Giao diện nặng trên điện thoại | Lọc theo loại, mặc định chỉ triều + tông trong vùng đã biết; cuộn ngang |
 | Gắn `why` sót chỗ gọi `relAdd` | Rà bằng `grep relAdd` và bài kiểm thử đếm số loại ghi sổ sau 300 năm |
 
-### 15.10 Sau S1 (xem trước)
+### 15.10 Lộ trình tổng thể
+Thứ tự các đợt, hạ tầng đường cơ sở, cổng chơi thử, chỉ tiêu và ước lượng của toàn bộ Q, R, S, E, F nằm ở [Z-lo-trinh-trien-khai](Z-lo-trinh-trien-khai.md). S1 là **Đợt 1**; **Đợt 0** (công cụ chạy kiểm thử và hash cơ sở) làm trước.
+
+### 15.11 Sau S1 (xem trước)
 - **S2:** bật chiều `dao` từ `gt` và chuyển điều kiện gia nhập/trục xuất sang độ hợp giá trị; thêm `gt`, công–tội cho 9 tông; cơ quan tên cổ; gia tộc `kieu`.
 - **S3:** quốc vận và nho khí (`world.fac.nat`), phản phệ, thiên mệnh; đo cân bằng bật/tắt như F4.

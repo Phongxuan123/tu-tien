@@ -81,6 +81,7 @@ Mục tiêu nhịp: một đời Phi Thăng khoảng 20 đến 30 phút thật; 
 | Nhật báo "Thiên Cơ Báo" bốn năm một số, thay khung Thiên hạ | ☑ | G1 đến G5 (rút gọn: chưa có nhiệm vụ từ truy nã, chưa chấm báo mới) | [G-nhat-bao](ke-hoach/G-nhat-bao.md) |
 | Phát triển thành trì (bảng tin chợ, bậc thành) | ☐ | | [H-phat-trien-thanh-tri](ke-hoach/H-phat-trien-thanh-tri.md) |
 | S. Hệ thống Quốc gia, Tông môn hiện đại (theo nguyên mẫu quốc gia thật) và Tôn giáo: quốc vận, nho khí, quân trận, mạng quan hệ nhiều chiều, thể chế và chỉ số tông, 9 tín ngưỡng thật; làm chung M5b; nội dung sự kiện ở Q mục 24 | ☐ | Chờ bạn duyệt, chưa code | [S-quoc-gia-tong-mon-ton-giao](ke-hoach/S-quoc-gia-tong-mon-ton-giao.md) |
+| Z. Lộ trình triển khai tổng thể 13 đợt cho Q, R, S, E (phần tồn: giám định, nhiệm vụ/vay/bảo hiểm hội, thuế vào giá), F (phần tồn: F3, F5, F2 sau) | ☐ | Chờ bạn duyệt, chưa code | [Z-lo-trinh-trien-khai](ke-hoach/Z-lo-trinh-trien-khai.md) |
 
 ### 2.4 Kinh tế và công trình
 | Mục | Xong | Bạn kiểm | Chi tiết |
@@ -243,6 +244,7 @@ Gợi ý thứ tự (bạn đổi tùy ý):
 - **2026-10-18** Kế hoạch R (nhân duyên, đạo lữ, con cái) tách khỏi Q; chờ duyệt.
 - **2026-10-18** Kế hoạch làm mới cốt truyện, lựa chọn, kỳ ngộ (Q), thay D; chờ duyệt.
 - **2026-10-18** Kế hoạch S gộp (Quốc gia, Tông môn hiện đại theo nguyên mẫu quốc gia thật, Tôn giáo) và thêm nội dung sự kiện, chuỗi sự kiện, giáo sĩ, Thần Chức đạo vào Q mục 24; chờ duyệt.
+- **2026-10-18** Lộ trình triển khai tổng thể Q, R, S, E, F (13 đợt, hạ tầng, cổng chơi thử, chỉ tiêu); S1 giao diện gộp vào Biên niên sử; chờ duyệt rồi bắt đầu Đợt 0.
 - Sắp xếp lại file kế hoạch tổng này; nhật ký cũ chuyển nguyên văn vào `ke-hoach/_nhat-ky-goc.md`.
 
 ---

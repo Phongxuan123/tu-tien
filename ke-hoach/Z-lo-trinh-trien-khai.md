@@ -1,0 +1,268 @@
+# Z. Lộ trình triển khai tổng thể (Q, R, S, E, F)
+
+- Trạng thái: Chờ duyệt (kế hoạch thực thi; chưa code)
+- Ngày lập: 2026-10-18
+- Mục đích: gom **một lộ trình làm việc duy nhất** cho các kế hoạch lớn còn lại: **Q** (cốt truyện), **R** (nhân duyên), **S** (quốc gia, tông môn hiện đại, tôn giáo, mạng quan hệ, M5b), **E** (kinh tế, phần còn tồn), **F** (hoàn thiện thế giới, phần còn tồn). Chi tiết thiết kế của từng hệ vẫn ở file riêng; file này chỉ nói **làm gì trước, làm thế nào, kiểm gì, khi nào dừng để bạn chơi thử**.
+- Liên quan: [S-quoc-gia-tong-mon-ton-giao](S-quoc-gia-tong-mon-ton-giao.md) (mục 11, 15), [Q-cot-truyen](Q-cot-truyen.md) (mục 19, 24), [R-nhan-duyen](R-nhan-duyen.md), [E-kinh-te](E-kinh-te.md), [F-hoan-thien-the-gioi](F-hoan-thien-the-gioi.md), [P-nghia-vu-dan-so](P-nghia-vu-dan-so.md) (mục 11), [M-tong-mon](M-tong-mon.md), [G-nhat-bao](G-nhat-bao.md)
+
+---
+
+## 1. Hiện trạng chính xác (đối chiếu code và kế hoạch, 2026-10-18)
+
+**Đính chính:** bạn gọi E và F là "phần chưa làm", nhưng theo `KE-HOACH.md` và code thì **phần lớn đã làm**; còn **phần tồn** là thứ lộ trình này xử lý.
+
+| Hệ | Đã làm (có kiểm thử) | Còn tồn (đưa vào lộ trình) |
+|---|---|---|
+| **E Kinh tế** | E0 đến E6: giá 63 ô theo cung cầu, cú sốc, hạn dùng, kênh mua, thương hội và gia nhập hội, kết thân ở chợ, cướp đường, nhà đấu giá, đồ nhái | **Giám định**; **nhiệm vụ, vay, bảo hiểm của hội**; **thuế vương triều vào giá** (đang giản lược); móc kinh tế với quốc vận, tôn giáo (lễ hội, thuế tôn giáo) khi S xong; chờ bạn chơi thử E0 đến E6 |
+| **F Hoàn thiện thế giới** | F1 thương hội; F2 hiệp ước (cống, thuế, chư hầu, minh ước, bảo hộ) và F4 dân số ẩn (đã code lõi) | **F3** vòng xung đột và hòa giải; **F5** hồ sơ quan hệ người chơi với từng thế lực; **F2 phần sau** (nhiệm vụ do thế lực giao, trưng binh gắn hiệp ước, thuế vào giá, sơ đồ vẽ hiệp ước, thông gia, thuế thương hội) |
+| **S Quốc gia, Tông, Tôn giáo** | Chỉ có kế hoạch (bản 3 + mục 15 triển khai S1) | Toàn bộ S1 đến S11 |
+| **Q Cốt truyện** | Chỉ có kế hoạch (bản 12, có mục 24) | Q1 đến Q10 |
+| **R Nhân duyên** | Chỉ có kế hoạch (bản 2) | R1 đến R6 |
+| **M5b Liên tông** | Chưa | Gộp vào S8 |
+| **Khác liên quan** | G nhật báo, I2, I3, N, O, J, K, L, M1 đến M3, M5a, M7 đã xong | I4/I5 (dịch vụ công trình còn lại), M4, M6 (để sau) |
+
+**Cơ sở kỹ thuật hiện có:** 93 bài kiểm thử `tests.html` (khoảng 3 phút), `tools/econ-sim.js`, `tools/calib.js`, `tools/dgsim.js`, `tools/quest-sim.js`; mô phỏng thế giới 300 năm khoảng 260 ms; `TT.VERSION` giữ nguyên bằng cách khởi tạo muộn mọi trường mới.
+
+---
+
+## 2. Nguyên tắc triển khai (áp dụng cho mọi chặng)
+
+1. **Một chặng, một thứ chơi thử được.** Sau mỗi chặng game vẫn chạy và tất cả bài kiểm thử cũ vẫn đạt.
+2. **Không đổi cân bằng một cách vô tình.** Chặng nào *không nhằm* đổi cân bằng (như S1) phải chứng minh bằng **hash đường cơ sở** trùng khít; chặng nào có chủ ý đổi (F3, S3, S6...) phải đo lại các chỉ tiêu (mục 6) và ghi số trước/sau.
+3. **Không đụng bộ sinh số ngẫu nhiên khi chỉ đọc.** Hàm đọc (giao diện, ma trận, kiểm thử) tuyệt đối không gọi `rng` (xem S 15.2).
+4. **Tương thích ngược.** Trường mới khởi tạo muộn, **không đổi `TT.VERSION`**; API cũ (`relV`, `relAdd`, `align`, `power`) giữ nguyên giao diện đến khi có chặng thay thế rõ ràng.
+5. **Dữ liệu nằm ở `js/data/`, hệ số chỉnh được**, tên người chơi thấy là tiếng Việt cổ trang (Đan Các, Khí Các...); tên nước thật chỉ ở tài liệu.
+6. **Mỗi chặng có checklist xong**: mã, kiểm thử mới, chạy đầy đủ `tests.html`, đo cân bằng nếu liên quan, kiểm giao diện (Playwright, ảnh chụp máy tính và điện thoại), cập nhật tài liệu, commit và đẩy theo `CLAUDE.md`.
+7. **Giao diện gộp vào chỗ sẵn có** khi hợp lý (ví dụ ma trận quan hệ vào **Biên niên sử**), tránh thêm tab.
+8. **Nhịp hỏi người chơi** luôn dưới 6 lần mỗi phút; hộp mới đi qua kênh tầng 2 có sẵn.
+9. **Nội dung nhạy cảm** (tôn giáo thật, nước thật): xem S mục 3 nguyên tắc 5 đến 7; bạn duyệt chữ trước khi coi là xong.
+
+---
+
+## 3. Sơ đồ phụ thuộc và đường găng
+
+```
+Đợt 0 Hạ tầng (chạy kiểm thử, hash cơ sở)
+   │
+   ├─> Đợt 1: S1 Mạng quan hệ ──> F3 Xung đột và hòa giải
+   │        │
+   │        ├─> Đợt 2: S2 Giá trị tông, công–tội, cơ quan, gia tộc/hội/triều
+   │        │        └─> Đợt 3: S3 Quốc vận, nho khí ──┐
+   │        │                                          ├─> Đợt 5: E7 (E còn tồn + móc S)
+   │        └────────> Đợt 4: S4 Chỉ số tông ─ S5 Tôn giáo lõi ──┘
+   │
+   ├─> Đợt 6: S6 Quân đội, chiến tranh tổng ─ S7 Triều chính ─ F2 phần sau
+   │        └─> Đợt 7: S8 M5b Liên tông
+   │
+   ├─> Đợt 8: Q0–Q2 Nền nhân vật + Khung tuyến   ║   R1 Mô hình quan hệ   (song song, cần Q1.3 cho R1–R3)
+   │        └─> Đợt 9: Q3–Q4 Xuất thân, xương sống ║ R2 Đạo lữ, R3 Con cái, R4 Dây duyên
+   │
+   ├─> Đợt 10: F5 Hồ sơ quan hệ người chơi ─ S9 Người chơi vào cuộc   (cần Q2)
+   │
+   └─> Đợt 11: Q5–Q7 + Q10 (mục 24) ─ S10 ─ R5/R6    (nội dung)
+            └─> Đợt 12: S11 + Q8 hoàn thiện (giao diện, cân bằng, mobile)  ──> Q9 AI (tùy chọn)
+```
+- **Đường găng:** Đợt 0 → 1 → 2 → 3 → 4 → 6 → 7 (S hoàn chỉnh) song song Đợt 8 → 9 → 10 → 11 → 12.
+- **Có thể song song** (nếu làm hai phiên): Đợt 8 (Q nền, R1) với Đợt 2 trở đi, vì ít đụng `factions.js`.
+- **File dễ xung đột:** `js/systems/factions.js` (S1, F3, S3, S4, S6, S7, S8), `js/systems/sect.js` (S2, S4, S8), `js/systems/pacts.js` (S1, F2-sau, S8), `tests.html` (mọi chặng), `js/ui/history.js` (S1, S3, S5). Quy tắc: mỗi chặng chỉ chạm các chỗ nó cần, không tái cấu trúc rộng.
+
+---
+
+## 4. Các đợt chi tiết
+
+### Đợt 0. Hạ tầng và đường cơ sở (khoảng 0,5 lượt)
+**Mục tiêu:** có công cụ chạy kiểm thử trong môi trường này và mốc "trước khi sửa".
+- [ ] `tools/run-tests.js`: kịch bản Playwright (Chromium có sẵn) mở `tests.html`, chờ `window.__done`, in kết quả đạt/lỗi và thời gian; tham số lọc bài.
+- [ ] `tests.html`: thêm `?only=<từ khóa>` (bài không khớp bị bỏ qua; mặc định chạy tất cả).
+- [ ] `tools/baseline.js`: dựng thế giới cho 6 hạt giống (301, 911, 77, 5, 12, 33), chạy 300 năm `TT.fac.yearly()`, xuất hash của `f.rel`, số chiến tranh theo thời đại, chiều dài `chron`, trạng thái thế lực, số hiệp ước; lưu `tools/baseline/seeds.json` (đưa vào repo làm mốc).
+- [ ] Chạy đầy đủ 93 bài, ghi thời gian và các bài chậm.
+- **Cổng:** 93 bài đạt trong môi trường này; `seeds.json` tạo ra và tái lập được (chạy hai lần ra cùng hash).
+
+### Đợt 1. Mạng quan hệ nhiều chiều (S1) và vòng xung đột (F3) (khoảng 3 lượt)
+**S1** (chi tiết ở S mục 15; **giao diện gộp vào Biên niên sử**, không tạo tab mới):
+- [ ] `js/data/diplo.js`, `js/systems/diplo.js`, sửa `js/files.js`, `fac.relAdd/relV`, 14 chỗ gắn sổ ân oán; hash cơ sở trùng.
+- [ ] `js/ui/diplo.js` (hàm `buildDiplo(box, c)`) gọi từ `history.js`: mục mới **"Quan hệ thế lực"** gập được, đặt trước "Sử ký": ma trận có lọc loại, hồ sơ cặp, hồ sơ thế lực; khóa vẽ lại của tab Biên niên sử thêm số mục sổ ân oán.
+- [ ] Bài `Mạng quan hệ nhiều chiều (S1)` (9 mục kiểm thử ở S 15.7).
+**F3 Vòng xung đột và hòa giải** (**có chủ ý đổi cân bằng**):
+- [ ] Dùng sổ ân oán làm **đồng hồ căng thẳng** theo cặp: ân oán xấu gần đây + tranh chấp (mỏ, địa bàn, nguồn hàng) → ngưỡng tạo **xung đột nhỏ** (tranh chấp, trục xuất sứ, cắt hàng) → có thể leo thang thành chiến tranh hoặc **hòa giải** (môi giới của hội, hòa nghị chủ động, sứ giả).
+- [ ] Sửa lỗ hổng "Thịnh thế 25 năm không có cuộc chiến nào" (F mục 3 điểm 3): đảm bảo mỗi 25 năm có ít nhất vài xung đột nhỏ dù chiến tranh hiếm.
+- [ ] Tần suất theo thời đại (hệ số `D.ERAS[..].war` đã có) nối vào ngưỡng.
+- [ ] Đo lại: khoảng 52 chiến tranh và 10 diệt vong mỗi 300 năm (±25%); lập đường cơ sở mới `seeds.json` sau F3.
+- **Cổng chơi thử 1 (bạn xem):** mở Biên niên sử → "Quan hệ thế lực": ma trận, hồ sơ cặp, sổ ân oán có hợp lý không; xung đột nhỏ có đủ vui không.
+
+### Đợt 2. Giá trị tông, công–tội, cơ quan, nguyên mẫu (S2) (khoảng 2 lượt)
+- [ ] `js/data/sects.js`: thêm `gt`, `chiso`, `chinhsach`, `cong`, `toi`, `bimat`, `nguyenmau`, `coquan` cho 9 tông (số trong S 6.5); `align` thành **nhãn suy ra** từ `gt` và `nhan`.
+- [ ] Đổi gia nhập/trục xuất/cộng thiên hướng (`sect.js` dòng 38-40, 112, 295-304) sang **độ hợp giá trị**; giữ kiểm thử cũ (gia nhập, trục xuất) đạt.
+- [ ] Bật chiều `dao` trong `diplo` (trọng số 0,3) từ độ gần `gt`; đo lại cân bằng, lập đường cơ sở mới.
+- [ ] Bộ máy tên cổ (Đan Các, Khí Các, Trận Các, Phù Các, Tài Các, Thiên Cơ Các, Mật Các, Y Quán...) trong phố tông môn M7: đặt tên lại công trình hiện có, thêm công trình thiếu (dùng pixel mã hóa như `bldart.js`, trang xem thử `asset-tongmon.html`).
+- [ ] Gia tộc `kieu` (tài phiệt, thương gia, học thuật), thương hội và 9 triều: dữ liệu bản sắc (S 7); hiển thị mô tả trong Biên niên sử.
+- [ ] **Thẻ tông** (giao diện): trục giá trị, bảy chỉ số (chữ, radar nhỏ), công–tội, chính sách, bí mật (che đến khi lộ).
+- **Cổng chơi thử 2:** đọc thẻ chín tông, kiểm các nguyên mẫu và công–tội có đúng ý (nhất là Âm Hồn Giáo và Kim Phong).
+
+### Đợt 3. Quốc vận và nho khí (S3) (khoảng 2 lượt)
+- [ ] `js/data/nation.js`, `js/systems/nation.js`: `world.fac.nat[triều]` (`van`, `nho`, `mach`...), nguồn tăng giảm, thiên mệnh (đổi chủ/chia cắt/thôn tính), phản phệ cơ bản, long mạch (nối N), văn vị cá nhân.
+- [ ] `power` của triều **suy ra** có hệ số bù; đo bật/tắt như F4 (12 hạt giống), giữ chỉ tiêu.
+- [ ] Hiển thị: thanh bậc quốc vận trong Nha môn, mô tả trong Biên niên sử (mục "Quốc gia"), tin tức, biên niên.
+- [ ] Bài kiểm thử: quốc vận trong khoảng, mất mệnh có hậu quả, thế giới luôn đủ 9 triều có chủ, nho khí giảm tà khí, lưu/tải.
+
+### Đợt 4. Chỉ số tông, chính sách và Tôn giáo lõi (S4, S5) (khoảng 3 lượt)
+**S4:** 7 chỉ số + 5 chính sách của tông, `power` suy ra, thanh trừng hiếm; đo cân bằng.
+**S5 Tôn giáo:**
+- [ ] `js/data/faiths.js` (9 tín ngưỡng tên thật, giới, phái, lồng được, hiệu ứng), `js/systems/faith.js` (`world.fac.faith`: 3 ô mỗi vùng, quy tắc lồng (Thiên Chúa giáo và, mặc định, Hồi giáo không lồng), hương hỏa, giáo hội, quốc giáo, phái/dị giáo hiếm).
+- [ ] **Nơi thờ tự**: loại địa điểm `tho_tu` (đại điện cho ô 1 mỗi vùng, miếu cho ô 2, 3), biểu tượng pixel theo tín ngưỡng, dịch vụ (cầu an, tụng kinh, cứu trợ, chữa bệnh); thêm vào `places.js` an toàn cho bản lưu cũ.
+- [ ] Tín ngưỡng cá nhân (`c.faith`, `c.tam`), giữ giới, nghi lễ, hành hương; hôn nhân khác đạo (móc R).
+- [ ] Bài kiểm thử: tổng `share` bằng 1, không quá 3 ô, quy tắc lồng, đẩy ô yếu nhất, đại điện đúng chủ.
+- **Cổng chơi thử 3:** thẻ tông + tab/mục Tín ngưỡng + một vòng đời ở vùng có nơi thờ tự.
+
+### Đợt 5. Kinh tế còn tồn, nối S (E7) (khoảng 2 lượt)
+- [ ] **Giám định** (đồ nhái, thông tin bất cân xứng; dịch vụ nhà đấu giá/chợ đen).
+- [ ] **Hội: nhiệm vụ, vay, bảo hiểm** (phần E4b còn lại; cần UI riêng ở cửa sổ hội).
+- [ ] **Thuế vào giá** theo triều: `giá x (1 + thuế_suất x 0,15)` đọc từ `nat` và dân tâm; hiển thị ở Nha môn (F2 phần sau).
+- [ ] Móc S vào kinh tế: lễ hội tôn giáo tạo cầu, thuế tôn giáo là nguồn cho triều, quốc vận cao ổn giá, chiến tranh tổng (S6) làm cú sốc lớn.
+- [ ] Đo lại bằng `tools/econ-sim.js` các chỉ tiêu E (lãi buôn tối đa 25% trung bình...).
+- **Cổng chơi thử 4:** chơi thử kinh tế E0 đến E6 + E7 (bạn đang chờ chơi thử phần E).
+
+### Đợt 6. Quân đội, chiến tranh tổng, triều chính, F2 phần sau (S6, S7) (khoảng 4 lượt)
+- [ ] **S6**: quân lực, phẩm, sát khí, tướng, quân trận, bảng lính tương đương; `strength()` dùng `CL`; **engine chiến tranh tổng** (đa bên, nhiều chiến tuyến, 10-18 năm) cho Đại chiến Phù Lệnh (Q 24.5b); bản sắc quân 9 nước; đo lại chiến tranh (tách đại chiến).
+- [ ] **S7**: triều chính (hoàng quyền, kế vị, thế gia), quốc sách với tu sĩ, quốc giáo gắn triều.
+- [ ] **F2 phần sau**: trưng binh gắn hiệp ước, nhiệm vụ do thế lực giao (hộ tống thu cống, đòi nợ cống, dẹp loạn...) qua hệ nhiệm vụ A, thông gia (`hon_uoc`), thuế thương hội.
+- [ ] Bài kiểm thử: bảng lính tương đương (Kim Đan bị vây thua, Hóa Thần thắng đại quân nhỏ), chiến tranh tổng không phá chỉ tiêu, phản phệ có trần.
+
+### Đợt 7. M5b Liên tông (S8) (khoảng 1,5 lượt)
+- [ ] Tông ↔ triều (quốc sư, cung phụng, ngoài vòng pháp luật, thao túng), minh ước liên tông, giải đấu 4 hoặc 10 năm, đại chiến liên tông có hậu quả, Thiên hạ công ước.
+- [ ] Giao diện: mục "Liên tông" trong tab Tông môn; tin trong Nhật báo.
+- **Cổng chơi thử 5:** thế giới tự chạy 200-300 năm quan sát biên niên (hoặc chạy thử tốc độ cao): tông diệt, tông mới, liên minh, đại chiến có hợp lý không.
+
+### Đợt 8. Nền nhân vật và khung tuyến (Q0 đến Q2) + R1 (khoảng 8 lượt)
+- [ ] **Q1.1** tiên thiên v2 (6 ô, 4 phẩm, tương hợp, ẩn/thức tỉnh), chuyển 20 tiên thiên cũ.
+- [ ] **Q1.2** khí vận v2 (điểm khí vận chỉ từ chuyện lớn), bỏ chỉ số `kv` cũ.
+- [ ] **Q1.3** tính cách bốn trục (-10 đến +10), khóa mềm, định hướng mặc định, NPC chuyển nhãn cũ.
+- [ ] **Q2** `TT.story` (tuyến, chặng, hạn, hậu quả trễ, nhân quả, hàng đợi), `TT.wheel` (vòng quay), hộp chặng.
+- [ ] **R1** mô hình quan hệ (thanh, loại, giai đoạn, nhãn, thẻ) và chuyển bản lưu cũ.
+- [ ] Mỗi chặng nền: đo lại Trúc Cơ+ giữ 2%/5%/18% (±10%).
+- **Cổng chơi thử 6:** tạo nhân vật mới: tiên thiên mới, tính cách, vòng quay; không còn thấy `kv` cũ.
+
+### Đợt 9. Xuất thân, xương sống, đạo lữ, con cái (Q3, Q4, R2, R3, R4) (khoảng 12 lượt)
+- [ ] **Q3** 17 xuất thân + tuổi thơ, xương sống A (6 mốc), bốn tuyến mẫu T1, T2, T3, T5.
+- [ ] **Q4** bốn xương sống còn lại (Xuyên không, Trọng sinh, Huyết mạch, Thiên phạt).
+- [ ] **R2** đạo lữ (hành trình, tương hợp, hôn ước, lễ, song tu, thử thách, rạn nứt, tang; khoảng 28 chặng).
+- [ ] **R3** con cái (ý định, thai kỳ, giai đoạn, giáo dưỡng, tính cách và xuất thân của con, thừa kế; khoảng 28 chặng).
+- [ ] **R4** dây duyên (nhân vật định mệnh; nối vai Q 13.3).
+- **Cổng chơi thử 7:** một đời đầy đủ từ sinh đến chết/kế thừa với tuyến thân phận và gia đình.
+
+### Đợt 10. Người chơi vào cuộc: F5 và S9 (khoảng 3 lượt)
+- [ ] **F5** hồ sơ quan hệ của người chơi với từng thế lực (tín nhiệm theo thế lực, tai tiếng, danh vọng theo vùng) ở tab Hồ sơ.
+- [ ] **S9**: nhập ngũ, nho quan, sứ giả, cảnh báo phản phệ, nhiệm vụ thế lực đã đủ khung (cần Q2).
+- [ ] Nối tín nhiệm (F5) với mạng quan hệ (S1) và tôn giáo (S5).
+
+### Đợt 11. Nội dung truyện: Q5 đến Q7, Q10, S10, R5/R6 (khoảng 18 lượt)
+- [ ] **Q5** kỳ ngộ làm lại, kho trope, manh mối, sự kiện lẻ cũ nối chuỗi.
+- [ ] **Q6** tuyến thế giới W1 đến W8 nối kinh tế, dân số, hiệp ước, tông, báo; bí cảnh mới.
+- [ ] **Q7** tuyến thân phận còn lại (T4, T6 đến T14).
+- [ ] **Q10 (mục 24)**: đợt đầu khoảng 70 chặng/sự kiện (T15, T17, T18; W13, W16, W18, W20; cụm 11, 12, 15, 23, 24 và W25; 12 sự kiện nghịch lý), sau đó T16 Thần Chức, T19 đến T22, còn lại.
+- [ ] **S10** xung đột tôn giáo, dị giáo, thánh chiến, thanh trừng, sự kiện nghịch lý của chín tông.
+- [ ] **R5/R6** giao diện Nhân duyên, nội dung sư đồ, kết nghĩa, thù.
+- [ ] `tools/story-sim.js`, `tools/story-lint.js`, trang `so-do-tuyen.html`.
+- **Cổng chơi thử 8:** mỗi đợt nhỏ (khoảng 70 chặng) chơi thử, bạn duyệt chữ tôn giáo và Kim Phong, Thanh Xà.
+
+### Đợt 12. Hoàn thiện (S11, Q8) (khoảng 4 lượt)
+- [ ] **S11** giao diện (thẻ tông, tab Quốc gia/Tín ngưỡng nếu cần), `so-do-the-gioi.html` vẽ ma trận ân oán và hiệp ước, di động.
+- [ ] **Q8** cân bằng toàn bộ, nhịp truyện (Story Director), màn kết đời, công cụ viết nội dung.
+- [ ] Đo lại mọi chỉ tiêu (mục 6), chạy đầy đủ `tests.html`, chơi thử máy tính và điện thoại, snapshot.
+- [ ] **Q9 (tùy chọn)** AI viết lại chữ và sinh tuyến sau khi bạn chơi thử.
+
+---
+
+## 5. Quy trình mỗi chặng (làm đúng thứ tự, không bỏ bước)
+1. Đọc lại mục kế hoạch của chặng và các file sẽ chạm; ghi giả định.
+2. Chạy `tools/baseline.js` lấy mốc **trước** (nếu chặng có thể ảnh hưởng thế giới).
+3. Viết dữ liệu rồi hệ thống; mọi hàm đọc không gọi `rng`.
+4. Thêm bài kiểm thử mới vào `tests.html`; chạy với `?only=` đến khi xanh.
+5. So hash đường cơ sở: chặng không đổi cân bằng phải trùng khít; chặng đổi cân bằng thì đo chỉ tiêu (mục 6) và ghi số.
+6. Làm giao diện; mở bằng Playwright, chụp màn hình máy tính và di động, kiểm không lỗi console.
+7. Chạy đầy đủ `tests.html`.
+8. Cập nhật tài liệu: tick chặng, "Đã làm" trong file kế hoạch, `KE-HOACH.md` (bảng tiến độ, nhật ký), `ke-hoach/README.md` nếu đổi trạng thái.
+9. Commit rõ ràng (tiếng Việt, một chặng một commit hoặc vài commit nhỏ) kèm dòng đồng tác giả theo hướng dẫn.
+10. Đẩy lên GitHub theo `CLAUDE.md`: fetch `main`, merge, push, đồng bộ local.
+11. Báo cho bạn: đã làm gì, kiểm thử ra sao (đạt/lỗi, số đo), việc cần bạn chơi thử.
+
+---
+
+## 6. Chỉ tiêu cần giữ (đo lại ở mọi chặng đổi thế giới)
+| Chỉ tiêu | Mức | Công cụ |
+|---|---|---|
+| Chiến tranh mỗi 300 năm (không tính đại chiến) | khoảng 52 (±25%) | `tools/baseline.js` (nhiều hạt giống) |
+| Diệt vong mỗi 300 năm | khoảng 10 (±25%) | như trên |
+| Triều đổi chủ | 0 đến 16 lần | như trên |
+| Phân tầng NPC Trúc Cơ+ theo tư chất | khoảng 2%, 5%, 18% (±10%) | bài đo hiện có (`tools/calib.js`) |
+| Nhịp hỏi người chơi | dưới 6 lần mỗi phút | `tools/quest-sim.js`, `story-sim` |
+| Mô phỏng 300-400 năm | dưới 1 giây | bài hiệu năng |
+| Lãi buôn tối đa (E) | khoảng 25% trung bình | `tools/econ-sim.js` |
+| Dân số mọi vùng | trong [0,25 n0; 1,3 cap] | bài F4 |
+| Bản lưu cũ | tải được, không lỗi | bài lưu/tải |
+
+---
+
+## 7. Cổng chơi thử (điểm dừng cần bạn tham gia)
+| Cổng | Sau đợt | Bạn xem/đáp |
+|---|---|---|
+| 1 | 1 (S1, F3) | Ma trận quan hệ, hồ sơ cặp, sổ ân oán; xung đột có vui không |
+| 2 | 2 (S2) | Thẻ chín tông, nguyên mẫu, công–tội, Âm Hồn nghiêng ác |
+| 3 | 4 (S3 đến S5) | Quốc vận, nho khí, thẻ tông, tôn giáo, nơi thờ tự |
+| 4 | 5 (E7) | Chơi thử kinh tế (giá, hạn dùng, hội, nhiệm vụ hội, vay, giám định) |
+| 5 | 7 (S6 đến S8) | Thế giới 200-300 năm: quân, chiến tranh tổng, liên tông |
+| 6 | 8 | Nhân vật mới: tiên thiên, tính cách, khí vận, vòng quay |
+| 7 | 9 | Một đời đầy đủ: xuất thân, đạo lữ, con cái, kế thừa |
+| 8 | 11 (mỗi đợt nội dung nhỏ) | Duyệt chữ truyện; tôn giáo; Thanh Xà; Kim Phong |
+| 9 | 12 | Bản cuối: cân bằng, di động, hiệu năng |
+
+---
+
+## 8. Ước lượng tổng và thứ tự ưu tiên khi thiếu thời gian
+Đơn vị "lượt" là một đợt làm việc liên tục có kiểm thử.
+| Đợt | Nội dung | Lượt |
+|---|---|---|
+| 0 | Hạ tầng | 0,5 |
+| 1 | S1, F3 | 3 |
+| 2 | S2 | 2 |
+| 3 | S3 | 2 |
+| 4 | S4, S5 | 3 |
+| 5 | E7 | 2 |
+| 6 | S6, S7, F2 sau | 4 |
+| 7 | S8 (M5b) | 1,5 |
+| 8 | Q0-Q2, R1 | 8 |
+| 9 | Q3, Q4, R2, R3, R4 | 12 |
+| 10 | F5, S9 | 3 |
+| 11 | Q5-Q7, Q10, S10, R5/R6 | 18 |
+| 12 | S11, Q8 (+Q9) | 4 |
+| **Cộng** |  | **khoảng 63** |
+
+**Nếu phải cắt:** giữ Đợt 0 đến 4 (nền thế giới mới), Đợt 8 (nền nhân vật), rồi Đợt 9 phần R2; để Đợt 11 theo từng gói nhỏ và Q9 cuối cùng.
+
+---
+
+## 9. Rủi ro tổng thể
+| Rủi ro | Cách giảm |
+|---|---|
+| Phạm vi rất lớn, dễ trôi | Cổng chơi thử; mỗi đợt có sản phẩm; cắt theo mục 8 |
+| Xung đột sửa chung `factions.js`, `sect.js`, `tests.html` | Thứ tự đợt đã tính; mỗi chặng sửa tối thiểu; commit nhỏ; merge `main` mỗi lần đẩy |
+| Đổi cân bằng không để ý | Hash đường cơ sở, chỉ tiêu mục 6, đo bật/tắt |
+| Bài kiểm thử chậm (3 phút, sẽ tăng) | `?only=`, tách bài chậm, chạy đầy đủ ở cuối chặng |
+| Nội dung nhạy cảm (tôn giáo, nước thật) | S mục 3, duyệt chữ ở cổng chơi thử |
+| Bản lưu cũ hỏng | Trường khởi tạo muộn, bài lưu/tải mỗi chặng |
+| Q10 (nội dung) quá lớn | Chia gói ~70 chặng, chơi thử từng gói; kho trope (Q 21.5) |
+| Môi trường cloud không có giao diện thật | Playwright + ảnh chụp; bạn chơi thử bản thật ở các cổng |
+
+---
+
+## 10. Cần bạn chốt (có mặc định)
+1. **Thứ tự đợt** theo mục 3 và 4? (Mặc định: có.)
+2. **Nhánh và PR:** mỗi đợt một nhánh và một PR từ `main`, sau khi bạn merge PR #1? Hay tiếp tục dồn vào nhánh `add-game-project`? (Mặc định: merge PR #1 trước, sau đó mỗi đợt một nhánh.)
+3. **Đợt nào bạn muốn chơi thử trước**: mặc định sau Đợt 1 để xem ma trận quan hệ.
+4. **E7** có gộp giám định/nhiệm vụ hội/vay/bảo hiểm làm một đợt (mặc định) hay làm lẻ?
+5. **Q9 (AI)**: giữ tùy chọn cuối cùng? (Mặc định: có.)
+
+---
+
+## 11. Nhật ký làm việc
+- 2026-10-18: lập lộ trình tổng thể 13 đợt (0 đến 12) cho Q, R, S, E, F; đối chiếu hiện trạng E (đã code E0 đến E6, còn giám định và nhiệm vụ/vay/bảo hiểm hội), F (đã F1, F2 lõi, F4; còn F3, F5, F2 sau); S1 giao diện gộp vào Biên niên sử theo ý bạn. Chưa code.
