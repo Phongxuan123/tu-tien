@@ -1,0 +1,136 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Mẫu: Nhật báo tu tiên (tổng san bốn năm)</title>
+<style>
+:root{--bg:#0f1520;--card:#161f2d;--line:#263447;--tx:#dbe4ee;--mut:#8da0b3;--acc:#e8497c;--ok:#3fb8b0;--bad:#e0564f;--gold:#f0a840;--paper:#e9dfc8;--ink:#2a2418}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--tx);font:14px/1.5 system-ui,"Segoe UI",sans-serif;padding:16px}
+.wrap{max-width:1180px;margin:0 auto}
+.card{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:12px;margin-bottom:12px}
+h1{font-size:18px;margin:0 0 4px}h2{font-size:14px;margin:0 0 6px}.small{color:var(--mut);font-size:12px}
+label{margin-right:6px;color:var(--mut);font-size:12px}select,input{background:#0f1827;color:var(--tx);border:1px solid var(--line);border-radius:6px;padding:4px 6px}
+button{background:#1d2a3d;color:var(--tx);border:1px solid var(--line);border-radius:7px;padding:6px 11px;cursor:pointer;margin:2px 3px 2px 0}button:hover,button.on{border-color:var(--acc)}
+.tabs button.on{background:#2a1f2b}
+.row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.modal{background:#101826;border:1px solid var(--acc);border-radius:12px;padding:16px;max-width:760px;margin:0 auto}
+.modal .opt{display:block;width:100%;text-align:left;margin:6px 0;padding:9px 12px}.modal .opt small{display:block;color:var(--mut)}
+.opt.off{opacity:.4}.warn{color:var(--bad)}.okc{color:var(--ok)}
+.lib table{width:100%;border-collapse:collapse}.lib td,.lib th{padding:5px 8px;border-bottom:1px solid var(--line);font-size:13px;text-align:left}
+.paperwrap{display:grid;grid-template-columns:200px 1fr;gap:14px}@media(max-width:800px){.paperwrap{grid-template-columns:1fr}}
+.toc{position:sticky;top:8px;align-self:start;font-size:13px}.toc a{display:block;color:var(--tx);text-decoration:none;padding:3px 6px;border-radius:5px}.toc a:hover{background:#1d2a3d}.toc .n{color:var(--mut);font-size:11px}
+.paper{background:var(--paper);color:var(--ink);border-radius:6px;padding:16px 20px;font-family:"Times New Roman","Noto Serif","DejaVu Serif",serif;box-shadow:0 2px 14px #0008}
+.mast{text-align:center;border-bottom:3px double var(--ink);padding-bottom:6px;margin-bottom:8px}.mast .t{font-size:28px;font-weight:700;letter-spacing:1px}.mast .s{font-size:12px;font-style:italic}
+.meta{display:flex;justify-content:space-between;font-size:12px;border-bottom:1px solid #0003;padding-bottom:4px;margin-bottom:10px;flex-wrap:wrap;gap:6px}
+.sech{font-size:13px;text-transform:uppercase;letter-spacing:2px;color:#7a3b2e;font-weight:700;border-top:2px solid var(--ink);margin:18px 0 8px;padding-top:4px}
+.cols{column-count:2;column-gap:22px;column-rule:1px solid #0002}@media(max-width:800px){.cols{column-count:1}}
+.art{break-inside:avoid;margin:0 0 12px;padding-bottom:8px;border-bottom:1px dotted #0004}
+.art h3{margin:0 0 3px;font-size:15.5px;line-height:1.25}.art p{margin:0 0 4px;font-size:13px}
+.badge{display:inline-block;font-family:system-ui,sans-serif;font-size:10.5px;padding:0 7px;border-radius:9px;margin-right:3px;background:#0002}
+.b-ok{background:#1f5a56;color:#fff}.b-mid{background:#8a6b1f;color:#fff}.b-low{background:#8a3a3a;color:#fff}.b-rel{background:#7a3b2e;color:#fff}
+.tl{font-size:13px}.tl div{padding:2px 0;border-bottom:1px dotted #0003}.tl b{display:inline-block;width:92px;color:#7a3b2e}
+table.pt{width:100%;border-collapse:collapse;font-size:12.5px;font-family:system-ui,sans-serif}table.pt td,table.pt th{padding:3px 6px;border-bottom:1px solid #0002;text-align:right}table.pt th:first-child,table.pt td:first-child{text-align:left}
+.up{color:#9a2f2a}.dn{color:#1f6a5e}
+.ed{background:#0001;padding:8px 12px;border-left:4px solid #7a3b2e;font-style:italic;font-size:13.5px;margin-bottom:10px}
+.qty{font-family:system-ui,sans-serif;font-size:11px;color:#6a5a40}
+.act button{background:#fff8;color:#2a2418;border:1px solid #0004;font-size:12px;padding:3px 8px}.toast{position:fixed;right:14px;bottom:14px;background:#161f2d;border:1px solid var(--ok);border-radius:8px;padding:8px 12px;display:none;color:var(--tx)}
+</style>
+</head>
+<body>
+<div class="wrap">
+<h1>Mẫu: Nhật báo tu tiên (bốn năm một số tổng san)</h1>
+<div class="small" style="margin-bottom:10px">Ba màn: (1) sự kiện người bán báo tới gia hạn, bốn năm một lần, chỉ khi bạn đủ linh thạch trụ ít nhất 30 năm; (2) mục Nhật báo để đọc lại các số đã mua; (3) một số tổng san bốn năm (dài, nhiều mục, chất lượng). Số liệu là thử.</div>
+<div class="card tabs"><button id="b1" class="on">1. Sự kiện gia hạn</button><button id="b2">2. Mục Nhật báo (đọc lại)</button><button id="b3">3. Số tổng san 4 năm</button></div>
+
+<div id="p1">
+<div class="card row">
+ <label>Cảnh giới <select id="realm"><option value="0">Phàm nhân</option><option value="1">Luyện Khí</option><option value="2" selected>Trúc Cơ</option><option value="3">Kim Đan</option></select></label>
+ <label>Tài sản (linh thạch) <input id="wealth" type="number" value="900" style="width:90px"></label>
+ <label>Đang đăng ký <select id="cur"><option value="">không</option><option value="thien_co">Thiên Cơ Báo</option></select></label>
+ <span class="small" id="cond"></span>
+</div>
+<div class="modal" id="modal"></div>
+</div>
+
+<div id="p2" style="display:none"><div class="card lib"><h2>Nhật báo: các số đã mua</h2><div class="small">Chỉ hiện số bạn đã mua; đọc lại bất cứ lúc nào. Không còn khung "Thiên hạ".</div><table><tr><th>Số</th><th>Tòa báo</th><th>Giai đoạn</th><th>Số tin</th><th>Phí đã trả</th><th></th></tr><tr><td>Số 3</td><td>Thiên Cơ Báo</td><td>Năm 17-20</td><td>58 tin, 6 bảng</td><td>40 linh thạch</td><td><button onclick="show3()">Đọc</button></td></tr><tr><td>Số 2</td><td>Thiên Cơ Báo</td><td>Năm 13-16</td><td>54 tin, 6 bảng</td><td>38 linh thạch</td><td><button onclick="toast('Mở số 2')">Đọc</button></td></tr><tr><td>Số 1 (số biếu)</td><td>Thiên Cơ Báo</td><td>Năm 9-12</td><td>51 tin, 5 bảng</td><td>miễn phí</td><td><button onclick="toast('Mở số 1')">Đọc</button></td></tr><tr class="small"><td>Số tới</td><td colspan="5">dự kiến ở năm 24 (sau 4 năm). Người bán báo sẽ ghé hỏi gia hạn.</td></tr></table></div></div>
+
+<div id="p3" style="display:none">
+ <div class="paperwrap"><div class="toc card"><b>Mục lục</b><div class="small" style="margin-bottom:4px">Số tổng san, năm 17-20</div><div id="toc"></div></div><div class="paper" id="paper"></div></div>
+</div>
+</div>
+<div class="toast" id="toast"></div>
+<script>
+const $ = id => document.getElementById(id);
+function toast(t) { const e = $('toast'); e.textContent = t; e.style.display = 'block'; clearTimeout(window._t); window._t = setTimeout(() => { e.style.display = 'none'; }, 2000); }
+['1', '2', '3'].forEach(k => { $('b' + k).onclick = () => { ['1', '2', '3'].forEach(j => { $('p' + j).style.display = j === k ? '' : 'none'; $('b' + j).classList.toggle('on', j === k); }); if (k === '3') show3(true); }; });
+
+// ---- 1. sự kiện gia hạn ----
+const PUBS = { thien_co: { n: 'Thiên Cơ Báo', base: 0.6, rel: 90, sub: 'giá cả, đường buôn, thương mại', dese: 'dày bảng giá và dự báo thị trường' }, chinh_dao: { n: 'Chính Đạo Nhật San', base: 0.4, rel: 78, sub: 'tông môn, bí cảnh, truy nã', dese: 'dày tin tông môn và truy nã' }, hac_phong: { n: 'Hắc Phong Tiểu Báo', base: 0.2, rel: 55, sub: 'tin đồn, chuyện thâm cung', dese: 'nhiều tin đồn, có tin thật báo khác giấu' } };
+function fee(p, realm) { return Math.round(PUBS[p].base * (1 + 0.6 * realm) * 100) / 100; }
+function ev() {
+  const realm = +$('realm').value, wealth = +$('wealth').value, cur = $('cur').value;
+  const need = k => fee(k, realm) * 12 * 30;
+  const ok = k => wealth >= need(k);
+  $('cond').innerHTML = 'Điều kiện hiện sự kiện: tài sản đủ trả ít nhất 30 năm của tờ rẻ nhất = <b>' + Math.round(need('hac_phong')) + '</b> linh thạch. ' + (ok('hac_phong') ? '<span class="okc">Bạn đủ, sự kiện sẽ hiện.</span>' : '<span class="warn">Chưa đủ, sự kiện không hiện lần này (bốn năm nữa xét lại).</span>');
+  if (!ok('hac_phong')) { $('modal').innerHTML = '<h2>Không có sự kiện</h2><div class="small">Người bán báo chỉ ghé những người có đủ của để trả phí đều đặn hàng chục năm. Lần sau (4 năm) sẽ xét lại.</div>'; return; }
+  let h = '<div class="small">NHẬT BÁO · bốn năm một lần</div><h2 style="font-size:17px">Người bán báo ghé thăm</h2><p>Một người bán báo rảo bước tới, cúi chào: "Thưa đạo hữu, bốn năm rồi, các tòa báo xin hỏi đạo hữu có muốn nhận Nhật báo hằng tháng không? Mỗi tháng trừ một khoản nhỏ, mỗi bốn năm sẽ gửi một <b>số tổng san</b> dày dặn ghi hết chuyện thiên hạ. Đạo hữu còn đủ của để đặt dài hạn."</p><div class="small">Mỗi tháng trừ tự động; hết linh thạch thì ngưng. Tối đa hai tờ.</div>';
+  Object.keys(PUBS).forEach(k => {
+    const f = fee(k, realm), p = PUBS[k], can = ok(k);
+    h += `<button class="opt ${can ? '' : 'off'}" onclick="toast('Chọn: ${p.n}')" ${can ? '' : 'disabled'}><b>${cur === k ? 'Gia hạn ' : 'Đặt '}${p.n}</b> · ${f} linh thạch/tháng (${Math.round(f * 48 * 10) / 10} cho bốn năm)<small>Mạnh về ${p.sub}; ${p.dese}; độ tin cậy khoảng ${p.rel}%. ${can ? '' : 'Bạn chưa đủ trụ 30 năm với tờ này.'}</small></button>`;
+  });
+  h += `<button class="opt" onclick="toast('Hủy đăng ký')"><b>${cur ? 'Hủy đăng ký' : 'Chưa cần, hỏi lại sau bốn năm'}</b><small>${cur ? 'Giữ các số đã mua để đọc lại.' : 'Có thể mua một số lẻ khi gặp người bán báo ở thành.'}</small></button>`;
+  h += '<div class="small" style="margin-top:8px">Mặc định khi hết giờ: ' + (cur ? 'gia hạn tờ đang đọc' : 'chưa cần') + '.</div>';
+  $('modal').innerHTML = h;
+}
+['realm', 'wealth', 'cur'].forEach(id => $(id).addEventListener('input', ev)); ev();
+
+// ---- 3. số tổng san ----
+const SECS = [
+  { id: 'edit', n: 'Xã luận', k: 1 }, { id: 'ben', n: 'Dòng thời gian bốn năm', k: 1 }, { id: 'the', n: 'Thế cuộc và chiến sự', k: 9 }, { id: 'tong', n: 'Tông môn, gia tộc', k: 8 }, { id: 'bicanh', n: 'Bí cảnh và kỳ ngộ', k: 5 },
+  { id: 'gia', n: 'Bảng giá và thị trường', k: 1 }, { id: 'nhan', n: 'Nhân vật và bảng xếp hạng', k: 1 }, { id: 'truyna', n: 'Truy nã và treo thưởng', k: 6 }, { id: 'hy', n: 'Hỷ tín và cáo phó', k: 6 }, { id: 'rao', n: 'Rao vặt dài hạn', k: 8 }, { id: 'ban', n: 'Có liên quan đến bạn', k: 4 }, { id: 'dubao', n: 'Dự báo bốn năm tới', k: 4 }, { id: 'dc', n: 'Đính chính', k: 1 }
+];
+function art(h, p, tags, act, rel) { return `<div class="art"><h3>${h}</h3><p>${p}</p><div>${rel ? '<span class="badge b-rel">liên quan bạn</span>' : ''}${tags.map(t => `<span class="badge ${t[1]}">${t[0]}</span>`).join('')}</div>${act ? `<div class="act">${act.map(a => `<button onclick="toast('${a}: đã ghi vào sổ tay')">${a}</button>`).join('')}</div>` : ''}</div>`; }
+const OK = ['đã kiểm chứng', 'b-ok'], MID = ['khá chắc', 'b-mid'], LOW = ['chưa xác nhận', 'b-low'];
+function show3(noswitch) {
+  if (!noswitch) $('b3').click();
+  const secHead = (id, n, k) => `<div class="sech" id="s_${id}">${n} <span class="qty">(${k})</span></div>`;
+  let h = `<div class="mast"><div class="t">THIÊN CƠ BÁO</div><div class="s">Tổng san bốn năm · giá cả, đường buôn, thương mại · do Thương hội ra</div></div><div class="meta"><span>Số 3 · năm 17 đến năm 20</span><span>58 tin · 6 bảng · 2 biểu đồ</span><span>Phí kỳ này: 40 linh thạch</span></div>`;
+  h += secHead('edit', 'Xã luận', '1 bài') + '<div class="ed">Bốn năm qua thiên hạ trải hai mùa gió: một cuộc chiến ở Hỏa Diệm Sơn kéo dài gần ba năm làm giá đan tăng gấp đôi rồi hạ dần; hai bí cảnh mở ra rồi đóng lại. Thương hội kêu gọi các bên giữ đường buôn thông thoáng. Chúng tôi dự báo bốn năm tới còn nhiều biến động ở phía nam, đạo hữu nên giữ vốn dự trữ.</div>';
+  h += secHead('ben', 'Dòng thời gian bốn năm', '16 mốc') + '<div class="tl">' + [['Năm 17, thg 2', 'Liệt Hỏa Môn và Thanh Phong Cung khai chiến ở Hỏa Diệm Sơn'], ['Năm 17, thg 9', 'Đường buôn Nam Lâm - Hỏa Diệm Sơn đóng'], ['Năm 18, thg 4', 'Bí cảnh Mãng Lâm mở; 120 tu sĩ đổ về'], ['Năm 18, thg 11', 'Giá đan thường ở Hỏa Diệm Sơn đạt đỉnh, gấp 2,1 lần'], ['Năm 19, thg 3', 'Bách Thảo Môn mở kho bán rộng, giá đan hạ'], ['Năm 19, thg 8', 'Hòa nghị Liệt Hỏa - Thanh Phong, bồi thường 800 linh thạch'], ['Năm 20, thg 1', 'Vương triều Nam Lâm hạ thuế cửa ải 15%']].map(x => `<div><b>${x[0]}</b> ${x[1]}</div>`).join('') + '<div class="qty">... và 9 mốc khác</div></div>';
+  h += secHead('the', 'Thế cuộc và chiến sự', '9 bài') + '<div class="cols">' +
+    art('Chiến Hỏa Diệm Sơn: từ tranh mỏ đến hòa nghị', 'Hai tông tranh một mỏ linh thạch, quan hệ xuống -42, chiến sự kéo gần ba năm. Liệt Hỏa Môn mất một địa điểm và chấp nhận bồi thường. Nguyên nhân sâu xa: Thanh Phong Cung chặn nguồn khoáng của Liệt Hỏa sau khi cắt hợp đồng. Hệ quả: đường buôn phía nam tắc 14 tháng, giá đan dược lên gấp đôi.', [OK], ['Đánh dấu vùng', 'Xem tin liên quan'], true) +
+    art('Vương triều Nam Lâm giảm thuế cửa ải', 'Sau khi thương hội vận động, triều đình hạ thuế 15% để đường buôn thông thương. Tông môn trong vùng được lợi ít hơn thương hội.', [OK], null) +
+    art('Thịnh thế còn kéo dài bao lâu?', 'Các nhà bình luận cho rằng thời Thịnh thế còn khoảng hai mươi năm nữa, nhưng dấu hiệu bất ổn ở phía bắc ngày càng nhiều.', [MID], null) +
+    art('Gia tộc Úc ở Trung Châu mất người nối nghiệp', 'Trưởng gia Úc Thiên Vũ qua đời không con nối dõi, gia tộc có nguy cơ phụ thuộc Thanh Vân Tông.', [OK], null) +
+    art('Tin đồn: tông môn phía bắc ngầm tích binh', 'Một nguồn tin không nêu danh nói Băng Nguyên đang chiêu mộ cao thủ lạ mặt. Chưa có xác nhận.', [LOW], null) +
+    '</div>';
+  h += secHead('tong', 'Tông môn, gia tộc', '8 bài') + '<div class="cols">' +
+    art('Thanh Vân Tông nhận 120 đệ tử mới', 'Cuộc tuyển đệ tử lớn nhất ba mươi năm. Điều kiện tư chất hạ thấp, mở cho tán tu từ hai mươi tuổi.', [OK], ['Xem điều kiện nhập môn'], true) +
+    art('Bách Thảo Môn mở kho đan dược', 'Sau gần hai năm đóng, kho mở bán cho người ngoài với hạn mức. Giá thấp hơn chợ 18%.', [OK], null) +
+    art('Âm Hồn Giáo chia hai phe', 'Hai trưởng lão bất đồng về việc nhận đệ tử chính đạo bỏ tông; một phe ly khai về phía tây.', [MID], null) +
+    '</div>';
+  h += secHead('bicanh', 'Bí cảnh và kỳ ngộ', '5 bài') + '<div class="cols">' +
+    art('Bí cảnh Mãng Lâm: kết quả sau mười tám tháng', 'Có 120 tu sĩ vào, khoảng 61% thua và mất đồ, 9% thông quan. Các vật phẩm quý hiện giá cao ở chợ tán tu.', [OK], ['Xem bảng thu hoạch'], true) +
+    art('Bí cảnh mới sắp mở ở Lôi Đảo', 'Dấu hiệu linh khí dao động. Dự kiến mở trong một đến hai năm.', [MID], ['Lập kế hoạch tới dự']) +
+    '</div>';
+  h += secHead('gia', 'Bảng giá và thị trường', '1 bảng + 1 biểu đồ') + `<table class="pt"><tr><th>Mặt hàng (Trung Châu)</th><th>Đầu kỳ</th><th>Cuối kỳ</th><th>Đỉnh</th><th>Xu hướng</th></tr>${[['Đan thường', 70, 74, 148, 'ổn'], ['Bùa chú', 75, 79, 134, 'ổn'], ['Linh thảo', 6, 5, 9, 'giảm'], ['Khoáng thạch', 8, 9, 12, 'ổn'], ['Phá Cảnh Đan', 121, 128, 220, 'ổn']].map(r => `<tr><td>${r[0]}</td><td>${r[1]}</td><td>${r[2]}</td><td>${r[3]}</td><td class="${r[4] === 'giảm' ? 'dn' : ''}">${r[4]}</td></tr>`).join('')}</table>` + spark() + '<div class="qty">Đơn vị: vàng. Bảng giá ở vùng xa và so sánh vùng có trong số đặc biệt của Thiên Cơ Báo cho hội viên.</div>';
+  h += secHead('nhan', 'Nhân vật và bảng xếp hạng', '10 người') + '<table class="pt"><tr><th>Hạng</th><th>Tu sĩ</th><th>Cảnh giới</th><th>Thế lực</th></tr>' + [['Úc Hiên', 'Hóa Thần', 'ẩn thế'], ['Hạ Hạo Huyền', 'Nguyên Anh', 'Vương triều Đông Hải'], ['Khúc Phong Tuấn', 'Nguyên Anh', 'Thanh Vân Tông'], ['Tạ Thiên Tuấn', 'Kim Đan', 'Tạ gia'], ['...', '', '']].map((r, i) => `<tr><td>${i + 1}</td><td>${r[0]}</td><td>${r[1]}</td><td>${r[2]}</td></tr>`).join('') + '</table>';
+  h += secHead('truyna', 'Truy nã và treo thưởng', '6 tin') + '<div class="cols">' + art('Treo thưởng 40 linh thạch bắt tên cướp đường', 'Kẻ cướp tấn công ba đoàn buôn trong năm. Bằng chứng hoặc bắt sống đều được thưởng.', [OK], ['Nhận truy nã']) + art('Âm Hồn Giáo truy nã phản đồ', 'Một đệ tử bỏ trốn mang theo bí kíp, treo thưởng 80 linh thạch.', [MID], null) + '</div>';
+  h += secHead('hy', 'Hỷ tín và cáo phó', '6 tin') + '<div class="cols">' + art('Cáo phó: Úc Thiên Vũ, thương nhân Trung Châu', 'Thọ bốn trăm năm. Lễ tang tổ chức cuối tháng.', [OK], ['Gửi quà chia buồn']) + art('Hỷ tín: kết đạo lữ giữa con trai Tạ gia và đệ tử Thủy Nguyệt Cung', 'Hai nhà liên hôn, quan hệ hai bên khởi sắc.', [OK], null) + '</div>';
+  h += secHead('rao', 'Rao vặt dài hạn', '8 tin') + '<div class="cols">' + art('Cần thợ luyện đan có kinh nghiệm', 'Một thương hội tuyển thợ đan phòng, lương tháng 6 linh thạch, hợp đồng hai năm.', [OK], ['Xem việc làm'], true) + art('Bán đan phương cổ', 'Đan phương Hồi Xuân cải tiến, giá 50 linh thạch, có bảo đảm hoàn tiền.', [MID], null) + '</div>';
+  h += secHead('ban', 'Có liên quan đến bạn', '4 mục') + '<div class="cols">' + art('Tên bạn xuất hiện trong báo', 'Bạn được nhắc trong bài về bí cảnh Mãng Lâm như người sống sót duy nhất của một đoàn năm người. Danh vọng +3.', [OK], null, true) + art('Người quen: Ngụy Vũ Nhiên', 'Được thăng chức trưởng lão ngoại môn ở Thanh Vân Tông.', [OK], null, true) + '</div>';
+  h += secHead('dubao', 'Dự báo bốn năm tới', '4 mục') + '<div class="cols">' + art('Nguy cơ chiến sự phía bắc: trung bình', 'Theo tình hình hai tông ở Băng Nguyên, khả năng nổ chiến tranh trong bốn năm khoảng 35%. Nếu có, đan thường ở Băng Nguyên có thể tăng gấp 1,5 đến 2 lần.', [MID], null) + art('Giá linh thảo dự báo thấp', 'Mùa màng bội thu hai năm liền, nhưng nếu hạn hán thì giá có thể tăng gấp rưỡi.', [MID], null) + '</div>';
+  h += secHead('dc', 'Đính chính', '1 mục') + '<div class="qty" style="font-size:12.5px">Số 2: tin "Bách Thảo Môn xây thêm lò" là sai; tòa soạn xin lỗi.</div>';
+  $('paper').innerHTML = h;
+  $('toc').innerHTML = SECS.map(s => `<a href="#s_${s.id}">${s.n} <span class="n">${s.k > 1 ? s.k : ''}</span></a>`).join('');
+}
+function spark() {
+  const pts = [70, 72, 80, 98, 130, 148, 140, 118, 104, 90, 80, 76, 74]; const W = 600, H = 120, mx = 160;
+  const x = i => 30 + (W - 40) * i / (pts.length - 1), y = v => 10 + (H - 24) * (1 - v / mx);
+  return `<svg viewBox="0 0 ${W} ${H}" style="width:100%;height:auto;margin-top:6px"><line x1="30" x2="${W - 10}" y1="${y(70)}" y2="${y(70)}" stroke="#7a6a50" stroke-dasharray="4 3"/><polyline fill="none" stroke="#7a3b2e" stroke-width="2.2" points="${pts.map((v, i) => x(i) + ',' + y(v)).join(' ')}"/><text x="30" y="${H - 2}" font-size="10" fill="#6a5a40">năm 17</text><text x="${W - 10}" y="${H - 2}" font-size="10" fill="#6a5a40" text-anchor="end">năm 20</text><text x="${x(5) + 4}" y="${y(148) - 3}" font-size="10" fill="#7a3b2e">đỉnh chiến sự 148</text><text x="${W - 12}" y="${y(70) - 3}" font-size="10" fill="#6a5a40" text-anchor="end">giá bình thường 70</text></svg><div class="qty">Giá đan thường ở Hỏa Diệm Sơn theo quý trong bốn năm.</div>`;
+}
+show3(true);
+</script>
+</body>
+</html>

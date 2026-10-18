@@ -1,0 +1,141 @@
+<!doctype html>
+<html lang="vi"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Bản mẫu giao diện mới</title>
+<style>
+:root{--bg:#0e1218;--bg2:#121820;--card:#161d27;--card2:#1b2430;--line:#243040;--text:#e8edf3;--mute:#8d9aab;--dim:#5c6b7d;--pink:#e8497c;--pink2:#ff6f9e;--green:#34c38f;--yellow:#e0b73a;--teal:#3fb8b0;--purple:#8a7af0;--red:#d8505f;--r:12px;
+--serif:'Cambria','Times New Roman','Noto Serif',serif;--mono:ui-monospace,Menlo,Consolas,monospace;--sans:system-ui,-apple-system,'Segoe UI',Roboto,sans-serif}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font:14px/1.45 var(--sans)}
+.cap{font:11px/1.2 var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--mute)}
+.btn{background:var(--card2);border:1px solid var(--line);color:#d5dde8;border-radius:8px;padding:7px 12px;font:13px var(--sans);cursor:pointer}
+.btn:hover{border-color:#3a4a60}.btn.on{background:#eef1f5;color:#10151c;border-color:#eef1f5}.btn.pink{background:var(--pink);border-color:var(--pink);color:#fff}
+.sel{background:var(--card2);border:1px solid var(--line);color:#d5dde8;border-radius:8px;padding:7px 10px;font:13px var(--sans)}
+header{position:sticky;top:0;z-index:5;background:linear-gradient(var(--bg) 85%,transparent);padding:14px 24px 8px}
+.top{display:flex;align-items:baseline;gap:14px;flex-wrap:wrap}
+.brand{font:600 17px var(--serif)}.brand b{color:var(--pink)}
+.age{font:700 38px/1 var(--serif)}.age small{font:400 17px var(--serif);color:var(--mute);margin-left:4px}
+.date{color:var(--mute);font-size:13px}.date b{color:var(--text);font-weight:500}
+.year{height:5px;border-radius:3px;background:#1d2631;margin:10px 0 12px;overflow:hidden}.year i{display:block;height:100%;background:var(--pink);width:62%}
+.ctl{display:flex;gap:8px;flex-wrap:wrap;align-items:center}.ctl .sp{flex:1}
+.hud{display:flex;gap:8px;align-items:stretch;margin-top:10px}
+.hud .chip{flex:1 1 0;min-width:112px;background:var(--card);border:1px solid var(--line);border-radius:10px;padding:8px 10px;cursor:grab;user-select:none;transition:border-color .15s}
+.hud .chip:hover{border-color:#3a4a60}.hud .chip.drag{opacity:.4;border-color:var(--pink)}
+.chip .t{display:flex;justify-content:space-between;gap:6px;margin-bottom:6px;align-items:baseline}.chip b{font-weight:500;font-size:13px}.chip .v{font:11px var(--mono);color:var(--mute)}
+.chip .gr{color:#46556a;letter-spacing:-2px;margin-right:4px}.bar{height:6px;border-radius:3px;background:#222c39;overflow:hidden}.bar i{display:block;height:100%;border-radius:3px}
+.chip.warn{border-color:#6a2c3a}.chip.warn b{color:#f08aa6}
+.hudbar{display:flex;justify-content:space-between;align-items:center;margin:10px 0 0}
+main{display:grid;grid-template-columns:380px minmax(0,1fr) 330px;gap:16px;padding:8px 24px 40px;align-items:start}
+.card{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:16px}
+.card h2{font:600 19px var(--serif);margin:0 0 10px}
+.tabs{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:12px}
+.tab{background:var(--card2);border:1px solid var(--line);color:#aab6c6;border-radius:8px;padding:6px 10px;font-size:13px;cursor:pointer}
+.tab.on{color:var(--pink2);border-color:var(--pink);background:#241a24}
+.id{border-radius:var(--r);overflow:hidden;border:1px solid var(--line);background:var(--card)}
+.id .band{background:var(--pink);color:#fff;display:flex;justify-content:space-between;padding:7px 14px;font:11px var(--mono);letter-spacing:.1em;text-transform:uppercase}
+.id .body{padding:14px}.id h3{font:700 24px var(--serif);margin:0 0 8px}
+.kv{display:grid;grid-template-columns:96px 1fr;gap:6px 10px;font-size:13px}.kv span:nth-child(odd){color:var(--mute)}
+.mrz{margin-top:12px;border-top:1px dashed var(--line);padding-top:10px;font:11px/1.5 var(--mono);color:#69788c;word-break:break-all}
+.scene{padding:0;overflow:hidden}.scene canvas{display:block;width:100%;image-rendering:pixelated;aspect-ratio:240/72;height:auto}
+.scene .scap{padding:10px 16px;font:12px var(--mono);letter-spacing:.06em;text-transform:uppercase;color:var(--mute);border-top:1px solid var(--line)}
+.ev{border-color:#7a5a1e;background:#1c1a14}.ev h2{color:#f0c35a}.ev .choice{display:block;width:100%;text-align:left;margin:8px 0 0;padding:11px 14px;border-radius:10px;background:#2a2a30;border:1px solid #3a3a44;color:var(--text);font:14px var(--sans);cursor:pointer}
+.ev .choice.pri{background:#e0b73a;border-color:#e0b73a;color:#1b1608;font-weight:600}.ev .tm{height:5px;border-radius:3px;background:#2c2a20;margin-top:12px}.ev .tm i{display:block;height:100%;width:55%;background:#e0b73a;border-radius:3px}
+.log div{padding:6px 0;border-bottom:1px solid #1c2530;color:#b8c3d1;font-size:13px}.log div:last-child{border:0}.log .good{color:#7ad8a8}.log .bad{color:#f08aa6}.log .big{color:#f0c35a}
+.lm{display:grid;grid-template-columns:repeat(10,1fr);gap:4px;margin:12px 0 8px}
+.lm i{aspect-ratio:1;border-radius:4px;background:#1c2530;display:block;position:relative}
+.lm i.cur{outline:2px solid var(--pink);outline-offset:1px}.lm i.end{outline:2px solid #e8edf3;outline-offset:1px}.lm i.end2{outline:2px dashed #7a8aa0;outline-offset:1px}
+.lm i.m::after{content:"";position:absolute;right:2px;top:2px;width:5px;height:5px;border-radius:50%;background:#ffe08a}
+.legend{display:flex;gap:10px;flex-wrap:wrap;font-size:12px;color:var(--mute)}.legend span{display:flex;align-items:center;gap:5px}.legend u{width:11px;height:11px;border-radius:3px;display:inline-block;text-decoration:none}
+.people .row{display:flex;justify-content:space-between;padding:9px 0;border-bottom:1px solid #1c2530}.people .row:last-child{border:0}.people small{color:var(--mute);display:block}
+.mapph{height:170px;border-radius:10px;background:radial-gradient(circle at 30% 40%,#1c2a3a,#121a24);border:1px solid var(--line);display:flex;align-items:center;justify-content:center;color:var(--dim);font:12px var(--mono)}
+.tabs.top{margin:10px 0 0}.sgrip{display:flex;justify-content:space-between;align-items:center;padding:8px 12px;border-bottom:1px solid var(--line);background:#141b25}.lnk{color:var(--pink);cursor:pointer}.sph{border:1px dashed #34445a;border-radius:12px;padding:16px;color:var(--mute);font-size:13px;margin-bottom:12px;text-align:center}.scene.floating{position:fixed!important;z-index:8;margin:0!important;top:auto;box-shadow:0 14px 40px rgba(0,0,0,.55);border-color:var(--pink)}.scene.floating .sgrip{cursor:move}.sticky-scene{position:sticky;top:calc(var(--hh,150px) + 8px);z-index:3;box-shadow:0 10px 24px rgba(0,0,0,.45)}.float .mr{display:flex;justify-content:space-between;margin-bottom:4px}.float .m.warn b{color:#f08aa6}.float{position:fixed;right:26px;bottom:26px;top:auto;width:250px;background:var(--card);border:1px solid var(--pink);border-radius:12px;padding:12px;display:none;z-index:9;box-shadow:0 10px 30px rgba(0,0,0,.45)}
+.float .grip{cursor:move;display:flex;justify-content:space-between;margin-bottom:8px}.float .m{margin-bottom:8px}
+@media(max-width:1000px){main{grid-template-columns:minmax(0,1fr)}.hud{overflow-x:auto;padding-bottom:4px}.hud .chip{min-width:130px;flex:0 0 130px}header{padding:12px 14px 6px}main{padding:8px 14px 40px}.age{font-size:30px}}
+</style></head>
+<body>
+<header>
+  <div class="top"><span class="brand"><b>1</b> trong 8 tỷ</span><span class="age">24<small>tuổi</small></span><span class="date">Năm 2028 · Hamid Safi · <b>Luyện Khí tầng 3</b> · 1 năm ≈ 4 giây</span></div>
+  <div class="year"><i></i></div>
+  <div class="ctl">
+    <button class="btn on">▸ Tiếp tục</button><button class="btn">1×</button><button class="btn">2×</button><button class="btn">4×</button><button class="btn">8×</button><button class="btn">16×</button>
+    <button class="btn">⏭ Tua tới sự kiện</button>
+    <select class="sel"><option>Hướng đi: Cân bằng</option></select><select class="sel"><option>Tự động: Cân bằng</option></select>
+    <span class="sp"></span><button class="btn">Lưu</button><button class="btn">☰ Tệp</button>
+  </div>
+  <nav class="tabs top" id="tabs"><span class="tab on">Nhân vật</span><span class="tab">Quan hệ</span><span class="tab">Mục tiêu</span><span class="tab">Tông môn</span><span class="tab">Gia đình</span><span class="tab">Hành trang</span><span class="tab">Công pháp</span><span class="tab">Biên niên sử</span><span class="tab">Quy tắc</span></nav>
+</header>
+<div class="float" id="float"><div class="grip"><span class="cap">⋮⋮ Trạng thái</span><span class="cap" style="color:var(--pink);cursor:pointer" id="dock">gắn lại</span></div>
+  <div class="m"><div class="mr"><b>Sinh lực</b><span class="cap">142/181</span></div><div class="bar"><i style="width:78%;background:var(--green)"></i></div></div>
+  <div class="m"><div class="mr"><b>Tu vi</b><span class="cap">420/1000</span></div><div class="bar"><i style="width:42%;background:var(--pink)"></i></div></div>
+  <div class="m"><div class="mr"><b>Đạo tâm</b><span class="cap">72</span></div><div class="bar"><i style="width:72%;background:var(--teal)"></i></div></div>
+  <div class="m"><div class="mr"><b>Linh thạch</b><span class="cap">37,5 · 46 vàng</span></div><div class="bar"><i style="width:35%;background:var(--purple)"></i></div></div>
+  <div class="m warn"><div class="mr"><b>Trọng thương</b><span class="cap">còn 12 tháng</span></div><div class="bar"><i style="width:35%;background:var(--red)"></i></div></div></div>
+<main>
+  <section>
+
+    <div class="sph" id="sph" style="display:none">Màn hình nhân vật đang tách ra <span class="lnk" id="sdock2">gắn lại</span></div><div class="card scene sticky-scene" id="scenecard" style="margin-bottom:12px"><div class="sgrip" id="sgrip"><span class="cap">⋮⋮ Màn hình nhân vật</span><span class="cap"><span class="lnk" id="ssize" style="margin-right:10px">to / nhỏ</span><span class="lnk" id="sdetach">tách ra</span></span></div><canvas id="scene" width="240" height="72"></canvas><div class="scap">Thiên Mã Trấn · Tây Thiên Sơn · ban đêm</div></div>
+    <div class="id"><div class="band"><span>Hồ sơ nhân vật</span><span>AFG · 2026</span></div><div class="body">
+      <h3>Hamid Safi</h3>
+      <div class="kv"><span>Giới tính</span><span>Nam</span><span>Sinh</span><span>Afghanistan · 2026</span><span>Nơi ở</span><span>Thiên Mã Trấn, Tây Thiên Sơn</span><span>Cảnh giới</span><span>Luyện Khí · tầng 3</span><span>Tư chất</span><span>86 điểm · Kim 55, Thủy 31</span><span>Tiên thiên</span><span>Tay khéo, Phúc duyên</span></div>
+      <div class="mrz">I&lt;AFGSAFI&lt;&lt;HAMID&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;<br>260101MAFG&lt;002&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;</div>
+    </div></div>
+    <div class="card" style="margin-top:12px"><span class="cap">Công kích · sinh lực · niệm lực</span><div class="kv" style="margin-top:10px"><span>Công kích</span><span><b>41</b> <span style="color:var(--green)">+15%</span></span><span>Sinh lực tối đa</span><span><b>181</b> <span style="color:var(--green)">+15%</span></span><span>Niệm lực</span><span><b>29</b> <span style="color:var(--green)">+9%</span></span></div></div>
+    <div class="card" style="margin-top:12px"><span class="cap">Tư chất · tiên thiên · cơ duyên</span><div class="kv" style="margin-top:10px"><span>Tư chất</span><span>Kim 55 · Thủy 31</span><span>Cơ duyên</span><span>3/5</span><span>Khí vận</span><span>???</span></div></div>
+  </section>
+
+  <section class="mainc">
+
+    <div class="card ev" style="margin-top:12px"><h2>Chặng 2: Rắn độc rừng sâu</h2>
+      <div style="color:#d8d2c0;margin-bottom:6px">Mê Vụ Lâm · chặng 2/5. Một con rắn khổng lồ lặng lẽ trườn tới. Đối thủ ngang sức bạn.</div>
+      <button class="choice pri">★ Tấn công mạnh</button><button class="choice">Thủ chắc, mài dần</button><button class="choice">Bỏ chạy</button>
+      <div class="tm"><i></i></div></div>
+    <div class="card log" style="margin-top:12px"><h2>Nhật ký</h2>
+      <div class="big">Năm 24: Bạn nhóm lò luyện Phi kiếm linh (phẩm linh), cần 3 tháng.</div><div class="good">Luyện khí thành công: Linh kiếm hệ Hỏa, công kích +21,4%.</div><div>Bạn trò chuyện cùng Âu Dương Nhiên ở Thiên Mã Trấn.</div><div class="bad">Bạn bại trận trước Thằn lằn lửa. Cái giá: tu vi -12, trọng thương.</div><div>Tuổi 11: tu vi +1. Bạn trò chuyện với dân làng.</div><div>Tuổi 12: tu vi +1. Bạn trò chuyện với dân làng.</div><div>Tuổi 13: tu vi +1. Bạn trò chuyện với dân làng.</div><div>Tuổi 14: tu vi +1. Bạn trò chuyện với dân làng.</div><div>Tuổi 15: tu vi +1. Bạn trò chuyện với dân làng.</div><div>Tuổi 16: tu vi +1. Bạn trò chuyện với dân làng.</div><div>Tuổi 17: tu vi +1. Bạn trò chuyện với dân làng.</div><div>Tuổi 18: tu vi +1. Bạn trò chuyện với dân làng.</div><div>Tuổi 19: tu vi +1. Bạn trò chuyện với dân làng.</div><div>Tuổi 20: tu vi +1. Bạn trò chuyện với dân làng.</div><div>Tuổi 21: tu vi +1. Bạn trò chuyện với dân làng.</div><div>Tuổi 22: tu vi +1. Bạn trò chuyện với dân làng.</div><div>Tuổi 23: tu vi +1. Bạn trò chuyện với dân làng.</div><div>Tuổi 24: tu vi +1. Bạn trò chuyện với dân làng.</div></div>
+  </section>
+
+  <section>
+    <div class="card"><div style="display:flex;justify-content:space-between;align-items:baseline"><h2>Bản đồ cuộc đời</h2><span class="cap">1 ô = 5 năm</span></div>
+      <div class="lm" id="lm"></div>
+      <div class="legend"><span><u style="background:#1c2530"></u>chưa tới</span><span><u style="background:#2d7a74"></u>năm tốt</span><span><u style="background:#6a3040"></u>năm tệ</span><span><u style="outline:2px solid var(--pink)"></u>hiện tại</span><span><u style="outline:2px solid #e8edf3"></u>thọ nguyên</span><span><u style="outline:2px dashed #7a8aa0"></u>nếu lên Kim Đan</span></div></div>
+    <div class="card" style="margin-top:12px"><h2>Bản đồ vùng</h2><div class="mapph">bản đồ vùng và đại địa đồ giữ như hiện nay</div></div>
+    <div class="card people" style="margin-top:12px"><h2>Người ở đây</h2><div class="row"><span>Âu Dương Nhiên<small>Trúc Cơ · bạn bè</small></span><span class="cap">thân</span></div><div class="row"><span>Liễu Liên<small>Luyện Khí · đồng môn</small></span><span class="cap">quen</span></div></div>
+  </section>
+</main><script src="js/files.js"></script><script>TT_LOAD(false);</script><script src="js/ui/sprites.js"></script><script src="js/ui/scene.js"></script>
+<script>
+(function(){
+  // bản đồ cuộc đời: 24 tuổi, thọ nguyên 118, mỗi ô 5 năm
+  var lm=document.getElementById('lm'),per=5,cells=24,cur=Math.floor(24/per),end=Math.floor(118/per),end2=Math.floor(180/per);
+  var good=['#2d7a74','#256b66','#33908a','#1f5a56'],bad='#6a3040';
+  for(var i=0;i<cells;i++){var e=document.createElement('i');
+    if(i<=cur&&i>0){e.style.background=i===2?bad:good[i%4]}
+    if(i===cur)e.className='cur';else if(i===end)e.className='end';else if(i===end2)e.className='end2';
+    if(i===3||i===1)e.className+=' m';lm.appendChild(e)}
+  var hd=document.querySelector('header');function hh(){document.documentElement.style.setProperty('--hh',hd.offsetHeight+'px')}hh();addEventListener('resize',hh);
+  var fl=document.getElementById('float');fl.style.display='block';
+  document.getElementById('dock').onclick=function(){var on=fl.classList.toggle('docked');this.textContent=on?'tách ra':'gắn lại';fl.style.position=on?'static':'fixed';fl.style.width=on?'auto':'250px'};  // kéo thẻ nổi: đổi sang toạ độ trái/trên ngay lần kéo đầu (bỏ bottom/right để thẻ không bị kéo giãn), giữ trong màn hình, nhớ vị trí
+  var g=fl.querySelector('.grip'),ox=0,oy=0,mv=false;
+  try{var sv=JSON.parse(localStorage.getItem('floatpos')||'null');if(sv){fl.style.left=sv.x+'px';fl.style.top=sv.y+'px';fl.style.right='auto';fl.style.bottom='auto'}}catch(e){}
+  g.addEventListener('pointerdown',function(e){var r=fl.getBoundingClientRect();fl.style.left=r.left+'px';fl.style.top=r.top+'px';fl.style.right='auto';fl.style.bottom='auto';ox=e.clientX-r.left;oy=e.clientY-r.top;mv=true;g.setPointerCapture(e.pointerId);e.preventDefault()});
+  g.addEventListener('pointermove',function(e){if(!mv)return;var x=Math.max(4,Math.min(innerWidth-fl.offsetWidth-4,e.clientX-ox)),y=Math.max(4,Math.min(innerHeight-fl.offsetHeight-4,e.clientY-oy));fl.style.left=x+'px';fl.style.top=y+'px'});
+  g.addEventListener('pointerup',function(e){if(!mv)return;mv=false;try{localStorage.setItem('floatpos',JSON.stringify({x:parseInt(fl.style.left),y:parseInt(fl.style.top)}))}catch(x){}});  // màn hình nhân vật: tách ra thành thẻ nổi kéo được, đổi cỡ, gắn lại; nhớ trạng thái
+  (function(){
+    var card=document.getElementById('scenecard'),ph=document.getElementById('sph'),grip=document.getElementById('sgrip'),sizes=[300,440,620],st={fl:false,x:60,y:200,s:1};
+    try{var sv=JSON.parse(localStorage.getItem('scenefloat')||'null');if(sv)st=sv}catch(e){}
+    function save(){try{localStorage.setItem('scenefloat',JSON.stringify(st))}catch(e){}}
+    function apply(){card.classList.toggle('floating',st.fl);ph.style.display=st.fl?'block':'none';
+      if(st.fl){card.style.left=st.x+'px';card.style.top=st.y+'px';card.style.width=sizes[st.s]+'px'}else{card.style.left=card.style.top=card.style.width=''}
+      document.getElementById('sdetach').textContent=st.fl?'gắn lại':'tách ra'}
+    document.getElementById('sdetach').onclick=function(){st.fl=!st.fl;apply();save()};document.getElementById('sdock2').onclick=function(){st.fl=false;apply();save()};
+    document.getElementById('ssize').onclick=function(){if(!st.fl){st.fl=true}st.s=(st.s+1)%sizes.length;apply();save()};
+    var ox=0,oy=0,mv=false;
+    grip.addEventListener('pointerdown',function(e){if(!st.fl||e.target.classList.contains('lnk'))return;var r=card.getBoundingClientRect();ox=e.clientX-r.left;oy=e.clientY-r.top;mv=true;grip.setPointerCapture(e.pointerId);e.preventDefault()});
+    grip.addEventListener('pointermove',function(e){if(!mv)return;st.x=Math.max(4,Math.min(innerWidth-card.offsetWidth-4,e.clientX-ox));st.y=Math.max(4,Math.min(innerHeight-card.offsetHeight-4,e.clientY-oy));card.style.left=st.x+'px';card.style.top=st.y+'px'});
+    grip.addEventListener('pointerup',function(){if(mv){mv=false;save()}});
+    apply();
+  })();  // cảnh pixel thật của game
+  window.addEventListener('load',function(){setTimeout(function(){try{
+    TT.time.stop();TT.life.createWorld(5);var c=TT.player();var base=TT.ui.scene.readState();
+    var kin=[{k:'love',c:{id:3,gender:'nu',realm:1,alive:true}},{k:'kid',c:{id:4,gender:'nam',realm:0,alive:true}},{k:'kid',c:{id:5,gender:'nu',realm:0,alive:true}}];
+    var s=Object.assign({},base,{cls:'town',phase:'night',people:kin,wid:'',mon:null,geo:{w:{t:1,e:'Hỏa'},h:{t:1,e:''},a:{t:1,e:''},r:{t:1,e:'Băng'}},c:Object.assign({},c,{realm:2})});
+    var cv=document.getElementById('scene');var f=0;TT.ui.scene.preview(s,30,cv);setInterval(function(){TT.ui.scene.preview(s,1,cv)},120);
+  }catch(e){console.error(e)}},900)});
+})();
+</script></body></html>

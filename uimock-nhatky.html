@@ -1,0 +1,297 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Mô phỏng Nhật ký mới</title>
+<style>
+:root{--bg:#0e131a;--panel:#151c26;--line:#222d3b;--text:#e4e9f0;--dim:#8794a6;--gold:#d9a441;--green:#6fd8a4;--red:#ff6f45;--teal:#4fd1c5;--pink:#ff7ab6;--violet:#a98be8;--blue:#6aa8ff}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--text);font:14px/1.5 system-ui,"Segoe UI",sans-serif;padding:16px}
+.wrap{max-width:560px;margin:0 auto}
+h1{font-size:15px;color:var(--dim);font-weight:600;margin:0 0 10px}
+.note{font-size:12px;color:var(--dim);margin:0 0 12px}
+.panel{background:var(--panel);border:1px solid var(--line);border-radius:10px;overflow:hidden}
+.head{display:flex;align-items:center;gap:8px;padding:10px 12px;border-bottom:1px solid var(--line)}
+.head h2{margin:0;font-size:15px;flex:1}
+button{font:inherit;color:var(--text);background:#1d2733;border:1px solid #2c394b;border-radius:6px;padding:4px 10px;cursor:pointer}
+button:hover{background:#26344a}
+button.on{background:#2b3f5e;border-color:#47638f}
+button.sm{font-size:12px;padding:2px 8px}
+
+/* Hôm nay */
+.today{padding:10px 12px;border-bottom:1px solid var(--line);background:linear-gradient(180deg,#1a2433,#151c26)}
+.today .row1{display:flex;flex-wrap:wrap;gap:6px 12px;align-items:baseline}
+.today b{color:var(--gold)}
+.today .chip{font-size:12px;padding:1px 8px;border-radius:99px;background:#223048;color:#b8c7dd}
+.today .q{margin-top:6px;font-size:12.5px;color:var(--dim)}
+.today .q b{color:var(--teal)}
+.bar{height:5px;background:#1f2937;border-radius:3px;margin-top:5px;overflow:hidden}
+.bar i{display:block;height:100%;background:var(--teal)}
+
+/* lọc */
+.filters{display:flex;flex-wrap:wrap;gap:6px;padding:8px 12px;border-bottom:1px solid var(--line);align-items:center}
+.star{float:right;margin-left:6px;cursor:pointer;color:#4b586b;font-size:15px;line-height:1;user-select:none}
+.star:hover{color:var(--gold)}
+.star.on{color:var(--gold)}
+.marks{border-bottom:1px solid var(--line);background:#141b26}
+.marks .mh{display:flex;align-items:center;gap:8px;padding:7px 12px;cursor:pointer;font-weight:700;font-size:13px;color:var(--gold)}
+.marks .mh .s{font-weight:400;font-size:11.5px;color:var(--dim);flex:1}
+.marks .mi{display:grid;grid-template-columns:34px minmax(0,1fr);gap:8px;padding:5px 12px;border-top:1px solid #1b2431}
+.marks .mi .ic{width:22px;height:22px;border-radius:6px;display:grid;place-items:center;background:#1d2733;font-size:12px}
+.marks .mi .w{font-size:11px;color:#6f7d90}
+.marks .mi .x{font-size:13.5px}
+.marks .mi .nt{font-size:12px;color:var(--gold);font-style:italic;margin-top:2px}
+.marks .empty{padding:10px 12px;font-size:12.5px;color:var(--dim)}
+.cnt{font-size:11px;color:var(--dim);margin-left:2px}
+
+/* danh sách */
+.list{max-height:560px;overflow:auto}
+.yr{position:sticky;top:0;z-index:2;display:flex;align-items:center;gap:8px;padding:7px 12px;background:#101823;border-bottom:1px solid var(--line);border-top:1px solid var(--line);cursor:pointer}
+.yr .t{font-weight:700;font-size:13px}
+.yr .s{font-size:11.5px;color:var(--dim);flex:1}
+.yr .tg{color:var(--dim);font-size:12px}
+.yr .sum{display:flex;gap:6px;font-size:11.5px}
+.sum .g{color:var(--green)}.sum .b{color:var(--red)}.sum .k{color:var(--gold)}
+
+.ev{display:grid;grid-template-columns:34px minmax(0,1fr);gap:8px;padding:8px 12px;border-bottom:1px solid #1b2431}
+.ev .ic{width:26px;height:26px;border-radius:7px;display:grid;place-items:center;font-size:14px;background:#1d2733;border:1px solid #2c394b}
+.ev .mo{font:11px var(--mono,ui-monospace,monospace);color:#6f7d90}
+.ev .tx{font-size:14px;line-height:1.45}
+.ev .info{float:right;margin-left:6px;font-size:12px;color:var(--dim);cursor:pointer;border:1px solid #2c394b;border-radius:50%;width:18px;height:18px;text-align:center;line-height:16px}
+.ev .det{margin-top:5px;font:12px/1.5 ui-monospace,monospace;color:#9aa7b8;background:#0f151d;border-left:2px solid var(--teal);padding:5px 8px;border-radius:0 6px 6px 0}
+
+/* 3 mức */
+.ev.big{margin:6px 10px;border:1px solid #2c394b;border-left:4px solid var(--gold);border-radius:8px;background:#19212e;padding:10px 10px}
+.ev.big .tx{font-weight:700;color:#fff;font-size:14.5px}
+.ev.big.good{border-left-color:var(--green)}
+.ev.big.bad{border-left-color:var(--red)}
+.ev.norm.good{box-shadow:inset 3px 0 0 var(--green)}
+.ev.norm.bad{box-shadow:inset 3px 0 0 var(--red)}
+.ev.minor{padding:3px 12px;border-bottom:0;opacity:.78}
+.ev.minor .tx{font-size:12.5px;color:#9aa7b8}
+.ev.minor .ic{width:20px;height:20px;font-size:11px;border-radius:5px;margin-left:6px}
+.ev.minor{grid-template-columns:34px minmax(0,1fr)}
+.merge{display:flex;gap:8px;align-items:center;padding:4px 12px 4px 18px;font-size:12.5px;color:#8794a6;cursor:pointer}
+.merge:hover{color:var(--text)}
+.merge .ic{width:20px;height:20px;border-radius:5px;display:grid;place-items:center;background:#1d2733;font-size:11px}
+.empty{padding:24px;text-align:center;color:var(--dim)}
+
+/* màu loại */
+.c-tu .ic{color:var(--teal)}.c-chien .ic{color:var(--red)}.c-tien .ic{color:var(--gold)}.c-nguoi .ic{color:var(--pink)}
+.c-tong .ic{color:var(--violet)}.c-nv .ic{color:var(--green)}.c-kp .ic{color:var(--blue)}.c-the .ic{color:#c9d3e0}
+
+/* sổ đời */
+.back{position:fixed;inset:0;background:rgba(0,0,0,.65);display:none;z-index:10;padding:16px;overflow:auto}
+.back.on{display:block}
+.book{max-width:620px;margin:0 auto;background:var(--panel);border:1px solid #2c394b;border-radius:12px;padding:14px 16px}
+.book h3{margin:0 0 4px}
+.tl{position:relative;margin:12px 0 0 10px;padding-left:18px;border-left:2px solid #2c394b}
+.tl .it{position:relative;margin-bottom:12px}
+.tl .it:before{content:"";position:absolute;left:-26px;top:5px;width:12px;height:12px;border-radius:50%;background:var(--gold);border:2px solid var(--panel)}
+.tl .it.good:before{background:var(--green)}.tl .it.bad:before{background:var(--red)}
+.tl .when{font-size:11.5px;color:var(--dim)}
+.tl .what{font-weight:600}
+.life{margin:14px 0 8px;padding:6px 10px;background:#101823;border-radius:6px;color:var(--violet);font-size:12.5px;text-align:center}
+.tools{display:flex;gap:8px;margin:10px 0;flex-wrap:wrap}
+.legend{margin-top:14px;font-size:12px;color:var(--dim)}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>Mô phỏng Nhật ký mới (chỉ là bản xem thử, chưa nối vào game)</h1>
+  <p class="note">Mục mới nhất ở trên cùng. Thử: bấm tên năm để thu/mở, bấm nút lọc, bấm ☆ để đánh dấu (danh sách đánh dấu và thông tin cơ bản nằm ở Hồ sơ nhân vật, xem uimock-hoso.html), bấm ⓘ xem chi tiết, bấm dòng "việc vặt" để bung ra, nút "Sổ đời". Nút "Thêm mục" giả lập thời gian trôi.</p>
+  <div class="tools">
+    <button class="sm" id="add">+ Thêm mục mới (giả lập)</button>
+    <button class="sm" id="addbig">+ Thêm việc lớn</button>
+    <button class="sm" id="reset">Đặt lại</button>
+  </div>
+
+  <div class="panel">
+    <div class="head"><h2>Nhật ký của bạn</h2><button class="sm" id="book">Sổ đời</button></div>
+    <div class="filters" id="filters"></div>
+    <div class="list" id="list"></div>
+  </div>
+
+  <div class="legend">Biểu tượng: ☯ tu luyện · ⚔ chiến đấu, thương tích · ◈ tiền bạc, đồ · ♥ người quen, gia đình · ⌂ tông môn, nghề · ✦ nhiệm vụ · ➶ khám phá, đi lại · ☼ thế giới. Đường kẻ trái: xanh là chuyện tốt, đỏ là chuyện xấu, vàng là việc lớn.</div>
+</div>
+
+<div class="back" id="back"><div class="book">
+  <div style="display:flex;align-items:center;gap:8px"><h3 style="flex:1">Sổ đời của Nguyễn Vân</h3><button class="sm" id="closebook">Đóng ✕</button></div>
+  <div class="note">Chỉ những việc lớn, từ mới đến cũ. Kiếp trước nằm ở cuối.</div>
+  <div id="tl"></div>
+</div></div>
+
+<script>
+const CATS={tu:['☯','Tu luyện'],chien:['⚔','Chiến đấu'],tien:['◈','Tiền bạc'],nguoi:['♥','Người quen'],tong:['⌂','Tông môn, nghề'],nv:['✦','Nhiệm vụ'],kp:['➶','Khám phá'],the:['☼','Thế giới']};
+// m = tháng tính từ lúc sinh; lv: big | norm | minor; tone: good | bad | ''
+const SEED=[
+ {m:12*12+0,cat:'kp',lv:'norm',t:'Đến Bạch Sa Ngư Thôn tìm đường tu hành.'},
+ {m:12*12+1,cat:'tu',lv:'big',tone:'good',t:'Được thức tỉnh tư chất: Thủy, Mộc. Bạn bước chân vào con đường tu tiên.'},
+ {m:12*12+2,cat:'tong',lv:'minor',t:'Bạn học nghề phụ: Hái thuốc.'},
+ {m:12*12+3,cat:'kp',lv:'minor',t:'Bạn đã tới Thủy Nguyệt Cung.'},
+ {m:12*12+4,cat:'kp',lv:'minor',t:'Bạn đã tới Lam Cảng.'},
+ {m:12*12+5,cat:'kp',lv:'minor',t:'Bạn đã tới Bạch Sa Ngư Thôn.'},
+ {m:12*12+7,cat:'tu',lv:'norm',t:'Tu vi đạt 40/40, sẵn sàng đột phá.'},
+ {m:12*13+1,cat:'tu',lv:'big',tone:'good',t:'Đột phá thành công! Bạn đã đạt cảnh giới Luyện Khí.',note:'Xác suất 62%, Phá Cảnh Đan +8%, đạo tâm 71/100.'},
+ {m:12*13+2,cat:'tien',lv:'norm',tone:'good',t:'Bán 5 Hắc Thiết Quặng ở Hải Vận Thương Đoàn, được 12 hạ phẩm.',note:'Giá thị trường 2,4 hạ phẩm/món; hạn mức tháng còn 38/150.'},
+ {m:12*13+3,cat:'tien',lv:'minor',t:'Bạn trang bị Kiếm sắt.'},
+ {m:12*13+4,cat:'nguoi',lv:'norm',tone:'good',t:'Kết bạn với Lâm Tố, một dược sư trẻ.'},
+ {m:12*13+6,cat:'chien',lv:'norm',tone:'bad',t:'Bị thương ở Triều Âm Động, sinh lực -18.',note:'Yêu thú cấp 1 tập kích khi hái thuốc. Nguy hiểm khu vực 3/6.'},
+ {m:12*13+7,cat:'chien',lv:'minor',t:'Bạn đến y quán chữa trị, thương thế lành hẳn.'},
+ {m:12*13+9,cat:'nv',lv:'big',tone:'good',t:'Hoàn thành nhiệm vụ: Đạt Luyện Khí tầng 3. Đạo tâm +4.'},
+ {m:12*14+0,cat:'tong',lv:'big',tone:'good',t:'Bạn được Thủy Nguyệt Cung nhận làm ngoại môn đệ tử.',note:'Cần 8 điểm cống hiến để lên nội môn.'},
+ {m:12*14+2,cat:'tong',lv:'minor',t:'Đang làm nhiệm vụ của Thủy Nguyệt Cung.'},
+ {m:12*14+3,cat:'tong',lv:'minor',t:'Đang làm nhiệm vụ của Thủy Nguyệt Cung.'},
+ {m:12*14+4,cat:'tong',lv:'minor',t:'Đang làm nhiệm vụ của Thủy Nguyệt Cung.'},
+ {m:12*14+6,cat:'the',lv:'norm',t:'Tin đồn ở tửu lâu: Đại Vĩnh Quốc và Tề Lương Quốc sắp giao tranh.'},
+ {m:12*14+8,star:true,mark:'Phải cứu cậu ấy sau khi lên Trúc Cơ',cat:'nguoi',lv:'big',tone:'bad',t:'Lâm Tố bị hải tặc Hắc Phàm bắt đi. Bạn mất một người bạn.',note:'Thiện cảm 62 → mất. Có thể giải cứu nếu đạt Trúc Cơ.'},
+ {m:12*15+1,star:true,cat:'kp',lv:'norm',t:'Vào bí cảnh San Hô Long Quật, tìm được Linh Châu.'},
+ {m:12*15+2,cat:'tien',lv:'norm',tone:'good',t:'Nhặt được 30 hạ phẩm trong bí cảnh.'},
+ {m:12*15+5,cat:'tu',lv:'big',tone:'good',t:'Đột phá thành công! Bạn đã đạt cảnh giới Trúc Cơ.',note:'Xác suất 41%, đạo tâm 83/100, thiên cơ điểm +2.'},
+ {m:12*15+7,cat:'nv',lv:'norm',tone:'bad',t:'Nhiệm vụ cấp bách: Tìm Lâm Tố trong 2 năm.'},
+ {m:12*15+9,cat:'tien',lv:'minor',t:'Bạn nhóm lò luyện Kiếm tinh cương.'},
+ {m:12*15+10,cat:'tien',lv:'minor',t:'Bạn đi thu thập khoáng thạch để luyện khí.'},
+ {m:12*15+11,cat:'tien',lv:'norm',tone:'good',t:'Luyện khí thành công: Kiếm tinh cương.',note:'Xác suất thành công 54%, lò bậc 1.'},
+ {m:12*16+0,cat:'chien',lv:'big',tone:'bad',t:'Thiên kiếp quá mạnh, bạn bị trọng thương!',note:'Chỉ còn 9 sinh lực. Cần nghỉ ngơi 3 tháng.'},
+ {m:12*16+3,cat:'nguoi',lv:'big',tone:'good',t:'Bạn và Lâm Tố kết làm đạo lữ.'},
+];
+const LIFE_PAST=[
+ {t:'Kiếp trước: chết ở tuổi 71, cảnh giới Kim Đan, tại Thanh Vân Tông.',tone:''},
+ {t:'Kiếp trước: Đột phá Kim Đan ở tuổi 58.',tone:'good'},
+ {t:'Kiếp trước: Sư phụ Trần Nhất bị ma tu sát hại.',tone:'bad'},
+];
+const START_AGE=12;
+let events=[], filt='all', q='', open={}, expandedMerge={}, openInfo={};
+function reset(){events=SEED.map((e,i)=>Object.assign({id:i},e));open={};expandedMerge={};openInfo={};}
+reset();
+const nowM=()=>Math.max(...events.map(e=>e.m));
+const ageOf=m=>Math.floor(m/12);
+const yearOf=m=>ageOf(m);
+function monthLabel(m){return 'Tháng '+(m%12+1)}
+
+function renderToday(){
+  const m=nowM(), a=ageOf(m);
+  document.getElementById('today').innerHTML=
+   '<div class="row1"><b>'+a+' tuổi</b><span class="chip">Trúc Cơ tầng 1</span><span class="chip">Thủy Nguyệt Cung · Nội môn</span><span class="chip">Lam Cảng</span><span class="chip">Đang: Bế quan tu luyện</span></div>'+
+   '<div class="bar"><i style="width:64%"></i></div>'+
+   '<div class="q"><b>Nhiệm vụ gần hạn:</b> Đạt Kim Đan sơ kỳ, còn 6 năm (tiến độ 38%)</div>';
+}
+function renderFilters(){
+  const f=document.getElementById('filters');
+  const defs=[['all','Tất cả'],['big','Việc lớn'],['star','★ Đánh dấu'],['tu','☯ Tu luyện'],['nguoi','♥ Người'],['tien','◈ Tiền'],['nv','✦ Nhiệm vụ'],['chien','⚔ Chiến đấu']];
+  f.innerHTML='';
+  defs.forEach(d=>{const b=document.createElement('button');b.className='sm'+(filt===d[0]?' on':'');b.textContent=d[1];b.onclick=()=>{filt=d[0];render()};f.appendChild(b)});
+}
+function passes(e){
+  if(filt==='big'&&e.lv!=='big')return false;
+  if(filt==='star')return !!e.star;
+  if(filt!=='all'&&filt!=='big'&&e.cat!==filt)return false;
+  return true;
+}
+let marksOpen=true;
+function renderMarks(){
+  const box=document.getElementById('marks'), ms=events.filter(e=>e.star).sort((a,b)=>b.m-a.m);
+  box.innerHTML='';
+  const h=document.createElement('div');h.className='mh';
+  h.innerHTML='<span>'+(marksOpen?'▾':'▸')+'</span><span>★ Đánh dấu</span><span class="s">'+ms.length+' mục ghim, không bao giờ bị xóa khỏi nhật ký</span>';
+  h.onclick=()=>{marksOpen=!marksOpen;renderMarks()};box.appendChild(h);
+  if(!marksOpen)return;
+  if(!ms.length){const e=document.createElement('div');e.className='empty';e.textContent='Bấm ☆ ở cuối một mục để ghim nó vào đây.';box.appendChild(e);return}
+  ms.forEach(e=>{
+    const d=document.createElement('div');d.className='mi c-'+e.cat;
+    d.innerHTML='<div><div class="ic">'+CATS[e.cat][0]+'</div></div><div><div class="w">'+ageOf(e.m)+' tuổi · '+monthLabel(e.m)+'</div><div class="x"></div></div>';
+    d.querySelector('.x').textContent=e.t;
+    const nt=document.createElement('div');nt.className='nt';nt.textContent=e.mark?'“'+e.mark+'”':'+ thêm ghi chú';nt.style.cursor='pointer';
+    nt.onclick=()=>{const v=prompt('Ghi chú cho mục này (bỏ trống để xóa):',e.mark||'');if(v!==null){e.mark=v.trim();render()}};
+    d.lastChild.appendChild(nt);
+    const s=document.createElement('span');s.className='star on';s.textContent='★';s.title='Bỏ đánh dấu';s.onclick=()=>{e.star=false;render()};
+    d.lastChild.querySelector('.x').appendChild(s);
+    box.appendChild(d);
+  });
+}
+function evNode(e){
+  const d=document.createElement('div');
+  d.className='ev '+(e.lv==='big'?'big':e.lv==='minor'?'minor':'norm')+' '+(e.tone||'')+' c-'+e.cat;
+  d.innerHTML='<div><div class="ic" title="'+CATS[e.cat][1]+'">'+CATS[e.cat][0]+'</div></div><div><div class="mo">'+monthLabel(e.m)+' · '+ageOf(e.m)+' tuổi</div><div class="tx"></div></div>';
+  const tx=d.querySelector('.tx');tx.textContent=e.t;
+  const st=document.createElement('span');st.className='star'+(e.star?' on':'');st.textContent=e.star?'★':'☆';st.title=e.star?'Bỏ đánh dấu':'Đánh dấu mục này';
+  st.onclick=ev=>{ev.stopPropagation();e.star=!e.star;render()};tx.appendChild(st);
+  if(e.note){
+    const i=document.createElement('span');i.className='info';i.textContent='i';i.title='Chi tiết';
+    i.onclick=ev=>{ev.stopPropagation();openInfo[e.id]=!openInfo[e.id];renderList(true)};
+    tx.appendChild(i);
+    if(openInfo[e.id]){const dt=document.createElement('div');dt.className='det';dt.textContent=e.note;tx.appendChild(dt)}
+  }
+  return d;
+}
+function renderList(keep){
+  const box=document.getElementById('list'), st=box.scrollTop;
+  box.innerHTML='';
+  const items=events.filter(passes).sort((a,b)=>b.m-a.m||b.id-a.id);
+  if(!items.length){box.innerHTML='<div class="empty">Không có mục nào khớp.</div>';return}
+  const top=yearOf(nowM());
+  const groups={};items.forEach(e=>{(groups[yearOf(e.m)]=groups[yearOf(e.m)]||[]).push(e)});
+  Object.keys(groups).map(Number).sort((a,b)=>b-a).forEach(y=>{
+    const g=groups[y], all=events.filter(e=>yearOf(e.m)===y);
+    const isOpen=open[y]!==undefined?open[y]:(y>=top||q||filt!=='all');
+    const bigN=all.filter(e=>e.lv==='big').length, goodN=all.filter(e=>e.tone==='good').length, badN=all.filter(e=>e.tone==='bad').length;
+    const head=document.createElement('div');head.className='yr';
+    head.innerHTML='<span class="tg">'+(isOpen?'▾':'▸')+'</span><span class="t">'+y+' tuổi</span><span class="s">Năm '+(y-START_AGE+1)+(y>=top?' · hiện tại':'')+'</span><span class="sum"><span class="k">★ '+bigN+'</span><span class="g">▲ '+goodN+'</span><span class="b">▼ '+badN+'</span></span>';
+    head.onclick=()=>{open[y]=!isOpen;renderList(true)};
+    box.appendChild(head);
+    if(!isOpen)return;
+    // gộp việc vặt liền nhau
+    let i=0;
+    while(i<g.length){
+      const e=g[i];
+      if(e.lv==='minor'){
+        let j=i;while(j<g.length&&g[j].lv==='minor'&&g[j].cat===e.cat)j++;
+        const run=g.slice(i,j);
+        if(run.length>=2){
+          const key=run[0].id;
+          if(expandedMerge[key]){run.forEach(r=>box.appendChild(evNode(r)));
+            const c=document.createElement('div');c.className='merge';c.textContent='▴ gộp lại';c.onclick=()=>{expandedMerge[key]=false;renderList(true)};box.appendChild(c)}
+          else{
+            const c=document.createElement('div');c.className='merge c-'+e.cat;
+            const names=e.cat==='kp'?'Đi lại':e.cat==='tong'?'Làm nhiệm vụ tông môn':e.cat==='tien'?'Luyện nghề, trang bị':'Việc vặt';
+            c.innerHTML='<div class="ic">'+CATS[e.cat][0]+'</div><span>'+names+' ×'+run.length+' <span style="opacity:.6">· bấm để bung</span></span>';
+            c.onclick=()=>{expandedMerge[key]=true;renderList(true)};box.appendChild(c);
+          }
+          i=j;continue;
+        }
+      }
+      box.appendChild(evNode(e));i++;
+    }
+  });
+  if(keep)box.scrollTop=st;else box.scrollTop=0;
+}
+function renderBook(){
+  const tl=document.getElementById('tl');tl.innerHTML='';
+  const wrap=document.createElement('div');wrap.className='tl';
+  events.filter(e=>e.lv==='big').sort((a,b)=>b.m-a.m).forEach(e=>{
+    const it=document.createElement('div');it.className='it '+(e.tone||'');
+    it.innerHTML='<div class="when">'+ageOf(e.m)+' tuổi · '+monthLabel(e.m)+'</div><div class="what"></div>';
+    it.querySelector('.what').textContent=e.t;wrap.appendChild(it)});
+  tl.appendChild(wrap);
+  const l=document.createElement('div');l.className='life';l.textContent='— Kiếp trước —';tl.appendChild(l);
+  const w2=document.createElement('div');w2.className='tl';
+  LIFE_PAST.forEach(e=>{const it=document.createElement('div');it.className='it '+(e.tone||'');it.innerHTML='<div class="what" style="color:#aab6c8"></div>';it.querySelector('.what').textContent=e.t;w2.appendChild(it)});
+  tl.appendChild(w2);
+}
+function render(){renderFilters();renderList(true)}
+render();
+let counter=0;
+const TIMES=['Bạn đã tới Lam Cảng.','Bạn trang bị Giáp linh.','Đến y quán nghỉ ngơi.','Tu luyện đạt 12/40.','Bán 3 Linh Thảo được 6 hạ phẩm.'];
+document.getElementById('add').onclick=()=>{
+  const m=nowM()+1;const cats=['kp','tien','tu','nguoi'];const c=cats[counter%cats.length];
+  events.push({id:1000+counter,m,cat:c,lv:counter%3===0?'minor':'norm',tone:counter%4===3?'good':'',t:TIMES[counter%TIMES.length]});counter++;render()};
+document.getElementById('addbig').onclick=()=>{
+  events.push({id:1000+counter++,m:nowM()+1,cat:'tu',lv:'big',tone:'good',t:'Đột phá thành công! Bạn đã đạt cảnh giới Kim Đan.',note:'Xác suất 28%, thiên cơ điểm dùng 0.'});render()};
+document.getElementById('reset').onclick=()=>{reset();filt='all';q='';render()};
+document.getElementById('book').onclick=()=>{renderBook();document.getElementById('back').classList.add('on')};
+document.getElementById('closebook').onclick=()=>document.getElementById('back').classList.remove('on');
+document.getElementById('back').onclick=e=>{if(e.target.id==='back')e.currentTarget.classList.remove('on')};
+</script>
+</body>
+</html>

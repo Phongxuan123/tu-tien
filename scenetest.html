@@ -1,0 +1,37 @@
+<!doctype html><meta charset="utf-8"><title>Thử cảnh pixel</title>
+<body style="background:#101318;color:#cfd6e4;font:12px monospace;margin:8px"><div id="g" style="display:grid;grid-template-columns:repeat(2,480px);gap:6px"></div>
+<script src="js/files.js"></script><script>TT_LOAD(false);</script><script src="js/ui/sprites.js"></script><script src="js/ui/scene.js"></script>
+<script>
+window.addEventListener('load', function () {
+  setTimeout(function () {
+    TT.time.stop(); TT.life.createWorld(5); const c = TT.player(); const g = document.getElementById('g');
+    const base = TT.ui.scene.readState();
+    const mk = (label, o, frames) => {
+      const s = Object.assign({}, base, o); const cvs = document.createElement('canvas'); cvs.width = 240; cvs.height = 72; cvs.style.cssText = 'width:480px;height:144px;image-rendering:pixelated;display:block';
+      TT.ui.scene.preview(s, frames || 25, cvs); const w = document.createElement('div'); w.innerHTML = '<div>' + label + '</div>'; w.appendChild(cvs); g.appendChild(w);
+    };
+    const terr = id => ({ terr: ({ plain: { n: 'plain' }, sea: { n: 'sea', ground: '#d8c48a', soil: '#b89c62' }, mount: { n: 'mount', ground: '#6a7080', soil: '#4a4f5c', far: '#58607a', near: '#444b60' }, forest: { n: 'forest', ground: '#2f6a3a', soil: '#4a3a24' }, snow: { n: 'snow', ground: '#e2ecf4', soil: '#b9c8d8', far: '#9fb4cc', near: '#c8d8e8' }, volcano: { n: 'volcano', ground: '#3a2a26', soil: '#2a1c18', far: '#4a2420', near: '#331a18' }, desert: { n: 'desert', ground: '#d6b676', soil: '#b8924e', far: '#c49a5a', near: '#d2a966' }, swamp: { n: 'swamp', ground: '#3a5a48', soil: '#2a3a30', far: '#3a4a50', near: '#2c3c40' }, storm: { n: 'storm', ground: '#5a4a80', soil: '#3a2f58', far: '#473a70', near: '#352b58' } })[id] });
+    const kin = [{ k: 'love', c: { id: 3, gender: 'nu', realm: 1, age: 30, alive: true } }, { k: 'kid', c: { id: 4, gender: 'nam', realm: 0, alive: true } }, { k: 'kid', c: { id: 5, gender: 'nu', realm: 0, alive: true } }, { k: 'kid', c: { id: 6, gender: 'nam', realm: 0, alive: true } }, { k: 'dis', c: { id: 7, gender: 'nam', realm: 2, alive: true } }];
+    mk('làng đêm + gia đình', Object.assign({ cls: 'town', phase: 'night', people: kin, wid: '' }, terr('plain')));
+    mk('thành trì hoàng hôn', Object.assign({ cls: 'city', phase: 'dusk', people: [], wid: '' }, terr('plain')));
+    mk('tông môn ban ngày, Kim Đan', Object.assign({ cls: 'sect', phase: 'day', people: [], wid: '' }, terr('mount')), 30);
+    mk('hầm mộ', Object.assign({ cls: 'secret', phase: 'cave', people: [], wid: '' , c: Object.assign({}, c, { dungeon: { name: 'x' } }) }, terr('plain')));
+    mk('sa mạc + bão cát', Object.assign({ cls: 'town', phase: 'day', people: [], wid: 'bao_cat' }, terr('desert')));
+    mk('băng nguyên đêm', Object.assign({ cls: 'town', phase: 'night', people: [], wid: 'bao_tuyet' }, terr('snow')));
+    mk('rừng + đường đi', Object.assign({ cls: 'road', phase: 'dusk', people: [], wid: '' }, terr('forest')));
+    mk('biển, bến, bão', Object.assign({ cls: 'port', phase: 'day', people: [], wid: 'bao_bien' }, terr('sea')));
+    mk('núi lửa + chiến loạn', Object.assign({ cls: 'ruin', phase: 'night', people: [], wid: 'phun_trao', war: true }, terr('volcano')));
+    mk('đầm lầy, bị thương', Object.assign({ cls: 'town', phase: 'night', people: [], wid: 'suong_doc', wound: true }, terr('swamp')));
+    mk('lôi đảo, thiên kiếp', Object.assign({ cls: 'vein', phase: 'night', people: [], wid: '', thunder: true }, terr('storm')), 40);
+    mk('hư không', Object.assign({ cls: 'void', phase: 'void', people: [], wid: '' }, terr('plain')));
+    const dg = (kind, nodeT, mon) => Object.assign({ cls: 'secret', phase: 'cave', people: [], wid: '', dgkind: kind, node: nodeT ? { t: nodeT } : null, mon: mon || null, c: Object.assign({}, c, { dungeon: { name: 'x', kind: kind } }) }, terr('plain'));
+    mk('bí cảnh · cấm chế', dg('bi_canh', 'trap')); mk('bí cảnh · kho báu', dg('bi_canh', 'treasure')); mk('bí cảnh · đánh kiếm linh', dg('bi_canh', 'fight', 'kiem_linh')); mk('bí cảnh · thủ lĩnh lôi long', dg('bi_canh', 'boss', 'loi_long'));
+    mk('tàn tích · chỗ nghỉ', dg('tan_tich', 'rest')); mk('tàn tích · thủ vệ cổ', dg('tan_tich', 'fight', 'thu_ve')); mk('tàn tích · cổ tu', dg('tan_tich', 'boss', 'co_tu')); mk('hung địa · hổ tuyết', dg('hung_dia', 'fight', 'cop_bang'));
+    mk('hung địa · rồng huyết', dg('hung_dia', 'boss', 'long_huyet')); mk('hung địa · oán hồn', dg('hung_dia', 'fight', 'am_hon'));
+    const wild = (id, o) => Object.assign({ cls: 'road', phase: 'dusk', people: [], wid: '', mon: id }, terr(o));
+    mk('rừng · sói gió', wild('soi_gio', 'forest')); mk('đầm lầy · rắn độc', wild('ran_doc', 'swamp')); mk('núi lửa · thằn lằn lửa', wild('hoa_than', 'volcano')); mk('lôi đảo · ưng sét', wild('loi_ung', 'storm'));
+    mk('biển · giao long con', wild('thuy_xa', 'sea')); mk('đồng bằng · heo rừng, ong giáp', wild('kim_giap', 'plain')); mk('sa mạc · phượng non', wild('phuong_non', 'desert')); mk('băng nguyên · băng vương', wild('bang_vuong', 'snow'));
+    mk('kẻ thù tìm đến', Object.assign({ cls: 'town', phase: 'dusk', people: [], wid: '', foe: { gender: 'nam', realm: 3 } }, terr('plain')));    document.title = 'xong';
+  }, 1200);
+});
+</script>

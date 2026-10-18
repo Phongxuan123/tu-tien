@@ -1,0 +1,235 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Sơ đồ thế giới: năng lực, thế lực, quan hệ</title>
+<style>
+:root{--bg:#0f1520;--card:#161f2d;--line:#263447;--tx:#dbe4ee;--mut:#8da0b3;--acc:#e8497c;--ok:#3fb8b0;--bad:#e0564f;--gold:#f0a840;--blue:#4aa3ff;--vio:#9b7bf0}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--tx);font:14px/1.5 system-ui,"Segoe UI",sans-serif;padding:16px}
+h1{font-size:20px;margin:0 0 4px}h2{font-size:16px;margin:0 0 4px}h3{font-size:13px;margin:10px 0 4px;color:var(--mut)}
+.small{color:var(--mut);font-size:12px}.wrap{max-width:1180px;margin:0 auto}
+.card{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:14px;margin:12px 0}
+.bar{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+button,input{background:#1d2a3d;color:var(--tx);border:1px solid var(--line);border-radius:7px;padding:6px 10px}button{cursor:pointer}button:hover{border-color:var(--acc)}input{width:90px}
+svg{width:100%;height:auto;display:block}
+table{border-collapse:collapse;width:100%}td,th{padding:4px 8px;border-bottom:1px solid var(--line);font-size:12.5px;text-align:left;vertical-align:middle}th{color:var(--mut);font-weight:600}
+.chip{display:inline-block;font-size:11px;padding:1px 8px;border-radius:9px;background:#26323f;color:#cfd8e2;margin-right:3px}
+.chinh{background:#1f5a56}.ta{background:#6a3040}.trung{background:#3a3d63}.suy{background:#6b4a22}.diet{background:#444}.thinh{background:#2b6a3c}
+.meter{display:inline-block;height:8px;border-radius:4px;vertical-align:middle}
+.legend span{margin-right:12px;font-size:12px;color:var(--mut)}.dot{display:inline-block;width:10px;height:10px;border-radius:50%;margin-right:4px;vertical-align:middle}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:14px}@media(max-width:860px){.grid2{grid-template-columns:1fr}}
+.tag-dk{font-size:10px;color:var(--gold);border:1px dashed var(--gold);border-radius:6px;padding:0 5px;margin-left:4px}
+</style>
+</head>
+<body>
+<div class="wrap">
+<h1>Sơ đồ thế giới: năng lực, thế lực, quan hệ</h1>
+<div class="small">Số liệu lấy trực tiếp từ game (một thế giới ngẫu nhiên). Thương hội đã có trong game (thế lực thứ tư, giàu và có ảnh hưởng nhưng không có quân đội). Nhãn <span class="tag-dk">dự kiến</span> chỉ còn ở dòng chảy hàng hóa và tiền (kinh tế chưa làm). Bấm "Sinh thế giới" để đổi hạt giống, "Chạy 25 năm" để xem quan hệ và chiến tranh tiến triển.</div>
+<div class="card bar">
+  <label class="small">Hạt giống <input id="seed" type="number" value="11"></label>
+  <button id="gen">Sinh thế giới</button><button id="run">Chạy 25 năm</button>
+  <span class="small" id="info"></span>
+</div>
+
+<div class="card"><h2>1. Thang cảnh giới và năng lực</h2>
+<div class="small">Mỗi bậc cao hơn là một bước nhảy lớn về thọ nguyên, sinh lực và sức đánh; số người lên tới đó giảm rất nhanh.</div>
+<div id="realms"></div></div>
+
+<div class="card"><h2>2. Bản đồ chín vùng và thế lực đóng ở đâu</h2>
+<div class="small">Vòng tròn lớn là vùng (màu theo thuộc tính chính, cỡ theo linh khí). Vương miện là vương triều, tháp là tông môn, chấm nhỏ là gia tộc. Nét nối là đường đi giữa các vùng. Vòng viền đỏ là chiến sự.</div>
+<svg id="map" viewBox="0 0 800 560"></svg><div class="legend small" id="maplegend"></div></div>
+
+<div class="card"><h2>3. Danh sách thế lực: ai mạnh, ai giàu, ai đang suy</h2><div id="factions"></div></div>
+
+<div class="card"><h2>4. Mạng quan hệ giữa các thế lực</h2>
+<div class="small">Đỏ đậm: đang chiến tranh. Xanh: liên minh hoặc thiện cảm cao. Đỏ nhạt: thù oán. Tím có mũi tên: chư hầu. Vàng nét đứt: vùng thương hội phủ (thương hội không tham chiến).</div>
+<svg id="net" viewBox="0 0 800 600"></svg><div class="legend small" id="netlegend"></div></div>
+
+<div class="card"><h2>5. Ma trận năng lực của các lực lượng</h2>
+<div class="small">Mỗi lực lượng mạnh ở một mặt khác nhau, nên không bên nào nuốt trọn bên nào. Thương hội và tán tu là hai chỗ mới cần làm rõ.</div><div id="matrix"></div></div>
+
+<div class="card"><h2>6. Dòng quyền lực, hàng hóa, tiền bạc giữa các bên</h2>
+<div class="small">Mũi tên là thứ chảy theo hướng đó. Nét đứt vàng là phần dự kiến cho thương hội.</div>
+<svg id="flow" viewBox="0 0 800 520"></svg></div>
+
+<div class="card"><h2>7. Quan hệ giữa người với người</h2>
+<div class="small">Thiện cảm từ -100 đến 100, kèm các mối quan hệ đặc biệt.</div><div id="people"></div></div>
+</div>
+<script src="js/files.js"></script>
+<script>TT_LOAD(false);</script>
+<script>
+window.addEventListener('load', function () {
+const $ = id => document.getElementById(id), D = TT.data;
+TT.save.clear(); TT.config.persistMeta = false; TT.config.autosaveMonths = 1e12; try { TT.time.stop(); } catch (e) {}
+const ELCOL = { 'Thổ': '#b08a4a', 'Thủy': '#3f8ee0', 'Kim': '#c9ccd3', 'Phong': '#8fd6c4', 'Mộc': '#58b36a', 'Băng': '#9fdcf0', 'Hỏa': '#e0674f', 'Dương': '#f0c24a', 'Âm': '#8a6fc0', 'Lôi': '#d6d85a' };
+const KIND = { trieu: 'Vương triều', tong: 'Tông môn', gia: 'Gia tộc', hoi: 'Thương hội' };
+const esc = s => String(s).replace(/[&<>]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;' }[c]));
+const STATE = { 'thịnh': 'thinh', 'ổn': 'chinh', 'suy': 'suy', 'diệt': 'diet' };
+let F, regs = {};
+
+function gen() {
+  TT.life.createWorld(+$('seed').value || 11); F = TT.world.fac;
+  regs = {}; D.REGIONS.forEach(r => { regs[r.id] = r; });
+  const L = Object.values(F.list); for (let i = 0; i < L.length; i++) for (let j = i + 1; j < L.length; j++) TT.fac.relV(L[i], L[j]);
+  draw();
+}
+function run() {
+  const w = TT.world, p = TT.player(), orig = TT.life.stepChar;
+  TT.life.stepChar = function (c) { if (c.kind !== 'player') return; return orig.apply(this, arguments); };
+  try {
+    for (let m = 0; m < 12 * 25; m++) { if (w.pending) { if (w.pending.type === 'death' || w.pending.type === 'ascend') break; TT.decisions.resolveDefault(); } TT.life.stepWorld(); }
+  } finally { TT.life.stepChar = orig; }
+  F = TT.world.fac; const L = Object.values(F.list); for (let i = 0; i < L.length; i++) for (let j = i + 1; j < L.length; j++) TT.fac.relV(L[i], L[j]);
+  draw();
+}
+
+// ---------- 1. cảnh giới ----------
+function realmsView() {
+  const rows = [], pop = ['mọi người', '78-85% người có tư chất', '4-19% (tùy tư chất)', 'dưới 4%', 'rất hiếm', 'huyền thoại', 'rời thế giới'];
+  const role = ['dân thường, thợ, tán tu mới nhập môn', 'đệ tử ngoại/nội môn, tán tu, võ sư', 'trưởng lão nhỏ, chủ gia tộc, hộ vệ cao cấp', 'trưởng lão, đại thương nhân, quan đầu vùng', 'chưởng môn, lão tổ gia tộc, quốc sư', 'lão tổ ẩn thế, quyết định vận mệnh tông', 'thoát khỏi phàm giới'];
+  for (let r = 0; r <= 6; r++) {
+    const c = TT.createChar({ kind: 'player', age: 30 }); c.realm = r;
+    rows.push({ n: D.REALM_NAMES[r], life: TT.stats.lifeSpan(c), hp: TT.stats.hpMax(c), atk: TT.stats.atk(c), need: D.NEED[Math.min(5, r)] });
+  }
+  const mx = k => Math.max(...rows.filter(x => isFinite(x[k])).map(x => x[k]));
+  const bar = (v, m, col, log) => { const w = isFinite(v) ? (log ? Math.log10(v + 1) / Math.log10(m + 1) : v / m) * 100 : 100; return `<span class="meter" style="width:${Math.max(3, w)}%;background:${col}"></span>`; };
+  let h = '<table><tr><th>Cảnh giới</th><th style="width:20%">Thọ nguyên (năm, thang log)</th><th style="width:15%">Sinh lực</th><th style="width:15%">Công kích</th><th style="width:15%">Nhu cầu tu vi (log)</th><th>Số người đạt</th><th>Vai trò thường gặp</th></tr>';
+  rows.forEach((x, i) => { h += `<tr><td><b>${x.n}</b></td><td>${bar(x.life === Infinity ? 1e4 : x.life, 2000, '#3fb8b0', true)} ${x.life === Infinity ? '∞' : x.life}</td><td>${bar(x.hp, 340, '#34c38f')} ${Math.round(x.hp)}</td><td>${bar(x.atk, 66, '#e8497c')} ${Math.round(x.atk)}</td><td>${bar(x.need, 36000, '#9b7bf0', true)} ${x.need}</td><td class="small">${pop[i]}</td><td class="small">${role[i]}</td></tr>`; });
+  $('realms').innerHTML = h + '</table><div class="small" style="margin-top:6px">Công kích và sinh lực lấy cho nhân vật mẫu tuổi 30 (chưa kể trang bị, công pháp, thương tích). Sức mạnh thật phụ thuộc thuộc tính khắc chế, công pháp, pháp bảo.</div>';
+}
+
+// ---------- 2. bản đồ vùng ----------
+function mapView() {
+  let s = '', edges = new Set();
+  D.REGIONS.forEach(r => { let nb = []; try { nb = TT.map.macroNeighbors(r.id) || []; } catch (e) {} nb.forEach(n => { const to = typeof n === 'string' ? n : (n.to || n.id || n.region); if (!to || !regs[to]) return; const k = [r.id, to].sort().join('|'); if (edges.has(k)) return; edges.add(k); const b = regs[to]; s += `<line x1="${r.x}" y1="${r.y}" x2="${b.x}" y2="${b.y}" stroke="#2c3b50" stroke-width="2"/>`; }); });
+  const L = Object.values(F.list), warRegion = {};
+  (F.wars || []).forEach(w => { [w.a, w.b].forEach(id => { const f = F.list[id]; if (f) warRegion[f.region] = 1; }); });
+  D.REGIONS.forEach(r => {
+    const col = ELCOL[r.elems[0]] || '#888', rad = 26 + r.linh * 4, tr = L.find(f => f.kind === 'trieu' && f.region === r.id);
+    s += `<g><title>${esc(r.n)}: ${esc(r.env.name)}; linh khí ${r.linh}/5, nguy hiểm ${r.danger}/5, giàu ${r.rich}/5; thuộc tính ${r.elems.join('/')}</title><circle cx="${r.x}" cy="${r.y}" r="${rad}" fill="${col}" fill-opacity=".22" stroke="${warRegion[r.id] ? '#e0564f' : col}" stroke-width="${warRegion[r.id] ? 4 : 2}"/><text x="${r.x}" y="${r.y - rad - 6}" fill="#dbe4ee" font-size="13" text-anchor="middle" font-weight="700">${esc(r.n)}</text><text x="${r.x}" y="${r.y + rad + 14}" fill="#8da0b3" font-size="10.5" text-anchor="middle">${r.elems.join('/')} · linh ${r.linh} · hiểm ${r.danger} · giàu ${r.rich}</text></g>`;
+    if (tr) s += `<text x="${r.x}" y="${r.y + 6}" font-size="22" text-anchor="middle" fill="${tr.state === 'diệt' ? '#666' : '#f0c24a'}">♛</text><text x="${r.x}" y="${r.y + 20}" font-size="9.5" fill="#cfd8e2" text-anchor="middle">lực ${Math.round(tr.power)}</text>`;
+    const ts = L.filter(f => f.kind === 'tong' && f.region === r.id), gs = L.filter(f => f.kind === 'gia' && f.region === r.id);
+    ts.forEach((f, i) => { const a = -0.9 + i * 0.7, x = r.x + (rad + 12) * Math.cos(a - 1.2), y = r.y + (rad + 12) * Math.sin(a - 1.2); s += `<g><title>${esc(f.n)} (${f.tag}), lực ${Math.round(f.power)}, ${f.state}</title><text x="${x}" y="${y + 6}" font-size="18" text-anchor="middle" fill="${f.state === 'diệt' ? '#666' : f.tag === 'chinh' ? '#3fb8b0' : f.tag === 'ta' ? '#e0564f' : '#9b7bf0'}">⛩</text></g>`; });
+    gs.forEach((f, i) => { const x = r.x + (rad + 10) * Math.cos(1.5 + i * 0.6), y = r.y + (rad + 10) * Math.sin(1.5 + i * 0.6); s += `<g><title>${esc(f.n)}, lực ${Math.round(f.power)}</title><circle cx="${x}" cy="${y}" r="5" fill="#9aa7b6"/></g>`; });
+    { const hh = TT.fac.hoiAt(r.id); if (hh.length) s += `<g><title>Thương hội phủ vùng: ${esc(hh.map(x => x.n).join(", "))}</title><text x="${r.x + rad + 8}" y="${r.y - rad + 6}" font-size="13" fill="#f0a840">$${hh.length > 1 ? hh.length : ""}</text></g>`; }
+  });
+  $('map').innerHTML = s;
+  $('maplegend').innerHTML = '<span><span class="dot" style="background:#f0c24a"></span>♛ vương triều</span><span>⛩ tông (xanh chính đạo, tím trung lập, đỏ tà đạo)</span><span><span class="dot" style="background:#9aa7b6"></span>gia tộc</span><span style="color:#f0a840">$n: n thương hội có chi nhánh ở vùng</span><span><span class="dot" style="background:none;border:2px solid #e0564f"></span>đang có chiến sự</span>';
+}
+
+// ---------- 3. danh sách thế lực ----------
+function facView() {
+  const ORD = ['trieu', 'tong', 'gia', 'hoi']; const L = Object.values(F.list).sort((a, b) => (a.kind === b.kind ? b.power - a.power : ORD.indexOf(a.kind) - ORD.indexOf(b.kind)));
+  const m = (v, col) => `<span class="meter" style="width:${Math.max(2, v) * 0.8}px;background:${col}"></span> ${Math.round(v)}`;
+  let h = '<table><tr><th>Thế lực</th><th>Loại</th><th>Vùng</th><th>Xu hướng</th><th>Sức mạnh</th><th>Đoàn kết</th><th>Của cải</th><th>Tình trạng</th><th>Lãnh tụ</th><th>Quan hệ nổi bật</th></tr>';
+  L.forEach(f => {
+    const tag = f.tag === 'chinh' ? '<span class="chip chinh">chính</span>' : f.tag === 'ta' ? '<span class="chip ta">tà</span>' : '<span class="chip trung">trung lập</span>';
+    const rel = [];
+    if (f.war) { const w = (F.wars || []).find(x => x.id === f.war || x.a === f.id || x.b === f.id); rel.push('<span style="color:#e0564f">chiến tranh</span>'); }
+    if ((f.ally || []).length) rel.push('liên minh ' + f.ally.map(i => esc((F.list[i] || {}).n || '?').replace(/Vương triều |Tông /, '')).join(', '));
+    if (f.vassal) rel.push('chư hầu của ' + esc((F.list[f.vassal] || {}).n || '?'));
+    if (f.kind === 'hoi') rel.push('phủ ' + f.reach.map(r => esc((regs[r] || {}).n)).join(', ') + '; xu hướng '+ esc(D.HOI.agendaName[f.agenda]) + '; uy tín ' + Math.round(f.trust) + '; hộ vệ ' + Math.round(f.guard) + '/' + D.HOI.guardMax + ' (không quân đội)');
+    h += `<tr><td><b>${esc(f.n)}</b></td><td>${KIND[f.kind]}</td><td>${esc((regs[f.region] || {}).n || '')}</td><td>${tag}</td><td>${m(f.power, '#e8497c')}</td><td>${m(f.unity, '#3fb8b0')}</td><td>${m(f.wealth, '#f0a840')}</td><td><span class="chip ${STATE[f.state] || ''}">${f.state}</span></td><td class="small">${esc(f.leader || '')}</td><td class="small">${rel.join('; ') || '-'}</td></tr>`;
+  });
+
+  $('factions').innerHTML = h + '</table><div class="small" style="margin-top:6px">Đang chiến tranh: ' + ((F.wars || []).length || 'không') + '. Thời đại: ' + esc(F.era.id) + '.</div>';
+}
+
+// ---------- 4. mạng quan hệ ----------
+function netView() {
+  const L = Object.values(F.list), pos = {};
+  const byReg = {}; L.forEach(f => { (byReg[f.region] = byReg[f.region] || []).push(f); });
+  Object.keys(byReg).forEach(rid => { const r = regs[rid]; const n = byReg[rid].length; byReg[rid].forEach((f, i) => { const a = -Math.PI / 2 + (i / n) * Math.PI * 2; pos[f.id] = { x: 40 + r.x * 0.9 + 52 * Math.cos(a), y: 30 + r.y * 1.0 + 52 * Math.sin(a) }; }); });
+  let s = '', pairs = [];
+  for (let i = 0; i < L.length; i++) for (let j = i + 1; j < L.length; j++) { const v = TT.fac.relV(L[i], L[j]); pairs.push([L[i], L[j], v]); }
+  // thương hội: nét đứt vàng nối tới từng vùng có chi nhánh
+  L.filter(f => f.kind === 'hoi' && f.state !== 'diệt').forEach(h => { h.reach.forEach(rid => { const r = regs[rid]; if (r && pos[h.id]) s += `<line x1="${pos[h.id].x}" y1="${pos[h.id].y}" x2="${40 + r.x * 0.9}" y2="${30 + r.y}" stroke="#f0a840" stroke-dasharray="3 4" opacity=".4"/>`; }); });
+  pairs.forEach(p => { const a = pos[p[0].id], b = pos[p[1].id], v = p[2]; if (Math.abs(v) < 22) return; s += `<line x1="${a.x}" y1="${a.y}" x2="${b.x}" y2="${b.y}" stroke="${v > 0 ? '#3fb8b0' : '#e0564f'}" stroke-width="${1 + Math.abs(v) / 50}" opacity="${0.18 + Math.abs(v) / 180}"/>`; });
+  L.forEach(f => { (f.ally || []).forEach(i => { if (i > f.id && pos[i]) s += `<line x1="${pos[f.id].x}" y1="${pos[f.id].y}" x2="${pos[i].x}" y2="${pos[i].y}" stroke="#3fb8b0" stroke-width="3"/>`; }); if (f.vassal && pos[f.vassal]) s += `<line x1="${pos[f.id].x}" y1="${pos[f.id].y}" x2="${pos[f.vassal].x}" y2="${pos[f.vassal].y}" stroke="#9b7bf0" stroke-width="2.5" marker-end="url(#ar)"/>`; });
+  (F.wars || []).forEach(w => { const a = pos[w.a], b = pos[w.b]; if (a && b) s += `<line x1="${a.x}" y1="${a.y}" x2="${b.x}" y2="${b.y}" stroke="#e0564f" stroke-width="5"/>`; });
+  L.forEach(f => {
+    const p = pos[f.id], r = 6 + f.power / 8, col = f.state === 'diệt' ? '#555' : f.tag === 'chinh' ? '#3fb8b0' : f.tag === 'ta' ? '#e0564f' : '#9b7bf0';
+    const shape = f.kind === 'trieu' ? `<polygon points="${p.x},${p.y - r} ${p.x + r},${p.y} ${p.x},${p.y + r} ${p.x - r},${p.y}" fill="${col}" stroke="#f0c24a" stroke-width="2"/>` : f.kind === 'tong' ? `<circle cx="${p.x}" cy="${p.y}" r="${r}" fill="${col}"/>` : f.kind === 'hoi' ? `<circle cx="${p.x}" cy="${p.y}" r="${r + 3}" fill="#f0a84033" stroke="#f0a840" stroke-width="2.5" stroke-dasharray="4 3"/><text x="${p.x}" y="${p.y + 5}" font-size="13" text-anchor="middle" fill="#f0a840">$</text>` : `<rect x="${p.x - r * 0.7}" y="${p.y - r * 0.7}" width="${r * 1.4}" height="${r * 1.4}" fill="${col}" opacity=".8"/>`;
+    s += `<g><title>${esc(f.n)}: lực ${Math.round(f.power)}, đoàn kết ${Math.round(f.unity)}, ${f.state}</title>${shape}<text x="${p.x}" y="${p.y + r + 11}" font-size="9.5" fill="#cfd8e2" text-anchor="middle">${esc(f.n.replace('Vương triều ', '♛ ').replace('Tông ', '').replace(' Tông', '').replace(' gia', ' gia'))}</text></g>`;
+  });
+  $('net').innerHTML = '<defs><marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#9b7bf0"/></marker></defs>' + s;
+  $('netlegend').innerHTML = '<span>◆ vương triều</span><span>● tông môn</span><span>■ gia tộc</span><span>($) thương hội</span><span>cỡ = sức mạnh</span><span>màu: xanh chính đạo, tím trung lập, đỏ tà đạo, xám đã diệt</span>';
+}
+
+// ---------- 5. ma trận năng lực ----------
+function matrixView() {
+  const cols = ['Quân sự', 'Chính trị', 'Của cải', 'Đạo pháp, cao thủ', 'Dân số, nhân lực', 'Thông tin'];
+  const rows = [
+    ['Vương triều', [5, 5, 3, 1, 5, 3], 'có quân đội, thuế, cửa ải; ít cao thủ tu luyện'],
+    ['Tông môn', [3, 3, 2, 5, 2, 2], 'nắm cao thủ, đan, bùa, công pháp; ít người đông'],
+    ['Gia tộc tu tiên', [2, 2, 2, 3, 2, 1], 'nhỏ, gắn một địa điểm, phụ thuộc tông hoặc triều'],
+    ['Thương hội', [1, 4, 5, 1, 3, 5], 'giàu và nhiều tai mắt; hộ vệ nhỏ, không quân đội; ảnh hưởng bằng tiền, nợ'],
+    ['Tán tu', [1, 0, 1, 2, 5, 3], 'đông nhất, phân tán, không tổ chức; là người mua lớn của chợ'],
+    ['Phàm nhân', [0, 0, 2, 0, 5, 2], 'dân số cơ bản, nộp thuế, sinh ra tư chất mới']
+  ];
+  const dots = n => '<span style="color:#e8497c;letter-spacing:1px">' + '●'.repeat(n) + '</span><span style="color:#2c3b50;letter-spacing:1px">' + '●'.repeat(5 - n) + '</span>';
+  let h = '<table><tr><th></th>' + cols.map(c => '<th>' + c + '</th>').join('') + '<th>Điểm chính</th></tr>';
+  rows.forEach(r => { h += '<tr><td><b>' + r[0] + '</b></td>' + r[1].map(v => '<td>' + dots(v) + '</td>').join('') + '<td class="small">' + r[2] + '</td></tr>'; });
+  $('matrix').innerHTML = h + '</table>';
+}
+
+// ---------- 6. dòng chảy ----------
+function flowView() {
+  const box = (x, y, w, h, t, sub, col, dk) => `<g><rect x="${x}" y="${y}" width="${w}" height="${h}" rx="9" fill="${col}" fill-opacity=".18" stroke="${col}" stroke-width="2" ${dk ? 'stroke-dasharray="6 4"' : ''}/><text x="${x + w / 2}" y="${y + 24}" font-size="14" font-weight="700" fill="#dbe4ee" text-anchor="middle">${t}</text><text x="${x + w / 2}" y="${y + 42}" font-size="10.5" fill="#8da0b3" text-anchor="middle">${sub}</text></g>`;
+  const arr = (x1, y1, x2, y2, label, col, dk, dx, dy) => `<g><line x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}" stroke="${col}" stroke-width="2.2" ${dk ? 'stroke-dasharray="6 4"' : ''} marker-end="url(#fa${col.replace('#', '')})"/><text x="${(x1 + x2) / 2 + (dx || 0)}" y="${(y1 + y2) / 2 + (dy || -4)}" font-size="10.5" fill="${col}" text-anchor="middle">${label}</text></g>`;
+  let s = ['#9b7bf0', '#3fb8b0', '#f0a840', '#e8497c', '#4aa3ff'].map(c => `<marker id="fa${c.replace('#', '')}" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10z" fill="${c}"/></marker>`).join('');
+  s = '<defs>' + s + '</defs>';
+  s += box(300, 14, 200, 56, 'Vương triều', 'quân đội, thuế, cửa ải, luật', '#f0c24a');
+  s += box(40, 190, 190, 60, 'Tông môn', 'cao thủ, đan, bùa, công pháp', '#3fb8b0');
+  s += box(570, 190, 190, 60, 'Gia tộc tu tiên', 'nhỏ, gắn địa điểm', '#9aa7b6');
+  s += box(290, 215, 220, 66, 'THƯƠNG HỘI', 'trung gian, vốn, tin tức, hộ vệ nhỏ', '#f0a840', true);
+  s += box(40, 400, 190, 60, 'Tán tu', 'tu sĩ tự do, thợ nhỏ, mạo hiểm', '#4aa3ff');
+  s += box(570, 400, 190, 60, 'Phàm nhân', 'dân, thợ, nông, thương buôn nhỏ', '#8da0b3');
+  s += box(300, 420, 200, 56, 'Chợ và thị trấn', 'nơi giá được hình thành', '#e8497c');
+  // triều
+  s += arr(580, 400, 460, 74, 'thuế, lính', '#9b7bf0', false, 40, 10);
+  s += arr(340, 70, 300, 190, 'bảo hộ, ban đất, phong hiệu', '#3fb8b0', false, -50, 0);
+  s += arr(120, 190, 300, 62, 'cống nạp, cao thủ ra trận', '#9b7bf0', false, -60, -10);
+  s += arr(640, 190, 500, 62, 'chư hầu, nộp phần', '#9b7bf0', false, 40, -6);
+  // hội
+  s += arr(370, 215, 370, 70, 'quân nhu, cho vay, hối lộ', '#f0a840', true, -95, 0);
+  s += arr(430, 70, 430, 215, 'giấy phép, thuế, giá trần', '#e8497c', true, 95, 0);
+  s += arr(230, 215, 290, 235, 'hàng sỉ (đan, bùa)', '#3fb8b0', true, -12, -14);
+  s += arr(290, 262, 230, 246, 'tiền, nguyên liệu, tin tức', '#f0a840', true, 0, 16);
+  s += arr(510, 245, 570, 225, 'hợp đồng, vay', '#f0a840', true, 0, -12);
+  s += arr(330, 281, 140, 400, 'bán lẻ, thu mua, vay, thuê hộ vệ', '#f0a840', true, -70, 0);
+  s += arr(470, 281, 600, 400, 'buôn sỉ, hàng nhập', '#f0a840', true, 60, 0);
+  s += arr(400, 281, 400, 420, 'đoàn buôn, hàng hóa', '#f0a840', true, 54, 0);
+  // tông, tán tu
+  s += arr(120, 250, 120, 400, 'tuyển đệ tử, kho tông', '#3fb8b0', false, 62, 0);
+  s += arr(60, 400, 60, 250, 'cống hiến, nhiệm vụ', '#4aa3ff', false, -52, 0);
+  s += arr(230, 440, 300, 448, 'bán đồ, mua thiết yếu', '#e8497c', false, 0, -8);
+  s += arr(570, 440, 500, 448, 'mua bán hằng ngày', '#e8497c', false, 0, -8);
+  s += arr(670, 400, 670, 250, 'đệ tử mới từ dân', '#8da0b3', false, 50, 0);
+  $('flow').innerHTML = s;
+}
+
+// ---------- 7. quan hệ cá nhân ----------
+function peopleView() {
+  const lv = TT.rel.LEVELS, W = 700, x = v => 20 + (v + 100) / 200 * W;
+  let s = '<svg viewBox="0 0 740 130">';
+  const col = ['#6a1f1f', '#8a3a3a', '#3c4656', '#3a5a78', '#2f6f6a', '#3fb8b0'];
+  lv.forEach((l, i) => { const a = Math.max(-100, l[0]), b = Math.min(100, l[1]); s += `<rect x="${x(a)}" y="40" width="${x(b) - x(a)}" height="34" fill="${col[i]}"/><text x="${(x(a) + x(b)) / 2}" y="62" font-size="12" fill="#fff" text-anchor="middle">${l[2]}</text><text x="${x(a)}" y="92" font-size="10" fill="#8da0b3" text-anchor="middle">${a}</text>`; });
+  s += `<text x="${x(100)}" y="92" font-size="10" fill="#8da0b3" text-anchor="middle">100</text><text x="20" y="22" font-size="12" fill="#cfd8e2">Thiện cảm (đối xứng giữa hai người)</text></svg>`;
+  const kinds = [['Kẻ thù', 'thề báo thù, truy lùng, có thể xóa bằng hóa giải', '#e0564f'], ['Kết nghĩa', 'thiện cảm cao, giúp nhau, chia sẻ cơ duyên', '#3fb8b0'], ['Đạo lữ', 'song tu, sinh con, ghen tuông; NPC chỉ một đạo lữ', '#e8497c'], ['Sư đồ', 'sư phụ tăng tốc tu luyện cho đồ đệ; đồ đệ kế thừa', '#f0a840'], ['Ruột thịt', 'cha mẹ con cái; kế thừa khi chết, mang nhân quả', '#9b7bf0']];
+  s += '<div style="display:flex;flex-wrap:wrap;gap:8px;margin-top:8px">' + kinds.map(k => `<div style="flex:1 1 200px;border:1px solid ${k[2]};border-radius:8px;padding:6px 10px"><b style="color:${k[2]}">${k[0]}</b><div class="small">${k[1]}</div></div>`).join('') + '</div>';
+  s += '<div class="small" style="margin-top:8px">Mối quan hệ cá nhân kéo theo thế lực: đệ tử tông, thành viên gia tộc, hội viên (dự kiến) mang theo nghĩa vụ và lợi ích của tổ chức. Một người có thể vừa là bạn thân của đối thủ tông mình.</div>';
+  $('people').innerHTML = s;
+}
+
+function draw() {
+  $('info').textContent = 'Năm ' + (Math.floor(TT.world.months / 12) - TT.config.startYear + 1) + ' · thời đại ' + F.era.id + ' · ' + Object.keys(F.list).length + ' thế lực · ' + ((F.wars || []).length) + ' cuộc chiến';
+  realmsView(); mapView(); facView(); netView(); matrixView(); flowView(); peopleView();
+}
+$('gen').onclick = gen; $('run').onclick = run;
+gen();
+});
+</script>
+</body>
+</html>
