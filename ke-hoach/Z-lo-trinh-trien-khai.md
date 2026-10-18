@@ -99,11 +99,11 @@
 - [ ] **Thẻ tông** (giao diện): trục giá trị, bảy chỉ số (chữ, radar nhỏ), công–tội, chính sách, bí mật (che đến khi lộ).
 - **Cổng chơi thử 2:** đọc thẻ chín tông, kiểm các nguyên mẫu và công–tội có đúng ý (nhất là Âm Hồn Giáo và Kim Phong).
 
-### Đợt 3. Quốc vận và nho khí (S3) (khoảng 2 lượt)
-- [ ] `js/data/nation.js`, `js/systems/nation.js`: `world.fac.nat[triều]` (`van`, `nho`, `mach`...), nguồn tăng giảm, thiên mệnh (đổi chủ/chia cắt/thôn tính), phản phệ cơ bản, long mạch (nối N), văn vị cá nhân.
-- [ ] `power` của triều **suy ra** có hệ số bù; đo bật/tắt như F4 (12 hạt giống), giữ chỉ tiêu.
-- [ ] Hiển thị: thanh bậc quốc vận trong Nha môn, mô tả trong Biên niên sử (mục "Quốc gia"), tin tức, biên niên.
-- [ ] Bài kiểm thử: quốc vận trong khoảng, mất mệnh có hậu quả, thế giới luôn đủ 9 triều có chủ, nho khí giảm tà khí, lưu/tải.
+### Đợt 3. Quốc vận và nho khí (S3) (khoảng 2 lượt) — đã xong 2026-10-18 (xem S mục 15.14; `strength()` dùng vận trực tiếp, quan chế, vùng cấm đánh nhau, long mạch động dời sang các đợt sau)
+- [x] `js/data/nation.js`, `js/systems/nation.js`: `world.fac.nat[triều]` (`van`, `nho`, `mach`...), nguồn tăng giảm, thiên mệnh (đổi chủ/chia cắt/thôn tính), phản phệ cơ bản, long mạch (nối N), văn vị cá nhân.
+- [x] `power` của triều **suy ra** có hệ số bù; đo bật/tắt như F4 (40 hạt giống: 52,2 → 48,1 chiến tranh), giữ chỉ tiêu.
+- [x] Hiển thị: thanh bậc quốc vận trong Nha môn, mô tả trong Biên niên sử (mục "Quốc gia"), tin tức, biên niên.
+- [x] Bài kiểm thử: quốc vận trong khoảng, mất mệnh có hậu quả, thế giới luôn đủ 9 triều có chủ, nho khí giảm tà khí, lưu/tải.
 
 ### Đợt 4. Chỉ số tông, chính sách và Tôn giáo lõi (S4, S5) (khoảng 3 lượt)
 **S4:** 7 chỉ số + 5 chính sách của tông, `power` suy ra, thanh trừng hiếm; đo cân bằng.
@@ -269,3 +269,4 @@
 - 2026-10-18: **Đợt 0 xong.** `tools/run-tests.js` (Playwright, lọc bài), `tests.html?only=`, `tools/baseline.js` (hash 6 hạt giống, đếm biến cố bằng cách bọc hàm; trung bình 300 năm: 54,7 chiến tranh, 6,7 diệt vong, 5,3 đổi chủ triều), `tools/baseline/seeds.json` (tái lập hai lần cho cùng hash). Chạy đầy đủ `tests.html`: 96 đạt, 0 lỗi, 98 giây. Dùng `sim.html` có sẵn làm trang trống. Lưu ý: sử ký bị cắt ở 300 mục nên đếm biến cố không dựa vào sử ký.
 - 2026-10-18: **S1 xong.** Hash 6 hạt giống trùng khít đường cơ sở; `tests.html` 97 đạt, 0 lỗi; mục "Quan hệ thế lực" trong Biên niên sử. Tiếp theo: **F3** (vòng xung đột và hòa giải), rồi Cổng chơi thử 1.
 - 2026-10-18: **Đợt 2 (S2) xong** (F3 tạm hoãn theo ý bạn). Tông có giá trị, hành vi, bảy chỉ số, năm chính sách, công–tội, bí mật; `align` nay suy ra từ hành vi; `dao` bật giữa các tông; đo 40 hạt giống: 52,2 chiến tranh, 6,5 diệt vong, 4,5 đổi chủ triều. 98 bài đạt. Tiếp theo: Đợt 3 (S3 quốc vận và nho khí) hoặc F3 nếu bạn muốn.
+- 2026-10-18: **Đợt 3 (S3) xong.** Quốc vận, nho khí, thiên mệnh (đổi chủ, chia cắt, thôn tính), phản phệ cơ bản, văn vị dạng dữ liệu; `power` của triều suy ra từ vận và nho (tắt bằng `D.NATION.on = false` thì trùng khít đường cơ sở cũ). Đo 40 hạt giống: trước 52,2 chiến tranh, 6,5 diệt vong, 4,5 đổi chủ; sau 48,1 / 6,2 / 4,5, thêm 1,4 lần mất mệnh mỗi 300 năm. `tests.html` 99 đạt, 0 lỗi. Tiếp theo: Đợt 4 (S4, S5).

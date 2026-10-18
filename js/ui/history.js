@@ -41,13 +41,15 @@
           } else row.appendChild(h('div', { class: 'small' }, 'Đứng đầu: ' + x.leader + ' · sức mạnh ' + Math.round(x.power) + ' · đoàn kết ' + Math.round(x.unity) + (x.ally && x.ally.length ? ' · đồng minh: ' + x.ally.map(i => (TT.fac.get(i) || {}).n).join(', ') : '')));
         } else if (k === 'tong') row.appendChild(h('div', { class: 'small' }, 'Đã bị tiêu diệt, chỉ còn tàn tích (có thể thám hiểm).'));
         if (TT.fac.alive(x) && ui.factionStyle) ui.factionStyle(row, x, k, c);
+        if (k === 'trieu' && ui.nationLine) row.appendChild(ui.nationLine(x)); // quốc vận, nho khí (S3)
         box.appendChild(row);
       });
     });
 
+    if (ui.buildNation) ui.buildNation(box, c); // mục "Quốc gia" (S3)
     if (ui.buildDiplo) ui.buildDiplo(box, c); // mục "Quan hệ thế lực" (S1)
     box.appendChild(h('div', { class: 'sec' }, 'Sử ký (' + f.chron.length + ' mục)'));
     f.chron.slice(-40).reverse().forEach(e => box.appendChild(h('div', { class: 'small' }, 'Năm ' + yr(e.m) + ': ' + e.t)));
   }
-  ui.addTab({ id: 'history', label: 'Biên niên sử', key: c => { const f = TT.fac.S(); return c.id + ':' + f.chron.length + ':' + f.wars.length + ':' + f.era.id + ':' + Math.floor(TT.world.months / 12) + ':' + (c.sect ? c.sect.id : '') + (ui.diploKey ? ui.diploKey(c) : ''); }, build });
+  ui.addTab({ id: 'history', label: 'Biên niên sử', key: c => { const f = TT.fac.S(); return c.id + ':' + f.chron.length + ':' + f.wars.length + ':' + f.era.id + ':' + Math.floor(TT.world.months / 12) + ':' + (c.sect ? c.sect.id : '') + (ui.diploKey ? ui.diploKey(c) : '') + (ui.nationKey ? ui.nationKey() : ''); }, build });
 })();

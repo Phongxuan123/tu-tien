@@ -72,7 +72,7 @@
         const before = g.n;
         g.n = clamp(g.n + sinh - tu + delta[rid], p.n0 * R.nMin, p.cap * R.nMax);
         g.g = (g.n - before) / before; g.mig = delta[rid];
-        g.mood = clamp(g.mood + (R.mood0 - g.mood) * 0.08 - war * R.warMood + (g.food - R.food0) * 0.05 + (era.id === 'thinh' ? 0.8 : era.id === 'loan' ? -0.8 : 0), 0, 100);
+        g.mood = clamp(g.mood + (R.mood0 - g.mood) * 0.08 * TT.nation.moodMul(rid) - war * R.warMood + (g.food - R.food0) * 0.05 + (era.id === 'thinh' ? 0.8 : era.id === 'loan' ? -0.8 : 0), 0, 100);
         // nổi loạn
         if (g.mood < R.riot && !g.riot) {
           g.riot = true; TT.fac.chron('Dân chúng ' + regName(rid) + ' nổi loạn vì đói khổ và chiến tranh.', 'bad', !!(pl && pl.region === rid));

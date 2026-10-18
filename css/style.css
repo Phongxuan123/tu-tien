@@ -417,3 +417,7 @@ body.has-modal{overflow:hidden}
 .paper-top{position:sticky;top:0;z-index:2;background:rgba(5,8,14,.9);padding:4px 0}
 .gt{display:flex;align-items:center;gap:6px;font-size:.78rem;color:var(--dim);margin:2px 0}.gt .gl,.gt .gr{width:70px;flex:none}.gt .gl{text-align:right}.gt .tr{position:relative;flex:1;height:4px;background:#222c39;border-radius:2px}.gt .tr i{position:absolute;top:-3px;width:10px;height:10px;border-radius:50%;background:var(--gold);margin-left:-5px}.gt .gw{width:96px;flex:none}
 .gstat{display:grid;grid-template-columns:1fr 1fr;gap:2px 12px}
+/* Quốc vận và nho khí (S3): thanh bậc năm vùng (Mạt, Suy, Bình, Thịnh, Rồng bay) với mốc ở mức hiện tại */
+.tierbar{position:relative;height:8px;border-radius:4px;margin:4px 0 6px;background:linear-gradient(90deg,#5a2b25 0 15%,#5a4a25 15% 35%,#26323f 35% 60%,#2a4a33 60% 80%,#4a3a6a 80% 100%)}
+.tierbar i{position:absolute;top:-3px;width:4px;height:14px;margin-left:-2px;border-radius:2px;background:#f2f4f7;box-shadow:0 0 0 1px #0008}
+.nation-bars{margin:8px 0}

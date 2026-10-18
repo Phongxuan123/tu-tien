@@ -221,7 +221,7 @@
         out.info = true;
         out.text = 'Tộc trưởng tiếp khách bên bếp lửa, kể về nguồn gốc cứ địa và những quy tắc của bộ tộc.';
       } else if (id === 'quan') {
-        out.info = true;
+        out.info = true; out.van = c.region; // thanh bậc quốc vận và nho khí (S3)
         const tr = TT.fac.get('tr_' + c.region), war = TT.fac.atFront(c.region), hoi = TT.fac.hoiAt(c.region);
         out.text = (tr ? tr.n + ' (' + tr.state + ', lãnh tụ ' + tr.leader + ')' : 'Quan phủ địa phương') + '. ' + (war ? 'Vùng đang có chiến sự, cửa ải siết, giá cả tăng.' : 'Vùng đang yên ổn.') + (hoi.length ? ' Thương hội có mặt: ' + hoi.map(h => h.n).join(', ') + '.' : '') + ' Thời đại: ' + TT.fac.era().n + '.';
         const kt = TT.rumors ? TT.rumors.active().filter(o => o.kind === 'ke_thu') : [];

@@ -84,6 +84,7 @@ Mục tiêu nhịp: một đời Phi Thăng khoảng 20 đến 30 phút thật; 
 | Z. Lộ trình triển khai tổng thể 13 đợt cho Q, R, S, E (phần tồn: giám định, nhiệm vụ/vay/bảo hiểm hội, thuế vào giá), F (phần tồn: F3, F5, F2 sau) | ☐ | Chờ bạn duyệt, chưa code | [Z-lo-trinh-trien-khai](ke-hoach/Z-lo-trinh-trien-khai.md) |
 | S1 Mạng quan hệ nhiều chiều: sổ ân oán, bậc quan hệ, ma trận và hồ sơ cặp trong Biên niên sử (không đổi cân bằng) | ☑ | ☐ | [S-quoc-gia-tong-mon-ton-giao](ke-hoach/S-quoc-gia-tong-mon-ton-giao.md) mục 15.12 |
 | S2 Tông môn hiện đại hóa: giá trị, hành vi, bảy chỉ số, chính sách, công–tội, bí mật, bộ máy tên cổ, thẻ tông; `align` suy ra từ hành vi; `dao` giữa các tông | ☑ | ☐ | [S-quoc-gia-tong-mon-ton-giao](ke-hoach/S-quoc-gia-tong-mon-ton-giao.md) mục 15.13 |
+| S3 Quốc vận và nho khí: thanh bậc ở Nha môn, mục "Quốc gia" trong Biên niên sử, thiên mệnh (đổi chủ, chia cắt, thôn tính), phản phệ cơ bản, `power` của triều suy ra | ☑ | ☐ | [S-quoc-gia-tong-mon-ton-giao](ke-hoach/S-quoc-gia-tong-mon-ton-giao.md) mục 15.14 |
 
 ### 2.4 Kinh tế và công trình
 | Mục | Xong | Bạn kiểm | Chi tiết |
@@ -249,6 +250,7 @@ Gợi ý thứ tự (bạn đổi tùy ý):
 - **2026-10-18** Lộ trình triển khai tổng thể Q, R, S, E, F (13 đợt, hạ tầng, cổng chơi thử, chỉ tiêu); S1 giao diện gộp vào Biên niên sử; chờ duyệt rồi bắt đầu Đợt 0.
 - **2026-10-18** Đợt 0 (công cụ chạy kiểm thử, đường cơ sở) và **S1** (mạng quan hệ nhiều chiều, ma trận trong Biên niên sử) xong: 97 bài đạt, hash cơ sở trùng khít.
 - **2026-10-18** **S2** (Đợt 2) xong: thẻ tông, giá trị, công–tội, bộ máy tên cổ, đạo thống giữa các tông; 98 bài đạt; đo 40 hạt giống 52,2 chiến tranh mỗi 300 năm.
+- **2026-10-18** **S3** (Đợt 3) xong: quốc vận, nho khí, thiên mệnh, phản phệ cơ bản; 99 bài đạt; đo 40 hạt giống 48,1 chiến tranh, 6,2 diệt vong, 4,5 đổi chủ mỗi 300 năm (trước 52,2 / 6,5 / 4,5).
 - Sắp xếp lại file kế hoạch tổng này; nhật ký cũ chuyển nguyên văn vào `ke-hoach/_nhat-ky-goc.md`.
 
 ---
