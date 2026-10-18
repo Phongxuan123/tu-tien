@@ -24,7 +24,8 @@ Trang tổng ở gốc dự án: [KE-HOACH.md](../KE-HOACH.md) (bảng tiến đ
 | [N-tai-nguyen-ban-do.md](N-tai-nguyen-ban-do.md) | Tài nguyên trên bản đồ: linh mạch, mỏ linh thạch, khoáng thạch, linh thảo, yêu thú | Bản 1 đã code |
 | [O-khu-thong-tin-ban-do.md](O-khu-thong-tin-ban-do.md) | Khu thông tin dưới bản đồ gọn lại, Vượt vùng chuyển sang Tông môn (khóa), ý tưởng tiếp | Bản gọn đã code |
 | [P-nghia-vu-dan-so.md](P-nghia-vu-dan-so.md) | F2 nghĩa vụ giữa các thế lực (hiệp ước, thuế, cống, chư hầu) và F4 dân số ẩn theo vùng | Lõi đã code, còn phần sau |
-
-Cách đặt tên: chữ cái hoặc ngày + tên ngắn không dấu. Trạng thái: Ý tưởng, Chờ duyệt, Đã duyệt, Đang làm, Xong, Tạm dừng.
 | [Q-cot-truyen.md](Q-cot-truyen.md) | Làm mới cốt truyện, lựa chọn, kỳ ngộ (tuyến truyện, nhân quả, manh mối) | Chờ duyệt |
 | [R-nhan-duyen.md](R-nhan-duyen.md) | Nhân duyên và quan hệ: đạo lữ, con cái, sư đồ, thân tộc, dây duyên (tách khỏi Q) | Chờ duyệt |
+| [S-quoc-gia.md](S-quoc-gia.md) | Hệ thống quốc gia: quốc vận, nho khí, quân đội và quân trận (đối kháng tu sĩ), triều chính, quốc sách, mạng quan hệ nhiều chiều của mọi thế lực, liên thông M5b | Chờ duyệt |
+
+Cách đặt tên: chữ cái hoặc ngày + tên ngắn không dấu. Trạng thái: Ý tưởng, Chờ duyệt, Đã duyệt, Đang làm, Xong, Tạm dừng.

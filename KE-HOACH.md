@@ -80,6 +80,7 @@ Mục tiêu nhịp: một đời Phi Thăng khoảng 20 đến 30 phút thật; 
 | Đại địa đồ (9 vùng) làm đẹp như bản đồ vùng | ☐ | | J mục 5 (bạn bảo chưa cần) |
 | Nhật báo "Thiên Cơ Báo" bốn năm một số, thay khung Thiên hạ | ☑ | G1 đến G5 (rút gọn: chưa có nhiệm vụ từ truy nã, chưa chấm báo mới) | [G-nhat-bao](ke-hoach/G-nhat-bao.md) |
 | Phát triển thành trì (bảng tin chợ, bậc thành) | ☐ | | [H-phat-trien-thanh-tri](ke-hoach/H-phat-trien-thanh-tri.md) |
+| S. Hệ thống Quốc gia: quốc vận, nho khí, quân đội và quân trận (đối kháng tu sĩ), triều chính, quốc sách, mạng quan hệ nhiều chiều của mọi thế lực; làm chung M5b | ☐ | Chờ bạn duyệt, chưa code | [S-quoc-gia](ke-hoach/S-quoc-gia.md) |
 
 ### 2.4 Kinh tế và công trình
 | Mục | Xong | Bạn kiểm | Chi tiết |
@@ -175,7 +176,7 @@ Gợi ý thứ tự (bạn đổi tùy ý):
 
 1. **Chơi thử và gửi phản hồi** các mục ở mục 3 (đặc biệt phố tông môn, khu tài nguyên, nhật ký).
 2. **D. Kỳ ngộ có cốt truyện** (đã có kế hoạch, chờ làm).
-3. **M5b Liên tông** dùng lại hiệp ước F2 (minh ước, giải đấu); phần còn lại của F2 (nhiệm vụ thế lực, F5) ở [P](ke-hoach/P-nghia-vu-dan-so.md) mục 11.
+3. **S Hệ thống Quốc gia** (kế hoạch chờ bạn duyệt, [S-quoc-gia](ke-hoach/S-quoc-gia.md)); **M5b Liên tông** gộp vào chặng S5 của S, dùng lại hiệp ước F2 (minh ước, giải đấu); phần còn lại của F2 (nhiệm vụ thế lực, F5) ở [P](ke-hoach/P-nghia-vu-dan-so.md) mục 11.
 4. **Khu dưới bản đồ:** dải "Sắp tới", nhiều lớp bản đồ (thế lực, nguy hiểm), bộ lập lộ trình (O mục 3).
 5. **E Kinh tế** (nền F2, F4, tài nguyên đã xong; kế hoạch bản 5 chờ bạn duyệt) và **G Nhật báo**.
 6. **I4/I5**: võ đài, kho đồ, hầm mỏ, bến tàu, nhà đấu giá, tòa soạn.
@@ -194,6 +195,7 @@ Gợi ý thứ tự (bạn đổi tùy ý):
 6. Cốt truyện (Q): xem ke-hoach/Q-cot-truyen.md mục 20 (câu hỏi còn mở, có mặc định) và mục 21 (gợi ý bổ sung) rồi cho làm Q1 trở đi.
 7. Nhật báo: chơi thử tab Nhật báo (đăng ký, đọc số, mua số cũ) và cho biết cần chỉnh gì.
 8. Kinh tế: chơi thử giá, hạn dùng, hội; cho mình biết cần chỉnh gì (giá, hạn dùng, cướp, đấu giá).
+9. Quốc gia (S): xem ke-hoach/S-quoc-gia.md mục 8 (9 câu, có mặc định) rồi cho làm S1.
 
 ---
 
@@ -240,6 +242,7 @@ Gợi ý thứ tự (bạn đổi tùy ý):
 - Nhật báo Thiên Cơ Báo (G1 đến G5): bỏ khung Thiên hạ, thêm tab Nhật báo, số tổng san bốn năm, đăng ký theo tháng.
 - **2026-10-18** Kế hoạch R (nhân duyên, đạo lữ, con cái) tách khỏi Q; chờ duyệt.
 - **2026-10-18** Kế hoạch làm mới cốt truyện, lựa chọn, kỳ ngộ (Q), thay D; chờ duyệt.
+- **2026-10-18** Kế hoạch hệ thống Quốc gia (S): quốc vận, nho khí, quân trận, triều chính, mạng quan hệ nhiều chiều, liên thông M5b; chờ duyệt.
 - Sắp xếp lại file kế hoạch tổng này; nhật ký cũ chuyển nguyên văn vào `ke-hoach/_nhat-ky-goc.md`.
 
 ---
