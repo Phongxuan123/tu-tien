@@ -11,7 +11,7 @@
   S.atk = c => Math.max(1, Math.round(c.baseAtk + c.realm * 10 + S.mod(c, 'atk') + c.trainAtk));
   S.nl = c => Math.max(1, Math.round(c.baseNl + c.realm * 6 + S.mod(c, 'nl') + c.trainNl));
   S.kv = c => c.baseKv + S.mod(c, 'kv');
-  S.luck = c => c.baseLuck + S.mod(c, 'luck');
+  S.luck = c => c.baseLuck + S.mod(c, 'luck') + (TT.nation ? TT.nation.luck(c) : 0);
 
   // Tư chất: main là điểm thuộc tính cao nhất, n là số thuộc tính chính (>= 5 điểm).
   S.tc = function (c) {
@@ -66,6 +66,7 @@
       { n: 'Tiên thiên và pháp khí', v: S.mod(c, 'brk') + (c.ring ? 0.05 : 0) },
       { n: 'Tông môn hỗ trợ', v: TT.sect ? TT.sect.breakBonus(c) : 0 },
       { n: 'Thiên phạt (Nghịch Thiên)', v: c.thienPhat ? -0.10 : 0 },
+      { n: 'Phản phệ quốc vận', v: TT.nation ? -TT.nation.brkPenalty(c) : 0 },
       { n: 'Thương tích chưa lành', v: -TT.loss.brkPenalty(c) },
       { n: 'Phá Cảnh Đan x' + c.aid.pill, v: D.AID.pillBonus * c.aid.pill },
       { n: 'Động phủ linh khí', v: c.aid.room ? D.AID.roomBonus : 0 },

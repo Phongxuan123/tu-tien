@@ -39,6 +39,7 @@
     const s = TT.bld.service(c, cur);
     panel.appendChild(h('p', { class: 'shop-text' }, s.text));
     if (s.note) panel.appendChild(h('p', { class: 'small' }, s.note));
+    if (s.van && ui.nationBars) { const nb = ui.nationBars(s.van); if (nb) panel.appendChild(nb); }
     if (s.info && ui.placeInfo) panel.appendChild(ui.placeInfo(c, TT.map.place(c.place))); // thông tin nơi đang đứng, chỉ xem được ở công trình đại diện
     if (msg) panel.appendChild(h('div', { class: 'shop-msg' }, msg));
     const row = h('div', { class: 'btns', style: 'margin-top:8px' });

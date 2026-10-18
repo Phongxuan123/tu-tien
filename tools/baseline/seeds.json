@@ -3,75 +3,75 @@
  "seeds": [
   {
    "seed": 301,
-   "rel": "284d3848",
-   "list": "ff0831fe",
-   "chron": "8296a4fe",
-   "pacts": "3779e6e3",
-   "wars": 87,
-   "destroyed": 6,
-   "rulers": 8,
-   "chronLen": 300,
-   "relPairs": 166
-  },
-  {
-   "seed": 911,
-   "rel": "833b9f9e",
-   "list": "a389ee87",
-   "chron": "9e5020e4",
-   "pacts": "5bec4976",
-   "wars": 134,
-   "destroyed": 17,
-   "rulers": 15,
-   "chronLen": 300,
-   "relPairs": 168
-  },
-  {
-   "seed": 77,
-   "rel": "aa71bf3c",
-   "list": "a63f9158",
-   "chron": "6fc3ef92",
-   "pacts": "b2864459",
-   "wars": 46,
+   "rel": "d36de5a7",
+   "list": "4c966ee0",
+   "chron": "5c775e7d",
+   "pacts": "12af7e0c",
+   "wars": 27,
    "destroyed": 7,
    "rulers": 0,
    "chronLen": 300,
-   "relPairs": 176
+   "relPairs": 163
+  },
+  {
+   "seed": 911,
+   "rel": "b0e06af6",
+   "list": "da9757e1",
+   "chron": "ef54df82",
+   "pacts": "15cd2b7d",
+   "wars": 117,
+   "destroyed": 11,
+   "rulers": 22,
+   "chronLen": 300,
+   "relPairs": 169
+  },
+  {
+   "seed": 77,
+   "rel": "7d25db4a",
+   "list": "8b8653c",
+   "chron": "6effd721",
+   "pacts": "311c12f1",
+   "wars": 31,
+   "destroyed": 6,
+   "rulers": 0,
+   "chronLen": 300,
+   "relPairs": 180
   },
   {
    "seed": 5,
-   "rel": "e1d1d45c",
-   "list": "ab6fcce6",
-   "chron": "3ffe53b8",
-   "pacts": "5e649dee",
-   "wars": 66,
+   "rel": "2162a5c3",
+   "list": "31cfa725",
+   "chron": "a7eac507",
+   "pacts": "2fd28683",
+   "wars": 74,
    "destroyed": 9,
    "rulers": 8,
    "chronLen": 300,
-   "relPairs": 183
+   "relPairs": 177
   },
   {
    "seed": 12,
-   "rel": "80a33168",
-   "list": "8a6cc220",
-   "chron": "ed59676d",
-   "pacts": "d4f24c76",
-   "wars": 50,
-   "destroyed": 12,
-   "rulers": 0,
+   "rel": "6f737e34",
+   "list": "d202c400",
+   "chron": "7ffca339",
+   "pacts": "e2243506",
+   "wars": 101,
+   "destroyed": 10,
+   "rulers": 17,
    "chronLen": 300,
-   "relPairs": 187
+   "relPairs": 210
   },
   {
    "seed": 33,
-   "rel": "c2d8c34f",
-   "list": "4d4cf20d",
-   "chron": "ab0e72ab",
-   "pacts": "733d336c",
-   "wars": 48,
-   "destroyed": 4,
+   "rel": "c1eed7e0",
+   "list": "961e7b71",
+   "chron": "4e664e1e",
+   "pacts": "8fc76ac7",
+   "wars": 11,
+   "destroyed": 1,
    "rulers": 1,
    "chronLen": 300,
-   "relPairs": 173
+   "relPairs": 170
   }
  ]
 }
