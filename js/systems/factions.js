@@ -53,7 +53,7 @@
 
   const fac = TT.fac = {
     KIND_NAME,
-    S() { const w = S0(); if (!w.fac) fac.init(w); return w.fac; },
+    S() { const w = S0(); if (!w.fac) fac.init(w); if (!w.fac.rel2) w.fac.rel2 = {}; return w.fac; }, // rel2: mạng quan hệ nhiều chiều (S1), khởi tạo muộn
 
     init(w) {
       const f = w.fac = { list: {}, wars: [], era: null, nextEra: null, chron: [], ruins: {}, tempo: 1, lastEnd: w.months, nextWar: 1, rel: {} };
@@ -123,8 +123,9 @@
       }
       return k;
     },
-    relV(a, b) { const k = fac.rel(a, b); return fac.S().rel[k]; },
-    relAdd(a, b, n) { const f = fac.S(), k = fac.rel(a, b); f.rel[k] = rng.clamp(f.rel[k] + n, -100, 100); },
+    relV(a, b) { fac.rel(a, b); return TT.diplo.total(a, b); }, // số tổng hợp các chiều (S1: bằng thiện cảm); fac.rel() giữ nguyên thứ tự dùng rng
+    // why = [loại ân oán, lời] (tùy chọn): ghi vào sổ ân oán của cặp (TT.diplo.log), không đổi giá trị.
+    relAdd(a, b, n, why) { const f = fac.S(), k = fac.rel(a, b); f.rel[k] = rng.clamp(f.rel[k] + n, -100, 100); if (why) TT.diplo.log(a, b, why[0], n, why[1]); },
     near(a, b) { return a.region === b.region || TT.map.macroNeighbors(a.region).some(n => n.to === b.region); },
 
     // ---------- một năm ----------
@@ -191,15 +192,15 @@
         const b = rng.pick(L); if (a === b || !fac.near(a, b)) return;
         let d = rng.RI(-5, 5) + (a.war || b.war ? 0 : 1) - (rng.P(0.03) ? rng.RI(12, 28) : 0); // thỉnh thoảng có xung đột nhỏ làm bạn thành thù
         if (a.tag === b.tag) d += 1; else if (a.tag !== 'trung' && b.tag !== 'trung') d -= 1;
-        fac.relAdd(a, b, d);
+        fac.relAdd(a, b, d, d <= -12 ? ['xung_dot', a.n + ' và ' + b.n + ' xảy ra xung đột'] : null);
         // liên minh: đã thân thiết và chưa có đồng minh
         if (fac.relV(a, b) >= 38 && a.kind === b.kind && (a.ally || []).indexOf(b.id) < 0 && (a.ally || []).length < 2 && (b.ally || []).length < 2 && rng.P(0.25)) {
           a.ally = (a.ally || []).concat(b.id); b.ally = (b.ally || []).concat(a.id);
-          fac.chron(a.n + ' và ' + b.n + ' kết thành đồng minh.', 'good');
+          fac.chron(a.n + ' và ' + b.n + ' kết thành đồng minh.', 'good'); TT.diplo.log(a, b, 'ket_minh', 0, 'Kết thành đồng minh');
         }
       });
       // đồng minh đã nguội thì tan
-      L.forEach(a => { (a.ally || []).slice().forEach(id => { const b = fac.get(id); if (!b || !fac.alive(b) || fac.relV(a, b) < 20) { a.ally = a.ally.filter(i => i !== id); if (b) b.ally = (b.ally || []).filter(i => i !== a.id); } }); });
+      L.forEach(a => { (a.ally || []).slice().forEach(id => { const b = fac.get(id); if (!b || !fac.alive(b) || fac.relV(a, b) < 20) { a.ally = a.ally.filter(i => i !== id); if (b) b.ally = (b.ally || []).filter(i => i !== a.id); if (b && fac.alive(b)) TT.diplo.log(a, b, 'tan_minh', 0, 'Đồng minh nguội lạnh, tan liên minh'); } }); });
     },
 
     // ---------- chiến tranh ----------
@@ -227,7 +228,7 @@
       (b.ally || []).forEach(i => { const x = fac.get(i); if (x && fac.alive(x) && !x.war && rng.P(TT.pact.helpP(i, b.id))) { war.sb.push(i); } });
       a.war = b.war = war.id; war.sa.concat(war.sb).forEach(i => { fac.get(i).war = war.id; });
       f.wars.push(war);
-      fac.relAdd(a, b, -25);
+      fac.relAdd(a, b, -25, ['chien', a.n + ' tuyên chiến với ' + b.n + ' vì ' + reason]);
       const pl0 = TT.player(); if (pl0 && pl0.region === war.front) TT.log(pl0, 'Chiến loạn bùng lên ở ' + regName(war.front) + ': ' + a.n + ' đánh ' + b.n + '.', 'bad', 'Vì ' + reason + '. Ở vùng chiến tuyến: nguy hiểm +' + D.FAC.frontDanger + ', kiếm tiền -' + Math.round((1 - D.FAC.frontGold) * 100) + '%, giá mua +' + Math.round((D.FAC.frontPrice - 1) * 100) + '%.');
       fac.chron(a.n + ' tuyên chiến với ' + b.n + ' vì ' + reason + '. Chiến sự bùng lên ở ' + regName(war.front) + (war.sa.length + war.sb.length ? ' (có đồng minh tham chiến)' : '') + '.', 'war');
     },
@@ -259,12 +260,12 @@
       f.wars = f.wars.filter(x => x.id !== war.id);
       [war.a, war.b].concat(war.sa, war.sb).forEach(i => { const x = fac.get(i); if (x && x.war === war.id) x.war = null; });
       if (res === 'draw') {
-        fac.relAdd(a, b, 15);
+        fac.relAdd(a, b, 15, ['hoa_nghi', 'Hòa nghị sau ' + war.years + ' năm chiến tranh']);
         fac.chron('Chiến tranh giữa ' + a.n + ' và ' + b.n + ' kết thúc bằng hòa nghị sau ' + war.years + ' năm.', 'good');
         return;
       }
       const win = res === 'a' ? a : b, lose = res === 'a' ? b : a;
-      fac.relAdd(a, b, -10);
+      fac.relAdd(win, lose, -10, ['thang', win.n + ' thắng ' + lose.n + ' sau ' + war.years + ' năm chiến tranh']);
       if (win.kind === 'tong' && lose.kind === 'tong') TT.sect.spoils(win, lose);
       win.power = rng.clamp(win.power + 4, 1, 100); win.wealth = rng.clamp(win.wealth + 8, 0, 100);
       const pd = 0.42 + (win.power - lose.power) / 220 + (lose.unity < 30 ? 0.15 : 0);
@@ -282,6 +283,7 @@
     destroy(x, by, why, quiet) {
       const f = fac.S(), w = S0();
       x.state = 'diệt'; x.diedAt = w.months; x.deadYears = 0; x.war = null;
+      if (by) TT.diplo.log(by, x, 'diet', 0, by.n + ' tiêu diệt ' + x.n);
       if (!quiet) fac.chron(x.n + ' ' + why + '.', 'bad');
       if (x.kind === 'tong') {
         f.ruins[x.home] = w.months;
@@ -395,13 +397,13 @@
       // bị triều tịch thu (giàu mà không có chỗ dựa)
       if (x.wealth > 66) fac.list('trieu').filter(t => fac.alive(t) && x.reach.indexOf(t.region) >= 0 && t.power > 55 && (x.infl[t.id] || 0) < 35).forEach(t => {
         if (!rng.P(0.04)) return;
-        x.wealth = rng.clamp(x.wealth - 25, 0, 100); x.reach = x.reach.filter(r => r !== t.region || x.reach.length <= 2); x.trust = rng.clamp(x.trust - 6, 5, 100); fac.relAdd(x, t, -30);
+        x.wealth = rng.clamp(x.wealth - 25, 0, 100); x.reach = x.reach.filter(r => r !== t.region || x.reach.length <= 2); x.trust = rng.clamp(x.trust - 6, 5, 100); fac.relAdd(x, t, -30, ['tich_thu', t.n + ' tịch thu tài sản của ' + x.n]);
         fac.chron(t.n + ' tịch thu phần lớn tài sản của ' + x.n + ' ở ' + R(t.region) + ', viện cớ trốn thuế.', 'bad');
       });
       // tông cắt hàng sỉ
       fac.list('tong').filter(t => fac.alive(t) && x.reach.indexOf(t.region) >= 0 && t.power > 55 && fac.relV(x, t) < -30).forEach(t => {
         if (!rng.P(0.04)) return;
-        x.wealth = rng.clamp(x.wealth - 10, 0, 100); x.own = rng.clamp(x.own - 0.02, 0.02, H.ownMax); fac.relAdd(x, t, -8);
+        x.wealth = rng.clamp(x.wealth - 10, 0, 100); x.own = rng.clamp(x.own - 0.02, 0.02, H.ownMax); fac.relAdd(x, t, -8, ['cat_hang', t.n + ' cắt nguồn hàng sỉ của ' + x.n]);
         fac.chron(t.n + ' cắt nguồn hàng sỉ của ' + x.n + ' sau mâu thuẫn về giá và hạn mức.', 'bad');
       });
       // môi giới hòa nghị và cho vay thời chiến

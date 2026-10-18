@@ -44,8 +44,9 @@
       });
     });
 
+    if (ui.buildDiplo) ui.buildDiplo(box, c); // mục "Quan hệ thế lực" (S1)
     box.appendChild(h('div', { class: 'sec' }, 'Sử ký (' + f.chron.length + ' mục)'));
     f.chron.slice(-40).reverse().forEach(e => box.appendChild(h('div', { class: 'small' }, 'Năm ' + yr(e.m) + ': ' + e.t)));
   }
-  ui.addTab({ id: 'history', label: 'Biên niên sử', key: c => { const f = TT.fac.S(); return c.id + ':' + f.chron.length + ':' + f.wars.length + ':' + f.era.id + ':' + Math.floor(TT.world.months / 12) + ':' + (c.sect ? c.sect.id : ''); }, build });
+  ui.addTab({ id: 'history', label: 'Biên niên sử', key: c => { const f = TT.fac.S(); return c.id + ':' + f.chron.length + ':' + f.wars.length + ':' + f.era.id + ':' + Math.floor(TT.world.months / 12) + ':' + (c.sect ? c.sect.id : '') + (ui.diploKey ? ui.diploKey(c) : ''); }, build });
 })();

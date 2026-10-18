@@ -79,10 +79,10 @@
 - **Cổng:** 93 bài đạt trong môi trường này; `seeds.json` tạo ra và tái lập được (chạy hai lần ra cùng hash).
 
 ### Đợt 1. Mạng quan hệ nhiều chiều (S1) và vòng xung đột (F3) (khoảng 3 lượt)
-**S1** (chi tiết ở S mục 15; **giao diện gộp vào Biên niên sử**, không tạo tab mới):
-- [ ] `js/data/diplo.js`, `js/systems/diplo.js`, sửa `js/files.js`, `fac.relAdd/relV`, 14 chỗ gắn sổ ân oán; hash cơ sở trùng.
-- [ ] `js/ui/diplo.js` (hàm `buildDiplo(box, c)`) gọi từ `history.js`: mục mới **"Quan hệ thế lực"** gập được, đặt trước "Sử ký": ma trận có lọc loại, hồ sơ cặp, hồ sơ thế lực; khóa vẽ lại của tab Biên niên sử thêm số mục sổ ân oán.
-- [ ] Bài `Mạng quan hệ nhiều chiều (S1)` (9 mục kiểm thử ở S 15.7).
+**S1 đã xong (2026-10-18)** (chi tiết ở S mục 15, kết quả ở S 15.12; **giao diện gộp vào Biên niên sử**, không tạo tab mới):
+- [x] `js/data/diplo.js`, `js/systems/diplo.js`, sửa `js/files.js`, `fac.relAdd/relV`, 14 chỗ gắn sổ ân oán; hash cơ sở trùng.
+- [x] `js/ui/diplo.js` (hàm `buildDiplo(box, c)`) gọi từ `history.js`: mục mới **"Quan hệ thế lực"** gập được, đặt trước "Sử ký": ma trận có lọc loại, hồ sơ cặp, hồ sơ thế lực; khóa vẽ lại của tab Biên niên sử thêm số mục sổ ân oán.
+- [x] Bài `Mạng quan hệ nhiều chiều (S1)` (9 mục kiểm thử ở S 15.7).
 **F3 Vòng xung đột và hòa giải** (**có chủ ý đổi cân bằng**):
 - [ ] Dùng sổ ân oán làm **đồng hồ căng thẳng** theo cặp: ân oán xấu gần đây + tranh chấp (mỏ, địa bàn, nguồn hàng) → ngưỡng tạo **xung đột nhỏ** (tranh chấp, trục xuất sứ, cắt hàng) → có thể leo thang thành chiến tranh hoặc **hòa giải** (môi giới của hội, hòa nghị chủ động, sứ giả).
 - [ ] Sửa lỗ hổng "Thịnh thế 25 năm không có cuộc chiến nào" (F mục 3 điểm 3): đảm bảo mỗi 25 năm có ít nhất vài xung đột nhỏ dù chiến tranh hiếm.
@@ -267,3 +267,4 @@
 ## 11. Nhật ký làm việc
 - 2026-10-18: lập lộ trình tổng thể 13 đợt (0 đến 12) cho Q, R, S, E, F; đối chiếu hiện trạng E (đã code E0 đến E6, còn giám định và nhiệm vụ/vay/bảo hiểm hội), F (đã F1, F2 lõi, F4; còn F3, F5, F2 sau); S1 giao diện gộp vào Biên niên sử theo ý bạn. Chưa code.
 - 2026-10-18: **Đợt 0 xong.** `tools/run-tests.js` (Playwright, lọc bài), `tests.html?only=`, `tools/baseline.js` (hash 6 hạt giống, đếm biến cố bằng cách bọc hàm; trung bình 300 năm: 54,7 chiến tranh, 6,7 diệt vong, 5,3 đổi chủ triều), `tools/baseline/seeds.json` (tái lập hai lần cho cùng hash). Chạy đầy đủ `tests.html`: 96 đạt, 0 lỗi, 98 giây. Dùng `sim.html` có sẵn làm trang trống. Lưu ý: sử ký bị cắt ở 300 mục nên đếm biến cố không dựa vào sử ký.
+- 2026-10-18: **S1 xong.** Hash 6 hạt giống trùng khít đường cơ sở; `tests.html` 97 đạt, 0 lỗi; mục "Quan hệ thế lực" trong Biên niên sử. Tiếp theo: **F3** (vòng xung đột và hòa giải), rồi Cổng chơi thử 1.

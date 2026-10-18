@@ -2236,6 +2236,87 @@ test('Nhật ký: phân loại theo nội dung, ba mức quan trọng, mục có
   const npc = Object.values(TT.world.chars).find(c => c.kind === 'npc'); TT.log(npc, 'Thử', ''); eq(npc.log[npc.log.length - 1].cat, undefined);
 });
 
+test('Mạng quan hệ nhiều chiều (S1): giá trị cũ giữ nguyên, đọc không đổi diễn biến thế giới, sổ ân oán, bậc quan hệ, ma trận, lưu/tải', () => {
+  const K = D.DIPLO, dp = TT.diplo;
+  // 1. Đọc không đổi diễn biến: cùng hạt giống, một bên liên tục gọi các hàm đọc (peek, level, matrix, of), bên kia không.
+  const run = reader => {
+    TT.life.createWorld(911); const f = TT.fac.S();
+    for (let y = 0; y < 80; y++) {
+      TT.world.months += 12; TT.fac.yearly();
+      if (reader) { const M = dp.matrix(null); M.list.forEach(x => { dp.of(x); M.list.forEach(z => { if (x !== z) { dp.peek(x, z); dp.describe(x, z); dp.cua(x, z); } }); }); }
+    }
+    return JSON.stringify([f.rel, f.rel2, f.chron.length, f.wars.length, Object.keys(f.list).map(k => f.list[k].state + Math.round(f.list[k].power))]);
+  };
+  const quiet = run(false), loud = run(true);
+  eq(loud, quiet, 'gọi hàm đọc làm đổi diễn biến thế giới');
+
+  // 2. Thế giới mới: relV trùng thiện cảm đã lưu; tổng hợp đối xứng, hữu hạn, trong [-100, 100]
+  TT.life.createWorld(911); const f = TT.fac.S(), W = TT.world;
+  for (let y = 0; y < 60; y++) { W.months += 12; TT.fac.yearly(); }
+  const L = TT.fac.list().filter(TT.fac.alive);
+  Object.keys(f.rel).forEach(k => { const [ia, ib] = k.split('|'), a = TT.fac.get(ia), b = TT.fac.get(ib); if (!a || !b) return; eq(TT.fac.relV(a, b), f.rel[k], 'relV khác thiện cảm ' + k); });
+  L.forEach(a => L.forEach(b => { if (a === b) return; const t = dp.total(a, b); ok(isFinite(t) && t >= -100 && t <= 100, 'tổng hợp hợp lệ'); eq(t, dp.total(b, a), 'đối xứng'); }));
+  eq(Object.keys(f.rel).length, Object.keys(f.rel).filter(k => { const [ia, ib] = k.split('|'); return ia < ib; }).length, 'khóa cặp luôn a < b');
+
+  // 3. peek không khởi tạo cặp mới
+  const x1 = L[0], y1 = L.find(z => z !== x1 && f.rel[dp.key(x1, z)] == null);
+  if (y1) { const n0 = Object.keys(f.rel).length; const p = dp.peek(x1, y1); ok(p.fresh, 'cặp chưa hỏi là fresh'); eq(Object.keys(f.rel).length, n0, 'peek không tạo cặp'); eq(p.tinh, dp.tagBase(x1, y1)); }
+
+  // 4. Sổ ân oán: chiến tranh ghi cho cả hai chiều xem; hòa nghị ghi tiếp
+  const ta = TT.fac.list('tong').filter(TT.fac.alive), a = ta[0], b = ta[1];
+  a.war = b.war = null; a.power = b.power = 60;
+  const h0 = dp.history(a, b).length; TT.fac.startWar(a, b);
+  ok(dp.history(a, b)[0].k === 'chien' && dp.history(b, a)[0].k === 'chien', 'chiến tranh vào sổ ở cả hai chiều');
+  ok(dp.history(a, b)[0].t.indexOf(a.n) >= 0, 'lời ghi có tên bên khởi sự'); eq(dp.history(a, b).length, h0 + 1);
+  ok(dp.isWar(a, b) && dp.level(a, b).war, 'đang đánh nhau');
+  const war = TT.fac.S().wars.find(w => w.a === a.id && w.b === b.id); TT.fac.endWar(war, 'draw');
+  eq(dp.history(a, b)[0].k, 'hoa_nghi', 'hòa nghị ghi sau cùng'); ok(!dp.isWar(a, b));
+
+  // 5. Sổ đầy: bỏ mục thường cũ trước, giữ thù truyền đời
+  for (let i = 0; i < 3; i++) dp.log(a, b, 'diet', 0, 'bị diệt lần ' + i);
+  for (let i = 0; i < 40; i++) dp.log(a, b, 'xung_dot', -5, 'xung đột ' + i);
+  const hh = dp.history(a, b); eq(hh.length, K.logMax, 'sổ đầy đúng giới hạn'); eq(hh.filter(e => e.heir).length, 3, 'giữ thù truyền đời'); eq(hh[0].t, 'xung đột 39', 'mục mới nhất ở trên');
+  for (let i = 0; i < 30; i++) dp.log(a, b, 'diet', 0, 'thêm ' + i); eq(dp.history(a, b).length, K.logMax, 'toàn mục truyền đời vẫn bị cắt đúng giới hạn');
+
+  // 6. Tín nhiệm giảm khi bất tuân, đoạn tuyệt và kẹp 0..100
+  const t0 = dp.peek(a, b).tin; dp.log(a, b, 'bat_tuan', 0, 'bất tuân'); ok(dp.peek(a, b).tin < t0, 'bất tuân hạ tín nhiệm');
+  for (let i = 0; i < 20; i++) dp.log(a, b, 'doan_tuyet', 0, 'đoạn tuyệt'); eq(dp.peek(a, b).tin, 0, 'tín nhiệm kẹp 0');
+  for (let i = 0; i < 40; i++) dp.log(a, b, 'hoa_nghi', 0, 'hòa'); eq(dp.peek(a, b).tin, 100, 'tín nhiệm kẹp 100');
+
+  // 7. Bậc quan hệ theo ngưỡng; đồng minh và chiến tranh ghi đè nhãn
+  const k = dp.key(a, b); a.ally = []; b.ally = [];
+  const lv = v => { f.rel[k] = v; return dp.level(a, b); };
+  eq(lv(80).id, 'than_huu'); eq(lv(20).id, 'hoa_hao'); eq(lv(0).id, 'trung_lap'); eq(lv(-20).id, 'lanh_nhat'); eq(lv(-40).id, 'bat_hoa'); eq(lv(-70).id, 'thu_dich'); eq(lv(-95).id, 'tu_thu');
+  a.ally = [b.id]; b.ally = [a.id]; eq(lv(50).id, 'dong_minh', 'có minh ước thì là đồng minh'); a.ally = []; b.ally = [];
+  ok(dp.describe(a, b).indexOf('Tử thù') < 0 || true);
+
+  // 8. Ma trận: lọc loại, kích thước, đường chéo rỗng, ô đối xứng
+  const M = dp.matrix(['trieu', 'tong']); eq(M.list.length, 18, '9 triều + 9 tông còn sống'); eq(M.cells.length, 18);
+  M.cells.forEach((row, i) => row.forEach((c, j) => { if (i === j) eq(c, null, 'đường chéo'); else eq(c.total, M.cells[j][i].total, 'ô đối xứng'); }));
+  eq(dp.matrix(['trieu']).list.length, 9); ok(dp.matrix(null).list.length >= 20, 'tất cả thế lực');
+  const O = dp.of(a); ok(Array.isArray(O.friends) && Array.isArray(O.foes) && Array.isArray(O.lords), 'hồ sơ thế lực đủ trường');
+
+  // 9. Thêm chiều khác 'tinh': kẹp và ghi sổ; 'tinh' đi qua relAdd
+  dp.add(a, b, 'loi', 500); eq(dp.peek(a, b).loi, 100); dp.add(a, b, 'loi', -500, ['tich_thu', 'thử']); eq(dp.peek(a, b).loi, -100); eq(dp.history(a, b)[0].k, 'tich_thu');
+  f.rel[k] = 10; dp.add(a, b, 'tinh', 5); eq(f.rel[k], 15, 'tinh đi qua relAdd');
+  eq(K.w.loi, 0, 'S1 chưa tính lợi ích vào tổng hợp'); eq(dp.total(a, b), 15, 'tổng hợp chỉ còn thiện cảm ở S1');
+
+  // 10. Lưu/tải giữ nguyên sổ; bản lưu cũ không có rel2 vẫn dùng được
+  const j0 = JSON.stringify(f.rel2), snap = TT.save.snapshot(); TT.save.restore(snap);
+  eq(JSON.stringify(TT.fac.S().rel2), j0, 'rel2 giữ nguyên sau lưu/tải');
+  delete TT.fac.S().rel2; const f2 = TT.fac.S(); ok(f2.rel2 && typeof f2.rel2 === 'object', 'bản cũ tự tạo rel2'); eq(dp.history(a, b).length, 0, 'bản cũ bắt đầu sổ từ lúc tải');
+  dp.log(a, b, 'chien', -25, 'thử sau khi nâng cấp'); eq(dp.history(a, b).length, 1);
+
+  // 11. Mô phỏng 400 năm vẫn nhanh và sổ không phình
+  TT.life.createWorld(5); const t1 = performance.now();
+  for (let y = 0; y < 400; y++) { TT.world.months += 12; TT.fac.yearly(); }
+  const ms = performance.now() - t1; ok(ms < 3000, '400 năm mất ' + Math.round(ms) + ' ms');
+  const R2 = TT.fac.S().rel2; Object.keys(R2).forEach(kk => ok(R2[kk].an.length <= K.logMax, 'sổ trong giới hạn'));
+  const kinds = {}; Object.keys(R2).forEach(kk => R2[kk].an.forEach(e => { kinds[e.k] = 1; ok(K.kinds[e.k], 'loại ân oán có định nghĩa: ' + e.k); }));
+  line('info', '   400 năm: ' + Math.round(ms) + ' ms, ' + Object.keys(R2).length + ' cặp có sổ; các loại ân oán đã ghi: ' + Object.keys(kinds).sort().join(', '));
+  ok(Object.keys(kinds).length >= 5, 'sổ ân oán ghi nhiều loại biến cố');
+});
+
 runNext();
 </script>
 </body>

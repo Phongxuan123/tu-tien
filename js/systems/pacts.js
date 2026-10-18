@@ -33,7 +33,7 @@
     vassalize(lose, win) {
       pact.S();
       const p = pact.add('chu_hau', lose.id, win.id, { rate: K.chuHauRate, strain: 15, until: TT.world.months + rng.RI(K.chuHauYears[0], K.chuHauYears[1]) * 12 });
-      if (p) TT.fac.relAdd(lose, win, -5);
+      if (p) TT.fac.relAdd(lose, win, -5, ['than_phuc', lose.n + ' thần phục ' + win.n]);
     },
     // Minh ước theo đồng minh (ally) hiện có.
     sync(f) {
@@ -79,21 +79,21 @@
         else p.strain = Math.max(0, p.strain - 3);
         // bên hưởng có bổn phận bảo vệ khi bên gánh đang có chiến sự
         if (!p.defy && (p.kind === 'cong' || p.kind === 'bao_ho') && a.war && b.power > a.power && rng.P(0.4)) { // b bỏ mặc
-          p.strain = Math.min(100, p.strain + 5); TT.fac.relAdd(a, b, -3);
+          p.strain = Math.min(100, p.strain + 5); TT.fac.relAdd(a, b, -3, ['bo_mac', b.n + ' bỏ mặc ' + a.n + ' lúc lâm chiến']);
         } else if (!p.defy && (p.kind === 'cong' || p.kind === 'bao_ho') && a.war && b.power > a.power) a.power = clamp(a.power + 1.5, 1, 100);
         // gánh nặng: kho thấp và còn nộp thì thêm oán; chư hầu lâu năm cũng oán
         if (p.kind === 'chu_hau') p.strain = Math.min(100, p.strain + 2);
         if (!p.defy && p.strain >= K.defy) {
-          p.defy = true;
+          p.defy = true; TT.diplo.log(a, b, 'bat_tuan', 0, a.n + ' ngừng ' + K.kinds[p.kind].what.replace(/ cho$/, '') + ' ' + b.n);
           TT.fac.chron(a.n + ' ngừng ' + K.kinds[p.kind].what.replace(/ cho$/, '') + ' ' + b.n + ', bất tuân hiệp ước.', 'bad');
         }
         if (p.defy && b.power > a.power * 1.1 && rng.P(0.25)) { // bên hưởng trừng phạt
-          a.wealth = clamp(a.wealth - 5, 0, 100); a.power = clamp(a.power - 2, 1, 100); TT.fac.relAdd(a, b, -8);
+          a.wealth = clamp(a.wealth - 5, 0, 100); a.power = clamp(a.power - 2, 1, 100); TT.fac.relAdd(a, b, -8, ['trung_phat', b.n + ' trừng phạt ' + a.n + ' vì bất tuân']);
           if (rng.P(0.4)) TT.fac.chron(b.n + ' trừng phạt ' + a.n + ' vì bất tuân.', 'war');
         }
         if (p.strain >= K.break) { // đoạn tuyệt
           f.rifts.push({ a: p.a, b: p.b, m: w.months, kind: p.kind });
-          TT.fac.relAdd(a, b, -40);
+          TT.fac.relAdd(a, b, -40, ['doan_tuyet', a.n + ' đoạn tuyệt với ' + b.n + ' (hiệp ước ' + K.kinds[p.kind].n.toLowerCase() + ' tan vỡ)']);
           if (p.kind === 'chu_hau') a.vassal = null;
           TT.fac.chron(a.n + ' đoạn tuyệt với ' + b.n + ', hiệp ước ' + K.kinds[p.kind].n.toLowerCase() + ' tan vỡ.', 'bad');
           return false;

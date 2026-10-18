@@ -708,3 +708,12 @@ Thứ tự các đợt, hạ tầng đường cơ sở, cổng chơi thử, ch�
 ### 15.11 Sau S1 (xem trước)
 - **S2:** bật chiều `dao` từ `gt` và chuyển điều kiện gia nhập/trục xuất sang độ hợp giá trị; thêm `gt`, công–tội cho 9 tông; cơ quan tên cổ; gia tộc `kieu`.
 - **S3:** quốc vận và nho khí (`world.fac.nat`), phản phệ, thiên mệnh; đo cân bằng bật/tắt như F4.
+
+### 15.12 S1 đã làm (2026-10-18)
+**Mã:** `js/data/diplo.js` (`D.DIPLO`), `js/systems/diplo.js` (`TT.diplo`), `js/ui/diplo.js` (`ui.buildDiplo`), sửa `js/files.js`, `js/systems/factions.js` (`S()` tạo `rel2`, `relV` đi qua `diplo.total`, `relAdd(a,b,n,why)`, 8 chỗ gắn sổ), `js/systems/pacts.js` (5 chỗ gắn sổ), `js/ui/history.js` (gọi `ui.buildDiplo`, khóa vẽ lại), `tests.html` (bài S1).
+- **Sổ ân oán** ghi 14 loại: xung đột, kết minh, đồng minh tan, tuyên chiến, hòa nghị, thắng trận, thần phục, bị diệt (thù truyền đời), bị bỏ mặc, bất tuân, bị trừng phạt, đoạn tuyệt, bị tịch thu, cắt hàng. Sau 400 năm mô phỏng đã thấy 12 loại; mỗi cặp tối đa 12 mục, mục thù truyền đời được giữ lâu hơn.
+- **Bậc quan hệ:** Thân hữu, Hòa hảo, Trung lập, Lạnh nhạt, Bất hòa, Thù địch, Tử thù; "Đồng minh" ghi đè khi có minh ước; có nhãn đang đánh nhau và nhãn hiệp ước.
+- **Giao diện:** mục "Quan hệ thế lực" trong Biên niên sử (gập, mặc định đóng), bộ lọc Triều và tông / Triều / Tông / Gia tộc / Hội / Tất cả, ma trận tô màu (✕ đang đánh, ◆ minh ước, • hiệp ước), hồ sơ cặp (bậc, tín nhiệm, kiêng dè, hiệp ước, sổ ân oán theo năm) và hồ sơ thế lực. Chỉ hiện thế lực ở vùng đã biết; không hiện số.
+- **Khác với kế hoạch:** (1) `diplo.level` ghi đè "Đồng minh" khi tổng hợp lớn hơn -35 (thay vì nhãn riêng ở mức 60); (2) khi sổ đầy toàn mục thù truyền đời, bỏ mục thù truyền đời cũ nhất để mục mới vẫn được ghi; (3) bậc "Tử thù" từ -80 trở xuống như kế hoạch, tách riêng bậc "Thù địch" ở -60 đến -79.
+- **Kiểm chứng:** hash `tools/baseline.js --check` **trùng khít** đường cơ sở cho 6 hạt giống (S1 không đổi cân bằng); bài kiểm thử mới đạt (đọc không đổi diễn biến, relV trùng, sổ, bậc, ma trận, lưu/tải, bản cũ, hiệu năng 400 năm khoảng 130 đến 200 ms); chạy đầy đủ `tests.html` **97 đạt, 0 lỗi** (96 giây); giao diện kiểm bằng Playwright trên máy tính và điện thoại, không lỗi console.
+- **Chưa làm (để S2 trở đi):** bật chiều `dao`, `loi`, `thong`; `so-do-the-gioi.html` vẽ ân oán; nhập quá khứ từ `chron` cho bản lưu cũ.
