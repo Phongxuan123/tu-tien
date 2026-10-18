@@ -81,6 +81,7 @@ Mục tiêu nhịp: một đời Phi Thăng khoảng 20 đến 30 phút thật; 
 | Nhật báo "Thiên Cơ Báo" bốn năm một số, thay khung Thiên hạ | ☑ | G1 đến G5 (rút gọn: chưa có nhiệm vụ từ truy nã, chưa chấm báo mới) | [G-nhat-bao](ke-hoach/G-nhat-bao.md) |
 | Phát triển thành trì (bảng tin chợ, bậc thành) | ☐ | | [H-phat-trien-thanh-tri](ke-hoach/H-phat-trien-thanh-tri.md) |
 | S. Hệ thống Quốc gia: quốc vận, nho khí, quân đội và quân trận (đối kháng tu sĩ), triều chính, quốc sách, mạng quan hệ nhiều chiều của mọi thế lực; làm chung M5b | ☐ | Chờ bạn duyệt, chưa code | [S-quoc-gia](ke-hoach/S-quoc-gia.md) |
+| T. Tông môn hiện đại hóa theo nguyên mẫu quốc gia thật (không thuần thiện hay ác), thay thang chính–tà bằng nhiều trục giá trị, thể chế, chỉ số đa chiều; kèm hệ thống Tôn giáo | ☐ | Chờ bạn duyệt, chưa code | [T-tong-mon-hien-dai-ton-giao](ke-hoach/T-tong-mon-hien-dai-ton-giao.md) |
 
 ### 2.4 Kinh tế và công trình
 | Mục | Xong | Bạn kiểm | Chi tiết |
@@ -196,6 +197,7 @@ Gợi ý thứ tự (bạn đổi tùy ý):
 7. Nhật báo: chơi thử tab Nhật báo (đăng ký, đọc số, mua số cũ) và cho biết cần chỉnh gì.
 8. Kinh tế: chơi thử giá, hạn dùng, hội; cho mình biết cần chỉnh gì (giá, hạn dùng, cướp, đấu giá).
 9. Quốc gia (S): xem ke-hoach/S-quoc-gia.md mục 8 (9 câu, có mặc định) rồi cho làm S1.
+10. Tông môn hiện đại và tôn giáo (T): xem ke-hoach/T-tong-mon-hien-dai-ton-giao.md mục 9 (10 câu, có mặc định), nhất là cách hiểu "hiện đại" và chín nguyên mẫu.
 
 ---
 
@@ -243,6 +245,7 @@ Gợi ý thứ tự (bạn đổi tùy ý):
 - **2026-10-18** Kế hoạch R (nhân duyên, đạo lữ, con cái) tách khỏi Q; chờ duyệt.
 - **2026-10-18** Kế hoạch làm mới cốt truyện, lựa chọn, kỳ ngộ (Q), thay D; chờ duyệt.
 - **2026-10-18** Kế hoạch hệ thống Quốc gia (S): quốc vận, nho khí, quân trận, triều chính, mạng quan hệ nhiều chiều, liên thông M5b; chờ duyệt.
+- **2026-10-18** Kế hoạch tông môn hiện đại hóa theo nguyên mẫu quốc gia và hệ thống Tôn giáo (T); chờ duyệt.
 - Sắp xếp lại file kế hoạch tổng này; nhật ký cũ chuyển nguyên văn vào `ke-hoach/_nhat-ky-goc.md`.
 
 ---

@@ -27,5 +27,6 @@ Trang tổng ở gốc dự án: [KE-HOACH.md](../KE-HOACH.md) (bảng tiến đ
 | [Q-cot-truyen.md](Q-cot-truyen.md) | Làm mới cốt truyện, lựa chọn, kỳ ngộ (tuyến truyện, nhân quả, manh mối) | Chờ duyệt |
 | [R-nhan-duyen.md](R-nhan-duyen.md) | Nhân duyên và quan hệ: đạo lữ, con cái, sư đồ, thân tộc, dây duyên (tách khỏi Q) | Chờ duyệt |
 | [S-quoc-gia.md](S-quoc-gia.md) | Hệ thống quốc gia: quốc vận, nho khí, quân đội và quân trận (đối kháng tu sĩ), triều chính, quốc sách, mạng quan hệ nhiều chiều của mọi thế lực, liên thông M5b | Chờ duyệt |
+| [T-tong-mon-hien-dai-ton-giao.md](T-tong-mon-hien-dai-ton-giao.md) | Tông môn hiện đại hóa theo nguyên mẫu quốc gia thật (nhiều trục giá trị, công–tội, thể chế, chỉ số đa chiều) và hệ thống Tôn giáo | Chờ duyệt |
 
 Cách đặt tên: chữ cái hoặc ngày + tên ngắn không dấu. Trạng thái: Ý tưởng, Chờ duyệt, Đã duyệt, Đang làm, Xong, Tạm dừng.
