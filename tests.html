@@ -15,6 +15,7 @@ body{font-family:Consolas,monospace;background:#14110f;color:#e8dfd0;padding:16p
 <script>TT_LOAD(false);</script>
 <script src="js/ui/icons.js"></script>
 <script src="js/ui/bldart.js"></script>
+<script src="js/data/natevents.js"></script>
 <script>
 const out = document.getElementById('out');
 let pass = 0, failN = 0;
@@ -2475,6 +2476,46 @@ test('Quốc vận và nho khí (S3): trong khoảng, đọc không đổi thế
   ['Trung Quốc', 'Nhật Bản', 'Mỹ', 'Nga', 'Đức', 'Ấn Độ', 'Mông Cổ', 'Iran', 'Venice'].forEach(w => ok(txt.indexOf(w) < 0, 'chữ game không nhắc tên nước thật: ' + w));
   TT.life.createWorld(5); const t1 = performance.now(); for (let y = 0; y < 400; y++) { TT.world.months += 12; TT.fac.yearly(); } const ms = performance.now() - t1; ok(ms < 3000, '400 năm mất ' + Math.round(ms) + ' ms');
   line('info', '   400 năm có quốc vận: ' + Math.round(ms) + ' ms');
+});
+
+test('Sự kiện nghịch lý bốn tông (natevents): đủ trường, nhãn có giá, không trùng id, chạy được', () => {
+  TT.life.createWorld(3);
+  const list = D.NATEVENTS, ids = {}, kinds = ['risk', 'safe', 'fight', 'flee', 'help', 'pay'];
+  const sectOf = { tm_tv: 'tc_thanh_van', tm_kp: 'ts_kim_phong', tm_lh: 'hs_liet_hoa', tm_ah: 'vt_am_hon' };
+  eq(list.length, 16, 'số sự kiện natevents');
+  let nChoice = 0;
+  list.forEach(e => {
+    const m = /^(tm_(?:tv|kp|lh|ah))_[1-4]$/.exec(e.id);
+    ok(m, e.id + ' sai tiền tố hoặc số thứ tự');
+    ok(!ids[e.id] && !D.eventById[e.id], 'trùng id ' + e.id); ids[e.id] = 1;
+    ok(e.title && e.tier >= 1 && e.tier <= 3 && e.manual === true, e.id + ' thiếu tiêu đề, tầng hoặc manual');
+    ok(typeof e.text === 'function' && typeof e.when === 'function', e.id + ' thiếu text hoặc when');
+    ok(!e.when({ sect: null }), e.id + ' mở cho người không thuộc tông');
+    eq(e.choices.length, 3, e.id + ' số lựa chọn');
+    const keys = {};
+    e.choices.forEach(ch => {
+      ok(ch.key && !keys[ch.key], e.id + ' trùng hoặc thiếu key ' + ch.key); keys[ch.key] = 1;
+      ok(/\(.+\)/.test(ch.label), e.id + '/' + ch.key + ' nhãn thiếu giá trong ngoặc');
+      ok(kinds.indexOf(ch.kind) >= 0 && typeof ch.run === 'function', e.id + '/' + ch.key + ' thiếu kind hoặc run');
+      if (ch.disabled) ok(typeof ch.disabled === 'function', e.id + '/' + ch.key + ' disabled phải là hàm');
+      nChoice++;
+    });
+    for (let k = 0; k < 24; k++) {
+      const c = mkChar({ realm: k % 4, gold: 200 });
+      c.known.kv = c.known.luck = false;
+      TT.sect.join(c, sectOf[m[1]]);
+      ok(e.when(c), e.id + ' không mở cho đệ tử của tông');
+      const ctx = {};
+      ok(String(e.text(c, ctx)).length > 30, e.id + ' nội dung rỗng');
+      e.choices.forEach(ch => {
+        const r = ch.run(c, ctx);
+        const res = typeof r === 'string' ? { t: r } : r;
+        ok(res && typeof res.t === 'string' && res.t.length > 10, e.id + '/' + ch.key + ' kết quả rỗng');
+        ok(isFinite(c.hp) && isFinite(c.gold) && isFinite(c.xp) && c.gold >= 0 && c.sect.contrib >= 0, e.id + '/' + ch.key + ' số liệu hỏng');
+      });
+    }
+  });
+  line('info', '   ' + list.length + ' sự kiện natevents, ' + nChoice + ' lựa chọn');
 });
 
 runNext();
