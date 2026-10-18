@@ -1,0 +1,77 @@
+{
+ "years": 300,
+ "seeds": [
+  {
+   "seed": 301,
+   "rel": "1045240a",
+   "list": "42124a17",
+   "chron": "ba192df7",
+   "pacts": "1f7c96c9",
+   "wars": 0,
+   "destroyed": 0,
+   "rulers": 0,
+   "chronLen": 300,
+   "relPairs": 166
+  },
+  {
+   "seed": 911,
+   "rel": "5fefcb35",
+   "list": "72064ff",
+   "chron": "4ad3f774",
+   "pacts": "bf945732",
+   "wars": 111,
+   "destroyed": 10,
+   "rulers": 10,
+   "chronLen": 300,
+   "relPairs": 167
+  },
+  {
+   "seed": 77,
+   "rel": "d37a7ba3",
+   "list": "d87169ba",
+   "chron": "ea52048",
+   "pacts": "74825f2e",
+   "wars": 43,
+   "destroyed": 5,
+   "rulers": 7,
+   "chronLen": 300,
+   "relPairs": 168
+  },
+  {
+   "seed": 5,
+   "rel": "fa987db5",
+   "list": "48801aef",
+   "chron": "2b51750c",
+   "pacts": "3fd2b4fe",
+   "wars": 71,
+   "destroyed": 10,
+   "rulers": 10,
+   "chronLen": 300,
+   "relPairs": 180
+  },
+  {
+   "seed": 12,
+   "rel": "49c2d008",
+   "list": "270baba4",
+   "chron": "87d7c968",
+   "pacts": "76e382ab",
+   "wars": 49,
+   "destroyed": 8,
+   "rulers": 1,
+   "chronLen": 300,
+   "relPairs": 187
+  },
+  {
+   "seed": 33,
+   "rel": "975eb70b",
+   "list": "f5e91005",
+   "chron": "5378bdbf",
+   "pacts": "31507ce8",
+   "wars": 54,
+   "destroyed": 7,
+   "rulers": 4,
+   "chronLen": 300,
+   "relPairs": 164
+  }
+ ]
+}

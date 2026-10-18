@@ -72,10 +72,10 @@
 
 ### Đợt 0. Hạ tầng và đường cơ sở (khoảng 0,5 lượt)
 **Mục tiêu:** có công cụ chạy kiểm thử trong môi trường này và mốc "trước khi sửa".
-- [ ] `tools/run-tests.js`: kịch bản Playwright (Chromium có sẵn) mở `tests.html`, chờ `window.__done`, in kết quả đạt/lỗi và thời gian; tham số lọc bài.
-- [ ] `tests.html`: thêm `?only=<từ khóa>` (bài không khớp bị bỏ qua; mặc định chạy tất cả).
-- [ ] `tools/baseline.js`: dựng thế giới cho 6 hạt giống (301, 911, 77, 5, 12, 33), chạy 300 năm `TT.fac.yearly()`, xuất hash của `f.rel`, số chiến tranh theo thời đại, chiều dài `chron`, trạng thái thế lực, số hiệp ước; lưu `tools/baseline/seeds.json` (đưa vào repo làm mốc).
-- [ ] Chạy đầy đủ 93 bài, ghi thời gian và các bài chậm.
+- [x] `tools/run-tests.js`: kịch bản Playwright (Chromium có sẵn) mở `tests.html`, chờ `window.__done`, in kết quả đạt/lỗi và thời gian; tham số lọc bài.
+- [x] `tests.html`: thêm `?only=<từ khóa>` (bài không khớp bị bỏ qua; mặc định chạy tất cả).
+- [x] `tools/baseline.js`: dựng thế giới cho 6 hạt giống (301, 911, 77, 5, 12, 33), chạy 300 năm `TT.fac.yearly()`, xuất hash của `f.rel`, số chiến tranh theo thời đại, chiều dài `chron`, trạng thái thế lực, số hiệp ước; lưu `tools/baseline/seeds.json` (đưa vào repo làm mốc).
+- [x] Chạy đầy đủ 96 bài: đạt hết, 98 giây.
 - **Cổng:** 93 bài đạt trong môi trường này; `seeds.json` tạo ra và tái lập được (chạy hai lần ra cùng hash).
 
 ### Đợt 1. Mạng quan hệ nhiều chiều (S1) và vòng xung đột (F3) (khoảng 3 lượt)
@@ -266,3 +266,4 @@
 
 ## 11. Nhật ký làm việc
 - 2026-10-18: lập lộ trình tổng thể 13 đợt (0 đến 12) cho Q, R, S, E, F; đối chiếu hiện trạng E (đã code E0 đến E6, còn giám định và nhiệm vụ/vay/bảo hiểm hội), F (đã F1, F2 lõi, F4; còn F3, F5, F2 sau); S1 giao diện gộp vào Biên niên sử theo ý bạn. Chưa code.
+- 2026-10-18: **Đợt 0 xong.** `tools/run-tests.js` (Playwright, lọc bài), `tests.html?only=`, `tools/baseline.js` (hash 6 hạt giống, đếm biến cố bằng cách bọc hàm; trung bình 300 năm: 54,7 chiến tranh, 6,7 diệt vong, 5,3 đổi chủ triều), `tools/baseline/seeds.json` (tái lập hai lần cho cùng hash). Chạy đầy đủ `tests.html`: 96 đạt, 0 lỗi, 98 giây. Dùng `sim.html` có sẵn làm trang trống. Lưu ý: sử ký bị cắt ở 300 mục nên đếm biến cố không dựa vào sử ký.

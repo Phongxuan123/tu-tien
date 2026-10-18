@@ -21,7 +21,9 @@ let pass = 0, failN = 0;
 function line(cls, t) { const d = document.createElement('div'); d.className = cls; d.textContent = t; out.appendChild(d); }
 // Các bài kiểm thử chạy lần lượt, mỗi bài một lượt setTimeout để trang không bị treo và đọc kết quả giữa chừng được.
 const queue = [];
-function test(name, fn) { queue.push([name, fn]); }
+// ?only=từ khóa  chỉ chạy các bài có tên chứa từ khóa (lặp nhanh khi làm một chặng); không có tham số thì chạy tất cả.
+const ONLY = new URLSearchParams(location.search).get('only');
+function test(name, fn) { if (ONLY && name.indexOf(ONLY) < 0) return; queue.push([name, fn]); }
 // Cho người chơi một lịch sử tốc độ tốt để dựng được nhiệm vụ ở mọi tầng.
 function primeQuests(p) { const s = TT.quests.qs(p), a = TT.age(p); s.h = []; for (let i = 0; i < 6; i++) s.h.push({ a: a - 5 + i, L: i * 0.03, w: i * 60, d: i }); }
 function runNext() {
