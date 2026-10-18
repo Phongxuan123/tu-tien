@@ -22,6 +22,13 @@
     elders(id) { return sect.members(id).filter(c => c.sect.rank === 3); },
     head(id) { return sect.members(id).find(c => c.sect.rank === 4) || null; },
 
+    // Tên cổ trang của một nhà trong phố tông môn theo từng tông (Đan Các, Khí Các...); null nếu không phải nhà của tông.
+    bldName(bid, sectId) {
+      const pl = TT.player(), d = D.SECTS[sectId || (pl && pl.place)];
+      if (!d || !D.SECT_CORE_ORGS[bid]) return null;
+      return (d.coquan && d.coquan[bid]) || D.SECT_CORE_ORGS[bid];
+    },
+
     // Thuộc tính chính của nhân vật có hợp thuộc tính của tông môn không.
     fitElem(c, d) { return d.elems.indexOf(mainAttr(c).n) >= 0; },
 

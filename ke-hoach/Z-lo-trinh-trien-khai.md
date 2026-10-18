@@ -90,7 +90,7 @@
 - [ ] Đo lại: khoảng 52 chiến tranh và 10 diệt vong mỗi 300 năm (±25%); lập đường cơ sở mới `seeds.json` sau F3.
 - **Cổng chơi thử 1 (bạn xem):** mở Biên niên sử → "Quan hệ thế lực": ma trận, hồ sơ cặp, sổ ân oán có hợp lý không; xung đột nhỏ có đủ vui không.
 
-### Đợt 2. Giá trị tông, công–tội, cơ quan, nguyên mẫu (S2) (khoảng 2 lượt)
+### Đợt 2. Giá trị tông, công–tội, cơ quan, nguyên mẫu (S2) (khoảng 2 lượt) — đã xong 2026-10-18 (xem S mục 15.13; công trình mới và độ hợp giá trị người chơi dời sang các đợt sau)
 - [ ] `js/data/sects.js`: thêm `gt`, `chiso`, `chinhsach`, `cong`, `toi`, `bimat`, `nguyenmau`, `coquan` cho 9 tông (số trong S 6.5); `align` thành **nhãn suy ra** từ `gt` và `nhan`.
 - [ ] Đổi gia nhập/trục xuất/cộng thiên hướng (`sect.js` dòng 38-40, 112, 295-304) sang **độ hợp giá trị**; giữ kiểm thử cũ (gia nhập, trục xuất) đạt.
 - [ ] Bật chiều `dao` trong `diplo` (trọng số 0,3) từ độ gần `gt`; đo lại cân bằng, lập đường cơ sở mới.
@@ -268,3 +268,4 @@
 - 2026-10-18: lập lộ trình tổng thể 13 đợt (0 đến 12) cho Q, R, S, E, F; đối chiếu hiện trạng E (đã code E0 đến E6, còn giám định và nhiệm vụ/vay/bảo hiểm hội), F (đã F1, F2 lõi, F4; còn F3, F5, F2 sau); S1 giao diện gộp vào Biên niên sử theo ý bạn. Chưa code.
 - 2026-10-18: **Đợt 0 xong.** `tools/run-tests.js` (Playwright, lọc bài), `tests.html?only=`, `tools/baseline.js` (hash 6 hạt giống, đếm biến cố bằng cách bọc hàm; trung bình 300 năm: 54,7 chiến tranh, 6,7 diệt vong, 5,3 đổi chủ triều), `tools/baseline/seeds.json` (tái lập hai lần cho cùng hash). Chạy đầy đủ `tests.html`: 96 đạt, 0 lỗi, 98 giây. Dùng `sim.html` có sẵn làm trang trống. Lưu ý: sử ký bị cắt ở 300 mục nên đếm biến cố không dựa vào sử ký.
 - 2026-10-18: **S1 xong.** Hash 6 hạt giống trùng khít đường cơ sở; `tests.html` 97 đạt, 0 lỗi; mục "Quan hệ thế lực" trong Biên niên sử. Tiếp theo: **F3** (vòng xung đột và hòa giải), rồi Cổng chơi thử 1.
+- 2026-10-18: **Đợt 2 (S2) xong** (F3 tạm hoãn theo ý bạn). Tông có giá trị, hành vi, bảy chỉ số, năm chính sách, công–tội, bí mật; `align` nay suy ra từ hành vi; `dao` bật giữa các tông; đo 40 hạt giống: 52,2 chiến tranh, 6,5 diệt vong, 4,5 đổi chủ triều. 98 bài đạt. Tiếp theo: Đợt 3 (S3 quốc vận và nho khí) hoặc F3 nếu bạn muốn.

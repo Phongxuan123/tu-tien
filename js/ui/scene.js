@@ -285,7 +285,7 @@
     if (!ov) return; ov.innerHTML = ''; const s = st;
     if (!s || !s.vis || !s.vis.length || !ui.bld) { lay = []; return; }
     lay = streetLayout(s.vis);
-    lay.forEach((b, i) => { const el = document.createElement('div'); el.className = 'bl'; el.dataset.i = i; el.textContent = ui.bld.defs[b.id].n; el.style.left = ((b.x + b.w / 2) / W * 100) + '%'; el.style.top = ((GY + 5) / H * 100) + '%'; ov.appendChild(el); });
+    lay.forEach((b, i) => { const el = document.createElement('div'); el.className = 'bl'; el.dataset.i = i; el.textContent = ui.bld.nameOf(b.id); el.style.left = ((b.x + b.w / 2) / W * 100) + '%'; el.style.top = ((GY + 5) / H * 100) + '%'; ov.appendChild(el); });
     if (s.pages > 1) {
       const mk = (txt, cls, fn) => { const b = document.createElement('button'); b.className = 'pg ' + cls; b.textContent = txt; b.onclick = e => { e.stopPropagation(); fn(); }; ov.appendChild(b); };
       if (s.page > 0) mk('◀', 'l', () => setPage(s.page - 1)); if (s.page < s.pages - 1) mk('▶', 'r', () => setPage(s.page + 1));
@@ -342,7 +342,7 @@
     // sân khấu bọc canvas để đặt nhãn công trình lên trên, bắt chuột rê và bấm vào công trình
     const stage = document.createElement('div'); stage.className = 'sc-stage'; cv.parentNode.insertBefore(stage, cv); stage.appendChild(cv);
     ov = document.createElement('div'); ov.className = 'sc-ov'; stage.appendChild(ov);
-    cv.addEventListener('mousemove', e => { const i = hitIdx(e); if (i !== hoverIdx) { hoverIdx = i; cv.style.cursor = i >= 0 ? 'pointer' : ''; cv.title = i >= 0 ? ui.bld.defs[lay[i].id].n + ': ' + ui.bld.defs[lay[i].id].desc : ''; ov.querySelectorAll('.bl').forEach(el => el.classList.toggle('h', +el.dataset.i === i)); } });
+    cv.addEventListener('mousemove', e => { const i = hitIdx(e); if (i !== hoverIdx) { hoverIdx = i; cv.style.cursor = i >= 0 ? 'pointer' : ''; cv.title = i >= 0 ? ui.bld.nameOf(lay[i].id) + ': ' + ui.bld.defs[lay[i].id].desc : ''; ov.querySelectorAll('.bl').forEach(el => el.classList.toggle('h', +el.dataset.i === i)); } });
     cv.addEventListener('mouseleave', () => { hoverIdx = -1; ov.querySelectorAll('.bl.h').forEach(el => el.classList.remove('h')); });
     cv.addEventListener('click', e => { if (TT.world && TT.world.pending) return; const i = hitIdx(e); if (i >= 0 && ui.shop) ui.shop.open(lay[i].id); });
     setInterval(tick, 110); // khoảng 9 khung hình mỗi giây, đủ cho pixel art

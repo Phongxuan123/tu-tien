@@ -415,3 +415,5 @@ body.has-modal{overflow:hidden}
 .paper select{background:#fff8;border:1px solid #0004;border-radius:5px;padding:2px 4px;margin-right:4px}
 @media(max-width:800px){.paperwrap .toc{position:static}.paperwrap .toc a{display:inline-block;margin:0 4px 4px 0;background:#1d2a3d;border-radius:12px;padding:2px 9px;font-size:12px}}
 .paper-top{position:sticky;top:0;z-index:2;background:rgba(5,8,14,.9);padding:4px 0}
+.gt{display:flex;align-items:center;gap:6px;font-size:.78rem;color:var(--dim);margin:2px 0}.gt .gl,.gt .gr{width:70px;flex:none}.gt .gl{text-align:right}.gt .tr{position:relative;flex:1;height:4px;background:#222c39;border-radius:2px}.gt .tr i{position:absolute;top:-3px;width:10px;height:10px;border-radius:50%;background:var(--gold);margin-left:-5px}.gt .gw{width:96px;flex:none}
+.gstat{display:grid;grid-template-columns:1fr 1fr;gap:2px 12px}

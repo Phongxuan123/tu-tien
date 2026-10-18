@@ -22,10 +22,17 @@
       return v;
     },
 
+    // Đạo thống nền giữa hai thế lực: hiện chỉ có giữa hai tông (từ khoảng cách giá trị gt), còn lại 0. Suy ra, không lưu, không rng.
+    daoBase(a, b) {
+      const da = a.kind === 'tong' && D.SECTS[a.id], db = b.kind === 'tong' && D.SECTS[b.id];
+      if (!da || !db || !da.gt || !db.gt) return 0;
+      let s = 0; for (let i = 0; i < 5; i++) s += Math.abs(da.gt[i] - db.gt[i]);
+      return Math.round(clamp((K.daoMid - s / 5) * K.daoK, -K.daoMax, K.daoMax));
+    },
     // Đọc một cặp, không khởi tạo gì. fresh = true nghĩa là cặp chưa từng có chuyện (thiện cảm là mặc định suy ra).
     peek(a, b) {
       const f = TT.fac.S(), k = diplo.key(a, b), raw = f.rel && f.rel[k], r2 = f.rel2 && f.rel2[k];
-      return { k, tinh: raw != null ? raw : diplo.tagBase(a, b), fresh: raw == null, loi: r2 ? r2.loi : 0, dao: r2 ? r2.dao : 0, thong: r2 ? r2.thong : 0, tin: r2 ? r2.tin : 60, an: r2 ? r2.an : [] };
+      return { k, tinh: raw != null ? raw : diplo.tagBase(a, b), fresh: raw == null, loi: r2 ? r2.loi : 0, dao: (r2 ? r2.dao : 0) + diplo.daoBase(a, b), thong: r2 ? r2.thong : 0, tin: r2 ? r2.tin : 60, an: r2 ? r2.an : [] };
     },
     // Số tổng hợp -100..100. S1: chỉ `tinh` có trọng số nên bằng đúng giá trị cũ.
     total(a, b) {

@@ -30,7 +30,7 @@
 
   function head(c) {
     const d = def(cur), pl = TT.map.place(c.place);
-    return h('div', { class: 'shop-head' }, h('div', null, h('b', { class: 'shop-title' }, d.n), h('span', { class: 'small' }, ' · ' + (pl ? pl.n : '')), h('div', { class: 'small' }, d.desc)),
+    return h('div', { class: 'shop-head' }, h('div', null, h('b', { class: 'shop-title' }, (ui.bld && ui.bld.nameOf ? ui.bld.nameOf(cur) : d.n)), h('span', { class: 'small' }, ' · ' + (pl ? pl.n : '')), h('div', { class: 'small' }, d.desc)),
       h('button', { class: 'sm', onclick: close }, 'Đóng ✕'));
   }
 

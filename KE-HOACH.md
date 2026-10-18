@@ -1,6 +1,6 @@
 # Kế hoạch tổng: "1 trong 8 tỷ: Tu Tiên"
 
-Cập nhật: 2026-10-17 · Kiểm thử tự động: **97/97 đạt** (`tests.html`) · Nhịp hỏi người chơi: 5,5 lần/phút (mục tiêu dưới 6).
+Cập nhật: 2026-10-17 · Kiểm thử tự động: **98/98 đạt** (`tests.html`) · Nhịp hỏi người chơi: 5,5 lần/phút (mục tiêu dưới 6).
 
 > **Cách đọc file này.** Đây là trang tổng, chỉ ghi *cái gì đã làm, cái gì chưa, xem chi tiết ở đâu*. Chi tiết thiết kế và nhật ký từng tính năng nằm trong thư mục [`ke-hoach/`](ke-hoach/README.md) (mỗi tính năng một file). Toàn bộ nhật ký cũ (M0 đến M7, số liệu, mặc định) được giữ nguyên văn ở [`ke-hoach/_nhat-ky-goc.md`](ke-hoach/_nhat-ky-goc.md).
 > Ký hiệu: ☑ đã làm và có kiểm thử · ☐ chưa làm · ◐ làm một phần · cột "Bạn kiểm" để bạn tích sau khi chơi thử.
@@ -83,6 +83,7 @@ Mục tiêu nhịp: một đời Phi Thăng khoảng 20 đến 30 phút thật; 
 | S. Hệ thống Quốc gia, Tông môn hiện đại (theo nguyên mẫu quốc gia thật) và Tôn giáo: quốc vận, nho khí, quân trận, mạng quan hệ nhiều chiều, thể chế và chỉ số tông, 9 tín ngưỡng thật; làm chung M5b; nội dung sự kiện ở Q mục 24 | ☐ | Chờ bạn duyệt, chưa code | [S-quoc-gia-tong-mon-ton-giao](ke-hoach/S-quoc-gia-tong-mon-ton-giao.md) |
 | Z. Lộ trình triển khai tổng thể 13 đợt cho Q, R, S, E (phần tồn: giám định, nhiệm vụ/vay/bảo hiểm hội, thuế vào giá), F (phần tồn: F3, F5, F2 sau) | ☐ | Chờ bạn duyệt, chưa code | [Z-lo-trinh-trien-khai](ke-hoach/Z-lo-trinh-trien-khai.md) |
 | S1 Mạng quan hệ nhiều chiều: sổ ân oán, bậc quan hệ, ma trận và hồ sơ cặp trong Biên niên sử (không đổi cân bằng) | ☑ | ☐ | [S-quoc-gia-tong-mon-ton-giao](ke-hoach/S-quoc-gia-tong-mon-ton-giao.md) mục 15.12 |
+| S2 Tông môn hiện đại hóa: giá trị, hành vi, bảy chỉ số, chính sách, công–tội, bí mật, bộ máy tên cổ, thẻ tông; `align` suy ra từ hành vi; `dao` giữa các tông | ☑ | ☐ | [S-quoc-gia-tong-mon-ton-giao](ke-hoach/S-quoc-gia-tong-mon-ton-giao.md) mục 15.13 |
 
 ### 2.4 Kinh tế và công trình
 | Mục | Xong | Bạn kiểm | Chi tiết |
@@ -247,6 +248,7 @@ Gợi ý thứ tự (bạn đổi tùy ý):
 - **2026-10-18** Kế hoạch S gộp (Quốc gia, Tông môn hiện đại theo nguyên mẫu quốc gia thật, Tôn giáo) và thêm nội dung sự kiện, chuỗi sự kiện, giáo sĩ, Thần Chức đạo vào Q mục 24; chờ duyệt.
 - **2026-10-18** Lộ trình triển khai tổng thể Q, R, S, E, F (13 đợt, hạ tầng, cổng chơi thử, chỉ tiêu); S1 giao diện gộp vào Biên niên sử; chờ duyệt rồi bắt đầu Đợt 0.
 - **2026-10-18** Đợt 0 (công cụ chạy kiểm thử, đường cơ sở) và **S1** (mạng quan hệ nhiều chiều, ma trận trong Biên niên sử) xong: 97 bài đạt, hash cơ sở trùng khít.
+- **2026-10-18** **S2** (Đợt 2) xong: thẻ tông, giá trị, công–tội, bộ máy tên cổ, đạo thống giữa các tông; 98 bài đạt; đo 40 hạt giống 52,2 chiến tranh mỗi 300 năm.
 - Sắp xếp lại file kế hoạch tổng này; nhật ký cũ chuyển nguyên văn vào `ke-hoach/_nhat-ky-goc.md`.
 
 ---

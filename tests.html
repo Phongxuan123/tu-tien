@@ -2254,7 +2254,7 @@ test('Mạng quan hệ nhiều chiều (S1): giá trị cũ giữ nguyên, đọ
   TT.life.createWorld(911); const f = TT.fac.S(), W = TT.world;
   for (let y = 0; y < 60; y++) { W.months += 12; TT.fac.yearly(); }
   const L = TT.fac.list().filter(TT.fac.alive);
-  Object.keys(f.rel).forEach(k => { const [ia, ib] = k.split('|'), a = TT.fac.get(ia), b = TT.fac.get(ib); if (!a || !b) return; eq(TT.fac.relV(a, b), f.rel[k], 'relV khác thiện cảm ' + k); });
+  Object.keys(f.rel).forEach(k => { const [ia, ib] = k.split('|'), a = TT.fac.get(ia), b = TT.fac.get(ib); if (!a || !b) return; ok(Math.abs(TT.fac.relV(a, b) - Math.max(-100, Math.min(100, f.rel[k] + K.w.dao * dp.daoBase(a, b)))) < 1e-9, 'relV khác thiện cảm cộng đạo thống ' + k); });
   L.forEach(a => L.forEach(b => { if (a === b) return; const t = dp.total(a, b); ok(isFinite(t) && t >= -100 && t <= 100, 'tổng hợp hợp lệ'); eq(t, dp.total(b, a), 'đối xứng'); }));
   eq(Object.keys(f.rel).length, Object.keys(f.rel).filter(k => { const [ia, ib] = k.split('|'); return ia < ib; }).length, 'khóa cặp luôn a < b');
 
@@ -2284,11 +2284,11 @@ test('Mạng quan hệ nhiều chiều (S1): giá trị cũ giữ nguyên, đọ
   for (let i = 0; i < 40; i++) dp.log(a, b, 'hoa_nghi', 0, 'hòa'); eq(dp.peek(a, b).tin, 100, 'tín nhiệm kẹp 100');
 
   // 7. Bậc quan hệ theo ngưỡng; đồng minh và chiến tranh ghi đè nhãn
-  const k = dp.key(a, b); a.ally = []; b.ally = [];
-  const lv = v => { f.rel[k] = v; return dp.level(a, b); };
+  const ra = TT.fac.list('trieu').filter(TT.fac.alive)[0], rb = TT.fac.list('trieu').filter(TT.fac.alive)[1], k7 = dp.key(ra, rb); ra.ally = []; rb.ally = []; // hai triều: không có đạo thống nền
+  const lv = v => { f.rel[k7] = v; return dp.level(ra, rb); };
   eq(lv(80).id, 'than_huu'); eq(lv(20).id, 'hoa_hao'); eq(lv(0).id, 'trung_lap'); eq(lv(-20).id, 'lanh_nhat'); eq(lv(-40).id, 'bat_hoa'); eq(lv(-70).id, 'thu_dich'); eq(lv(-95).id, 'tu_thu');
-  a.ally = [b.id]; b.ally = [a.id]; eq(lv(50).id, 'dong_minh', 'có minh ước thì là đồng minh'); a.ally = []; b.ally = [];
-  ok(dp.describe(a, b).indexOf('Tử thù') < 0 || true);
+  ra.ally = [rb.id]; rb.ally = [ra.id]; eq(lv(50).id, 'dong_minh', 'có minh ước thì là đồng minh'); ra.ally = []; rb.ally = [];
+  ok(dp.describe(a, b).length > 3, 'có mô tả');
 
   // 8. Ma trận: lọc loại, kích thước, đường chéo rỗng, ô đối xứng
   const M = dp.matrix(['trieu', 'tong']); eq(M.list.length, 18, '9 triều + 9 tông còn sống'); eq(M.cells.length, 18);
@@ -2298,8 +2298,8 @@ test('Mạng quan hệ nhiều chiều (S1): giá trị cũ giữ nguyên, đọ
 
   // 9. Thêm chiều khác 'tinh': kẹp và ghi sổ; 'tinh' đi qua relAdd
   dp.add(a, b, 'loi', 500); eq(dp.peek(a, b).loi, 100); dp.add(a, b, 'loi', -500, ['tich_thu', 'thử']); eq(dp.peek(a, b).loi, -100); eq(dp.history(a, b)[0].k, 'tich_thu');
-  f.rel[k] = 10; dp.add(a, b, 'tinh', 5); eq(f.rel[k], 15, 'tinh đi qua relAdd');
-  eq(K.w.loi, 0, 'S1 chưa tính lợi ích vào tổng hợp'); eq(dp.total(a, b), 15, 'tổng hợp chỉ còn thiện cảm ở S1');
+  const k = dp.key(a, b); f.rel[k] = 10; dp.add(a, b, 'tinh', 5); eq(f.rel[k], 15, 'tinh đi qua relAdd');
+  eq(K.w.loi, 0, 'S1 chưa tính lợi ích vào tổng hợp'); ok(Math.abs(dp.total(a, b) - (15 + K.w.dao * dp.daoBase(a, b))) < 1e-9, 'tổng hợp = thiện cảm + đạo thống');
 
   // 10. Lưu/tải giữ nguyên sổ; bản lưu cũ không có rel2 vẫn dùng được
   const j0 = JSON.stringify(f.rel2), snap = TT.save.snapshot(); TT.save.restore(snap);
@@ -2315,6 +2315,53 @@ test('Mạng quan hệ nhiều chiều (S1): giá trị cũ giữ nguyên, đọ
   const kinds = {}; Object.keys(R2).forEach(kk => R2[kk].an.forEach(e => { kinds[e.k] = 1; ok(K.kinds[e.k], 'loại ân oán có định nghĩa: ' + e.k); }));
   line('info', '   400 năm: ' + Math.round(ms) + ' ms, ' + Object.keys(R2).length + ' cặp có sổ; các loại ân oán đã ghi: ' + Object.keys(kinds).sort().join(', '));
   ok(Object.keys(kinds).length >= 5, 'sổ ân oán ghi nhiều loại biến cố');
+});
+
+test('Tông môn hiện đại hóa (S2): giá trị, hành vi, công–tội, chính sách, nhãn suy ra, đạo thống, tên nhà, gia tộc, hội, triều', () => {
+  const ids = Object.keys(D.SECTS), G = D.SECT_GT, P = D.SECT_POLICY, K = D.DIPLO, dp = TT.diplo;
+  eq(ids.length, 9);
+  const oldAlign = { tc_thanh_van: 'chinh', dh_thuy_nguyet: 'chinh', ts_kim_phong: 'chinh', nl_bach_thao: 'chinh', bb_huyen_bang: 'trung', hs_liet_hoa: 'trung', hm_nhat_luan: 'trung', vt_am_hon: 'ta', ld_tu_loi: 'chinh' };
+  ids.forEach(id => {
+    const d = D.SECTS[id];
+    eq(d.align, oldAlign[id], 'nhãn suy ra phải trùng phân loại cũ: ' + id);
+    eq(d.gt.length, 5); d.gt.forEach(v => ok(v >= -100 && v <= 100, 'giá trị trong khoảng ' + id));
+    eq(d.chiso.length, D.SECT_STATS.keys.length); d.chiso.forEach(v => ok(v >= 0 && v <= 100, 'chỉ số trong khoảng ' + id));
+    eq(d.chinhsach.length, 5); P.keys.forEach((k, i) => ok(P.opt[k][d.chinhsach[i]], 'chính sách hợp lệ ' + id + ' ' + k));
+    ok(d.phongcach && d.bimat && d.nhan0 === d.nhan, 'có phong cách, bí mật, hành vi gốc ' + id);
+    // không tông nào thuần thiện hay thuần ác: có cả công và tội
+    ok(d.cong.length >= 2 && d.toi.length >= 3, 'có cả công và tội ' + id);
+    if (id === 'vt_am_hon') { eq(d.cong.length, 2); eq(d.toi.length, 4); ok(d.nhan <= -30, 'Âm Hồn nghiêng về ác'); } else { eq(d.cong.length, 3); eq(d.toi.length, 3); }
+    ['chap', 'duoc', 'tang', 'ngoai', 'khoc'].forEach(b => ok(TT.sect.bldName(b, id), 'có tên nhà ' + b + ' ' + id));
+    (d.them || []).forEach(o => ok(o.n && o.desc, 'cơ quan phụ có tên và mô tả'));
+  });
+  ok(/phù/.test(D.SECTS.ts_kim_phong.bimat), 'bí mật Kim Phong nói về phù');
+  eq(TT.sect.bldName('duoc', 'ts_kim_phong'), 'Khí Các'); eq(TT.sect.bldName('duoc', 'nl_bach_thao'), 'Đan Các'); eq(TT.sect.bldName('ngoai', 'ld_tu_loi'), 'Hải Vụ Đường'); eq(TT.sect.bldName('dien', 'ld_tu_loi'), null, 'nhà không thuộc bộ máy thì null');
+  // nhãn đổi theo hành vi (không phải hằng)
+  const dn = D.SECTS.hm_nhat_luan, n0 = dn.nhan; dn.nhan = 40; eq(dn.align, 'chinh'); dn.nhan = -50; eq(dn.align, 'ta'); dn.nhan = n0; eq(dn.align, 'trung');
+  // đạo thống nền: đối xứng, trong khoảng, trung bình quanh 0, gần thì thân, xa thì khắc
+  const T = TT.fac.list('tong'); let sum = 0, n = 0;
+  T.forEach(a => T.forEach(b => { if (a === b) return; const v = dp.daoBase(a, b); eq(v, dp.daoBase(b, a), 'đối xứng'); ok(v >= -K.daoMax && v <= K.daoMax); sum += v; n++; }));
+  ok(Math.abs(sum / n) < 8, 'đạo thống nền bình quân gần 0: ' + (sum / n).toFixed(1));
+  ok(dp.daoBase(TT.fac.get('tc_thanh_van'), TT.fac.get('ts_kim_phong')) > 20, 'Thanh Vân và Kim Phong gần nhau về giá trị');
+  ok(dp.daoBase(TT.fac.get('hs_liet_hoa'), TT.fac.get('hm_nhat_luan')) <= -40, 'Liệt Hỏa và Nhật Luân khắc nhau về giá trị');
+  const tr = TT.fac.list('trieu')[0]; eq(dp.daoBase(tr, T[0]), 0, 'chỉ tông với tông mới có đạo thống nền (S2)');
+  const a = TT.fac.get('tc_thanh_van'), b = TT.fac.get('ts_kim_phong'), pk = dp.peek(a, b); ok(pk.dao === dp.daoBase(a, b));
+  ok(Math.abs(dp.total(a, b) - Math.max(-100, Math.min(100, pk.tinh + K.w.dao * pk.dao))) < 1e-9, 'tổng hợp có đạo thống');
+  // gia nhập và trục xuất vẫn theo nhãn: chính đạo không dung kẻ tiếng xấu, tà đạo nghi người tiếng tốt
+  TT.life.createWorld(21); const p = TT.player(); p.sect = null;
+  p.rep.chinh = -40; ok(TT.sect.canJoin(p, 'tc_thanh_van').why.some(t => t.indexOf('chính đạo không dung') >= 0), 'chính đạo từ chối kẻ tiếng xấu');
+  p.rep.chinh = 60; ok(TT.sect.canJoin(p, 'vt_am_hon').why.some(t => t.indexOf('Tà đạo nghi ngờ') >= 0), 'tà đạo nghi người tiếng tốt');
+  dn.nhan = 40; p.rep.chinh = -40; ok(TT.sect.canJoin(p, 'hm_nhat_luan').why.some(t => t.indexOf('chính đạo không dung') >= 0), 'đổi hành vi thì đổi cách đối xử'); dn.nhan = n0;
+  // gia tộc, hội, triều
+  const kc = {}; D.GIA_KIEU.order.forEach(k => { kc[k] = (kc[k] || 0) + 1; }); eq(kc.tai_phiet, 3); eq(kc.thuong_gia, 3); eq(kc.hoc_thuat, 2); eq(D.GIA_KIEU.order.length, D.FAC.gia);
+  Object.keys(D.GIA_KIEU.info).forEach(k => ok(D.GIA_KIEU.info[k].n && D.GIA_KIEU.info[k].desc));
+  eq(D.HOI_STYLE.length, D.HOI.start.length); D.REGIONS.forEach(r => ok(D.NATION_STYLE[r.id], 'có bản sắc triều ' + r.id));
+  // chữ của game không nhắc tên nước thật
+  const txt = JSON.stringify([ids.map(i => [D.SECTS[i].phongcach, D.SECTS[i].cong, D.SECTS[i].toi, D.SECTS[i].bimat, D.SECTS[i].them]), D.GIA_KIEU.info, D.HOI_STYLE, D.NATION_STYLE]);
+  ['Trung Quốc', 'Nhật Bản', 'Mỹ', 'Nga', 'Đức', 'Ấn Độ', 'Mông Cổ', 'Anh ', 'Iran', 'Venice', 'Medici'].forEach(w => ok(txt.indexOf(w) < 0, 'chữ game không nhắc tên nước/thực thể thật: ' + w));
+  // thế giới vẫn chạy 100 năm với dữ liệu mới và sổ ân oán vẫn ghi
+  TT.life.createWorld(911); for (let y = 0; y < 100; y++) { TT.world.months += 12; TT.fac.yearly(); }
+  ok(Object.keys(TT.fac.S().rel2).length > 5, 'sổ ân oán vẫn được ghi');
 });
 
 runNext();

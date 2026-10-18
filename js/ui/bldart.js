@@ -145,5 +145,7 @@
     if (E[id]) E[id](hs.cx, hs.top - 21, f);
   }
 
-  ui.bld = { defs: DEFS, draw, ids: Object.keys(DEFS) };
+  // Tên hiển thị: nhà của tông dùng tên cổ trang riêng của tông đó (Đan Các, Khí Các, Hải Vụ Đường...).
+  const nameOf = id => (TT.sect && TT.sect.bldName && TT.sect.bldName(id)) || (DEFS[id] ? DEFS[id].n : id);
+  ui.bld = { defs: DEFS, draw, ids: Object.keys(DEFS), nameOf };
 })();

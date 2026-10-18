@@ -6,8 +6,10 @@
 
   D.DIPLO = {
     logMax: 12,                                   // số mục ân oán tối đa mỗi cặp
-    // Trọng số khi gộp thành số tổng hợp `relV`. S1 chỉ dùng `tinh` nên mọi giá trị cũ giữ nguyên; S2 sẽ bật `dao` (0,3).
-    w: { tinh: 1, loi: 0, dao: 0, thong: 0 },
+    // Trọng số khi gộp thành số tổng hợp `relV`. S1 chỉ dùng `tinh`; từ S2 bật `dao` (0,3) cho các cặp tông có giá trị.
+    w: { tinh: 1, loi: 0, dao: 0.3, thong: 0 },
+    // `dao` giữa hai tông suy từ khoảng cách giá trị (bình quân |chênh| trên 5 trục): gần hơn mức giữa thì thân, xa hơn thì khắc.
+    daoMid: 40, daoK: 1.5, daoMax: 60,
     dimName: { tinh: 'Thiện cảm', loi: 'Lợi ích', dao: 'Đạo thống', thong: 'Thông gia', tin: 'Tín nhiệm', cua: 'Kiêng dè' },
     // Bậc quan hệ theo số tổng hợp (từ cao xuống thấp); 'dong_minh' và 'chien' ghi đè khi đúng điều kiện.
     levels: [

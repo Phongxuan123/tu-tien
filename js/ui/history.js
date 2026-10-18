@@ -40,6 +40,7 @@
             row.appendChild(h('div', { class: 'small' }, 'Phủ: ' + x.reach.map(r => TT.map.region(r).n).join(', ') + (top ? ' · ảnh hưởng nhiều nhất: ' + top : '')));
           } else row.appendChild(h('div', { class: 'small' }, 'Đứng đầu: ' + x.leader + ' · sức mạnh ' + Math.round(x.power) + ' · đoàn kết ' + Math.round(x.unity) + (x.ally && x.ally.length ? ' · đồng minh: ' + x.ally.map(i => (TT.fac.get(i) || {}).n).join(', ') : '')));
         } else if (k === 'tong') row.appendChild(h('div', { class: 'small' }, 'Đã bị tiêu diệt, chỉ còn tàn tích (có thể thám hiểm).'));
+        if (TT.fac.alive(x) && ui.factionStyle) ui.factionStyle(row, x, k, c);
         box.appendChild(row);
       });
     });

@@ -21,7 +21,7 @@
   ui.diploKey = function (c) {
     const f = TT.fac.S(); let n = 0;
     Object.keys(f.rel2 || {}).forEach(k => { n += f.rel2[k].an.length; });
-    return '|' + (sel.open ? 1 : 0) + sel.kind + (sel.a || '') + (sel.b || '') + ':' + n + ':' + Object.keys(c.knownRegions || {}).length + ':' + (f.pacts || []).length;
+    return '|' + Object.keys(ui.cardOpen || {}).filter(k => ui.cardOpen[k]).join(',') + (sel.open ? 1 : 0) + sel.kind + (sel.a || '') + (sel.b || '') + ':' + n + ':' + Object.keys(c.knownRegions || {}).length + ':' + (f.pacts || []).length;
   };
 
   function cellColor(t) {
