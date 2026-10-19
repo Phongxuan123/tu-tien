@@ -241,8 +241,8 @@ Nền (4 Tiên thiên, 5 Khí vận, 6 Tính cách)  ──>  7 Vòng quay (cầ
 | **Vòng quay vùng cao nhất** (quay trúng "phù hợp nhất") | +1 | chỉ khi **không** quay lại |
 | **Đột phá thiên kiếp thành công** (Kim Đan trở lên) | +1 | một lần mỗi cảnh giới |
 | **Không có**: theo thời gian, theo tuổi, theo tiền, theo nhặt nhạnh nhỏ | — | — |
-- **Trần**: giữ tối đa **10**; vượt thì cắt ("khí vận đầy, phần dư tan vào thiên địa").
-- **Khởi đầu**: 1 điểm (+1 nếu có tiên thiên Phúc duyên hoặc Đại khí vận giả; về 0 nếu Thiên cơ ghét bỏ).
+- **Trần**: ~~giữ tối đa 10~~ **bỏ trần (bạn chốt 2026-10-19)**: điểm khí vận không có tối đa.
+- **Khởi đầu**: **(bạn chốt 2026-10-19) bốc ngẫu nhiên 0 đến 10 lúc sinh như `baseKv` cũ** (giữ tính may rủi lúc sinh, dùng lại đúng lần rút `rng.RI(0, 10)` hiện có nên không đổi thứ tự số ngẫu nhiên). Bản cũ của dòng này: 1 điểm (+1 nếu có tiên thiên Phúc duyên hoặc Đại khí vận giả; về 0 nếu Thiên cơ ghét bỏ).
 - **Mất điểm**: phản bội ân nhân, bội ước thề lớn, giết kẻ vô tội xin tha (−1 đến −2, không xuống dưới 0); **nợ trời** không tồn tại (không được quay khi hết điểm).
 - **Ước lượng cả đời**: 12 đến 20 điểm, **khoảng 10 vòng quay**, trung bình tốn 2,5 mỗi lần quay lại. Nghĩa là chỉ **quay lại được khoảng 5 đến 8 lần cả đời**, nên mỗi lần phải **đáng giá**; đây là mục tiêu cân bằng, `story-sim` đo và chỉnh.
 
@@ -284,6 +284,7 @@ Hiện NPC có **một nhãn** trong 6 (Cần cù, Tham lam, Liều lĩnh, Hiề
 
 ### 6.3 Lúc sinh và chỉnh ban đầu
 - **Bốc** quanh 0 (±3) theo xuất thân (quan lại: Xử thế cao; nông hộ: Tu dưỡng cao; cô nhi: Xử thế cao, Đạo đức thấp nhẹ...), theo xương sống (E: Tính tình thấp), theo tiên thiên (đã có `traits`), cha mẹ truyền một phần (con cái người chơi).
+- **(Bạn chốt 2026-10-19)** tính cách **định ngay lúc sinh**; trước 12 tuổi có **sự kiện định hướng tuổi thơ** dịch trục (làm cùng xuất thân và tuổi thơ ở 9A). Đoạn dưới về ngân sách 4 điểm chờ chốt lại.
 - **Chỉnh ban đầu** (đúng ảnh mẫu có +/−): ở lúc sinh/đầu thai hoặc ở tuổi 12 (mốc A1) người chơi có **ngân sách 4 điểm** cộng/trừ giữa các trục (tổng không đổi: tăng trục này phải giảm trục kia); chỉnh xong khóa. Chế độ tự động: bốc mặc định.
 - **Đời sau kế thừa nhẹ**: đầu thai giữ **một phần ngấm** (15%) từ kiếp trước (người rất tà để lại tính ngang ngạnh), ghi Sổ đời.
 
@@ -1035,6 +1036,8 @@ Xem bảng 1.2. Thêm các chi tiết đã chốt sau khi bạn chỉnh: thang t
 - **Hoãn:** xương sống B đến E (Q4), xuất thân 9 đến 17, cấy/chuyển tiên thiên, chặng ghép và loại trừ (13.2), tuyến mẫu ngoài tuyến đầu, Q9 AI. **Thêm vào Đợt 9:** màn kết đời / bia mộ (21.1#1).
 - **Công cụ chơi thử:** `tools/life-sim.js` (truyện đời dạng văn bản, từ 8B), trang thử nghiệm (21.3#19, từ 8C).
 - Sửa mâu thuẫn: quay lại **tối đa 1 lần** mỗi vòng (bài kiểm thử ở 7.8 sửa theo).
+
+- **(Lượt 2, 2026-10-19)** Tính cách **định lúc sinh**, có **sự kiện định hướng trước 12 tuổi** (ở 9A, sau xuất thân). Điểm khí vận **bốc 0 đến 10 lúc sinh** như cũ (dùng lại lần rút `baseKv` nên thứ tự `rng` không đổi) và **không có trần**. Các câu còn lại của lượt 2 (Q18 đến Q21 mặc định, 8A chỉ tự dịch trục theo `kind`, chưa khóa mềm và phí trái tính với sự kiện cũ, tác động số chỉ độ liều và tâm ma) theo mặc định vì bạn không sửa.
 
 ### 20.2 Câu hỏi còn mở (mỗi câu có mặc định, bạn chỉ cần sửa chỗ muốn khác)
 **Giọng và nhịp truyện**
