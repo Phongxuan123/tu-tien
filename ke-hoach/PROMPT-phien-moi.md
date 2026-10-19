@@ -175,3 +175,31 @@ Quy tắc như 6A/6B. Kiểm thử: kế vị, tranh ngôi có trần, quốc s�
 
 ## Sau Đợt 6: Cổng chơi thử 4 (nếu chưa)
 Chơi thử kinh tế và quân sự; sau đó mới đến Đợt 7 (M5b Liên tông).
+
+---
+
+# Đợt 8: Nền nhân vật, làm theo lát cắt dọc (thiết kế chốt 2026-10-19, xem Z "Đợt 8")
+
+Thứ tự: **8A (Sonnet)** → **8B (Sonnet)** → **8C (Haiku dữ liệu, rồi Sonnet)** → **8D (Sonnet)** → Cổng chơi thử 6. Điều kiện chung: PR thiết kế Đợt 8 (nhánh `thiet-ke-dot-8`) đã merge vào `main`. Nhánh code: đầu Đợt 8 tạo lại `add-game-project` từ `origin/main` (`git fetch origin main && git checkout -B add-game-project origin/main`); các chặng sau trong Đợt 8 tiếp tục trên nhánh đó; mở PR nháp nếu chưa có.
+
+## 8A. Sonnet: tính cách bốn trục + khí vận v2 (chỉ người chơi) + hộp "Đời mới"
+
+```
+Repo: Phongxuan123/tu-tien. Gắn repo, clone nhánh `main` (trả lời tiếng Việt, ngắn gọn, xưng "mình", gọi tôi là "bạn"). Đọc CLAUDE.md của repo trước. Tạo lại nhánh `add-game-project` từ origin/main nếu nhánh đó chưa có commit Đợt 8 (nếu đã có thì làm tiếp trên đó).
+
+Đọc có chọn lọc (grep -n "^#" rồi đọc đúng mục, KHÔNG đọc nguyên Q):
+- ke-hoach/Z-lo-trinh-trien-khai.md: mục 2, 5, "Đợt 8" (nhất là "Đặc tả 8A": đây là bản chốt, ưu tiên hơn Q khi khác nhau).
+- ke-hoach/Q-cot-truyen.md: mục 6.2, 6.4, 6.8, 6.9 (tính cách), 5.2, 5.3, 5.6 (khí vận), 20.1 (đã chốt).
+- Mã: js/systems/character.js (createChar, dòng ~40-95: baseKv, personality, ring), js/systems/world.js (life.reincarnate ~400, life.createWorld ~486), js/systems/stats.js (S.kv), js/systems/events.js (dòng 75-170: rate, kyNgo kv, boldOf, chooseIndex), js/systems/cultivation.js (kvFactor), js/systems/crossing.js:96, js/ui/panels.js:40, js/ui/controls.js (btn-new ~78), js/systems/rules.js (pickChoice), js/data/traits.js (m.kv).
+
+NHIỆM VỤ (đúng "Đặc tả 8A" trong Z; chỉ người chơi, NPC giữ nguyên):
+1. js/data/nature.js (D.NATURE: on, trục, dải và nhãn, ánh xạ kind → hướng, bảng chuyển nhãn cũ, hệ số độ liều/tâm ma có trần) và js/systems/nature.js (TT.nature: ensure (khởi tạo muộn, băm không rng), get, band, label, summary, shift có quán tính và trần năm, affinity(c, choice), mods(c)). Thêm vào js/files.js đúng thứ tự.
+2. Bốc tính cách người chơi lúc sinh: ±8 mỗi trục, ít nhất 2 trục |v| ≥ 3, bằng băm (hạt giống thế giới + id), KHÔNG gọi rng. Nhãn cũ c.personality của người chơi suy từ trục (để boldOf, path.js, social.js cũ vẫn đọc được).
+3. Mọi lựa chọn của người chơi dịch trục theo kind (trong luồng fire/resolve của events.js và decisions.js); nhật ký khi đổi dải; c.natureLog 30 mục. chooseIndex của người chơi dùng affinity thay bold khi D.NATURE.on. Chưa khóa mềm, chưa phí trái tính.
+4. Khí vận: js/systems/kv.js (TT.kv: ensure, add(c, n, nguồn), spend, log). c.kvPts lấy từ chính baseKv đã rút (không rút thêm); không trần. S.kv của người chơi = min(kvPts, 20) + S.mod(c,'kv'); NPC giữ công thức cũ. Thay nguồn: kỳ ngộ vận mệnh +2, Nhẫn thật +2, đột phá Kim Đan trở lên +1 mỗi cảnh giới (một lần). Không cộng theo thời gian. Bản lưu cũ: kvPts = max(0, round(baseKv)).
+5. Giao diện: Hồ sơ có khối Tính cách (bốn thanh −10..+10, nhãn dải, xanh khi vừa đổi, bấm xem lịch sử) và "Khí vận: N điểm". Hộp "Đời mới" (overlay giao diện, KHÔNG dùng w.pending): hiện kết quả bốc; ngân sách 4 điểm +/−; nếu không chỉnh mà bấm Bắt đầu thì máy phân 4 điểm vào trục lệch nhất; nút "Bốc lại" không giới hạn (thế giới mới: createWorld với hạt giống mới; khi đầu thai: bốc lại người chơi). Hiện khi tạo thế giới (btn-new và lần đầu) và khi đầu thai; không hiện khi con kế thừa; không hiện trong chế độ Tự động và kiểm thử.
+
+Quy tắc: hàm đọc không gọi rng, không khởi tạo dữ liệu; không đổi TT.VERSION. Công tắc D.NATURE.on = false (gồm cả phần khí vận người chơi) thì `node tools/baseline.js --check` phải trùng khít; thêm cờ --nature=off cho baseline như các cờ cũ. Bật thì đo 40 hạt giống 101-140 (chiến tranh, diệt vong, đổi chủ) trước và sau, lưu lại seeds.json bằng --save nếu thế giới lệch, ghi số.
+Kiểm thử mới trong tests.html (nhóm "Tính cách và khí vận (8A)"): bốc không trung dung hết và không gọi rng (rng state trước/sau bằng nhau), dải và nhãn, quán tính và trần năm, ánh xạ kind, chooseIndex theo affinity, kvPts = baseKv cũ, không trần, S.kv thụ động trần 20, không tăng theo thời gian (chạy 80 năm không sự kiện), nguồn cộng, bản lưu cũ, lưu/tải, công tắc tắt. Chạy `node tools/run-tests.js` đầy đủ. Kiểm giao diện hộp Đời mới và Hồ sơ bằng Playwright (máy tính và điện thoại), không lỗi console.
+Cuối: ghi "8A đã làm" (Z, mục Đợt 8; Q mục 22 nhật ký), cập nhật KE-HOACH.md, commit, push theo CLAUDE.md, mở PR nháp nếu chưa có. Báo ngắn gọn: đã làm, số kiểm thử, số đo, việc cần tôi chơi thử, điều chưa làm.
+```
