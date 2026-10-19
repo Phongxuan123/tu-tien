@@ -219,7 +219,7 @@
     if (!w) return;
     const c = TT.player();
     $('date').textContent = TT.dateStr();
-    if (c) { $('hdr-age').textContent = TT.age(c); $('hdr-realm').textContent = TT.stats.realmName(c); $('yearbar').style.width = Math.round(((w.months % 12) + 1) / 12 * 100) + '%'; ui.renderLifeMap(c); }
+    if (c) { $('hdr-age').textContent = TT.age(c); $('hdr-realm').textContent = TT.stats.realmName(c); ui.renderLifeMap(c); }
     ui.renderSide();
     renderLog(c);
     ui.renderMap();
@@ -233,11 +233,20 @@
 
   // Vẽ lại tối đa ~8 lần/giây, chỉ khi có thay đổi. Dùng setTimeout (không dùng requestAnimationFrame)
   // để giao diện vẫn cập nhật khi tab bị ẩn hoặc nằm nền.
+  // Thanh tiến độ năm chạy theo thời gian thực giữa hai tháng, không nhảy theo từng tháng.
+  function updateYearBar() {
+    const w = TT.world, t = TT.time, bar = $('yearbar');
+    if (!w || !bar) return;
+    const f = t.stepLen > 0 ? Math.min(1, (Date.now() - t.stepAt) / t.stepLen) : 1;
+    bar.style.width = ((w.months % 12) + f) / 12 * 100 + '%';
+  }
+
   ui.loop = function () {
     if (state.dirty) {
       state.dirty = false;
       try { ui.render(); } catch (e) { console.error('Lỗi vẽ giao diện:', e); }
     }
+    try { updateYearBar(); } catch (e) { console.error('Lỗi thanh năm:', e); }
     try { tickCountdown(); } catch (e) { console.error('Lỗi đếm ngược:', e); }
     setTimeout(ui.loop, 120);
   };
