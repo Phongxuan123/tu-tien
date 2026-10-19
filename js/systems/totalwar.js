@@ -183,7 +183,8 @@
       const text = x.n + ' bị chia cắt trong ' + tw.n + ': một nửa đất cát cứ tự xưng, ' + x.leader + ' giữ phần còn lại.';
       TT.nation.note(e, 'chia_cat', text); TT.fac.chron(text, 'bad');
       TT.sectmod.rulerChanged(x);
-    },
+      TT.court.onRuler(x); // hoàng quyền về mức người mới (S7)
+},
     // Đổi chủ: người đứng đầu bị phế, người mới lên thay (cùng hệ số với mất mệnh đổi chủ, S3).
     rulerChange(tw, x) {
       const M = D.NATION.mat, e = TT.nation.ent(x), old = x.leader;
@@ -192,6 +193,7 @@
       const text = x.n + ' thua trong ' + tw.n + ': ' + old + ' bị phế, ' + x.leader + ' lên thay.';
       TT.nation.note(e, 'doi_chu', text); TT.fac.chron(text, 'bad');
       TT.sectmod.rulerChanged(x);
-    }
+      TT.court.onRuler(x); // hoàng quyền về mức người mới (S7)
+}
   };
 })();

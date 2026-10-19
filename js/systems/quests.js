@@ -147,6 +147,48 @@
       prog: (c, q) => ((c.clears || 0) >= q.target ? 1 : 0),
       done: (c, q) => (c.clears || 0) >= q.target,
       fixed: true
+    },
+    // Nhiệm vụ do thế lực giao theo hiệp ước (S7, F2): chỉ khi D.COURT.on. Tiến độ ghi trong q.got, không đổi theo cảnh giới.
+    // Hộ tống cống: có mặt trong vùng của đoàn cống trong n năm.
+    ho_tong: {
+      tiers: 'ml', n: 'Hộ tống cống phẩm', fixed: true, keep: true,
+      build(c, y, f) {
+        const p = D.COURT.on && TT.court.questPact(c.region, ['cong', 'thue', 'chu_hau'], 'ok'); if (!p) return null;
+        const n = Math.max(2, Math.round(y / 3)), a = TT.fac.get(p.a), b = TT.fac.get(p.b);
+        return { f, gname: b.n, q: { base: 0, target: n, got: 0, pact: p.id, region: c.region, text: 'Hộ tống đoàn cống của ' + a.n + ' sang ' + b.n + ', đi cùng ' + n + ' năm trong vùng ' + TT.map.region(c.region).n } };
+      },
+      prog: (c, q) => clamp01((q.got || 0) / q.target),
+      done: (c, q) => (q.got || 0) >= q.target,
+      step(c, q) { if (c.region === q.region) q.got = (q.got || 0) + 1; }
+    },
+    // Đòi nợ cống: thu lại phần cống còn nợ (p.owed) khi có mặt trong vùng; thu được thì bên hưởng được một phần.
+    doi_no: {
+      tiers: 'ml', n: 'Đòi nợ cống', fixed: true, keep: true,
+      build(c, y, f) {
+        const p = D.COURT.on && TT.court.questPact(c.region, ['cong', 'thue', 'chu_hau'], 'owed'); if (!p) return null;
+        const n = Math.max(3, Math.min(Math.round(p.owed), Math.round(y * 0.8))), a = TT.fac.get(p.a), b = TT.fac.get(p.b);
+        return { f, gname: b.n, q: { base: 0, target: n, got: 0, pact: p.id, region: c.region, text: 'Đòi lại ' + n + ' điểm cống còn nợ của ' + a.n + ' cho ' + b.n } };
+      },
+      prog: (c, q) => clamp01((q.got || 0) / q.target),
+      done: (c, q) => (q.got || 0) >= q.target,
+      step(c, q) {
+        const p = TT.court.pactById(q.pact); if (!p || c.region !== q.region || !(p.owed > 0) || q.got >= q.target) return;
+        const take = Math.min(p.owed, q.target - (q.got || 0), 3), b = TT.fac.get(p.b);
+        p.owed -= take; q.got = (q.got || 0) + take;
+        if (b) b.wealth = Math.max(0, Math.min(100, b.wealth + take * 0.6));
+      }
+    },
+    // Dẹp loạn: có mặt trong vùng đang loạn dân trong n năm; mỗi năm có mặt thì dân bớt bất mãn một chút.
+    dep_loan: {
+      tiers: 'sm', n: 'Dẹp loạn', fixed: true, keep: true,
+      build(c, y, f) {
+        if (!D.COURT.on || !TT.pop.unrest(c.region)) return null;
+        const n = Math.max(2, Math.round(y * 0.4));
+        return { f, q: { base: 0, target: n, got: 0, region: c.region, text: 'Dẹp loạn dân ở ' + TT.map.region(c.region).n + ', có mặt ở đó ' + n + ' năm' } };
+      },
+      prog: (c, q) => clamp01((q.got || 0) / q.target),
+      done: (c, q) => (q.got || 0) >= q.target,
+      step(c, q) { if (c.region === q.region) { q.got = (q.got || 0) + 1; const g = TT.pop.get(q.region); if (g) g.mood = Math.min(100, g.mood + 3); } }
     }
   };
 
@@ -293,6 +335,7 @@
     const tag = res.q.tag || Q.KIND_TAG[kind];
     const q = Object.assign({ kind, tier, giver: gi, f, d: diffIdx(f), startAge: age, byAge: age + y, y0: y, tag, rel: relation(c, tag), state: 'on', rank: 99, ext: 0, urgent: false }, res.q);
     if (gt === 'heaven') q.d = 2;
+    if (res.gname) q.giver.name = res.gname; // nhiệm vụ thế lực: tên bên được hưởng cống (S7)
     q.rew = rewardFor(c, q, R, y);
     return q;
   }
@@ -312,7 +355,9 @@
       const bad = kinds.filter(kd => relation(c, Q.KIND_TAG[kd]) === -1), good = kinds.filter(kd => relation(c, Q.KIND_TAG[kd]) !== -1);
       let pool = kinds;
       if (bad.length && good.length) pool = rng.P(pAgainst) ? bad : good;
-      const q = make(c, tier, gt, rng.wpick(pool.map(kd => ({ kd, w: Q.KIND_W[kd] || 1 })), x => x.w).kd);
+      // thế lực có hiệp ước với vùng thì đôi khi giao nhiệm vụ theo hiệp ước (S7, F2)
+      let q = gt === 'fac' && D.COURT.on && rng.P(D.COURT.questP) ? make(c, tier, 'fac', rng.pick(Q.FAC_KINDS)) : null;
+      if (!q) q = make(c, tier, gt, rng.wpick(pool.map(kd => ({ kd, w: Q.KIND_W[kd] || 1 })), x => x.w).kd);
       if (!q) continue;
       if (s.offers.some(o => o.kind === q.kind && o.giver.t === q.giver.t)) continue;
       q.exp = TT.world.months + Q.OFFER_LIFE;
@@ -339,7 +384,7 @@
     q.id = w.nextQuest++; q.state = 'on'; q.startAge = TT.age(c); q.rank = 99; q.exp = 0;
     // đề nghị có thể chờ lâu: tính lại mốc đầu và hạn theo lúc nhận
     q.byAge = q.startAge + q.y0;
-    if (q.kind !== 'revenge') {
+    if (q.kind !== 'revenge' && !K[q.kind].keep) {
       const d = q.target - q.base, cur = q.kind === 'gold' ? TT.ls.wealth(c) : q.kind === 'friend' ? friends(c) : q.kind === 'explore' ? visitedIn(c, q.region) : q.kind === 'fame' ? danh(c) : q.kind === 'clear' ? (c.clears || 0) : q.kind === 'order' ? (c.job ? c.job.done : 0) : lvl(c);
       q.base = cur; if (q.kind !== 'realm') q.target = cur + d;
       if (q.kind === 'gold') q.text = 'Tích lũy thêm ' + TT.ls.fmt(Math.round(d / 10) * 10) + ' tài sản (đạt ' + TT.ls.fmt(q.target) + ')';
@@ -520,7 +565,7 @@
   const Q_ = {
     K, rates, lvl, xpEst, slotsFree, make, active, list, sorted, byId, qs, advice, doAct, settle, accept, decline, drop, setDiff, extend, move, moveTo, autoSort,
     applyAdvice, review, reviewRows, reviewAct, want, penText, rewardText, extendCost, pathTag, relation, tierIdx,
-    kindLabel: { xp: 'Tu vi', realm: 'Cảnh giới', gold: 'Của cải', friend: 'Bạn bè', explore: 'Khám phá', fame: 'Danh tiếng', revenge: 'Ân oán', clear: 'Bí cảnh', order: 'Đơn hàng' },
+    kindLabel: { xp: 'Tu vi', realm: 'Cảnh giới', gold: 'Của cải', friend: 'Bạn bè', explore: 'Khám phá', fame: 'Danh tiếng', revenge: 'Ân oán', clear: 'Bí cảnh', order: 'Đơn hàng', ho_tong: 'Hộ tống cống', doi_no: 'Đòi nợ cống', dep_loan: 'Dẹp loạn' },
     progress: (c, q) => { const k = K[q.kind]; return k ? k.prog(c, q) : 0; },
     restore(c, q) { if (q && q.was) { moveTo(c, q, q.was - 1); q.was = 0; } },
 
@@ -561,6 +606,7 @@
       active(c).forEach(q => {
         const k = K[q.kind];
         if (!k) { q.state = 'fail'; return; }
+        if (k.step) k.step(c, q); // tiến độ theo năm (nhiệm vụ thế lực)
         if (k.done(c, q)) settle(c, q, 'done');
         else if (age >= q.byAge) settle(c, q, 'fail', 'Hết thời hạn.');
       });

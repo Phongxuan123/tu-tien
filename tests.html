@@ -3041,6 +3041,103 @@ test('Chiến tranh tổng (S6b): đọc không gọi rng, khung mở đúng, gi
   ['Trung Quốc', 'Nhật Bản', 'Mỹ', 'Nga', 'Đức', 'Ấn Độ', 'Mông Cổ', 'Iran', 'Venice', 'La Mã', 'Hà Lan', 'Ottoman', 'Viking', 'Khmer'].forEach(w => ok(txt.indexOf(w) < 0, 'chữ không nhắc tên nước thật: ' + w));
   line('info', '   300 năm có chiến tranh tổng: ' + Math.round(ms) + ' ms; mở tự động trong 300 năm ép điều kiện: ' + starts.length + ' lần; kết cục mẫu: ' + (last.kind) + ' sau ' + tw.years + ' năm');
 });
+test('Triều chính (S7) và F2 phần sau: đọc không gọi rng, hoàng quyền và kế vị có trần, quốc sách, quốc giáo, trưng binh, nhiệm vụ thế lực nhận và trả, thông gia, thuế thương hội, tắt, lưu/tải, bản cũ, giao diện chữ không số, hiệu năng', () => {
+  const CT = TT.court, K = D.COURT, W = () => TT.world, F = () => TT.fac.S(), T = () => TT.fac.list('trieu');
+  const runYears = n => { for (let y = 0; y < n; y++) { W().months += 12; TT.fac.yearly(); } };
+  // 1. Hàm đọc không gọi rng và không tạo bản ghi (dựng hiệp ước trước để đo đúng)
+  TT.life.createWorld(911); TT.pact.S(); const st0 = TT.rng.getState(), x0 = T()[0];
+  CT.peek(x0); CT.quyen(x0); CT.describe(x0); CT.sig(); CT.vanDelta(x0); CT.tongDelta(TT.fac.list('tong')[0]); CT.taAdd(x0.region); CT.levyMul(x0); CT.chieuDu(x0); CT.hqWord(50); CT.quyenWord(10); CT.questPact(x0.region, ['cong'], 'ok'); CT.pactById(1);
+  eq(TT.rng.getState(), st0, 'hàm đọc không gọi rng');
+  ok(!(F().nat && F().nat[x0.id] && F().nat[x0.id].court), 'hàm đọc không tạo bản triều chính');
+  // 2. Kế vị: thế gia mạnh, hoàng quyền yếu thì có tranh ngôi; nội chiến nhỏ tối đa một lần trong 60 năm; sau kế vị thái tử chưa lập
+  TT.life.createWorld(913); const x = T()[0], C = CT.ent(x), gia = TT.fac.list('gia')[0];
+  gia.region = x.region; gia.power = 90; gia.state = 'ổn';
+  const cn = {}, nn = TT.nation.note; TT.nation.note = function (e, k) { cn[k] = (cn[k] || 0) + 1; return nn.apply(this, arguments); };
+  C.hq = 5;
+  try { for (let i = 0; i < 60; i++) { W().months += 1; CT.succeed(x); } } finally { TT.nation.note = nn; }
+  ok((cn.tranh_ngoi || 0) + (cn.noi_chien || 0) > 0, 'hoàng quyền yếu, thế gia mạnh thì có tranh ngôi: ' + (cn.tranh_ngoi || 0));
+  ok((cn.noi_chien || 0) <= 1, 'nội chiến nhỏ có trần, không quá một lần trong 60 năm: ' + (cn.noi_chien || 0));
+  ok(C.hq >= 0 && C.hq <= 100, 'hoàng quyền trong [0, 100]: ' + C.hq);
+  ok(!C.heir, 'sau kế vị thái tử chưa lập');
+  // 3. Quốc sách: giá trị hợp lệ, xét mỗi 40 năm; cấm thì quốc vận giảm, tông bớt đoàn kết
+  TT.life.createWorld(915); runYears(200);
+  ok(T().every(t => CT.peek(t).sach in K.sach.kinds), 'quốc sách luôn là một trong bốn loại');
+  ok(T().every(t => CT.peek(t).sachAt <= W().months), 'thời điểm đổi quốc sách không vượt quá hiện tại');
+  const x3 = T()[0], C3 = CT.ent(x3); C3.sach = 'cam'; C3.hq = 50; gia.region = 'nam_lam';
+  eq(CT.vanDelta(x3), K.sach.kinds.cam.van, 'cấm: quốc vận giảm đúng mức');
+  // 4. Đổi quốc giáo: hoàng quyền và dân tâm tổn, đúng mức
+  TT.life.createWorld(919); const xf = T()[1], C4 = CT.ent(xf), m0 = TT.pop.get(xf.region).mood; C4.hq = 50;
+  CT.onFaith(xf);
+  eq(C4.hq, 50 + K.hq.faith, 'đổi quốc giáo: hoàng quyền tổn');
+  ok(TT.pop.get(xf.region).mood < m0, 'đổi quốc giáo: dân tâm tổn');
+  // 5. Trưng binh theo chư hầu: chỉ khi bên chủ có chiến tranh, hệ số quân trong trần, giảm dần khi nhàn rỗi
+  TT.life.createWorld(921); TT.pact.S(); const a5 = T()[0], b5 = T()[1];
+  TT.pact.add('chu_hau', a5.id, b5.id, { rate: 0.25, until: W().months + 120, strain: 10 });
+  CT.levy(); ok(CT.peek(b5).vien === 0, 'bên chủ hòa bình thì không trưng binh');
+  const w5 = b5.war; b5.war = 9999;
+  try { CT.levy(); } finally { b5.war = w5; }
+  ok(CT.peek(b5).vien > 0, 'chư hầu gửi quân khi bên chủ có chiến tranh: ' + Math.round(CT.peek(b5).vien));
+  ok(CT.levyMul(b5) > 1 && CT.levyMul(b5) <= 1 + K.levy.mulMax + 1e-9, 'hệ số quân nhờ trưng binh trong trần');
+  const v5 = CT.peek(b5).vien; CT.levy(); ok(CT.peek(b5).vien < v5, 'trưng binh giảm dần khi bên chủ hết chiến tranh');
+  // 6. Nhiệm vụ thế lực: nhận, tiến độ theo năm trong vùng, hoàn thành; không có mặt thì hết hạn và thất bại
+  TT.life.createWorld(923); TT.pact.S();
+  const cp = TT.fac.S().pacts.find(p => p.kind === 'cong' && TT.fac.alive(TT.fac.get(p.a)) && TT.fac.alive(TT.fac.get(p.b)));
+  ok(!!cp, 'có hiệp ước cống để làm nhiệm vụ');
+  const c = TT.player(); c.region = TT.fac.get(cp.a).region;
+  const q = TT.quests.make(c, 'm', 'fac', 'ho_tong');
+  ok(q && q.kind === 'ho_tong' && q.pact === cp.id, 'sinh nhiệm vụ hộ tống từ hiệp ước cống');
+  ok(q.giver.name === TT.fac.get(cp.b).n, 'người giao là bên được hưởng cống');
+  ok(TT.quests.accept(c, q) && q.state === 'on', 'nhận nhiệm vụ');
+  c.region = q.region;
+  for (let i = 0; i < 20 && q.state === 'on'; i++) { W().months += 12; TT.quests.yearly(c); }
+  ok(q.state === 'done', 'ở cùng vùng đủ năm thì hoàn thành: ' + q.state);
+  const q2 = TT.quests.make(c, 'm', 'fac', 'ho_tong');
+  ok(!!q2 && TT.quests.accept(c, q2), 'nhận nhiệm vụ thứ hai');
+  c.region = TT.fac.list('trieu').find(t => t.region !== q2.region).region;
+  for (let i = 0; i < 40 && q2.state === 'on'; i++) { W().months += 12; TT.quests.yearly(c); }
+  ok(q2.state === 'fail', 'không có mặt đủ năm thì hết hạn và thất bại: ' + q2.state);
+  // 7. Thông gia (hon_uoc) và thuế thương hội
+  TT.life.createWorld(925); runYears(1);
+  if (TT.fac.list('hoi').length) ok(F().pacts.some(p => p.kind === 'thue_hoi'), 'thương hội có thuế cho triều của vùng nó đặt');
+  const P0 = K.marry.p; K.marry.p = 1;
+  const [a7, b7] = T().slice(0, 2).sort((p1, p2) => (p1.id < p2.id ? -1 : 1));
+  a7.ally = (a7.ally || []).concat([b7.id]); TT.fac.relAdd(a7, b7, 100, ['hoa_nghi', 'thử thông gia']);
+  try { CT.marriages(); } finally { K.marry.p = P0; }
+  ok(F().pacts.some(p => p.kind === 'hon_uoc'), 'đồng minh có quan hệ tốt thì kết thông gia');
+  ok(TT.pact.helpP(a7.id, b7.id) > 0.6 + 1e-9, 'thông gia khiến đồng minh giúp thêm một chút');
+  // 8. Lưu/tải giữ nguyên trạng thái mới; bản cũ không có trường mới vẫn chạy
+  TT.life.createWorld(927); runYears(30);
+  const snap = TT.save.snapshot(), j0 = JSON.stringify([F().nat, F().pacts, T().map(t => CT.peek(t))]);
+  TT.life.createWorld(5); TT.save.restore(snap);
+  eq(JSON.stringify([F().nat, F().pacts, T().map(t => CT.peek(t))]), j0, 'lưu/tải giữ triều chính và hiệp ước mới');
+  runYears(10); ok(true, 'tiếp tục sau khi tải');
+  Object.keys(F().nat).forEach(k => { delete F().nat[k].court; });
+  F().pacts = F().pacts.filter(p => ['hon_uoc', 'thue_hoi'].indexOf(p.kind) < 0);
+  runYears(20); ok(T().every(t => CT.peek(t).hq >= 0 && CT.peek(t).hq <= 100), 'bản cũ không có triều chính vẫn chạy và tự khởi tạo');
+  // 9. Công tắc tắt: không tạo bản, không có hiệp ước mới, trưng binh và quốc sách trung tính
+  K.on = false; TT.life.createWorld(917); runYears(80);
+  ok(T().every(t => !(F().nat[t.id] && F().nat[t.id].court)), 'tắt: không tạo bản triều chính');
+  ok(!F().pacts.some(p => p.kind === 'hon_uoc' || p.kind === 'thue_hoi'), 'tắt: không có hiệp ước mới');
+  eq(CT.levyMul(T()[0]), 1, 'tắt: không có hệ số trưng binh');
+  eq(CT.vanDelta(T()[0]), 0, 'tắt: quốc vận không đổi vì triều chính');
+  K.on = true;
+  // 10. Giao diện: hàng triều chính ở thẻ triều, chỉ chữ và bậc, không số
+  TT.life.createWorld(929); runYears(3);
+  const ui = TT.ui; if (ui && ui.buildNation) { // như S3, S6a: nạp giao diện thì kiểm; tests.html không nạp nation.js thì bỏ qua (kiểm bằng Playwright)
+    const sel0 = ui.nationSel.open; ui.nationSel.open = true;
+    const box = document.createElement('div');
+    try { ui.buildNation(box, TT.player()); } finally { ui.nationSel.open = sel0; }
+    const rows = Array.prototype.map.call(box.querySelectorAll('.small'), e => e.textContent).filter(t => t.indexOf('Triều chính:') === 0);
+    eq(rows.length, 9, 'chín thẻ triều có hàng triều chính');
+    ok(rows.every(t => /hoàng quyền (mạnh|vừa|yếu)/.test(t) && !/\d/.test(t)), 'hàng triều chính chỉ chữ và bậc, không số');
+  }
+  // 11. Hiệu năng và chữ trong game
+  TT.life.createWorld(5); const t1 = performance.now(); runYears(300); const ms = performance.now() - t1;
+  ok(ms < 1000, '300 năm mất ' + Math.round(ms) + ' ms');
+  const txt = JSON.stringify([K.sach, K.quyenBand, K.hq]);
+  ['Trung Quốc', 'Nhật Bản', 'Mỹ', 'Nga', 'Đức', 'Ấn Độ', 'Mông Cổ', 'Iran', 'Venice', 'La Mã', 'Hà Lan', 'Ottoman', 'Viking', 'Khmer'].forEach(w => ok(txt.indexOf(w) < 0, 'chữ không nhắc tên nước thật: ' + w));
+  line('info', '   300 năm có triều chính và F2 phần sau: ' + Math.round(ms) + ' ms');
+});
 runNext();
 </script>
 </body>

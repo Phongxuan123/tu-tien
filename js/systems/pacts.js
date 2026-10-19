@@ -48,8 +48,10 @@
     },
     // Xác suất đồng minh x ra tay giúp a khi a lâm chiến: oán thấp thì giúp.
     helpP(xId, aId) {
-      const p = pact.S() && TT.fac.S().pacts.find(q => q.kind === 'minh_uoc' && ((q.a === xId && q.b === aId) || (q.a === aId && q.b === xId)));
-      return p ? clamp(0.85 - p.strain / 160, 0.25, 0.9) : 0.6;
+      const L = pact.S(), same = q => (q.a === xId && q.b === aId) || (q.a === aId && q.b === xId);
+      const p = L.find(q => q.kind === 'minh_uoc' && same(q));
+      const hon = L.some(q => q.kind === 'hon_uoc' && same(q)) ? 0.08 : 0; // thông gia khiến đồng minh giúp thêm một chút (S7)
+      return (p ? clamp(0.85 - p.strain / 160, 0.25, 0.9) : 0.6) + hon;
     },
     // Mối đoạn tuyệt gần đây giữa hai thế lực (cả hai chiều); trả về { m } hoặc null.
     rift(a, b) {
@@ -74,6 +76,7 @@
         const base = p.rate * B, want = p.defy ? 0 : base;
         const paid = Math.min(want, Math.max(0, a.wealth - 8));
         a.wealth = clamp(a.wealth - paid, 0, 100); b.wealth = clamp(b.wealth + paid * 0.8, 0, 100);
+        if (D.COURT.on && p.kind !== 'minh_uoc' && p.kind !== 'hon_uoc') p.owed = (p.owed || 0) * 0.85 + Math.max(0, base - paid); // nợ cống còn lại, giảm dần (S7: nhiệm vụ đòi nợ)
         if (p.defy) p.strain = Math.min(100, p.strain + 4);
         else if (base - paid > 0.3 * base) p.strain = Math.min(100, p.strain + 6 + 6 * (base - paid) / base);
         else p.strain = Math.max(0, p.strain - 3);

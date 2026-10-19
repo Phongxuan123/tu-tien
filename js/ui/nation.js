@@ -38,7 +38,7 @@
   ui.nationKey = function () {
     const S = (TT.world.fac && TT.world.fac.nat) || {}; let n = 0;
     Object.keys(S).forEach(k => { n += S[k].falls * 7 + S[k].hist.length; });
-    return '|n' + (sel.open ? 1 : 0) + ':' + n + (TT.army.on() ? '|' + TT.army.sig() : '');
+    return '|n' + (sel.open ? 1 : 0) + ':' + n + (TT.army.on() ? '|' + TT.army.sig() : '') + (TT.court.on() ? '|' + TT.court.sig() : '');
   };
 
   ui.buildNation = function (box, c) {
@@ -58,6 +58,10 @@
         const a = TT.army.describe(x);
         card.appendChild(h('div', { class: 'small', html: 'Quân lực: <b>' + ui.esc(a.bac) + '</b> · ' + ui.esc(a.ph) + ' · tướng: ' + ui.esc(a.tuong) + ' · trận: ' + ui.esc(a.tran) + ' · ' + ui.esc(a.sat) }));
         card.appendChild(h('div', { class: 'small' }, 'Bản sắc quân: ' + a.trait + ' (' + TT.army.trait(x.region).desc + ')'));
+      }
+      if (TT.court.on()) { // triều chính (S7): chữ và bậc, không số
+        const c = TT.court.describe(x);
+        card.appendChild(h('div', { class: 'small', html: 'Triều chính: hoàng quyền <b>' + ui.esc(c.hqWord) + '</b> · ' + ui.esc(c.quyen) + ' · thái tử ' + (c.heir ? 'đã lập' : 'chưa lập') + ' · quốc sách <b>' + ui.esc(c.sach.n) + '</b>' + (c.civil ? ' · <span class="bad-txt">vừa có nội chiến nhỏ</span>' : '') }));
       }
       d.hist.slice(-3).reverse().forEach(e => card.appendChild(h('div', { class: 'small bad-txt' }, 'Năm ' + yr(e.m) + ': ' + e.t)));
       sec.appendChild(card);

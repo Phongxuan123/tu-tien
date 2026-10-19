@@ -30,6 +30,7 @@
       tan_minh: { n: 'Đồng minh tan', tone: 'bad' },
       chien: { n: 'Tuyên chiến', tone: 'bad', tin: -4 },
       hoa_nghi: { n: 'Hòa nghị', tone: 'good', tin: 5 },
+      thong_gia: { n: 'Thông gia', tone: 'good', tin: 3 },
       thang: { n: 'Thắng trận', tone: 'bad' },
       than_phuc: { n: 'Thần phục', tone: 'bad' },
       diet: { n: 'Bị diệt', tone: 'bad', heir: true },

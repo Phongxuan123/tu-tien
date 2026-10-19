@@ -260,7 +260,7 @@
         if (L.faith !== top.chinh && L.faith !== top.long && hn('fsw', t.id, yn) < K.state.switchP) {
           const old = L.faith; L.faith = top.chinh; changed = true;
           const near = !!(pl && pl.region === t.region), tx = t.n + ' đổi quốc giáo sang ' + byId[top.chinh].n + (old ? ' (trước theo ' + byId[old].n + ')' : '') + '.';
-          TT.fac.chron(tx, 'age', near); faith.note(tx, 'quoc_giao');
+          TT.fac.chron(tx, 'age', near); faith.note(tx, 'quoc_giao'); TT.court.onFaith(t); // quyền thần lợi dụng (S7)
         }
         L.khoan = clamp(L.khoan + (khoanTarget(t.id, L.faith, nho) - L.khoan) * K.khoan.pull, K.khoan.min, K.khoan.max);
       });

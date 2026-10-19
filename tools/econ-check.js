@@ -21,6 +21,7 @@ const YEARS = +(arg('years') || 300);
 const ECO_OFF = arg('eco') === 'off';
 const HQ_OFF = arg('hq') === 'off';
 const TW_OFF = arg('tw') === 'off';
+const COURT_OFF = arg('court') === 'off';
 
 (async () => {
   const browser = await playwright.chromium.launch({ executablePath: process.env.CHROMIUM_PATH || '/opt/pw-browsers/chromium', args: ['--no-sandbox'] });
@@ -30,7 +31,7 @@ const TW_OFF = arg('tw') === 'off';
   await page.addScriptTag({ path: path.join(__dirname, 'econ-sim.js') });
   const out = [];
   for (const s of SEEDS) {
-    out.push(await page.evaluate(([seed, years, off, hqOff, twOff]) => { if (TT.data.ECO) { TT.data.ECO.sx = !off; TT.data.ECO.hq = !hqOff; } TT.data.TOTALWAR.on = !twOff; return econSim(seed, years, false); }, [s, YEARS, ECO_OFF, HQ_OFF, TW_OFF]));
+    out.push(await page.evaluate(([seed, years, off, hqOff, twOff, courtOff]) => { if (TT.data.ECO) { TT.data.ECO.sx = !off; TT.data.ECO.hq = !hqOff; } TT.data.TOTALWAR.on = !twOff; TT.data.COURT.on = !courtOff; return econSim(seed, years, false); }, [s, YEARS, ECO_OFF, HQ_OFF, TW_OFF, COURT_OFF]));
   }
   await browser.close();
   if (errs.length) { console.error(errs.join('\n')); process.exit(2); }

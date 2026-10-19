@@ -122,11 +122,11 @@
 - [x] Đo lại bằng `tools/econ-sim.js` (E7a: 48,5% trước, 49,2% sau, chưa đạt khoảng 25%; xem E A.18) các chỉ tiêu E (lãi buôn tối đa 25% trung bình...).
 - **Cổng chơi thử 4:** chơi thử kinh tế E0 đến E6 + E7a + E7b.
 
-### Đợt 6. Quân đội, chiến tranh tổng, triều chính, F2 phần sau (S6, S7) (khoảng 4 lượt) — S6a và S6b đã xong 2026-10-19 (xem S mục 15.17 và 15.18; S7 và F2 phần sau còn lại)
+### Đợt 6. Quân đội, chiến tranh tổng, triều chính, F2 phần sau (S6, S7) (khoảng 4 lượt) — ĐÃ XONG 2026-10-19 (S6a, S6b, S7 và F2 phần sau; xem S mục 15.17 đến 15.19)
 - [x] **S6a**: quân lực, phẩm, sát khí, tướng, quân trận, bảng lính tương đương (`TT.army.vsCultivator`), bản sắc quân 9 triều, `strength()` dùng quân lực (không đếm đôi với quốc vận); đo: chiến tranh 54,5 (từ 47,5), diệt vong 6,8 (chưa đạt ±25%, từ 6,0), đổi chủ 10,3 (từ 4,5).
 - [x] **S6b**: **engine chiến tranh tổng** (đa bên, nhiều chiến tuyến, 10-18 năm, giai đoạn, trần hậu quả, phản phệ, tông buộc chọn phe, `TT.totalwar.start` cho Q); đo 40 hạt giống: chiến tranh 54,5 → 57,0, diệt vong 6,8 → 7,7 (vào chỉ tiêu), đổi chủ 10,3 → 9,8, đại chiến 0,6 mỗi 300 năm (không vi phạm 150 năm). Cốt truyện Phù Lệnh (Q 24.5b), thương vong tu sĩ và mất tướng vẫn để sau.
-- [ ] **S7**: triều chính (hoàng quyền, kế vị, thế gia), quốc sách với tu sĩ, quốc giáo gắn triều.
-- [ ] **F2 phần sau**: trưng binh gắn hiệp ước, nhiệm vụ do thế lực giao (hộ tống thu cống, đòi nợ cống, dẹp loạn...) qua hệ nhiệm vụ A, thông gia (`hon_uoc`), thuế thương hội.
+- [x] **S7**: triều chính (hoàng quyền, kế vị có tranh ngôi và nội chiến nhỏ có trần, thế gia, quốc sách với tu sĩ, quốc giáo gắn triều); đo: chiến tranh 57,0 → 51,5, diệt vong 7,7 → 9,4, đổi chủ 9,8 → 7,7 (xem S 15.19).
+- [x] **F2 phần sau**: trưng binh gắn hiệp ước chư hầu, nhiệm vụ thế lực (hộ tống cống, đòi nợ cống, dẹp loạn) qua hệ nhiệm vụ A, thông gia (`hon_uoc`), thuế thương hội (`thue_hoi`).
 - [x] Bài kiểm thử (S6a): bảng lính tương đương (Kim Đan bị vây thua, Hóa Thần thắng đại quân nhỏ), tắt thì trùng khít, lưu/tải, bản cũ, hiệu năng.
 - [x] Bài kiểm thử (S6b): chiến tranh tổng không phá chỉ tiêu, phản phệ có trần, giai đoạn và kết đúng điều kiện, 150 năm, lưu/tải, tắt trùng khít (107 bài đạt).
 

@@ -29,7 +29,9 @@
     KIND_W: { order: 2, xp: 3, gold: 1.5, realm: 1.5, explore: 1, friend: 1, fame: 1, revenge: 1, clear: 1 },
     GIVER_W: { self: 3, npc: 1.5, sect: 2, fac: 1, heaven: 1.5 },
     // nhãn đường theo loại nhiệm vụ; hướng đi nào thì kéo theo nhãn nào
-    KIND_TAG: { xp: 'train', realm: 'train', gold: 'coin', friend: 'social', explore: 'explore', fame: 'social', revenge: null, clear: 'explore', order: 'coin' },
+    KIND_TAG: { xp: 'train', realm: 'train', gold: 'coin', friend: 'social', explore: 'explore', fame: 'social', revenge: null, clear: 'explore', order: 'coin', ho_tong: 'explore', doi_no: 'coin', dep_loan: 'social' },
+    // nhiệm vụ do thế lực giao theo hiệp ước (F2, js/systems/court.js): chỉ khi D.COURT.on
+    FAC_KINDS: ['ho_tong', 'doi_no', 'dep_loan'],
     DIR_TAG: { tu_luyen: 'train', kiem_song: 'coin', phieu_luu: 'explore', giao_du: 'social', luyen_nghe: 'craft', can_bang: null },
     OPPOSE: { train: ['coin', 'social'], coin: ['train', 'explore'], explore: ['coin', 'train'], social: ['train', 'craft'], craft: ['explore', 'social'] },
     ALIGN_BONUS: 1.15, AGAINST_BONUS: 1.2, AGAINST_P: 0.2, AGAINST_P_OTHER: 0.35,

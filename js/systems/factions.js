@@ -145,6 +145,7 @@
       fac.tickWars();
       fac.declareWars();
       TT.totalwar.yearly(); // chiến tranh tổng: mở, hao sức, kết thúc (S6b)
+      TT.court.yearly(); // triều chính và F2 phần sau: hoàng quyền, trưng binh, thông gia, thuế thương hội (S7)
       fac.rebuilds();
       fac.spawnClans();
       fac.npcCasualties();
@@ -173,7 +174,7 @@
       x.leaderAge = (x.leaderAge || 40) + 1;
       // quyền lực hồi về mức trung bình, có nhiễu; chiến tranh và mất đoàn kết kéo xuống
       x.power = rng.clamp(x.power + (52 + TT.nation.powerShift(x) + TT.sectmod.powerShift(x) - x.power) * 0.04 + rng.R(-3.5, 3.5) + (x.unity - 50) * 0.02, 1, 100);
-      x.unity = rng.clamp(x.unity + (60 - x.unity) * 0.06 + rng.R(-4, 4) * TT.sectmod.unityMul(x) + TT.faith.stab(x), 5, 100);
+      x.unity = rng.clamp(x.unity + (60 - x.unity) * 0.06 + rng.R(-4, 4) * TT.sectmod.unityMul(x) + TT.faith.stab(x) + TT.court.tongDelta(x), 5, 100);
       x.wealth = rng.clamp(x.wealth + rng.R(-3, 3) + (x.power - 50) * 0.04 + TT.sectmod.wealthTrend(x), 0, 100);
       if (x.kind === 'trieu') TT.pop.taxPull(x); // thuế từ dân kéo kho triều
       if (x.kind === 'tong') TT.sect.resYearly(x); // linh mạch, mỏ, cống nạp kéo kho về mức của tông
@@ -188,6 +189,7 @@
       const old = x.leader; x.leader = TT.genName(rng.P(0.8) ? 'nam' : 'nu'); x.leaderAge = rng.RI(32, 55);
       x.unity = rng.clamp(x.unity - rng.RI(8, 20), 5, 100);
       if (x.kind === 'trieu' || x.power > 55 || rng.P(0.3)) fac.chron(x.n + ' ' + (how === 'qua đời' ? 'mất ' : 'bị mất ') + 'người đứng đầu (' + old + ' ' + how + '). ' + x.leader + ' lên thay, nội bộ chao đảo.', 'age');
+      if (x.kind === 'trieu') TT.court.succeed(x); // thái tử, tranh ngôi, nội chiến nhỏ (S7)
     },
 
     tickRelations() {
@@ -283,6 +285,7 @@
         lose.state = 'suy'; lose.power = 35; lose.unity = 40; const old = lose.n; lose.leader = TT.genName('nam'); lose.leaderAge = 40; lose.tag = rng.pick(['chinh', 'trung', 'ta']);
         fac.chron(win.n + ' thắng ' + old + '. Triều đình đổi chủ, người cầm quyền mới là ' + lose.leader + '.', 'bad');
         TT.sectmod.rulerChanged(lose);
+        TT.court.onRuler(lose); // hoàng quyền về mức người mới (S7)
       } else {
         lose.vassal = win.id; lose.power = rng.clamp(lose.power * 0.7, 1, 100); TT.pact.vassalize(lose, win);
         fac.chron(win.n + ' thắng ' + lose.n + ' sau ' + war.years + ' năm, ' + lose.n + ' phải thần phục và nộp cống.', 'bad');

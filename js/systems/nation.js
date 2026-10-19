@@ -57,6 +57,7 @@
       const g = TT.world.pop && TT.world.pop[rid];
       if (g) { if (g.riot) s += T.riot; if (g.food < K.nho.hungerBelow) s += T.hunger; }
       if (f.atFront(rid)) s += T.front;
+      s += TT.court.taAdd(rid); // quốc sách với tu sĩ (S7)
       return s;
     },
     taKhi(rid) {
@@ -128,7 +129,7 @@
       const defy = Math.min(V.defyMax, (f.pacts || []).filter(p => p.b === x.id && p.defy).length);
       // quốc vận
       const target = V.base + V.mood * (g.mood - V.moodMid) + V.nho * (e.nho - V.nhoMid) + V.mach * (e.mach - V.machMid) + V.lead * (e.de + e.tai - V.leadMid);
-      let dv = (target - e.van) * V.pull + (war ? V.war : 0) + (front ? V.front : 0) + (g.riot ? V.riot : 0) + shocks * V.shock + defy * V.defy + (V.era[era] || 0) + TT.faith.vanDelta(x) + (hn('vn', x.id, yn) - 0.5) * 2 * V.noise;
+      let dv = (target - e.van) * V.pull + (war ? V.war : 0) + (front ? V.front : 0) + (g.riot ? V.riot : 0) + shocks * V.shock + defy * V.defy + (V.era[era] || 0) + TT.faith.vanDelta(x) + TT.court.vanDelta(x) + (hn('vn', x.id, yn) - 0.5) * 2 * V.noise;
       e.van = clamp(e.van + dv, 0, 100);
       // nho khí
       const nt = N.base + N.lead * (e.tai - 50) + N.mood * (g.mood - V.moodMid);
@@ -176,6 +177,7 @@
       x.state = 'suy';
       e.van = M.vanAfter[kind]; e.nho = clamp(e.nho - M.nhoLoss, 0, 100); e.low = 0; e.falls++; e.vt = nat.tier(e.van).id; e.vtAt = Math.floor(TT.world.months / 12);
       TT.army.onFall(x, e); // quân tan rã một phần (S6a)
+      TT.court.onRuler(x); // hoàng quyền về mức người mới, thái tử chưa lập (S7)
       nat.note(e, kind, text);
       TT.fac.chron(text, 'bad', true);
       if (pl && near) TT.log(pl, 'Thiên mệnh đã đổi: ' + text, 'big');
