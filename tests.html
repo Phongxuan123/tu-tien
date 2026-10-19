@@ -2518,6 +2518,54 @@ test('Sự kiện nghịch lý bốn tông (natevents): đủ trường, nhãn c
   line('info', '   ' + list.length + ' sự kiện natevents, ' + nChoice + ' lựa chọn');
 });
 
+test('Dữ liệu tín ngưỡng (S5): chín tín ngưỡng đủ trường, lồng đối xứng, ba ô mỗi vùng hợp lệ, chữ không có tên nước thật', () => {
+  const F = D.FAITHS, byId = {}, STR = ['id', 'n', 'loi', 'dongGop', 'cangThang', 'noiTho', 'tuDong'];
+  const NO_STATE = /Việt Nam|Trung Quốc|Trung Hoa|Nhật Bản|Hàn Quốc|Triều Tiên|Singapore|Thái Lan|Pakistan|Iran|Ai Cập|Mông Cổ|Tây Tạng|Đại Việt|Đại Hàn|Ả Rập|Anh Quốc|Pháp Quốc|Mỹ Quốc|Ấn Độ(?! giáo)/;
+  eq(F.length, 9, 'số tín ngưỡng');
+  F.forEach(f => {
+    ok(!byId[f.id], 'trùng id ' + f.id); byId[f.id] = f;
+    STR.forEach(k => ok(typeof f[k] === 'string' && f[k].length > 0, f.id + ' thiếu ' + k));
+    ok(Array.isArray(f.phai) && f.phai.every(p => p.n && p.mo), f.id + ' phái sai');
+    ok(Array.isArray(f.gioi) && f.gioi.length >= 2 && f.gioi.length <= 3 && f.gioi.every(g => typeof g === 'string' && g), f.id + ' giới phải có 2 đến 3 mục');
+    ok(Array.isArray(f.nghiLe) && f.nghiLe.length === 2 && f.nghiLe.every(x => typeof x === 'string' && x), f.id + ' cần đúng 2 nghi lễ');
+    ok(f.phuc && typeof f.phuc.moTa === 'string' && f.phuc.heSo > 0 && f.phuc.heSo <= f.phuc.tran && f.phuc.tran <= 0.1, f.id + ' phúc phải có trần');
+    ok(typeof f.docQuyen === 'boolean' && Array.isArray(f.long), f.id + ' thiếu docQuyen hoặc long');
+    ok(!f.long.includes(f.id), f.id + ' lồng với chính nó');
+    ok(!NO_STATE.test(JSON.stringify(f)), f.id + ' chứa tên nước thật');
+  });
+  F.forEach(f => {
+    // Thiên Chúa giáo và Hồi giáo độc chiếm ô: không lồng với ai, và chỉ hai tín ngưỡng này mang docQuyen.
+    const mono = f.id === 'thien_chua' || f.id === 'hoi';
+    eq(f.docQuyen, mono, f.id + ' docQuyen');
+    if (mono) eq(f.long.length, 0, f.id + ' không được lồng');
+    f.long.forEach(b => {
+      ok(byId[b], f.id + ' lồng với id lạ ' + b);
+      ok(byId[b].long.includes(f.id), 'lồng không đối xứng: ' + f.id + ' với ' + b);
+    });
+  });
+  ok(!F.some(f => f.long.some(b => byId[b].docQuyen)), 'có tín ngưỡng lồng vào tín ngưỡng độc chiếm');
+  eq(D.FAITH_SLOTS, 3, 'số ô mỗi vùng');
+  const regions = D.REGIONS.map(r => r.id);
+  eq(Object.keys(D.FAITH_START).length, 9, 'số vùng có ô khởi đầu');
+  regions.forEach(rid => ok(D.FAITH_START[rid], 'thiếu ô khởi đầu cho vùng ' + rid));
+  Object.keys(D.FAITH_START).forEach(rid => {
+    const slots = D.FAITH_START[rid];
+    ok(regions.indexOf(rid) >= 0, 'vùng lạ ' + rid);
+    eq(slots.length, D.FAITH_SLOTS, rid + ' phải có đúng 3 ô');
+    const used = {};
+    slots.forEach(s => {
+      ok(byId[s.chinh], rid + ' ô có tín ngưỡng lạ ' + s.chinh);
+      ok(!used[s.chinh], rid + ' lặp tín ngưỡng ' + s.chinh); used[s.chinh] = 1;
+      if (s.long === undefined) return;
+      ok(typeof s.long === 'string' && byId[s.long], rid + ' tục lồng sai ' + s.long);
+      ok(byId[s.chinh].long.includes(s.long), rid + ' lồng ' + s.long + ' vào ' + s.chinh + ' không tương thích');
+      ok(!byId[s.chinh].docQuyen && !byId[s.long].docQuyen, rid + ' ô độc chiếm không được lồng');
+      ok(!used[s.long], rid + ' lặp tín ngưỡng ' + s.long); used[s.long] = 1;
+    });
+  });
+  line('info', '   9 tín ngưỡng, ' + Object.keys(D.FAITH_START).length + ' vùng x 3 ô, ' + F.reduce((a, f) => a + f.long.length, 0) + ' cặp lồng (hai chiều)');
+});
+
 runNext();
 </script>
 </body>
