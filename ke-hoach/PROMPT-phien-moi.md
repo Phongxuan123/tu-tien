@@ -113,3 +113,65 @@ Quy tắc: hàm đọc không gọi rng; không đổi TT.VERSION; trường m�
 
 ## Sau Đợt 5: Cổng chơi thử 4
 Bạn chơi thử kinh tế (giá, thuế ở Nha môn, lễ hội, giám định, hội vay và bảo hiểm). Sau đó mới chạy **Đợt 6** (S6 quân đội và chiến tranh tổng, S7 triều chính, F2 phần sau); mình sẽ soạn prompt Đợt 6 khi bạn xác nhận Đợt 5 ổn.
+
+---
+
+# Đợt 6: Quân đội, chiến tranh tổng, triều chính (S6, S7, F2 phần sau)
+
+Chạy lần lượt **5B (nếu chưa) → 6A → 6B → 6C**, mỗi phiên một lượt, không song song (cùng sửa `tests.html`, `factions.js`, `tools/baseline/seeds.json`). Cả ba dùng Sonnet. 6A đổi cân bằng chủ ý (đo 40 hạt giống trước và sau). Chạy 6A trước 5B cũng được nhưng đừng chạy cùng lúc.
+
+## 6A. Sonnet: S6a quân lực, phẩm, sát khí, tướng, quân trận
+
+```
+Repo: Phongxuan123/tu-tien. Gắn repo, clone nhánh `add-game-project` (trả lời tiếng Việt, ngắn gọn). Đọc CLAUDE.md của repo trước. Trước khi bắt đầu: `git fetch origin add-game-project` và chắc chắn không có phiên khác đang đẩy.
+
+Đọc có chọn lọc (grep -n "^#" rồi đọc đúng mục):
+- ke-hoach/Z-lo-trinh-trien-khai.md: mục 2, 5, 6 và "Đợt 6".
+- ke-hoach/S-quoc-gia-tong-mon-ton-giao.md: 5.4 (quân đội và quân trận), 7.3 (bản sắc 9 vương triều), 10.3 (chỉ tiêu), 15.2, 15.14 (S3 đã làm).
+- Mã: js/systems/nation.js (power, văn vị, phản phệ), js/systems/factions.js (strength, chiến tranh), js/data/nation*.js, js/systems/combat.js, js/systems/diplo.js.
+
+NHIỆM VỤ S6a: quân đội làm sức mạnh đặc biệt, có thể đối kháng tu sĩ nhưng khó.
+1. Quân lực của mỗi triều: số quân theo dân và kho, phẩm quân (tân binh, tinh binh, cấm quân...), sát khí tích theo chiến sự, tướng (có bậc, có thể là tu sĩ), quân trận (trận đồ gom khí của quân, có điều kiện và hao tổn). Bản sắc quân của 9 triều theo bảng 7.3 (không nêu tên nước thật).
+2. Bảng lính tương đương tu sĩ: Luyện Khí/Trúc Cơ yếu hơn một đội lính tinh; Kim Đan bị đại quân có trận vây thì thua; Hóa Thần thắng đại quân nhỏ nhưng thua đại quân có trận và sát khí cao. Làm thành hàm thuần (không rng) `TT.army.vsCultivator(...)`, dùng được cho combat sau này.
+3. `strength()` của triều dùng quân lực (thay hoặc gộp có chủ ý, ghi rõ), không đếm đôi với `nat.power`.
+4. Công tắc tắt D.ARMY.on=false: thế giới trùng khít đường cơ sở (`node tools/baseline.js --check`). Bật thì đo 40 hạt giống 101-140 trước và sau (chiến tranh khoảng 52 và diệt vong khoảng 10 mỗi 300 năm, sai số 25%), ghi số.
+5. Giao diện tối thiểu: thẻ triều trong Biên niên sử hiện bậc quân lực, tướng, trận (chữ và bậc, không số).
+
+Quy tắc: hàm đọc không gọi rng, không khởi tạo dữ liệu; trường mới khởi tạo muộn; không đổi TT.VERSION; chữ tiếng Việt, tên nước thật không xuất hiện. Kiểm thử mới: bảng lính tương đương, tắt thì trùng khít, lưu/tải, bản cũ, hiệu năng (300 năm dưới 1 giây). Chạy đầy đủ `node tools/run-tests.js`; kiểm giao diện Playwright. Ghi "S6a đã làm" vào S mục 15.17, cập nhật Z và KE-HOACH.md, `node tools/baseline.js --save` nếu có chủ ý đổi cân bằng, rồi push theo CLAUDE.md. Báo ngắn gọn: đã làm, số kiểm thử, số đo, việc cần tôi chơi thử, điều chưa làm.
+```
+
+## 6B. Sonnet: S6b engine chiến tranh tổng
+
+```
+Repo: Phongxuan123/tu-tien. Gắn repo, clone nhánh `add-game-project` (tiếng Việt, ngắn gọn). Đọc CLAUDE.md trước. Nếu 6A chưa đẩy xong thì dừng và báo tôi.
+
+Đọc có chọn lọc: ke-hoach/Z-lo-trinh-trien-khai.md "Đợt 6"; ke-hoach/S-quoc-gia-tong-mon-ton-giao.md 5.6 (chiến tranh tổng), 15.14 và mục "S6a đã làm"; ke-hoach/Q-cot-truyen.md mục 24.5b (Đại chiến Phù Lệnh, chỉ đọc mục này bằng grep -n rồi offset/limit); E-kinh-te.md A.18 (cú sốc `chien_tong` đã khai báo). Mã: js/systems/factions.js, pacts.js, nation.js, army (6A), eco.js.
+
+NHIỆM VỤ S6b: engine chiến tranh tổng.
+1. Khung chiến tranh đa bên: nhiều phe, nhiều chiến tuyến, kéo dài 10-18 năm, có giai đoạn (bùng nổ, giằng co, kiệt sức, nghị hòa), điều kiện mở (do sự kiện Q hoặc điều kiện thế giới như quốc vận suy nhiều nước cùng lúc), điều kiện kết (hết sức, một phe thắng, thiên mệnh).
+2. Hậu quả: diệt vong, đổi chủ, chia cắt có trần; sát khí và phản phệ có trần; kích hoạt cú sốc giá `chien_tong` ở E; dân số giảm theo F4; tông môn buộc chọn phe theo quan hệ S1.
+3. Tách thống kê: chiến tranh tổng không tính vào "52 chiến tranh/300 năm"; chỉ tiêu riêng: tối đa một đại chiến mỗi 150 năm (mặc định), có thể không bao giờ xảy ra ở một số hạt giống. Đo 40 hạt giống, ghi số.
+4. Công tắc D.TOTALWAR.on=false: trùng khít đường cơ sở. Hàm đọc không rng. Cung cấp API cho Q (`TT.totalwar.start(opts)`) nhưng chưa viết cốt truyện Phù Lệnh.
+5. Nhật báo/Biên niên sử hiện tin theo giai đoạn (chữ cổ trang).
+
+Kiểm thử: chiến tranh tổng không phá chỉ tiêu thường, phản phệ có trần, kết thúc đúng điều kiện, lưu/tải giữa chiến tranh, tắt thì trùng khít, hiệu năng. Chạy đầy đủ run-tests, baseline --check (tắt) và đo (bật). Ghi "S6b đã làm" vào S mục 15.18, cập nhật Z và KE-HOACH.md, push theo CLAUDE.md. Báo ngắn gọn.
+```
+
+## 6C. Sonnet: S7 triều chính + F2 phần sau
+
+```
+Repo: Phongxuan123/tu-tien. Gắn repo, clone nhánh `add-game-project` (tiếng Việt, ngắn gọn). Đọc CLAUDE.md trước. Nếu 6B chưa đẩy xong thì dừng và báo tôi.
+
+Đọc có chọn lọc: ke-hoach/Z-lo-trinh-trien-khai.md "Đợt 6"; ke-hoach/S-quoc-gia-tong-mon-ton-giao.md 5.5 (triều chính, quốc sách), 8.6, 15.14, 15.16; ke-hoach/F-*.md (F2 phần còn lại, grep "Chưa làm"). Mã: js/systems/nation.js, factions.js, pacts.js, faith.js, quests.js, population.js.
+
+NHIỆM VỤ:
+1. S7 triều chính: hoàng quyền (mạnh/yếu), kế vị (có tranh ngôi, có thể sinh nội chiến nhỏ có trần), thế gia trong triều, quốc sách với tu sĩ (chiêu dụ, hạn chế, cấm), quốc giáo gắn triều (đổi quốc giáo có hệ quả). Dùng dữ liệu S3/S5 sẵn có, trường mới khởi tạo muộn.
+2. F2 phần sau: trưng binh gắn hiệp ước (liên quan quân lực S6), nhiệm vụ do thế lực giao qua hệ nhiệm vụ A (hộ tống thu cống, đòi nợ cống, dẹp loạn), thông gia (`hon_uoc`), thuế thương hội.
+3. Công tắc D.COURT.on=false trùng khít; đo 40 hạt giống khi bật (chỉ tiêu 52 chiến tranh/10 diệt vong, sai số 25%).
+4. Giao diện: thẻ triều thêm hàng triều chính (chữ và bậc); nhiệm vụ mới hiện trong bảng nhiệm vụ hiện có.
+
+Quy tắc như 6A/6B. Kiểm thử: kế vị, tranh ngôi có trần, quốc sách, trưng binh, nhiệm vụ thế lực nhận và trả, tắt thì trùng khít, lưu/tải, bản cũ. Chạy đầy đủ run-tests. Ghi "S7 đã làm" vào S mục 15.19, đánh dấu Đợt 6 trong Z, cập nhật KE-HOACH.md, push theo CLAUDE.md. Báo ngắn gọn.
+```
+
+## Sau Đợt 6: Cổng chơi thử 4 (nếu chưa)
+Chơi thử kinh tế và quân sự; sau đó mới đến Đợt 7 (M5b Liên tông).
