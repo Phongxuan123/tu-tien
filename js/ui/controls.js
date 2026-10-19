@@ -18,6 +18,16 @@
       sp.appendChild(b);
     });
 
+    // Thời gian chậm sau mỗi lựa chọn, nhớ lại ở lần chơi sau.
+    try { const s = localStorage.getItem('tt8b_slowms'); if (s !== null && !isNaN(+s)) TT.config.afterChoiceMs = +s; } catch (e) { /* bỏ qua */ }
+    const slowSel = h('select', { title: 'Sau mỗi lựa chọn, thế giới chạy chậm trong khoảng này để bạn kịp đọc kết quả', onchange: e => {
+      TT.config.afterChoiceMs = +e.target.value;
+      try { localStorage.setItem('tt8b_slowms', e.target.value); } catch (err) { /* bỏ qua */ }
+    } });
+    [[0, 'Không chậm'], [3000, 'Chậm 3 giây'], [5000, 'Chậm 5 giây'], [10000, 'Chậm 10 giây']].forEach(o => slowSel.appendChild(h('option', { value: o[0] }, o[1])));
+    slowSel.value = String(TT.config.afterChoiceMs);
+    sp.appendChild(slowSel);
+
     // Đạo hiện tại hiện dạng nhãn (chọn ở các ngã rẽ), có nút bỏ đạo giữa chừng (mất đạo tâm và thành thạo).
     pathLbl = h('span', { class: 'pname' });
     pathQuit = h('button', {

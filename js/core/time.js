@@ -10,11 +10,17 @@
     skipping: false,
     skipLeft: 0,
     SKIP_MAX_MONTHS: 12 * 15,   // tua tối đa 15 năm game mỗi lần bấm
+    slowUntil: 0,               // mốc thời gian thực (ms) hết đoạn làm chậm sau lựa chọn
 
     setSpeed(n) {
       TT.time.skipping = false;
       TT.time.speed = n;
       TT.bus.emit('speed', n);
+    },
+
+    // Gọi khi người chơi vừa chọn xong: thế giới chạy chậm một lúc để kịp đọc kết quả.
+    slowAfterChoice() {
+      if (TT.config.afterChoiceMs > 0) TT.time.slowUntil = Date.now() + TT.config.afterChoiceMs;
     },
 
     // Tua tới sự kiện kế tiếp: chạy hết tốc độ cho tới khi có hộp quyết định hoặc hết giới hạn.
@@ -38,7 +44,8 @@
           TT.life.stepWorld();
           const p = TT.player();
           const scale = TT.config.timeScale(p);
-          delay = TT.config.monthMs / (t.speed * scale);
+          const slow = Date.now() < t.slowUntil ? TT.config.afterChoiceSlow : 1;
+          delay = TT.config.monthMs / (t.speed * scale * slow);
         }
         timer = setTimeout(loop, delay);
       };

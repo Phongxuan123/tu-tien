@@ -26,7 +26,8 @@
       if (c.ring) bonuses.push('chiếc nhẫn +50%');
       const need = S.need(c);
       const xpGain = c.realm === y.realm0 ? c.xp - y.xp0 : 0;
-      const notable = c.log.filter(x => x.m > now - 12 && (x.cls === 'big' || x.cls === 'bad')).slice(-5).map(x => x.t.length > 110 ? x.t.slice(0, 107) + '...' : x.t);
+      // mọi việc đáng kể trong năm (kể cả kết quả lựa chọn có cls thường hoặc tốt), tối đa 12 mục gần nhất; bỏ việc vặt (cls age)
+      const notable = c.log.filter(x => x.m > now - 12 && x.cls !== 'age').slice(-12).map(x => x.t.length > 160 ? x.t.slice(0, 157) + '...' : x.t);
       // cảnh báo
       const warn = [];
       TT.quests.active(c).forEach(g => { const left = g.byAge - TT.age(c); if (left <= Math.max(1, Math.round((g.byAge - g.startAge) / 3))) warn.push('Nhiệm vụ "' + g.text + '" chỉ còn ' + Math.max(0, left) + ' năm (đang ' + Math.round(TT.quests.progress(c, g) * 100) + '%).'); });
