@@ -3,7 +3,7 @@
 (function () {
   var core = [
     'js/core/rng.js', 'js/core/bus.js', 'js/core/state.js',
-    'js/data/realms.js', 'js/data/elements.js', 'js/data/traits.js', 'js/data/nature.js', 'js/data/names.js', 'js/data/actions.js',
+    'js/data/realms.js', 'js/data/elements.js', 'js/data/traits.js', 'js/data/nature.js', 'js/data/childhood.js','js/data/names.js', 'js/data/actions.js',
     'js/data/regions.js', 'js/data/places.js', 'js/data/sects.js', 'js/data/sectmodern.js', 'js/data/diplo.js', 'js/data/nation.js', 'js/data/army.js', 'js/data/totalwar.js', 'js/data/faiths.js', 'js/data/faithrules.js', 'js/data/items.js', 'js/data/gear.js', 'js/data/techs.js', 'js/data/monsters.js', 'js/data/endings.js', 'js/data/events.js', 'js/data/relevents.js', 'js/data/sectevents.js', 'js/data/famevents.js', 'js/data/dgevents.js', 'js/data/facevents.js', 'js/data/quests.js', 'js/data/paths.js', 'js/data/jobs.js', 'js/data/buildings.js', 'js/data/resources.js', 'js/data/population.js', 'js/data/court.js', 'js/data/liendo.js', 'js/data/eco.js', 'js/data/press.js',
     'js/systems/stats.js', 'js/systems/nature.js', 'js/systems/kv.js', 'js/systems/ls.js', 'js/systems/map.js', 'js/systems/crossing.js', 'js/systems/character.js',
     'js/systems/cultivation.js', 'js/systems/events.js', 'js/systems/rules.js',

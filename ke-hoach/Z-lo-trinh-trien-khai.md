@@ -170,6 +170,7 @@
   - *Tự động / kiểm thử*: không hiện hộp; chọn theo độ hợp tính cách (`TT.nature.affinity`) và ghi tóm tắt vào nhật ký. Hộp chỉ là giao diện, không dùng `w.pending`.
   - *Dữ liệu* `js/data/childhood.js` (`D.CHILDHOOD`): **ít nhất 8 sự kiện mỗi hồi (24 sự kiện)**, khe `{ban}` tùy chọn, chữ ngắn (2 đến 3 câu), giọng đời thường pha nhẹ.
   - *Công tắc*: `D.CHILDHOOD.on`; tắt thì `--check` trùng khít. Bật thì người chơi mạnh hơn chút ở 12 tuổi: đo 40 hạt giống, ghi số.
+  **8A2 đã làm (2026-10-19):** `js/data/childhood.js` (`D.CHILDHOOD`: 27 sự kiện, 9 mỗi hồi; 4 sự kiện có khe `{ban}`), đăng ký trong `js/files.js`; 5 bài "Dữ liệu tuổi thơ (8A2)". Chưa có hệ thống (chờ 8A3). Kiểm thử 123 đạt, 0 lỗi; `baseline.js --check` trùng khít 40/40.
 - [ ] **8B** (Sonnet) Q2 `TT.story` + `TT.wheel` bản tối thiểu, **một tuyến thật** làm mẫu, `story-lint` rút gọn, lệnh nhảy tới chặng, `tools/life-sim.js`.
   **Đặc tả 8B (chốt 2026-10-19, lượt 5):**
   - *Tuyến mẫu*: **xương sống A, mốc A1 đến A3** (Q 9.1): A1 Mầm xanh (vào đời 12 tuổi, người dẫn đường đầu tiên), A2 Ngưỡng cửa (chạm Luyện Khí: gia đình hay cơ duyên), A3 Nền móng (Trúc Cơ: lần đầu giết hay tha). Có **1 vòng quay** (A3) và **ít nhất 2 hậu quả trễ** (ví dụ người được tha quay lại sau 3 đến 10 năm). Chuỗi Nhẫn chuyển sau (Q5).

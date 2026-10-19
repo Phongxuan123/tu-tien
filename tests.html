@@ -3490,6 +3490,67 @@ test('Tính cách và khí vận (8A): chia điểm chỉnh lúc sinh, Bốc l�
   } finally { D.NATURE.on = true; }
   // Giao diện (chỉ khi có): hộp Đời mới và khối Hồ sơ không lỗi
 });
+
+// ---------------- Dữ liệu tuổi thơ (8A2) ----------------
+const CHILD_KINDS = ['risk', 'safe', 'fight', 'flee', 'help', 'pay'];
+const CHILD_AXES = ['tinh', 'xuthe', 'daoduc', 'tudung'];
+const CHILD_FX = ['atk', 'nl', 'hp', 'gold', 'luck', 'daoTam', 'tuchat', 'kv', 'wake', 'bad', 'ban'];
+const CHILD_NUM_FX = CHILD_FX.filter(k => k !== 'bad');
+test('Dữ liệu tuổi thơ (8A2): bật, p2/p3, trần; mỗi hồi ≥ 8 sự kiện, id không trùng, hoi 1 đến 3, w 1 đến 3', () => {
+  const C = TT.data.CHILDHOOD, ids = C.ev.map(e => e.id);
+  eq(C.on, true, 'công tắc bật'); ok(C.p2 > 0 && C.p2 <= 1 && C.p3 > 0 && C.p3 <= 1, 'p2, p3 trong (0, 1]');
+  eq(JSON.stringify(Object.keys(C.cap).sort()), JSON.stringify(['atk', 'bad', 'daoTam', 'hp', 'kv', 'luck', 'nl', 'tuchat']), 'trần đủ khóa');
+  ok(C.ev.length >= 24, 'tổng ≥ 24: ' + C.ev.length);
+  [1, 2, 3].forEach(h => ok(C.ev.filter(e => e.hoi === h).length >= 8, 'hồi ' + h + ' có ≥ 8: ' + C.ev.filter(e => e.hoi === h).length));
+  eq(new Set(ids).size, ids.length, 'id không trùng');
+  ok(C.ev.every(e => /^th_/.test(e.id) && [1, 2, 3].indexOf(e.hoi) >= 0 && e.w >= 1 && e.w <= 3 && e.t && e.d), 'id th_, hoi, w, t, d đủ');
+});
+test('Dữ liệu tuổi thơ (8A2): mỗi sự kiện d 2 đến 3 câu; 2 đến 3 lựa chọn, key không trùng, kind và label, r đủ', () => {
+  TT.data.CHILDHOOD.ev.forEach(e => {
+    const n = e.d.split(/[.!?](?:\s|$)/).map(s => s.trim()).filter(Boolean).length;
+    ok(n >= 2 && n <= 3, e.id + ': d có ' + n + ' câu');
+    ok(e.ch.length >= 2 && e.ch.length <= 3, e.id + ': ' + e.ch.length + ' lựa chọn');
+    eq(new Set(e.ch.map(c => c.key)).size, e.ch.length, e.id + ': key không trùng');
+    e.ch.forEach(c => {
+      ok(CHILD_KINDS.indexOf(c.kind) >= 0, e.id + '/' + c.key + ': kind ' + c.kind);
+      ok(typeof c.label === 'string' && c.label.length > 0 && typeof c.r === 'string' && c.r.length > 0, e.id + '/' + c.key + ': label và r');
+    });
+  });
+});
+test('Dữ liệu tuổi thơ (8A2): ax chỉ dùng bốn trục, 1 đến 2 trục, giá trị nguyên trong ±3', () => {
+  TT.data.CHILDHOOD.ev.forEach(e => e.ch.forEach(c => {
+    const keys = Object.keys(c.ax);
+    ok(keys.length >= 1 && keys.length <= 2, e.id + '/' + c.key + ': ' + keys.length + ' trục');
+    keys.forEach(k => {
+      ok(CHILD_AXES.indexOf(k) >= 0, e.id + '/' + c.key + ': trục lạ ' + k);
+      const v = c.ax[k];
+      ok(Number.isInteger(v) && v !== 0 && Math.abs(v) <= 3, e.id + '/' + c.key + ': ' + k + ' = ' + v);
+    });
+  }));
+});
+test('Dữ liệu tuổi thơ (8A2): fx chỉ dùng khóa cho phép, 1 đến 2 khóa, số đúng kiểu, bad trỏ đúng tật g: 0', () => {
+  TT.data.CHILDHOOD.ev.forEach(e => e.ch.forEach(c => {
+    const keys = Object.keys(c.fx);
+    ok(keys.length >= 1 && keys.length <= 2, e.id + '/' + c.key + ': ' + keys.length + ' hiệu ứng');
+    keys.forEach(k => {
+      ok(CHILD_FX.indexOf(k) >= 0, e.id + '/' + c.key + ': fx lạ ' + k);
+      if (k === 'bad') { const t = TT.data.traitById[c.fx.bad]; ok(t && t.g === 0, e.id + '/' + c.key + ': bad ' + c.fx.bad + ' không phải tật'); }
+      else ok(Number.isInteger(c.fx[k]) && c.fx[k] !== 0, e.id + '/' + c.key + ': ' + k + ' phải là số nguyên khác 0');
+    });
+  }));
+});
+test('Dữ liệu tuổi thơ (8A2): needBan khớp khe {ban}, ban chỉ ở sự kiện có bạn; tuchat và kv ≤ 3 lựa chọn mỗi loại', () => {
+  const ev = TT.data.CHILDHOOD.ev;
+  ev.forEach(e => {
+    const hasSlot = e.d.indexOf('{ban}') >= 0;
+    eq(!!e.needBan, hasSlot, e.id + ': needBan khớp với {ban} trong d');
+    ok(e.ch.every(c => c.fx.ban === undefined) || !!e.needBan, e.id + ': fx ban chỉ ở sự kiện có needBan');
+    ok(e.ch.every(c => c.r.indexOf('{ban}') < 0), e.id + ': {ban} không lọt vào r');
+  });
+  const count = k => ev.reduce((s, e) => s + e.ch.filter(c => c.fx[k] !== undefined).length, 0);
+  ok(count('tuchat') <= 3, 'tuchat ' + count('tuchat') + ' lựa chọn');
+  ok(count('kv') <= 3, 'kv ' + count('kv') + ' lựa chọn');
+});
 runNext();
 </script>
 </body>
