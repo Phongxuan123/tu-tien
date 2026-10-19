@@ -204,6 +204,7 @@
       w.pending = null;
       const h = handlers[d.type];
       if (h) h(d, i);
+      if (TT.time) TT.time.slowAfterChoice();
       TT.bus.emit('decision', null);
     },
 

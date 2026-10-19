@@ -13,6 +13,8 @@
     coreMin: 15,           // số NPC lõi tối thiểu mỗi vùng đã có người ở
     coreMax: 20,           // số NPC lõi khi dựng vùng lần đầu
     autosaveMonths: 12,
+    afterChoiceMs: 5000,   // sau mỗi lựa chọn, thế giới chạy chậm trong ngần này mili-giây để người chơi kịp đọc (0 = tắt)
+    afterChoiceSlow: 0.25, // hệ số tốc độ trong lúc chậm (0.25 = chậm còn một phần tư)
     newsCap: 150,
     playerLogCap: 400,
     npcLogCap: 20,

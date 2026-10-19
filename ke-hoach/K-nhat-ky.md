@@ -62,3 +62,4 @@
 - 2026-10-16: làm demo `uimock-nhatky.html`. Theo ý bạn: bỏ ô tìm, thêm đánh dấu ★ (mục ghim + nút lọc). Hồ sơ nhân vật tách thành kế hoạch riêng L-ho-so-nhan-vat.md.
 
 - 2026-10-16: CODE xong. js/ui/journal.js (vẽ nhật ký, Sổ đời), js/core/state.js (TT.logMeta phân loại lazy, TT.log thêm tham số cat, giữ mục có sao khi cắt, giới hạn người chơi 150 lên 400), index.html (khung nhật ký có bộ lọc và nút Sổ đời), css (.j*). Mục cũ trong bản lưu phân loại muộn, không đổi TT.VERSION. Việc vặt gộp theo từng nhóm năm khi liền nhau và cùng loại.
+- 2026-10-19: báo cáo cuối năm (js/systems/report.js) giữ mọi việc đáng kể trong năm, kể cả kết quả lựa chọn thường/tốt (trước chỉ lấy 5 việc lớn/xấu). Sau mỗi lựa chọn thế giới chạy chậm 5 giây (x0.25), chỉnh được ở thanh tốc độ: Không chậm / 3 / 5 / 10 giây (js/core/time.js, js/systems/decisions.js, js/ui/controls.js). Không đổi mô phỏng nên không cần đo cân bằng; tests 108/108 đạt.

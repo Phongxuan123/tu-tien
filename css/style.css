@@ -20,7 +20,7 @@ h3{font:600 1.05rem var(--serif);margin:0 0 6px;color:var(--text)}
 .hage{font:700 38px/1 var(--serif)}.hage small{font:400 16px var(--serif);color:var(--dim);margin-left:4px}
 .date{color:var(--dim);font-size:13px}
 .yearbar{height:5px;border-radius:3px;background:#1d2631;margin:8px 0 10px;overflow:hidden}
-.yearbar i{display:block;height:100%;width:0;background:var(--pink);transition:width .25s linear}
+.yearbar i{display:block;height:100%;width:0;background:var(--pink);transition:width .12s linear}
 .bar-controls{display:flex;flex-wrap:wrap;gap:8px 16px;align-items:center}
 .bar-controls .sp{flex:1}
 .group{display:flex;align-items:center;gap:6px}

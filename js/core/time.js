@@ -10,11 +10,19 @@
     skipping: false,
     skipLeft: 0,
     SKIP_MAX_MONTHS: 12 * 15,   // tua tối đa 15 năm game mỗi lần bấm
+    slowUntil: 0,               // mốc thời gian thực (ms) hết đoạn làm chậm sau lựa chọn
+    stepAt: 0,                  // mốc thời gian thực (ms) của lần đi tháng gần nhất
+    stepLen: 0,                 // khoảng cách (ms) tới tháng kế tiếp, 0 = không chạy đều
 
     setSpeed(n) {
       TT.time.skipping = false;
       TT.time.speed = n;
       TT.bus.emit('speed', n);
+    },
+
+    // Gọi khi người chơi vừa chọn xong: thế giới chạy chậm một lúc để kịp đọc kết quả.
+    slowAfterChoice() {
+      if (TT.config.afterChoiceMs > 0) TT.time.slowUntil = Date.now() + TT.config.afterChoiceMs;
     },
 
     // Tua tới sự kiện kế tiếp: chạy hết tốc độ cho tới khi có hộp quyết định hoặc hết giới hạn.
@@ -33,12 +41,15 @@
           // chạy từng đợt nhỏ để giao diện không bị đơ
           for (let i = 0; i < 6 && t.skipLeft > 0 && !w.pending; i++) { TT.life.stepWorld(); t.skipLeft--; }
           if (w.pending || t.skipLeft <= 0) { t.skipping = false; TT.bus.emit('speed', t.speed); }
-          delay = 0;
+          delay = 0; t.stepLen = 0;
         } else if (w && !w.pending && t.speed > 0) {
+          t.stepAt = Date.now();
           TT.life.stepWorld();
           const p = TT.player();
           const scale = TT.config.timeScale(p);
-          delay = TT.config.monthMs / (t.speed * scale);
+          const slow = Date.now() < t.slowUntil ? TT.config.afterChoiceSlow : 1;
+          delay = TT.config.monthMs / (t.speed * scale * slow);
+          t.stepLen = delay; // để thanh năm chạy đều giữa hai tháng
         }
         timer = setTimeout(loop, delay);
       };
