@@ -2484,6 +2484,89 @@ test('Quốc vận và nho khí (S3): trong khoảng, đọc không đổi thế
   line('info', '   400 năm có quốc vận: ' + Math.round(ms) + ' ms');
 });
 
+test('Quân lực (S6a): đọc không đổi thế giới, bảng lính tương đương, sát khí và trận có điều kiện, tướng tu sĩ, strength không đếm đôi, công tắc tắt, lưu/tải, bản cũ, giao diện chữ không số, hiệu năng', () => {
+  const A = TT.army, K = D.ARMY, trieu = () => TT.fac.list('trieu');
+  // 1. Hàm đọc không gọi rng và không khởi tạo nat
+  TT.life.createWorld(911); const st0 = TT.rng.getState();
+  trieu().forEach(x => { A.peek(x); A.soldiers(x, false); A.phOf(x); A.tuongRank(x, true); A.stateOf(x); A.mul(x); A.describe(x); A.trait(x.region); });
+  A.vsCultivator(A.stateOf(trieu()[0]).arm, 3); A.sig();
+  eq(TT.rng.getState(), st0, 'hàm đọc không gọi rng'); ok(!TT.world.fac.nat, 'hàm đọc không khởi tạo nat');
+  eq(A.peek(trieu()[0]).sat, 0, 'chưa có bản ghi thì mặc định');
+  // 2. Bảng lính tương đương (hàm thuần)
+  const arm = o => Object.assign({ q: 0, ph: 1, tr: 0, sat: 0, qv: 55, tiep: 1, tuong: 0 }, o);
+  const squad = arm({ q: 50, ph: 1.3, tuong: 1 });
+  ok(A.vsCultivator(squad, 1).win, 'một đội lính tinh thắng Luyện Khí');
+  ok(A.vsCultivator(squad, 2).win, 'một đội lính tinh có tướng thắng Trúc Cơ');
+  eq(A.vsCultivator(arm({ q: 50, ph: 1.3 }), 2).why, 'thiếu tướng', 'Trúc Cơ cần tướng');
+  const big = arm({ q: 90000, ph: 1.3, tr: 1, sat: 40, qv: 60, tiep: 1, tuong: 1 });
+  ok(A.vsCultivator(big, 3).win, 'Kim Đan bị đại quân có trận vây thì thua');
+  eq(A.vsCultivator(arm({ q: 90000, ph: 1.3, tuong: 1, qv: 60 }), 3).why, 'thiếu quân trận', 'Kim Đan không thua đại quân không trận');
+  ok(!A.vsCultivator(arm({ q: 5000, ph: 1 }), 5).win, 'Hóa Thần thắng đại quân nhỏ');
+  ok(!A.vsCultivator(big, 5).win, 'Hóa Thần thắng đại quân có trận mà chiến lực chưa đủ');
+  ok(A.vsCultivator(arm({ q: 90000, ph: 1.6, tr: 3, sat: 100, qv: 100, tiep: 1, tuong: 3 }), 5).win, 'Hóa Thần thua đại quân có trận và sát khí cao');
+  ok(!A.vsCultivator(arm({ q: 1e9, ph: 1.6, tr: 3, sat: 100, qv: 100, tiep: 1, tuong: 3 }), 6).win, 'Phi Thăng: phàm quân không thắng');
+  // 3. Chạy thế giới: giá trị trong khoảng, đọc không đổi diễn biến, trận được học ở một số triều
+  const run = reader => {
+    TT.life.createWorld(77);
+    for (let y = 0; y < 80; y++) { TT.world.months += 12; TT.fac.yearly(); if (reader) trieu().forEach(x => { A.describe(x); A.mul(x); A.stateOf(x); TT.nation.describe(x); }); }
+    const f = TT.fac.S(); return JSON.stringify([f.nat, f.rel, f.chron.length, Object.keys(f.list).map(k => f.list[k].state + Math.round(f.list[k].power))]);
+  };
+  eq(run(true), run(false), 'gọi hàm đọc làm đổi diễn biến thế giới');
+  let maxTr = 0, satSum = 0, satN = 0, withTran = 0;
+  [101, 102, 103].forEach(seed => {
+    TT.life.createWorld(seed);
+    for (let y = 0; y < 300; y++) {
+      TT.world.months += 12; TT.fac.yearly();
+      const S0 = TT.fac.S().nat;
+      trieu().forEach(x => {
+        const e = S0[x.id]; ok(e && e.army, 'mỗi triều có bản quân lực sau một năm');
+        ok(e.army.sat >= 0 && e.army.sat <= 100, 'sát khí trong [0,100]: ' + e.army.sat);
+        ok(e.army.tr >= 0 && e.army.tr <= 3 && e.army.trN >= 0, 'trận trong [0,3]');
+        ok(typeof e.army.tuongTu === 'boolean');
+        maxTr = Math.max(maxTr, e.army.tr); satSum += e.army.sat; satN++;
+        const m = A.mul(x); ok(m >= 0.4 && m <= 1.6, 'hệ số quân trong [0,4;1,6]: ' + m);
+      });
+      withTran += trieu().filter(x => S0[x.id].army.tr > 0).length;
+    }
+  });
+  ok(maxTr >= 1, 'có triều học được quân trận');
+  ok(satSum / satN > 1 && satSum / satN < 60, 'sát khí trung bình hợp lý: ' + (satSum / satN).toFixed(1));
+  // 4. Sức mạnh không đếm đôi: strength dùng (power - phần quốc vận) x hệ số quân
+  TT.life.createWorld(911); for (let y = 0; y < 30; y++) { TT.world.months += 12; TT.fac.yearly(); }
+  const x = trieu()[0];
+  const exp = (x.power - TT.nation.powerShift(x)) * (0.55 + 0.45 * x.unity / 100) * (0.8 + 0.4 * x.wealth / 100) * TT.pop.milMul(x) * TT.sectmod.milMul(x) * A.mul(x);
+  ok(Math.abs(TT.fac.strength(x, []) - exp) < 1e-9, 'strength của triều có quân lực');
+  const tg = TT.fac.list('tong')[0]; eq(TT.fac.strength(tg, []), tg.power * (0.55 + 0.45 * tg.unity / 100) * (0.8 + 0.4 * tg.wealth / 100) * TT.pop.milMul(tg) * TT.sectmod.milMul(tg), 'tông không đổi');
+  // 5. Công tắc tắt: strength như trước S6a, không ghi gì
+  K.on = false;
+  const old = x.power * (0.55 + 0.45 * x.unity / 100) * (0.8 + 0.4 * x.wealth / 100) * TT.pop.milMul(x) * TT.sectmod.milMul(x);
+  eq(TT.fac.strength(x, []), old, 'tắt: strength như cũ');
+  TT.life.createWorld(913); for (let y = 0; y < 60; y++) { TT.world.months += 12; TT.fac.yearly(); }
+  ok(Object.keys(TT.fac.S().nat || {}).every(k => !TT.fac.S().nat[k].army), 'tắt: không tạo bản quân lực');
+  K.on = true;
+  // 6. Lưu/tải giữ quân lực; bản cũ không có quân lực vẫn chạy
+  TT.life.createWorld(102); for (let y = 0; y < 50; y++) { TT.world.months += 12; TT.fac.yearly(); }
+  const before = JSON.stringify(TT.fac.S().nat), snap = TT.save.snapshot();
+  TT.life.createWorld(5); TT.save.restore(snap);
+  eq(JSON.stringify(TT.fac.S().nat), before, 'lưu/tải giữ quân lực');
+  Object.keys(TT.fac.S().nat).forEach(k => { delete TT.fac.S().nat[k].army; });
+  for (let y = 0; y < 20; y++) { TT.world.months += 12; TT.fac.yearly(); }
+  ok(trieu().every(t => TT.fac.S().nat[t.id].army), 'bản cũ: quân lực được khởi tạo muộn');
+  // 7. Giao diện: dòng quân lực trong thẻ triều (chữ, không số)
+  const ui = TT.ui; if (ui && ui.buildNation) {
+    ui.nationSel.open = true; const keep = JSON.stringify(TT.fac.S().nat); const box = document.createElement('div'); ui.buildNation(box, TT.player()); ui.nationSel.open = false;
+    const lines = [...box.querySelectorAll('.small')].filter(d => /Quân lực/.test(d.textContent));
+    eq(lines.length, 9, 'chín thẻ có dòng quân lực'); ok(lines.every(d => !/\d/.test(d.textContent)), 'dòng quân lực không có số');
+    ok(lines.every(d => /tướng/.test(d.textContent) && /trận/.test(d.textContent)), 'dòng có tướng và trận');
+    eq(JSON.stringify(TT.fac.S().nat), keep, 'giao diện chỉ đọc');
+  }
+  // chữ của game không nhắc tên nước thật; hiệu năng
+  const txt = JSON.stringify([K.ph, K.bac, K.tuongName, K.tran, K.satWord, Object.keys(K.trait).map(r => K.trait[r].n + K.trait[r].desc)]);
+  ['Trung Quốc', 'Nhật Bản', 'Mỹ', 'Nga', 'Đức', 'Ấn Độ', 'Mông Cổ', 'Iran', 'Venice', 'La Mã', 'Hà Lan', 'Ottoman', 'Viking', 'Khmer'].forEach(w => ok(txt.indexOf(w) < 0, 'chữ game không nhắc tên nước thật: ' + w));
+  TT.life.createWorld(5); const t1 = performance.now(); for (let y = 0; y < 300; y++) { TT.world.months += 12; TT.fac.yearly(); } const ms = performance.now() - t1; ok(ms < 1000, '300 năm mất ' + Math.round(ms) + ' ms');
+  line('info', '   300 năm có quân lực: ' + Math.round(ms) + ' ms; sát khí trung bình ' + (satSum / satN).toFixed(1) + '; trận cao nhất ' + maxTr);
+});
+
 test('Tông môn có trạng thái riêng theo thế giới (S4): đọc không đổi thế giới, hai thế giới độc lập, sức mạnh suy từ chỉ số, chính sách có trần, thanh trừng có hậu quả và cách quãng, công tắc tắt, đạo thống, giao diện, lưu/tải, bản cũ', () => {
   const K = D.SECT_MOD, M = TT.sectmod, tongs = () => TT.fac.list('tong'), HM = 'hm_nhat_luan', h0 = D.SECTS[HM].nhan, ON = 5;
   // 1. Đọc không gọi rng và không khởi tạo sx

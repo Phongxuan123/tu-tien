@@ -135,6 +135,7 @@
       fac.ensureHoi();
       TT.pop.yearly(); // dân số, thiên tai, dân tâm (F4)
       TT.nation.yearly(); // quốc vận, nho khí, thiên mệnh của chín triều (S3)
+      TT.army.yearly(); // quân số, sát khí, quân trận, tướng tu sĩ của chín triều (S6a)
       TT.sectmod.yearly(); // chỉ số tông, thanh trừng hiếm (S4)
       TT.faith.yearly(); // tín ngưỡng: ba ô mỗi vùng, giáo hội, quốc giáo, nơi thờ tự (S5)
       fac.list().forEach(x => { if (fac.alive(x)) { if (x.kind === 'hoi') fac.tickHoi(x); else fac.tickInternal(x); } else { fac.tickDead(x); if (x.kind === 'hoi') fac.rebuildHoi(x); } });
@@ -235,8 +236,10 @@
       const pl0 = TT.player(); if (pl0 && pl0.region === war.front) TT.log(pl0, 'Chiến loạn bùng lên ở ' + regName(war.front) + ': ' + a.n + ' đánh ' + b.n + '.', 'bad', 'Vì ' + reason + '. Ở vùng chiến tuyến: nguy hiểm +' + D.FAC.frontDanger + ', kiếm tiền -' + Math.round((1 - D.FAC.frontGold) * 100) + '%, giá mua +' + Math.round((D.FAC.frontPrice - 1) * 100) + '%.');
       fac.chron(a.n + ' tuyên chiến với ' + b.n + ' vì ' + reason + '. Chiến sự bùng lên ở ' + regName(war.front) + (war.sa.length + war.sb.length ? ' (có đồng minh tham chiến)' : '') + '.', 'war');
     },
+    // S6a: với triều, phần quốc vận của `power` (TT.nation.powerShift) được bỏ đi vì quốc vận đã vào quân lực (TT.army.mul); không đếm đôi.
     strength(x, sup) {
-      let s = x.power * (0.55 + 0.45 * x.unity / 100) * (0.8 + 0.4 * x.wealth / 100) * TT.pop.milMul(x) * TT.sectmod.milMul(x);
+      const A = x.kind === 'trieu' && TT.army.on();
+      let s = (x.power - (A ? TT.nation.powerShift(x) : 0)) * (0.55 + 0.45 * x.unity / 100) * (0.8 + 0.4 * x.wealth / 100) * TT.pop.milMul(x) * TT.sectmod.milMul(x) * (A ? TT.army.mul(x) : 1);
       sup.forEach(i => { const y = fac.get(i); if (y) s += y.power * 0.3; });
       return s;
     },
@@ -272,6 +275,7 @@
       if (win.kind === 'tong' && lose.kind === 'tong') TT.sect.spoils(win, lose);
       win.power = rng.clamp(win.power + 4, 1, 100); win.wealth = rng.clamp(win.wealth + 8, 0, 100);
       TT.nation.onWarEnd(win, lose);
+      TT.army.onWarEnd(win, lose); // sát khí (S6a)
       const pd = 0.42 + (win.power - lose.power) / 220 + (lose.unity < 30 ? 0.15 : 0);
       if (lose.kind !== 'trieu' && (lose.power < 14 || rng.P(pd))) { fac.chron(win.n + ' thắng ' + lose.n + ' sau ' + war.years + ' năm, ' + lose.n + ' bị tiêu diệt.', 'bad', true); fac.destroy(lose, win, 'bị ' + win.n + ' tiêu diệt', true); }
       else if (lose.kind === 'trieu') {

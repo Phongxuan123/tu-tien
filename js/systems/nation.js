@@ -175,6 +175,7 @@
       }
       x.state = 'suy';
       e.van = M.vanAfter[kind]; e.nho = clamp(e.nho - M.nhoLoss, 0, 100); e.low = 0; e.falls++; e.vt = nat.tier(e.van).id; e.vtAt = Math.floor(TT.world.months / 12);
+      TT.army.onFall(x, e); // quân tan rã một phần (S6a)
       nat.note(e, kind, text);
       TT.fac.chron(text, 'bad', true);
       if (pl && near) TT.log(pl, 'Thiên mệnh đã đổi: ' + text, 'big');

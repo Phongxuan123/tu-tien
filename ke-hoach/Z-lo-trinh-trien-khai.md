@@ -122,11 +122,13 @@
 - [x] Đo lại bằng `tools/econ-sim.js` (E7a: 48,5% trước, 49,2% sau, chưa đạt khoảng 25%; xem E A.18) các chỉ tiêu E (lãi buôn tối đa 25% trung bình...).
 - **Cổng chơi thử 4:** chơi thử kinh tế E0 đến E6 + E7a + E7b.
 
-### Đợt 6. Quân đội, chiến tranh tổng, triều chính, F2 phần sau (S6, S7) (khoảng 4 lượt)
-- [ ] **S6**: quân lực, phẩm, sát khí, tướng, quân trận, bảng lính tương đương; `strength()` dùng `CL`; **engine chiến tranh tổng** (đa bên, nhiều chiến tuyến, 10-18 năm) cho Đại chiến Phù Lệnh (Q 24.5b); bản sắc quân 9 nước; đo lại chiến tranh (tách đại chiến).
+### Đợt 6. Quân đội, chiến tranh tổng, triều chính, F2 phần sau (S6, S7) (khoảng 4 lượt) — S6a đã xong 2026-10-19 (xem S mục 15.17; S6b, S7 và F2 phần sau còn lại)
+- [x] **S6a**: quân lực, phẩm, sát khí, tướng, quân trận, bảng lính tương đương (`TT.army.vsCultivator`), bản sắc quân 9 triều, `strength()` dùng quân lực (không đếm đôi với quốc vận); đo: chiến tranh 54,5 (từ 47,5), diệt vong 6,8 (chưa đạt ±25%, từ 6,0), đổi chủ 10,3 (từ 4,5).
+- [ ] **S6b**: **engine chiến tranh tổng** (đa bên, nhiều chiến tuyến, 10-18 năm) cho Đại chiến Phù Lệnh (Q 24.5b); đo lại chiến tranh tách đại chiến; thương vong và mất tướng khi đánh tu sĩ.
 - [ ] **S7**: triều chính (hoàng quyền, kế vị, thế gia), quốc sách với tu sĩ, quốc giáo gắn triều.
 - [ ] **F2 phần sau**: trưng binh gắn hiệp ước, nhiệm vụ do thế lực giao (hộ tống thu cống, đòi nợ cống, dẹp loạn...) qua hệ nhiệm vụ A, thông gia (`hon_uoc`), thuế thương hội.
-- [ ] Bài kiểm thử: bảng lính tương đương (Kim Đan bị vây thua, Hóa Thần thắng đại quân nhỏ), chiến tranh tổng không phá chỉ tiêu, phản phệ có trần.
+- [x] Bài kiểm thử (S6a): bảng lính tương đương (Kim Đan bị vây thua, Hóa Thần thắng đại quân nhỏ), tắt thì trùng khít, lưu/tải, bản cũ, hiệu năng.
+- [ ] Bài kiểm thử (S6b): chiến tranh tổng không phá chỉ tiêu, phản phệ có trần.
 
 ### Đợt 7. M5b Liên tông (S8) (khoảng 1,5 lượt)
 - [ ] Tông ↔ triều (quốc sư, cung phụng, ngoài vòng pháp luật, thao túng), minh ước liên tông, giải đấu 4 hoặc 10 năm, đại chiến liên tông có hậu quả, Thiên hạ công ước.
@@ -277,3 +279,4 @@
 - 2026-10-19: **Đợt 5, E7b xong** (giám định ở chợ đen và nhà đấu giá, vay hội có quá hạn, bảo hiểm chuyến buôn có trần, đơn hội; công tắc `D.ECO.hq`; 105 bài đạt; world và giá trùng khít với và không có E7b). Lãi buôn tối đa vẫn 49,2%, cần đo chuyến buôn người chơi.
 - 2026-10-19: **Đợt 5, E7a xong** (thuế vào giá theo triều, lễ hội tôn giáo, thuế hương hỏa, quốc vận làm nhỏ cú sốc, khai báo `chien_tong`; công tắc `D.ECO.sx` trùng khít 40 hạt giống cả thế giới và giá; 104 bài đạt). Đo: chiến tranh 49,4 → 47,5, diệt vong 6,2 → 6,0; lãi buôn tối đa 48,5% (chưa đạt 25%). Còn E7b.
 - 2026-10-19: Đợt 4 (S4, S5) đã xong ở các phiên khác; mình kiểm lại trên nhánh: 103 bài đạt, đường cơ sở 40 hạt giống trùng khít. Đã thêm prompt Đợt 5 (5A thuế vào giá và móc S, 5B giám định và hội vay, bảo hiểm, nhiệm vụ) vào `PROMPT-phien-moi.md`.
+- 2026-10-19: **Đợt 6, S6a xong** (quân lực, phẩm, sát khí, tướng, quân trận, bảng lính tương đương, bản sắc chín triều, `strength()` dùng quân lực; công tắc `D.ARMY.on` trùng khít 40 hạt giống; 106 bài đạt). Đo 40 hạt giống: chiến tranh 47,5 → 54,5; diệt vong 6,0 → 6,8 (vẫn dưới mục tiêu, lệch có sẵn); đổi chủ 4,5 → 10,3 (trong chỉ tiêu, nguyên nhân chưa hiểu hết). S6b (chiến tranh tổng) để phiên sau.

@@ -7,6 +7,7 @@
 //             --seeds=301,911 --years=300 --nation=off (tắt S3: phải trùng khít đường cơ sở trước S3)
 //             --faith=off (tắt S5: phải trùng khít đường cơ sở trước S5; --set=faith.entry.k=0.05 chỉnh D.FAITH)
 //             --sect=off (tắt S4: phải trùng khít đường cơ sở trước S4). --eco=off (tắt móc kinh tế E7a: D.ECO.sx = false), --hq=off (tắt hội và giám định E7b: D.ECO.hq = false).
+//             --army=off (tắt S6a quân lực: phải trùng khít đường cơ sở trước S6a; --set=army.ratio.war=0.08 chỉnh D.ARMY).
 //             Không ghi --seeds thì dùng danh sách trong seeds.json (nếu có).
 const fs = require('fs');
 const path = require('path');
@@ -25,12 +26,13 @@ const SECT_OFF = arg('sect') === 'off';
 const FAITH_OFF = arg('faith') === 'off';
 const ECO_OFF = arg('eco') === 'off';
 const HQ_OFF = arg('hq') === 'off';
+const ARMY_OFF = arg('army') === 'off';
 const SET = arg('set') ? arg('set').split(',').map(x => x.split('=')) : []; // ví dụ --set=power.kVan=0,van.base=50: chỉnh D.NATION để đo thử
 
 // Chạy trong trang: trả về { hash, chiến tranh, diệt vong, đổi chủ, ... } cho một hạt giống.
-function inPage(seed, years, natOff, sectOff, faithOff, set, ecoOff, hqOff) {
-  TT.data.NATION.on = !natOff; TT.data.SECT_MOD.on = !sectOff; TT.data.FAITH.on = !faithOff; TT.data.ECO.sx = !ecoOff; TT.data.ECO.hq = !hqOff;
-  set.forEach(kv => { const p = kv[0].split('.'), root = p[0] === 'sect' ? TT.data.SECT_MOD : p[0] === 'faith' ? TT.data.FAITH : TT.data.NATION; if (p[0] === 'sect' || p[0] === 'faith') p.shift(); let o = root; for (let i = 0; i < p.length - 1; i++) o = o[p[i]]; o[p[p.length - 1]] = +kv[1]; });
+function inPage(seed, years, natOff, sectOff, faithOff, set, ecoOff, hqOff, armyOff) {
+  TT.data.NATION.on = !natOff; TT.data.ARMY.on = !armyOff; TT.data.SECT_MOD.on = !sectOff; TT.data.FAITH.on = !faithOff; TT.data.ECO.sx = !ecoOff; TT.data.ECO.hq = !hqOff;
+  set.forEach(kv => { const p = kv[0].split('.'), root = p[0] === 'sect' ? TT.data.SECT_MOD : p[0] === 'faith' ? TT.data.FAITH : p[0] === 'army' ? TT.data.ARMY : TT.data.NATION; if (p[0] === 'sect' || p[0] === 'faith' || p[0] === 'army') p.shift(); let o = root; for (let i = 0; i < p.length - 1; i++) o = o[p[i]]; o[p[p.length - 1]] = +kv[1]; });
   TT.config.autosaveMonths = 1e12; TT.config.persistMeta = false;
   const hash = s => { let h = 2166136261 >>> 0; for (let i = 0; i < s.length; i++) { h ^= s.charCodeAt(i); h = Math.imul(h, 16777619) >>> 0; } return h.toString(16); };
   const fx = {}, fnote = TT.faith.note; TT.faith.note = function (t, k) { fx[k] = (fx[k] || 0) + 1; return fnote.apply(this, arguments); };
@@ -58,6 +60,8 @@ function inPage(seed, years, natOff, sectOff, faithOff, set, ecoOff, hqOff) {
     pacts: hash(pacts.join('|')),
     wars: n.wars, destroyed: n.destroyed, rulers: n.rulers, purges: n.purges,
     chronLen: f.chron.length, relPairs: Object.keys(f.rel || {}).length,
+    mulAvg: TT.fac.list('trieu').reduce((a, x) => a + TT.army.mul(x), 0) / TT.fac.list('trieu').length,
+    tranN: nt.filter(e => e.army && e.army.tr > 0).length, satAvg: nt.length ? nt.reduce((a, e) => a + (e.army ? e.army.sat : 0), 0) / nt.length : 0,
     falls: nt.reduce((a, e) => a + e.falls, 0), van: nt.length ? nt.reduce((a, e) => a + e.van, 0) / nt.length : 0, nho: nt.length ? nt.reduce((a, e) => a + e.nho, 0) / nt.length : 0
   };
 }
@@ -68,14 +72,14 @@ function inPage(seed, years, natOff, sectOff, faithOff, set, ecoOff, hqOff) {
   const errs = []; page.on('pageerror', e => errs.push(String(e)));
   await page.goto(pathToFileURL(path.join(__dirname, '..', 'sim.html')).href);
   const out = [];
-  for (const s of SEEDS) out.push(await page.evaluate(`(${inPage.toString()})(${s}, ${YEARS}, ${NATION_OFF}, ${SECT_OFF}, ${FAITH_OFF}, ${JSON.stringify(SET)}, ${ECO_OFF}, ${HQ_OFF})`));
+  for (const s of SEEDS) out.push(await page.evaluate(`(${inPage.toString()})(${s}, ${YEARS}, ${NATION_OFF}, ${SECT_OFF}, ${FAITH_OFF}, ${JSON.stringify(SET)}, ${ECO_OFF}, ${HQ_OFF}, ${ARMY_OFF})`));
   await browser.close();
   if (errs.length) { console.error(errs.join('\n')); process.exit(2); }
   const stable = o => ({ seed: o.seed, rel: o.rel, list: o.list, chron: o.chron, pacts: o.pacts, wars: o.wars, destroyed: o.destroyed, rulers: o.rulers, chronLen: o.chronLen, relPairs: o.relPairs });
   const data = { years: YEARS, seeds: out.map(stable) };
   out.forEach(o => console.log('hạt ' + o.seed + ': chiến tranh ' + o.wars + ', diệt vong ' + o.destroyed + ', đổi chủ triều ' + o.rulers + ', thanh trừng ' + o.purges + ', sử ký ' + o.chronLen + ', cặp quan hệ ' + o.relPairs + ', ' + (NATION_OFF ? '' : 'mất mệnh ' + o.falls + ', vận ' + o.van.toFixed(0) + ', nho ' + o.nho.toFixed(0) + ', ') + o.ms + ' ms, hash ' + o.rel + '/' + o.list + '/' + o.chron + '/' + o.pacts));
   const avg = k => (out.reduce((a, o) => a + o[k], 0) / out.length).toFixed(1);
-  console.log('Trung bình: chiến tranh ' + avg('wars') + ', diệt vong ' + avg('destroyed') + ', đổi chủ ' + avg('rulers') + ', thanh trừng ' + avg('purges') + ' (trong ' + YEARS + ' năm)' + (NATION_OFF ? '' : '; mất mệnh ' + avg('falls') + ', quốc vận cuối kỳ ' + avg('van') + ', nho khí ' + avg('nho')));
+  console.log('Trung bình: chiến tranh ' + avg('wars') + ', diệt vong ' + avg('destroyed') + ', đổi chủ ' + avg('rulers') + ', thanh trừng ' + avg('purges') + ' (trong ' + YEARS + ' năm)' + (NATION_OFF ? '' : '; mất mệnh ' + avg('falls') + ', quốc vận cuối kỳ ' + avg('van') + ', nho khí ' + avg('nho')) + (ARMY_OFF ? '' : '; triều có trận cuối kỳ ' + avg('tranN') + ', sát khí trung bình ' + avg('satAvg') + ', hệ số quân trung bình ' + avg('mulAvg')));
   if (!FAITH_OFF) { const kinds = {}; out.forEach(o => Object.keys(o.fx || {}).forEach(k => { kinds[k] = (kinds[k] || 0) + o.fx[k]; })); console.log('Tín ngưỡng, số biến cố mỗi thế giới (300 năm): ' + Object.keys(kinds).sort().map(k => k + ' ' + (kinds[k] / out.length).toFixed(1)).join(', ')); }
   if (process.argv.includes('--save')) { fs.mkdirSync(path.dirname(FILE), { recursive: true }); fs.writeFileSync(FILE, JSON.stringify(data, null, 1) + '\n'); console.log('Đã ghi ' + FILE); }
   if (process.argv.includes('--check')) {
