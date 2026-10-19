@@ -233,6 +233,7 @@
       rep.add(killer, 'chinh', feud ? -1 : -8);
       rep.add(killer, 'danh', 2 + victim.realm * 3);
       if (!feud) killer.nghiep = (killer.nghiep || 0) + 1;
+      if (killer.faith && TT.faith) TT.faith.onKill(killer); // tín đồ giữ giới sát sinh mà giết người thì phạm giới (S5)
       if (killer.kind === 'player' || victim.kind === 'player' || killer.realm >= 2 || victim.realm >= 2) {
         TT.news(killer.name + ' đã giết ' + victim.name + ' (' + why + ').', 'bad', [killer.id, victim.id]);
       }

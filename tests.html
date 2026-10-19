@@ -1522,9 +1522,9 @@ test('Chiến đấu: ngũ hành khắc chế, chiến thuật công/thủ, ch�
   line('info', '   Kim đánh Mộc thắng ' + win + '/' + N + ', Mộc đánh Kim thắng ' + loss + '/' + N); ok(win > loss + 30 && win > N * 0.55, 'khắc chế quyết định');
   // chiến thuật
   let dealtC = 0, takenC = 0, dealtT = 0, takenT = 0;
-  for (let i = 0; i < 200; i++) { let [a, b] = duelers(2, 'Thổ', 'Thổ'); const hb = b.hp, ha = a.hp; TT.combat.run(a, b, { tacticA: 'cong', lethal: false }); dealtC += hb - b.hp; takenC += ha - a.hp;
+  for (let i = 0; i < 1000; i++) { let [a, b] = duelers(2, 'Thổ', 'Thổ'); const hb = b.hp, ha = a.hp; TT.combat.run(a, b, { tacticA: 'cong', lethal: false }); dealtC += hb - b.hp; takenC += ha - a.hp;
     [a, b] = duelers(2, 'Thổ', 'Thổ'); const hb2 = b.hp, ha2 = a.hp; TT.combat.run(a, b, { tacticA: 'thu', lethal: false }); dealtT += hb2 - b.hp; takenT += ha2 - a.hp; }
-  ok(dealtC > dealtT && takenC > takenT * 0.9 - 1, 'công gây nhiều nhận nhiều: ' + (dealtC / 200).toFixed(0) + '/' + (takenC / 200).toFixed(0) + ' so với thủ ' + (dealtT / 200).toFixed(0) + '/' + (takenT / 200).toFixed(0));
+  ok(dealtC > dealtT && takenC > takenT * 0.9 - 1, 'công gây nhiều nhận nhiều: ' + (dealtC / 1000).toFixed(1) + '/' + (takenC / 1000).toFixed(1) + ' so với thủ ' + (dealtT / 1000).toFixed(1) + '/' + (takenT / 1000).toFixed(1));
   // chạy trốn: nhanh (niệm lực cao) thoát dễ hơn
   let fastOk = 0, slowOk = 0;
   for (let i = 0; i < 300; i++) { let [a, b] = duelers(2, 'Phong', 'Thổ'); a.baseNl = 60; if (TT.combat.run(a, b, { flee: true }).fled) fastOk++; [a, b] = duelers(2, 'Thổ', 'Thổ'); a.baseNl = 2; b.baseNl = 40; if (TT.combat.run(a, b, { flee: true }).fled) slowOk++; }
@@ -2634,6 +2634,120 @@ test('Dữ liệu tín ngưỡng (S5): chín tín ngưỡng đủ trường, l�
     });
   });
   line('info', '   9 tín ngưỡng, ' + Object.keys(D.FAITH_START).length + ' vùng x 3 ô, ' + F.reduce((a, f) => a + f.long.length, 0) + ' cặp lồng (hai chiều)');
+});
+
+test('Tín ngưỡng (S5): ba ô mỗi vùng, tổng tỉ phần bằng 1, quy tắc lồng, đẩy ô yếu nhất, nơi thờ tự và đại điện đúng chủ, quốc giáo, cá nhân, móc nhỏ, tắt thì đứng yên, lưu/tải, bản cũ', () => {
+  const K = D.FAITH, fa = TT.faith, F = D.FAITHS, byId = fa.byId, trieu = () => TT.fac.list('trieu');
+  const NO_STATE = /Việt Nam|Trung Quốc|Trung Hoa|Nhật Bản|Hàn Quốc|Triều Tiên|Singapore|Thái Lan|Pakistan|Iran|Ai Cập|Mông Cổ|Tây Tạng|Đại Việt|Đại Hàn|Ả Rập|Anh Quốc|Pháp Quốc|Mỹ Quốc|Ấn Độ(?! giáo)/;
+  const sites = rid => TT.map.placesOf(rid).filter(p => p.type === 'tho_tu');
+  const check = (tag) => {
+    const s = fa.peek(); ok(s, tag + ': có dữ liệu tín ngưỡng');
+    D.REGIONS.forEach(r => {
+      const sl = s.slots[r.id], used = {}; eq(sl.length, 3, tag + ' ' + r.id + ' phải có đúng 3 ô');
+      let sum = 0; sl.forEach((x, i) => {
+        sum += x.share; ok(x.share >= K.minShare - 1e-9 && isFinite(x.share), tag + ' tỉ phần tối thiểu'); if (i) ok(sl[i - 1].share >= x.share - 1e-12, tag + ' ô xếp giảm dần');
+        ok(byId[x.chinh], 'tín ngưỡng lạ'); ok(!used[x.chinh], tag + ' lặp tín ngưỡng ' + x.chinh + ' ở ' + r.id); used[x.chinh] = 1;
+        if (x.long) { ok(!used[x.long], tag + ' lặp tục lồng'); used[x.long] = 1; ok(byId[x.chinh].long.indexOf(x.long) >= 0 && byId[x.long].long.indexOf(x.chinh) >= 0, tag + ' lồng không tương thích ' + x.chinh + '/' + x.long); ok(!byId[x.chinh].docQuyen && !byId[x.long].docQuyen, tag + ' tín ngưỡng độc chiếm không được lồng'); }
+      });
+      ok(Math.abs(sum - 1) < 1e-9, tag + ' tổng tỉ phần ' + r.id + ' = ' + sum);
+    });
+    Object.keys(s.church).forEach(k => { const c = s.church[k]; ok(c.luc >= 5 && c.luc <= 100 && c.huong >= 0 && c.huong <= 100 && c.ky >= K.church.kyMin && c.ky <= K.church.kyMax && c.phai.length <= K.phai.max, tag + ' giáo hội ' + k + ' trong khoảng'); });
+  };
+  // 1. Đọc không khởi tạo, không đụng rng, không đổi diễn biến
+  TT.life.createWorld(911); const st0 = TT.rng.getState(), js0 = JSON.stringify(fa.peek()), pl = TT.player();
+  D.REGIONS.forEach(r => { fa.slotsOf(r.id); fa.view(r.id); fa.siteDefs(r.id); fa.shareOf('phat', r.id); fa.religiosity(r.id); fa.moodSupport(r.id); fa.crisis(r.id); }); trieu().forEach(t => { fa.lord(t); fa.stab(t); fa.vanDelta(t); fa.persecuted(t); });
+  F.forEach(f => { fa.church(f.id); fa.followers(f.id); }); fa.ranking(); fa.personal(pl); fa.phuc(pl); fa.hint(pl); fa.mixed(pl, pl);
+  eq(TT.rng.getState(), st0, 'hàm đọc không gọi rng'); eq(JSON.stringify(fa.peek()), js0, 'hàm đọc không đổi dữ liệu'); ok(!('faith' in pl), 'đọc tín ngưỡng cá nhân không tạo trường');
+  const run = reader => { TT.life.createWorld(77); for (let y = 0; y < 80; y++) { TT.world.months += 12; TT.fac.yearly(); if (reader) { D.REGIONS.forEach(r => { fa.view(r.id); fa.moodSupport(r.id); }); trieu().forEach(t => { fa.stab(t); fa.vanDelta(t); }); fa.hint(TT.player()); } } const f = TT.fac.S(); return JSON.stringify([f.faith, f.rel, f.chron.length, Object.keys(f.list).map(k => f.list[k].state + Math.round(f.list[k].power))]); };
+  eq(run(true), run(false), 'gọi hàm đọc làm đổi diễn biến thế giới');
+
+  // 2. Bất biến trên nhiều thế giới 300 năm; đếm biến cố
+  const cnt = {}, nt = fa.note; fa.note = function (t, k) { cnt[k] = (cnt[k] || 0) + 1; return nt.apply(this, arguments); };
+  let texts = '';
+  try {
+    [101, 102, 103, 104, 105, 106].forEach(seed => {
+      TT.life.createWorld(seed); check('khởi đầu ' + seed);
+      for (let y = 0; y < 300; y++) { TT.world.months += 12; TT.fac.yearly(); if (y % 20 === 19) check('năm ' + (y + 1) + ' hạt ' + seed); }
+      fa.peek().hist.forEach(e => { texts += e.t + '\n'; });
+      eq(sites ? D.REGIONS.reduce((a, r) => a + sites(r.id).length, 0) : 0, 27, 'ba nơi thờ tự mỗi vùng');
+    });
+  } finally { fa.note = nt; }
+  line('info', '   6 hạt giống x 300 năm: ' + Object.keys(cnt).sort().map(k => k + ' ' + cnt[k]).join(', '));
+  ok(cnt.day >= 1 || cnt.long >= 1, 'đã thấy tín ngưỡng mới vào vùng'); ok(!NO_STATE.test(texts), 'tin tín ngưỡng không nhắc tên nước thật');
+
+  // 3. Đẩy ô yếu nhất và lồng
+  const prepare = seed => { TT.life.createWorld(seed); TT.world.months += 12; TT.fac.yearly(); return fa.peek(); };
+  let s = prepare(31); let rid = null, newcomer = null; D.REGIONS.forEach(r => { if (newcomer) return; const f = F.find(f => !fa.inRegion(f.id, r.id) && !f.docQuyen && !s.slots[r.id].some(x => !x.long && !byId[x.chinh].docQuyen && byId[x.chinh].long.indexOf(f.id) >= 0)); if (f) { rid = r.id; newcomer = f; } });
+  const sl = s.slots[rid || 'trung_chau'], weak = sl[2].chinh;
+  const oldJoin = K.entry.joinLong; K.entry.joinLong = 0;
+  if (newcomer) { s.pend[rid][newcomer.id] = 5; TT.world.months += 12; fa.yearly(); ok(s.slots[rid].some(x => x.chinh === newcomer.id), 'tín ngưỡng đủ mạnh đẩy được một ô'); ok(!fa.inRegion(weak, rid) || weak === newcomer.id, 'ô yếu nhất bị đẩy ra'); eq(s.slots[rid].length, 3, 'vẫn đúng ba ô'); check('sau khi đẩy'); }
+  else line('info', '   (không có tín ngưỡng thích hợp để thử đẩy ở ' + rid + ')');
+  // tín ngưỡng độc chiếm vào vùng: chiếm hẳn một ô, không lồng
+  s = prepare(32); const rid2 = D.REGIONS.map(r => r.id).find(r => !fa.inRegion('thien_chua', r)) || null;
+  if (rid2) { s.pend[rid2].thien_chua = 5; TT.world.months += 12; fa.yearly(); const hit = s.slots[rid2].find(x => x.chinh === 'thien_chua'); ok(hit && !hit.long, 'Thiên Chúa giáo vào vùng thì độc chiếm một ô'); check('sau khi Thiên Chúa giáo vào'); }
+  // lồng vào ô tương thích khi được
+  K.entry.joinLong = 1; s = prepare(33); let joined = false;
+  D.REGIONS.forEach(r => { if (joined) return; const sl2 = s.slots[r.id]; F.forEach(f => { if (joined || f.docQuyen || fa.inRegion(f.id, r.id)) return; const host = sl2.find(x => !x.long && !byId[x.chinh].docQuyen && byId[x.chinh].long.indexOf(f.id) >= 0); if (host) { const hc = host.chinh; s.pend[r.id][f.id] = 5; TT.world.months += 12; fa.yearly(); const h2 = s.slots[r.id].find(x => x.chinh === hc); ok(h2 && h2.long === f.id, 'tín ngưỡng tương thích lồng vào ô thay vì đẩy'); check('sau khi lồng'); joined = true; } }); });
+  K.entry.joinLong = oldJoin; ok(joined, 'có ca lồng để thử');
+
+  // 4. Nơi thờ tự: đúng ba nơi mỗi vùng, đại điện thuộc ô 1, đổi chủ khi thứ hạng đổi
+  s = prepare(41);
+  D.REGIONS.forEach(r => { const ss = sites(r.id).sort((a, b) => a.rank - b.rank); eq(ss.length, 3, r.id + ' ba nơi thờ tự'); ss.forEach((p, i) => { eq(p.rank, i + 1); eq(p.faith, s.slots[r.id][i].chinh, 'nơi thờ tự đúng chủ theo ô'); ok(p.n.indexOf(byId[p.faith][i === 0 ? 'noiTho' : 'tuDong'].charAt(0).toUpperCase()) === 0, 'tên theo loại nơi thờ'); const rt = TT.map.localRoute(p.anchor, p.id); ok(rt && rt.months === K.site.months, 'nối với nơi neo bằng đường ngắn'); }); ok(ss[0].n.indexOf('lớn') > 0, 'đại điện có chữ lớn'); });
+  const r0 = 'trung_chau', before = s.slots[r0][0].chinh, second = s.slots[r0][1].chinh; s.slots[r0][0].share = 0.1; s.slots[r0][1].share = 0.8; s.slots[r0][2].share = 0.1;
+  const cn = TT.fac.S().chron.length; TT.world.months += 12; fa.yearly();
+  eq(s.slots[r0][0].chinh, second, 'thứ hạng đổi'); eq(TT.map.place('tt_' + r0 + '_1').faith, second, 'đại điện đổi chủ theo ô 1'); ok(before !== second);
+  ok(TT.fac.S().chron.slice(cn).some(e => /Đại điện/.test(e.t) && /đổi chủ/.test(e.t)), 'ghi vào sử ký khi đại điện đổi chủ'); ok(s.hist.some(e => e.k === 'dai_dien'), 'ghi vào sổ tín ngưỡng');
+  // công trình và dịch vụ
+  const c = TT.player(), dai = TT.map.place('tt_' + r0 + '_1'); c.region = r0; c.place = dai.id; c.travel = null; c.cross = null; c.dungeon = null; c.ls = 20; c.gold = 100; c.hp = Math.max(1, Math.floor(TT.stats.hpMax(c) * 0.5)); c.daoTam = 50; c.nghiep = 2;
+  eq(TT.bld.at(c).join(','), 'tho_' + second, 'công trình của nơi thờ tự theo tín ngưỡng'); ok(!TT.bld.isShop('tho_' + second));
+  fa.convert(c, F.find(f => f.id !== second).id, 1); let sv = TT.bld.service(c, 'tho_' + second); ok(sv.options.length >= 5, 'có dịch vụ: lễ, nghe giảng, cứu trợ, chữa bệnh, theo đạo');
+  const dt = c.daoTam; sv.options[0].run(c); ok(c.daoTam > dt && c.nghiep === 1, 'cầu an tăng đạo tâm và giảm nghiệp'); sv = TT.bld.service(c, 'tho_' + second); ok(sv.options[0].disabled, 'mỗi tháng lễ một lần');
+  const hp0 = c.hp; sv.options[3].run(c); ok(c.hp > hp0, 'chữa bệnh hồi sinh lực'); ok(typeof sv.options[2].run === 'function');
+  c.traitIds.push('tam_ma'); c.flags.kinh = 0; for (let i = 0; i < K.service.kinhForTamMa; i++) { c.flags.kinhAt = -1; TT.bld.service(c, 'tho_' + second).options[1].run(c); } ok(c.traitIds.indexOf('tam_ma') < 0, 'nghe giảng đều đặn thì tâm ma tan');
+  sv = TT.bld.service(c, 'tho_' + second); const conv = sv.options[sv.options.length - 1]; ok(/Theo /.test(conv.label) && conv.confirm, 'đổi đạo phải xác nhận'); conv.run(c); eq(c.faith, second); eq(c.tam, 1); ok(c.flags.faithChanged, 'ghi cờ đổi đạo');
+  ok(TT.bld.service(c, 'quan') && true); c.place = TT.map.placesOf(r0).find(p => p.type === 'thanh_tri').id; ok(/Nơi thờ tự gần đây/.test(fa.hint(c)), 'gợi ý nơi thờ tự');
+
+  // 5. Quốc giáo và khoan dung
+  const L = fa.peek().lord; trieu().forEach(t => { ok(L[t.id] && byId[L[t.id].faith] && L[t.id].khoan >= K.khoan.min && L[t.id].khoan <= K.khoan.max, 'triều có quốc giáo và khoan dung'); });
+  Object.keys(K.sect).forEach(id => { ok(L[id] && (L[id].faith === null || byId[L[id].faith]), 'tông có quốc giáo hoặc thế tục: ' + id); ok(TT.fac.get(id)); });
+  const tx = trieu().find(t => t.region === r0), top0 = s.slots[r0][0].chinh; L[tx.id].faith = F.find(f => f.id !== top0 && !fa.inRegion(f.id, r0)).id; const sw = K.state.switchP; K.state.switchP = 1; TT.world.months += 12; fa.yearly(); K.state.switchP = sw;
+  eq(L[tx.id].faith, s.slots[r0][0].chinh, 'triều đổi quốc giáo theo ô 1'); 
+  // 6. Móc nhỏ có trần
+  const gm = TT.world.pop[r0]; gm.mood = 70; ok(fa.moodSupport(r0) === 0, 'không khủng hoảng thì không cộng'); gm.mood = 15; const ms = fa.moodSupport(r0); ok(ms > 0 && ms <= K.hook.moodCap, 'khủng hoảng thì dân tâm đỡ tụt, có trần: ' + ms.toFixed(2));
+  trieu().forEach(t => { ok(Math.abs(fa.stab(t)) <= K.hook.stabCap + 1e-9 && Math.abs(fa.vanDelta(t)) <= K.hook.vanCap + 1e-9, 'móc trong trần'); });
+  L[tx.id].khoan = 10; L[tx.id].faith = s.slots[r0][2].chinh; ok(fa.persecuted(tx) > 0 && fa.vanDelta(tx) < 0, 'đàn áp trừ quốc vận và ổn định');
+  // 7. Tín ngưỡng cá nhân
+  s = prepare(51); const p = TT.player(), pp = fa.personal(p), pp2 = fa.personal(p); eq(JSON.stringify(pp), JSON.stringify(pp2), 'tín ngưỡng cá nhân suy ra ổn định'); ok(!pp.set && !('faith' in p)); ok(pp.tam >= 0 && pp.tam <= 2);
+  fa.convert(p, 'phat', 2); ok(p.faith === 'phat' && p.tam === 2 && fa.personal(p).set); fa.convert(p, null); eq(p.tam, 0); fa.convert(p, 'phat', 2);
+  const d0 = p.daoTam; p.flags = p.flags || {}; delete p.flags.gioi; fa.keepVow(p); ok(p.daoTam === d0 + 1 || p.daoTam === 100, 'giữ giới cộng đạo tâm'); const d1 = p.daoTam; ok(fa.breakVow(p) && p.daoTam < d1 && p.flags.faithShun, 'phạm giới trừ đạo tâm và bị xa lánh'); ok(fa.phuc(p) > 0 && fa.phuc(p) <= byId.phat.phuc.tran);
+  const other = Object.values(TT.world.chars).find(q => q.kind === 'npc'); fa.convert(other, 'hoi', 1); const mx = fa.markMixed(p, other); ok(mx.mixed && mx.mono && p.flags.faithMix.with === other.id, 'hôn nhân khác đạo: cờ dữ liệu'); fa.convert(other, 'phat', 1); ok(!fa.mixed(p, other).mixed);
+  p.tam = 1; p.daoTam = 80; const dk = p.daoTam; fa.onKill(p); ok(p.daoTam < dk, 'tín đồ Phật giáo giết người là phạm giới'); const q2 = { faith: 'nho', tam: 2, daoTam: 70, flags: {} }; fa.onKill(q2); eq(q2.daoTam, 70);
+  const snapC = TT.save.snapshot(); TT.save.restore(snapC); eq(TT.player().faith, 'phat', 'tín ngưỡng cá nhân giữ nguyên sau lưu/tải');
+
+  // 8. Lưu/tải và bản lưu cũ
+  eq(TT.VERSION, 13, 'không đổi phiên bản bản lưu');
+  s = prepare(61); const j0 = JSON.stringify(fa.peek()), nm0 = JSON.stringify(D.REGIONS.map(r => sites(r.id).map(x => x.n)));
+  const snap = TT.save.snapshot(); TT.save.restore(snap); eq(JSON.stringify(fa.peek()), j0, 'dữ liệu tín ngưỡng giữ nguyên sau lưu/tải'); eq(JSON.stringify(D.REGIONS.map(r => sites(r.id).map(x => x.n))), nm0, 'nơi thờ tự dựng lại giống hệt sau tải');
+  const pl2 = TT.player(); pl2.place = 'tt_trung_chau_1'; const snapAt = TT.save.snapshot(); TT.save.restore(snapAt); ok(TT.map.place(TT.player().place), 'người đang đứng ở nơi thờ tự vẫn tải được');
+  const old = JSON.parse(snap); delete old.world.fac.faith; TT.save.restore(JSON.stringify(old)); ok(fa.peek(), 'bản cũ chưa có tín ngưỡng được dựng lại'); check('bản cũ'); eq(D.REGIONS.reduce((a, r) => a + sites(r.id).length, 0), 27, 'bản cũ có nơi thờ tự');
+  TT.world.months += 12; TT.fac.yearly(); check('bản cũ sau một năm');
+
+  // 9. Tắt thì đứng yên
+  K.on = false; TT.life.createWorld(71);
+  ok(!TT.fac.S().faith, 'tắt thì không có dữ liệu tín ngưỡng'); eq(D.REGIONS.reduce((a, r) => a + sites(r.id).length, 0), 0, 'tắt thì không có nơi thờ tự'); eq(Object.keys(D.MAPS).reduce((a, k) => a + D.MAPS[k].places.length, 0), 90); ok(!TT.map.place('tt_trung_chau_1'), 'nơi thờ tự cũ được gỡ khi tạo thế giới mới');
+  eq(fa.moodSupport('trung_chau'), 0); trieu().forEach(t => { eq(fa.stab(t), 0); eq(fa.vanDelta(t), 0); });
+  for (let y = 0; y < 40; y++) { TT.world.months += 12; TT.fac.yearly(); } ok(!TT.fac.S().faith, 'tắt: chạy 40 năm vẫn không có dữ liệu'); K.on = true;
+
+  // 10. Giao diện chỉ đọc; chữ không nhắc tên nước thật; hiệu năng
+  TT.life.createWorld(81); for (let y = 0; y < 30; y++) { TT.world.months += 12; TT.fac.yearly(); }
+  const ui = TT.ui; if (ui && ui.buildFaith) {
+    const keep = JSON.stringify(fa.peek()); ui.faithSel.open = true; const cc = TT.player(); Object.keys(D.REGIONS).forEach(i => { cc.knownRegions[D.REGIONS[i].id] = true; }); const box = document.createElement('div'); ui.buildFaith(box, cc);
+    ok(box.querySelectorAll('.card').length >= 11, 'mục Tín ngưỡng: thẻ của bạn, chín vùng, ba giáo hội'); ok(/Tín ngưỡng của bạn/.test(box.textContent) && /Ba giáo hội lớn nhất/.test(box.textContent)); ok(box.querySelectorAll('.bar').length >= 27, 'có thanh tỉ phần'); ui.faithSel.open = false;
+    eq(JSON.stringify(fa.peek()), keep, 'giao diện chỉ đọc');
+    const cv = document.createElement('canvas'); cv.width = 80; cv.height = 80; const cx = cv.getContext('2d'); F.forEach(f => { ok(ui.bld.defs['tho_' + f.id], 'có biểu tượng cho ' + f.id); ui.bld.draw(cx, 'tho_' + f.id, 20, 70, 30, { frame: 3 }); });
+  }
+  const txt = JSON.stringify([K.tam, K.levels, K.khoanWords, K.phai, TT.map.placesOf('trung_chau').map(x => x.n)]); ok(!NO_STATE.test(txt), 'chữ tín ngưỡng không nhắc tên nước thật');
+  TT.life.createWorld(5); const t1 = performance.now(); for (let y = 0; y < 400; y++) { TT.world.months += 12; TT.fac.yearly(); } const msT = performance.now() - t1; ok(msT < 3000, '400 năm mất ' + Math.round(msT) + ' ms'); line('info', '   400 năm có tín ngưỡng: ' + Math.round(msT) + ' ms');
 });
 
 runNext();

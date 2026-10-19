@@ -67,7 +67,34 @@
   }
   Object.keys(regPlaces).forEach(layoutRegion);
 
-  const statCache = {};
+  const statCache = {}, siteIds = {};
+
+  // Nơi thờ tự (S5): đăng ký lúc chạy, không nằm trong D.MAPS và không lưu. Gắn vào địa điểm neo bằng một đường ngắn (nút lá, không làm đổi đường đi khác).
+  function siteAt(rid, anchor) {
+    const ps = regPlaces[rid], R = 78; let best = null;
+    for (let k = 0; k < 8; k++) {
+      const a = -Math.PI / 2 + k * Math.PI / 4 + 0.3, x = Math.max(36, Math.min(764, Math.round(anchor.x + Math.cos(a) * R))), y = Math.max(36, Math.min(524, Math.round(anchor.y + Math.sin(a) * R)));
+      let d = Infinity; ps.forEach(p => { d = Math.min(d, Math.hypot(p.x - x, p.y - y)); });
+      if (!best || d > best.d + 0.5) best = { x, y, d };
+    }
+    return best;
+  }
+  function addSite(s) {
+    const anchor = placeById[s.anchor]; if (!anchor) return null;
+    const pos = siteAt(s.region, anchor), m = D.FAITH ? D.FAITH.site.months : 1;
+    const p = { id: s.id, region: s.region, n: s.n, type: 'tho_tu', faction: 'Nơi thờ tự', x: pos.x, y: pos.y, gate: false, portal: false, site: true, anchor: anchor.id, faith: s.faith, rank: s.rank };
+    placeById[p.id] = p; regPlaces[s.region].push(p); siteIds[p.id] = true;
+    localAdj[p.id] = [{ to: anchor.id, m }]; localAdj[anchor.id].push({ to: p.id, m });
+    D.MAPS[s.region].roads.push([p.id, anchor.id, m]);
+    return p;
+  }
+  function removeSite(id) {
+    const p = placeById[id]; if (!p) { delete siteIds[id]; return; }
+    regPlaces[p.region] = regPlaces[p.region].filter(q => q.id !== id);
+    if (localAdj[p.anchor]) localAdj[p.anchor] = localAdj[p.anchor].filter(e => e.to !== id);
+    D.MAPS[p.region].roads = D.MAPS[p.region].roads.filter(r => r[0] !== id && r[1] !== id);
+    delete localAdj[id]; delete placeById[id]; delete statCache[id]; delete siteIds[id];
+  }
 
   const map = TT.map = {
     region: id => regById[id] || null,
@@ -76,6 +103,12 @@
     gateOf: rid => D.MAPS[rid].gate,
     portalOf: rid => D.MAPS[rid].portal,
     macroNeighbors: rid => macroAdj[rid] || [],
+    // Đồng bộ danh sách nơi thờ tự (id, region, n, faith, rank, anchor): thêm nơi mới, bỏ nơi không còn, cập nhật tên và tín ngưỡng. Không dùng rng.
+    syncSites(list) {
+      const keep = {}; list.forEach(s => { keep[s.id] = 1; });
+      Object.keys(siteIds).forEach(id => { if (!keep[id]) removeSite(id); });
+      list.forEach(s => { const p = placeById[s.id] || addSite(s); if (p) { p.n = s.n; p.faith = s.faith; p.rank = s.rank; } });
+    },
     edgeBetween(a, b) {
       return D.EDGES.find(e => (e.a === a && e.b === b) || (e.a === b && e.b === a)) || null;
     },

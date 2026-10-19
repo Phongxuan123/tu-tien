@@ -14,6 +14,7 @@
     // Infinity không lưu được trong JSON nên không có trường nào chứa nó; không cần khôi phục.
     TT.world = d.world;
     TT.rng.setState(d.world.rngState);
+    if (TT.faith) TT.faith.sync(); // đăng ký lại nơi thờ tự theo thế giới vừa tải (S5)
     return TT.world;
   }
 

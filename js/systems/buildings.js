@@ -72,6 +72,39 @@
     }
   }
   const sectGroup = c => Math.min(2, c.sect.rank);
+
+  // Nơi thờ tự (S5): cầu an, nghe giảng, cứu trợ, chữa bệnh, theo tín ngưỡng. Mở cho mọi người, tín đồ hưởng thêm phúc nhỏ có trần.
+  function shrineService(c, id, out, pay) {
+    const fid = id.slice(4), fd = TT.faith.byId[fid], p = TT.map.place(c.place), Sv = D.FAITH.service, now = TT.world.months, fa = TT.faith;
+    c.flags = c.flags || {};
+    const me = fa.personal(c), mine = me.faith === fid && me.tam >= 1, dai = !!(p && p.rank === 1), fl = c.flags;
+    const once = k => fl[k] === now ? 'Tháng này bạn đã làm rồi' : false;
+    out.info = true;
+    out.text = fd.n + ': ' + fd.loi + (dai ? ' Đây là đại điện của vùng, nơi đông tín đồ nhất.' : ' Một nơi thờ nhỏ của nếp tu này trong vùng.');
+    out.note = 'Đóng góp: ' + fd.dongGop + ' Giới của tín đồ: ' + fd.gioi.join(' ') + (me.faith ? ' Bạn hiện ' + (me.set ? 'theo ' : 'thường theo ') + TT.faith.byId[me.faith].n + ' (' + fa.tamName(me.tam).toLowerCase() + ').' : ' Bạn đang sống thế tục.');
+    const feeLe = Math.ceil(Sv.feeLe * (1 + c.realm)), feeKinh = Math.ceil(Sv.feeKinh * (1 + c.realm));
+    const bonus = mine ? 1 + fa.phuc(c) * 10 : 1;
+    out.options.push({ label: 'Dâng lễ cầu an (' + TT.ls.fmt(feeLe) + ')', disabled: once('leAt'), run: pay(feeLe, () => {
+      fl.leAt = now; let dao = Math.round(Sv.daoLe * bonus), extra = '';
+      if (mine && dai && now - (fl.hanhHuongAt || -9999) >= Sv.huongHuongMonths) { fl.hanhHuongAt = now; dao += Sv.daoHuongHuong; extra = ' (hành hương về đại điện)'; }
+      c.daoTam = Math.min(100, (c.daoTam == null ? 50 : c.daoTam) + dao); if (c.nghiep > 0) c.nghiep--;
+      if (mine) { fl.leCount = (fl.leCount || 0) + 1; if (fl.leCount >= Sv.leForTam && c.tam < 2) { c.tam = 2; TT.log(c, 'Bạn đã giữ lễ đều đặn nhiều năm, lòng tin nay vững vàng: ' + fa.tamName(2).toLowerCase() + '.', 'good'); } fa.keepVow(c); }
+      TT.log(c, 'Bạn dâng lễ cầu an ở ' + (p ? p.n : fd.noiTho) + extra + ', lòng nhẹ đi.', 'good'); return 'Đạo tâm +' + dao + (c.nghiep >= 0 ? ', nghiệp giảm bớt' : '') + extra;
+    }) });
+    out.options.push({ label: 'Nghe giảng, tụng kinh (' + TT.ls.fmt(feeKinh) + ')', disabled: once('kinhAt'), run: pay(feeKinh, () => {
+      fl.kinhAt = now; c.daoTam = Math.min(100, (c.daoTam == null ? 50 : c.daoTam) + Sv.daoKinh); fl.kinh = (fl.kinh || 0) + 1;
+      if (c.traitIds.indexOf('tam_ma') >= 0 && fl.kinh >= Sv.kinhForTamMa) { c.traitIds = c.traitIds.filter(t => t !== 'tam_ma'); fl.kinh = 0; TT.log(c, 'Nghe giảng và tụng kinh đều đặn, tâm ma của bạn tan dần.', 'good'); return 'Tâm ma đã tan. Đạo tâm +' + Sv.daoKinh; }
+      return 'Tâm tĩnh hơn. Đạo tâm +' + Sv.daoKinh + (c.traitIds.indexOf('tam_ma') >= 0 ? ' (tâm ma cần nghe giảng thêm ' + Math.max(1, Sv.kinhForTamMa - fl.kinh) + ' lần)' : '');
+    }) });
+    const need = fa.crisis(c.region) > 0 || TT.fac.atFront(c.region) || c.hp < TT.stats.hpMax(c) * 0.7;
+    out.options.push({ label: 'Xin cứu trợ và nơi trú ngụ', disabled: once('cuuAt') || (need ? false : 'Hiện không có thiên tai, chiến loạn hay thương tích'), run: () => {
+      fl.cuuAt = now; const gain = Math.round(TT.stats.hpMax(c) * 0.3); c.hp = Math.min(TT.stats.hpMax(c), c.hp + gain);
+      TT.log(c, 'Người trong ' + fd.noiTho + ' phát cháo, cho bạn chỗ nghỉ chân.', 'good'); return 'Được cho ăn và nghỉ, sinh lực +' + gain + '.';
+    } });
+    const sev = TT.loss.active(c) ? c.wound.sev : 0, feeC = Math.ceil(Sv.feeChua * (1 + c.realm) * (1 + sev * 0.8) * (mine ? 0.75 : 1)), hurt = c.hp < TT.stats.hpMax(c) || sev > 0;
+    out.options.push({ label: 'Nhờ chữa bệnh (' + TT.ls.fmt(feeC) + ')', disabled: hurt ? false : 'Bạn đang khỏe mạnh', run: pay(feeC, () => { c.wound = null; c.hp = TT.stats.hpMax(c); TT.log(c, 'Người trong ' + fd.noiTho + ' chữa bệnh cho bạn.', 'good'); return 'Thương thế đã lành, sinh lực đầy.'; }) });
+    if (me.faith !== fid) out.options.push({ label: 'Theo ' + fd.n + (fd.docQuyen ? ' (tín đồ không kiêm tín ngưỡng khác)' : ''), confirm: 'Đổi tín ngưỡng là việc lớn: những người khác đạo gần bạn có thể xa cách đi. Bạn chắc chắn?', run: () => { fa.convert(c, fid, 1); TT.log(c, 'Bạn theo ' + fd.n + '.', 'big'); return 'Từ nay bạn theo ' + fd.n + ' (tin sơ).'; } });
+  }
   const bld = TT.bld = {
     sizeOf(placeId) { const p = TT.map.place(placeId); return (p && D.PLACE_SIZE[p.type]) || 'lang'; },
     isShop: id => D.SHOP_IDS.indexOf(id) >= 0,
@@ -85,7 +118,7 @@
     at(c) {
       if (!c || !c.place || c.travel || c.cross || c.dungeon || (c.zone && TT.res.zoneOf(c))) return []; // ở khu tài nguyên giữa hoang dã thì không có công trình
       const p = TT.map.place(c.place); if (!p) return [];
-      const list = D.PLACE_BLD[p.type] || [], out = [];
+      const list = p.type === 'tho_tu' ? ['tho_' + p.faith] : D.PLACE_BLD[p.type] || [], out = [];
       list.forEach(id => { if (id === 'hoi' && !TT.fac.hoiAt(c.region).length) return; out.push(id); });
       if (bld.rongHere(c.place, TT.world.months)) out.unshift('rong');
       return out;
@@ -202,7 +235,10 @@
         out.info = true;
         const ops = TT.rumors ? TT.rumors.active().filter(o => o.region === c.region || o.kind === 'ke_thu') : [];
         out.text = 'Trưởng thôn mời bạn chén trà, kể chuyện làng và những điều ông nghe được từ khách qua đường.';
+        out.note = TT.faith ? TT.faith.hint(c) : '';
         out.options.push({ label: 'Hỏi thăm tin tức trong vùng', run: () => (ops.length ? 'Trưởng thôn kể: ' + ops.slice(0, 3).map(o => o.name).join('; ') + '.' : 'Trưởng thôn lắc đầu: dạo này làng yên ắng, chẳng có tin gì.') });
+      } else if (id.indexOf('tho_') === 0 && TT.faith && TT.faith.byId[id.slice(4)]) {
+        shrineService(c, id, out, pay);
       } else if (id === 'dgia') {
         const A = D.ECO.dgia, q = Math.floor(TT.world.months / 3), lots = bld.auctionLots(c), w = TT.world; w.dg = w.dg || {};
         out.text = 'Mỗi quý nhà đấu giá đưa ra ' + A.lots + ' món quý. Bạn ra giá một lần cho mỗi món: giá cao thì dễ thắng nhưng đắt, thua thì không mất tiền. Các tay chơi khác trả giá ngẫu nhiên nên không chắc thắng.';
@@ -226,6 +262,7 @@
         out.text = (tr ? tr.n + ' (' + tr.state + ', lãnh tụ ' + tr.leader + ')' : 'Quan phủ địa phương') + '. ' + (war ? 'Vùng đang có chiến sự, cửa ải siết, giá cả tăng.' : 'Vùng đang yên ổn.') + (hoi.length ? ' Thương hội có mặt: ' + hoi.map(h => h.n).join(', ') + '.' : '') + ' Thời đại: ' + TT.fac.era().n + '.';
         const kt = TT.rumors ? TT.rumors.active().filter(o => o.kind === 'ke_thu') : [];
         if (kt.length) out.note = 'Bảng truy nã: ' + kt.slice(0, 3).map(o => o.name).join('; ') + '.';
+        const fh = TT.faith ? TT.faith.hint(c) : ''; if (fh) out.note = (out.note ? out.note + ' ' : '') + fh;
         const pd = TT.pop.describe(c.region);
         if (pd) out.note = (out.note ? out.note + ' ' : '') + 'Dân số vùng ' + pd.size + ', ' + pd.trend + '; dân tâm ' + pd.mood + (pd.shocks.length ? ' (đang có ' + pd.shocks.join(', ') + ')' : '') + '.';
         const bd = TT.eco.board(c.region).filter(x => Math.abs(x.rel - 1) > 0.15).slice(0, 3);

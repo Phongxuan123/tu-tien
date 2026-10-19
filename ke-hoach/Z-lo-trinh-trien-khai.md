@@ -105,13 +105,13 @@
 - [x] Hiển thị: thanh bậc quốc vận trong Nha môn, mô tả trong Biên niên sử (mục "Quốc gia"), tin tức, biên niên.
 - [x] Bài kiểm thử: quốc vận trong khoảng, mất mệnh có hậu quả, thế giới luôn đủ 9 triều có chủ, nho khí giảm tà khí, lưu/tải.
 
-### Đợt 4. Chỉ số tông, chính sách và Tôn giáo lõi (S4, S5) (khoảng 3 lượt) — S4 đã xong 2026-10-19 (xem S mục 15.15; S5 Tôn giáo còn lại)
+### Đợt 4. Chỉ số tông, chính sách và Tôn giáo lõi (S4, S5) (khoảng 3 lượt) — S4 và S5 đã xong 2026-10-19 (xem S mục 15.15 và 15.16; thánh chiến, hương hỏa nuôi công trình, ma trận quan hệ giáo hội dời sang sau)
 **S4:** 7 chỉ số + 5 chính sách của tông, `power` suy ra, thanh trừng hiếm; đo cân bằng. **Đã làm:** trạng thái theo thế giới, `power` suy từ chỉ số (công tắc `D.SECT_MOD.on`, 40 hạt giống trùng khít khi tắt), năm chính sách tác dụng nhỏ có trần, thanh trừng hiếm, thẻ tông đọc giá trị hiện có. Còn tồn: bài "Nhịp quyết định" lỗi ở 12 hạt giống (xem S 15.15).
 **S5 Tôn giáo:**
-- [ ] `js/data/faiths.js` (9 tín ngưỡng tên thật, giới, phái, lồng được, hiệu ứng), `js/systems/faith.js` (`world.fac.faith`: 3 ô mỗi vùng, quy tắc lồng (Thiên Chúa giáo và, mặc định, Hồi giáo không lồng), hương hỏa, giáo hội, quốc giáo, phái/dị giáo hiếm).
-- [ ] **Nơi thờ tự**: loại địa điểm `tho_tu` (đại điện cho ô 1 mỗi vùng, miếu cho ô 2, 3), biểu tượng pixel theo tín ngưỡng, dịch vụ (cầu an, tụng kinh, cứu trợ, chữa bệnh); thêm vào `places.js` an toàn cho bản lưu cũ.
-- [ ] Tín ngưỡng cá nhân (`c.faith`, `c.tam`), giữ giới, nghi lễ, hành hương; hôn nhân khác đạo (móc R).
-- [ ] Bài kiểm thử: tổng `share` bằng 1, không quá 3 ô, quy tắc lồng, đẩy ô yếu nhất, đại điện đúng chủ.
+- [x] `js/data/faiths.js` (9 tín ngưỡng tên thật, giới, phái, lồng được, hiệu ứng), `js/systems/faith.js` (`world.fac.faith`: 3 ô mỗi vùng, quy tắc lồng (Thiên Chúa giáo và, mặc định, Hồi giáo không lồng), hương hỏa, giáo hội, quốc giáo, phái/dị giáo hiếm).
+- [x] **Nơi thờ tự**: loại địa điểm `tho_tu` (đại điện cho ô 1 mỗi vùng, miếu cho ô 2, 3), biểu tượng pixel theo tín ngưỡng, dịch vụ (cầu an, tụng kinh, cứu trợ, chữa bệnh); thêm vào `places.js` an toàn cho bản lưu cũ.
+- [x] Tín ngưỡng cá nhân (`c.faith`, `c.tam`), giữ giới, nghi lễ, hành hương; hôn nhân khác đạo (móc R).
+- [x] Bài kiểm thử: tổng `share` bằng 1, không quá 3 ô, quy tắc lồng, đẩy ô yếu nhất, đại điện đúng chủ.
 - **Cổng chơi thử 3:** thẻ tông + tab/mục Tín ngưỡng + một vòng đời ở vùng có nơi thờ tự.
 
 ### Đợt 5. Kinh tế còn tồn, nối S (E7) (khoảng 2 lượt)
@@ -273,3 +273,4 @@
 - 2026-10-18: **rà soát Đợt 2** tìm ra một lỗi thiết kế (Âm Hồn Giáo hợp với hầu hết các tông vì giá trị ở giữa; số cặp tông thù địch lúc dựng rơi từ 38 xuống 0). Đã thêm số hạng chênh hành vi vào `dao`, đo lại 40 hạt giống: 58,9 chiến tranh, 8,8 diệt vong, 5,0 đổi chủ triều; thêm bài kiểm thử chặn lỗi.
 - 2026-10-19: **Đợt 4, S4 xong** (S5 để phiên sau). Trạng thái tông theo thế giới (`world.fac.sx`), `power` suy từ bảy chỉ số, năm chính sách có tác dụng nhỏ có trần, thanh trừng hiếm (sổ ân oán, sử ký, tin), thẻ tông đọc giá trị hiện có; công tắc `D.SECT_MOD.on` tắt thì 40 hạt giống trùng khít từng băm. 40 hạt giống: chiến tranh 53,5 → 52,7, diệt vong 8,2 → 7,8, đổi chủ 4,8 → 5,8, thanh trừng 2,2 mỗi 300 năm mỗi thế giới. `tests.html` 100 đạt, 1 lỗi: bài "Nhịp quyết định" đo 12 hạt giống ra 6,07 lần/phút (bật S4) so với 4,99 (tắt); đo 40 hạt giống ra 5,60 so với 5,44, nên không phải hồi quy thật, nhưng bài 12 hạt giống vẫn đỏ, cần bạn quyết định ngưỡng hoặc cỡ mẫu. Chi tiết ở S mục 15.15.
 - 2026-10-18: thêm `ke-hoach/PROMPT-phien-moi.md` (ba prompt cho Đợt 4: 4A Sonnet S4, 4B Haiku dữ liệu tín ngưỡng, 4C Sonnet S5 cơ chế) và mục "Quy ước phiên làm việc" trong `CLAUDE.md` (mỗi phiên một đợt, chạy lần lượt, đọc có chọn lọc, chọn model theo việc).
+- 2026-10-19: **Đợt 4, S5 xong** (Đợt 4 trọn vẹn). Tín ngưỡng: ba ô mỗi vùng, quy tắc lồng, đẩy ô yếu nhất, giáo hội, quốc giáo và khoan dung, phái hiếm, 27 nơi thờ tự đăng ký lúc chạy (9 biểu tượng pixel, dịch vụ cầu an, nghe giảng, cứu trợ, chữa bệnh), tín ngưỡng cá nhân, móc nhỏ có trần; công tắc tắt `D.FAITH.on = false` trùng khít 40/40 hạt giống. Đo 40 hạt giống: trước 52,7 chiến tranh, 7,8 diệt vong, 5,8 đổi chủ; sau 49,4 / 6,2 / 4,6 (100 hạt giống: 58,7/8,3/6,3 tắt, 59,2/7,9/6,1 bật). `tests.html` 103 đạt, 0 lỗi. Cổng chơi thử 3 đã sẵn sàng. Tiếp theo: Đợt 5.

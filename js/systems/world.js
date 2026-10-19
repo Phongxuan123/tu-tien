@@ -492,6 +492,7 @@
       settings: { auto: 'can_bang' }, rel: {}, opps: [], nextOpp: 1, nextGoal: 1, lives: []
     };
     TT.fac.init(TT.world);
+    TT.faith.sync(); // nơi thờ tự (S5): chỉ có khi bật tín ngưỡng
     life.reincarnate();
     TT.news('Thế giới tu tiên bắt đầu. Hãy chọn hướng đi cho nhân vật của bạn.', 'age');
     return TT.world;

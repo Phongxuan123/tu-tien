@@ -128,7 +128,7 @@
       const defy = Math.min(V.defyMax, (f.pacts || []).filter(p => p.b === x.id && p.defy).length);
       // quốc vận
       const target = V.base + V.mood * (g.mood - V.moodMid) + V.nho * (e.nho - V.nhoMid) + V.mach * (e.mach - V.machMid) + V.lead * (e.de + e.tai - V.leadMid);
-      let dv = (target - e.van) * V.pull + (war ? V.war : 0) + (front ? V.front : 0) + (g.riot ? V.riot : 0) + shocks * V.shock + defy * V.defy + (V.era[era] || 0) + (hn('vn', x.id, yn) - 0.5) * 2 * V.noise;
+      let dv = (target - e.van) * V.pull + (war ? V.war : 0) + (front ? V.front : 0) + (g.riot ? V.riot : 0) + shocks * V.shock + defy * V.defy + (V.era[era] || 0) + TT.faith.vanDelta(x) + (hn('vn', x.id, yn) - 0.5) * 2 * V.noise;
       e.van = clamp(e.van + dv, 0, 100);
       // nho khí
       const nt = N.base + N.lead * (e.tai - 50) + N.mood * (g.mood - V.moodMid);

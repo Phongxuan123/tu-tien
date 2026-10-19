@@ -41,6 +41,13 @@
     bi: { n: 'Đài đại bỉ', desc: 'Đại bỉ năm năm một lần, thi tuyển', col: '#8a6a3a', roof: '#5a4020', h: 30, sect: true }
   };
 
+  // Nơi thờ tự theo tín ngưỡng (S5): id 'tho_' + id tín ngưỡng, tên lấy từ D.FAITHS (chùa, nhà thờ, thánh đường, đền...).
+  const THO = { phat: ['#c8962a', '#7a4a14'], thien_chua: ['#cfd6e0', '#5a6a8a'], hoi: ['#3a8a6a', '#1f5a44'], an_do: ['#d8702a', '#8a3a12'], dao_giao: ['#5a7aa8', '#2a3a5a'], nho: ['#a8623a', '#5a2a1a'], to_tien: ['#8a6a44', '#4a2a1a'], than_dao: ['#c8c0b0', '#8a1a14'], dan_gian: ['#6a8a5a', '#3a4a2a'] };
+  (TT.data.FAITHS || []).forEach(fd => {
+    const c = THO[fd.id] || ['#8a7a5a', '#4a3a20'];
+    DEFS['tho_' + fd.id] = { n: fd.noiTho.charAt(0).toUpperCase() + fd.noiTho.slice(1), desc: 'Nơi thờ tự của ' + fd.n + ': cầu an, nghe giảng, cứu trợ, chữa bệnh', col: c[0], roof: c[1], h: 30, faith: fd.id };
+  });
+
   const DK = '#1a1410';
   let ctx;
   const R = (x, y, w, h, c) => { ctx.fillStyle = c; ctx.fillRect(Math.round(x), Math.round(y), Math.round(w), Math.round(h)); };
@@ -87,7 +94,17 @@
     cua(cx, y, f) { const p = 0.6 + 0.4 * Math.sin(f * 0.12); R(cx - 9, y + 10, 4, 18, '#3a2a5a'); R(cx + 5, y + 10, 4, 18, '#3a2a5a'); R(cx - 9, y + 8, 18, 4, '#4a3270'); ctx.globalAlpha = p; R(cx - 5, y + 12, 10, 16, '#b878ff'); ctx.globalAlpha = p * 0.7; R(cx - 3, y + 15, 6, 11, '#f0d8ff'); ctx.globalAlpha = 1; R(cx - 1, y + 5, 2, 3, '#d8a8ff'); },
     ai(cx, y, f) { R(cx - 12, y + 8, 7, 24, '#767684'); R(cx + 5, y + 8, 7, 24, '#767684'); R(cx - 12, y + 6, 24, 4, '#8a8a98'); for (let i = 0; i < 4; i++) R(cx - 12 + i * 6, y + 3, 3, 4, '#8a8a98'); R(cx - 5, y + 14, 10, 18, '#1a1a22'); R(cx - 4, y + 13, 8, 2, '#8a8a98'); R(cx - 1, y - 2, 1, 6, '#4a3020'); R(cx, y - 2, 6 + Math.round(Math.sin(f * 0.2)), 3, '#c0302a'); },
     rong(cx, y, f) { R(cx - 1, y + 4, 2, 14, '#6a4a2a'); tri(cx - 10, y + 10, cx, y + 2, cx + 10, y + 10, '#d8553a'); R(cx - 10, y + 10, 20, 1, '#a8301f'); R(cx - 7, y + 15, 14, 7, '#8a5a2a'); R(cx - 7, y + 15, 14, 1, '#b07a3a'); R(cx - 5, y + 13, 3, 3, '#58b36a'); R(cx, y + 13, 3, 3, '#e8d9a0'); R(cx - 6, y + 22, 3, 3, DK); R(cx + 3, y + 22, 3, 3, DK); },
-    lang(cx, y, f) { tri(cx - 10, y + 24, cx, y + 6, cx + 10, y + 24, '#a07a4a'); tri(cx - 3, y + 24, cx, y + 14, cx + 3, y + 24, DK); R(cx - 1, y + 2, 1, 5, '#4a3020'); R(cx, y + 2, 4, 3, '#58b36a'); }
+    lang(cx, y, f) { tri(cx - 10, y + 24, cx, y + 6, cx + 10, y + 24, '#a07a4a'); tri(cx - 3, y + 24, cx, y + 14, cx + 3, y + 24, DK); R(cx - 1, y + 2, 1, 5, '#4a3020'); R(cx, y + 2, 4, 3, '#58b36a'); },
+    // nơi thờ tự (S5): biểu tượng theo tín ngưỡng, đặt trên mái như các công trình khác
+    tho_phat(cx, y, f) { R(cx - 1, y + 8, 2, 2, '#f0c24a'); R(cx - 3, y + 10, 6, 2, '#f0c24a'); R(cx - 5, y + 12, 10, 2, '#e8b030'); R(cx - 7, y + 14, 14, 2, '#d89a20'); R(cx - 8, y + 16, 16, 2, '#c08418'); const g = 0.7 + 0.3 * Math.sin(f * 0.1); ctx.globalAlpha = g; R(cx - 1, y + 6, 2, 2, '#fff0b0'); ctx.globalAlpha = 1; },
+    tho_thien_chua(cx, y, f) { R(cx - 1, y + 7, 3, 15, '#f4f0e0'); R(cx - 5, y + 11, 11, 3, '#f4f0e0'); R(cx - 1, y + 7, 3, 1, '#ffffff'); R(cx, y + 8, 1, 13, '#c8c0a8'); },
+    tho_hoi(cx, y, f) { R(cx - 4, y + 9, 8, 2, '#f0e8c0'); R(cx - 6, y + 11, 3, 6, '#f0e8c0'); R(cx - 4, y + 17, 8, 2, '#f0e8c0'); R(cx - 3, y + 11, 2, 6, '#f0e8c0'); R(cx - 2, y + 11, 6, 6, '#2a6a4a'); R(cx + 3, y + 10, 3, 3, '#f0e8c0'); R(cx + 4, y + 11, 1, 1, '#2a6a4a'); },
+    tho_an_do(cx, y, f) { tri(cx - 7, y + 22, cx, y + 7, cx + 7, y + 22, '#d86a2a'); R(cx - 5, y + 16, 10, 1, '#f0c24a'); R(cx - 3, y + 12, 6, 1, '#f0c24a'); R(cx - 1, y + 6, 2, 2, '#f0c24a'); R(cx - 1, y + 19, 2, 3, DK); },
+    tho_dao_giao(cx, y, f) { const a = f * 0.04; R(cx - 6, y + 9, 12, 12, '#f4f0e0'); R(cx - 5, y + 8, 10, 14, '#f4f0e0'); R(cx - 7, y + 10, 14, 10, '#f4f0e0'); R(cx - 6, y + 14, 6, 6, DK); R(cx - 2, y + 16, 8, 4, DK); R(cx - 1, y + 10, 3, 3, DK); R(cx + 1, y + 17, 2, 2, '#f4f0e0'); R(cx - 1, y + 11, 1, 1, '#f4f0e0'); },
+    tho_nho(cx, y, f) { R(cx - 7, y + 10, 14, 11, '#e8d9a0'); R(cx - 8, y + 9, 3, 13, '#8a3a2a'); R(cx + 5, y + 9, 3, 13, '#8a3a2a'); R(cx - 4, y + 12, 8, 1, '#5a4a30'); R(cx - 4, y + 15, 8, 1, '#5a4a30'); R(cx - 4, y + 18, 5, 1, '#5a4a30'); R(cx, y + 9, 1, 12, '#b0382a'); },
+    tho_to_tien(cx, y, f) { const s = Math.round(Math.sin(f * 0.12) * 1); R(cx - 6, y + 17, 12, 5, '#7a4b2a'); R(cx - 7, y + 16, 14, 2, '#a06a30'); R(cx - 4, y + 12, 8, 5, '#2a1a10'); R(cx - 3, y + 13, 6, 3, '#d8b050'); R(cx - 3 + s, y + 7, 1, 5, '#e8e0d0'); R(cx + s, y + 8, 1, 4, '#e8e0d0'); R(cx + 2 + s, y + 7, 1, 5, '#e8e0d0'); },
+    tho_than_dao(cx, y, f) { R(cx - 8, y + 9, 16, 2, '#1a1a1a'); R(cx - 9, y + 7, 18, 2, '#d83a2a'); R(cx - 6, y + 11, 2, 11, '#d83a2a'); R(cx + 4, y + 11, 2, 11, '#d83a2a'); R(cx - 6, y + 13, 12, 2, '#d83a2a'); R(cx - 1, y + 9, 2, 4, '#d83a2a'); },
+    tho_dan_gian(cx, y, f) { const w = Math.round(Math.sin(f * 0.15) * 1); R(cx - 4, y + 10, 8, 12, '#8a8f98'); R(cx - 5, y + 14, 10, 8, '#7a808a'); R(cx - 3, y + 10, 6, 1, '#b8bec8'); R(cx - 5, y + 13, 10, 1, '#d83a2a'); R(cx + 4 + w, y + 14, 3, 1, '#d83a2a'); R(cx - 6 - w, y + 16, 2, 1, '#e8c24a'); R(cx - 2, y + 17, 4, 5, '#5a5f68'); },
   };
 
   // công trình riêng không dùng nhà chung

@@ -16,10 +16,11 @@
     mo: ['ham', 'cho', 'khi'],
     phuong: ['khi', 'cho', 'ham'],
     cho_den: ['den', 'tuu'],
-    cua_ai: ['ai']
+    cua_ai: ['ai'],
+    tho_tu: [] // công trình là 'tho_' + id tín ngưỡng của nơi (xem TT.bld.at)
   };
   // Quy mô nơi: quyết định hạn mức giao dịch mỗi tháng (vàng x (1 + cảnh giới)) và lượng hàng tồn.
-  D.PLACE_SIZE = { thanh_tri: 'thanh', thuong_doan: 'thanh', mo: 'tran', phuong: 'tran', cho_den: 'tran', thon_tran: 'lang', ben: 'lang', tram: 'lang', bo_toc: 'lang' };
+  D.PLACE_SIZE = { thanh_tri: 'thanh', thuong_doan: 'thanh', mo: 'tran', phuong: 'tran', cho_den: 'tran', thon_tran: 'lang', ben: 'lang', tram: 'lang', bo_toc: 'lang', tho_tu: 'lang' };
   D.TRADE_LIMIT = { lang: 50, tran: 150, thanh: 600, rong: 40 };
   D.STOCK_MUL = { lang: 0.5, tran: 1, thanh: 2, rong: 0.5 };
   // Nơi có thể gặp hàng rong (xác suất mỗi quý) và nơi chắc chắn không (thành lớn đã có chợ).

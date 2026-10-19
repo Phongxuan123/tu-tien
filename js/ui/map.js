@@ -18,7 +18,7 @@
 
   const TYPE_COLOR = {
     city: '#c9a45a', town: '#9a8f7e', port: '#4b88b8', guild: '#d9a441', sect: '#6fa86b', tribe: '#b57edc',
-    vein: '#6a9ac4', secret: '#c4553f', ruin: '#8a7f6a', mine: '#8a93a3', market: '#7a6f9b', gate: '#e8e8e8'
+    vein: '#6a9ac4', secret: '#c4553f', ruin: '#8a7f6a', mine: '#8a93a3', market: '#7a6f9b', gate: '#e8e8e8', shrine: '#d9b46a'
   };
 
   function sv(tag, attrs, text) {
@@ -81,6 +81,11 @@
       case 'mine': // cuốc chim và cửa hầm
         add('path', { d: 'M-10 8 L-5 -4 L5 -4 L10 8 Z', fill: '#6b6660' });
         add('path', { d: 'M-3 8 L-3 1 Q0 -2 3 1 L3 8 Z', fill: '#14110f' }); break;
+      case 'shrine': // nơi thờ tự: mái cong hai tầng trên bệ
+        add('rect', { x: -8, y: 4, width: 16, height: 4, fill: '#8a7a5a' });
+        add('rect', { x: -5, y: -1, width: 10, height: 5, fill: '#b0382a' });
+        add('path', { d: 'M-10 -1 L0 -8 L10 -1 Z', fill: '#4a3a30' });
+        add('path', { d: 'M-6 -7 L0 -12 L6 -7 Z', fill: '#6a5040' }); break;
       case 'market': // quầy hàng tối
         add('rect', { x: -9, y: 0, width: 18, height: 8, fill: '#2f2a44' });
         add('path', { d: 'M-10 0 L-8 -7 L8 -7 L10 0 Z', fill: '#6b5fa8' });
@@ -419,7 +424,7 @@
     const row = h('div', { class: 'btns' });
     if (p.cross) row.appendChild(h('span', { class: 'small' }, 'Bạn đang vượt vùng.'));
     else if (p.travel) row.appendChild(h('span', { class: 'small' }, 'Bạn đang trên đường, chưa đổi hướng được.'));
-    else if (pl.id === p.place) row.appendChild(h('span', { class: 'small' }, 'Bạn đang ở đây.' + (REP_BLD[pl.type] ? ' Vào ' + REP_BLD[pl.type] + ' (màn hình nhân vật) để xem chi tiết.' : '')));
+    else if (pl.id === p.place) row.appendChild(h('span', { class: 'small' }, 'Bạn đang ở đây.' + ((pl.type === 'tho_tu' ? ui.bld.nameOf('tho_' + pl.faith) : REP_BLD[pl.type]) ? ' Vào ' + (pl.type === 'tho_tu' ? ui.bld.nameOf('tho_' + pl.faith) : REP_BLD[pl.type]) + ' (màn hình nhân vật) để xem chi tiết.' : '')));
     else {
       const rt = TT.map.localRoute(p.place, pl.id);
       row.appendChild(h('button', {

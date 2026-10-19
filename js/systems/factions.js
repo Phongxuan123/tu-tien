@@ -136,6 +136,7 @@
       TT.pop.yearly(); // dân số, thiên tai, dân tâm (F4)
       TT.nation.yearly(); // quốc vận, nho khí, thiên mệnh của chín triều (S3)
       TT.sectmod.yearly(); // chỉ số tông, thanh trừng hiếm (S4)
+      TT.faith.yearly(); // tín ngưỡng: ba ô mỗi vùng, giáo hội, quốc giáo, nơi thờ tự (S5)
       fac.list().forEach(x => { if (fac.alive(x)) { if (x.kind === 'hoi') fac.tickHoi(x); else fac.tickInternal(x); } else { fac.tickDead(x); if (x.kind === 'hoi') fac.rebuildHoi(x); } });
       f.shocks = (f.shocks || []).filter(s => s.until > w.months);
       fac.tickRelations();
@@ -170,7 +171,7 @@
       x.leaderAge = (x.leaderAge || 40) + 1;
       // quyền lực hồi về mức trung bình, có nhiễu; chiến tranh và mất đoàn kết kéo xuống
       x.power = rng.clamp(x.power + (52 + TT.nation.powerShift(x) + TT.sectmod.powerShift(x) - x.power) * 0.04 + rng.R(-3.5, 3.5) + (x.unity - 50) * 0.02, 1, 100);
-      x.unity = rng.clamp(x.unity + (60 - x.unity) * 0.06 + rng.R(-4, 4) * TT.sectmod.unityMul(x), 5, 100);
+      x.unity = rng.clamp(x.unity + (60 - x.unity) * 0.06 + rng.R(-4, 4) * TT.sectmod.unityMul(x) + TT.faith.stab(x), 5, 100);
       x.wealth = rng.clamp(x.wealth + rng.R(-3, 3) + (x.power - 50) * 0.04 + TT.sectmod.wealthTrend(x), 0, 100);
       if (x.kind === 'trieu') TT.pop.taxPull(x); // thuế từ dân kéo kho triều
       if (x.kind === 'tong') TT.sect.resYearly(x); // linh mạch, mỏ, cống nạp kéo kho về mức của tông

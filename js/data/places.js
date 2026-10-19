@@ -22,7 +22,8 @@
     mo: { n: 'Mỏ', linh: 0, danger: 1, rich: 1, cls: 'mine' },
     phuong: { n: 'Phường', linh: 0, danger: 1, rich: 1, cls: 'mine' },
     cho_den: { n: 'Chợ đen', linh: 0, danger: 1, rich: 1, cls: 'market' },
-    cua_ai: { n: 'Cửa ải', linh: 0, danger: 0, rich: 0, cls: 'gate' }
+    cua_ai: { n: 'Cửa ải', linh: 0, danger: 0, rich: 0, cls: 'gate' },
+    tho_tu: { n: 'Nơi thờ tự', linh: 0, danger: -1, rich: -1, cls: 'shrine' } // S5: đăng ký lúc chạy khi bật tín ngưỡng (TT.map.syncSites), không có trong D.MAPS
   };
 
   // Vai trò NPC phụ theo loại địa điểm: [chức danh, cảnh giới thấp nhất, cảnh giới cao nhất]
