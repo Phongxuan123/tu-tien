@@ -3,6 +3,7 @@
 //   node tools/econ-check.js --save          ghi tools/baseline/econ.json
 //   node tools/econ-check.js --check         so băm với tools/baseline/econ.json, thoát mã 1 nếu lệch
 //   --eco=off        tắt móc kinh tế E7a (D.ECO.sx = false): phải trùng khít mốc trước E7a
+//   --hq=off         tắt hội và giám định E7b (D.ECO.hq = false)
 //   --seeds=101,102 --years=60   tùy chọn
 const fs = require('fs');
 const path = require('path');
@@ -17,6 +18,7 @@ const WORLD = path.join(__dirname, 'baseline', 'seeds.json');
 const SEEDS = arg('seeds') ? arg('seeds').split(',').map(Number) : JSON.parse(fs.readFileSync(WORLD, 'utf8')).seeds.map(o => o.seed);
 const YEARS = +(arg('years') || 300);
 const ECO_OFF = arg('eco') === 'off';
+const HQ_OFF = arg('hq') === 'off';
 
 (async () => {
   const browser = await playwright.chromium.launch({ executablePath: process.env.CHROMIUM_PATH || '/opt/pw-browsers/chromium', args: ['--no-sandbox'] });
@@ -26,7 +28,7 @@ const ECO_OFF = arg('eco') === 'off';
   await page.addScriptTag({ path: path.join(__dirname, 'econ-sim.js') });
   const out = [];
   for (const s of SEEDS) {
-    out.push(await page.evaluate(([seed, years, off]) => { if (TT.data.ECO) TT.data.ECO.sx = !off; return econSim(seed, years, false); }, [s, YEARS, ECO_OFF]));
+    out.push(await page.evaluate(([seed, years, off, hqOff]) => { if (TT.data.ECO) { TT.data.ECO.sx = !off; TT.data.ECO.hq = !hqOff; } return econSim(seed, years, false); }, [s, YEARS, ECO_OFF, HQ_OFF]));
   }
   await browser.close();
   if (errs.length) { console.error(errs.join('\n')); process.exit(2); }

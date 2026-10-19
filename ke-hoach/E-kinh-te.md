@@ -205,6 +205,30 @@ Hai con đường, đều cần ghé hội sở ở thành lớn:
 4. Hương hỏa và lễ hội chưa có giao diện riêng ngoài Bảng giá của Nha môn.
 5. Mức thuế, mức lễ, tỉ lệ hương hỏa là số đoán để chơi thử, chưa qua cân chỉnh.
 
+### A.19 E7b đã làm (2026-10-19): giám định, hội (nhiệm vụ, vay, bảo hiểm)
+
+- **Mã:** `js/systems/appraise.js` (mới: `TT.gd`, giám định và đồ nhái), `js/systems/hoi.js` (vay, bảo hiểm, bảng đơn, quyền lợi `perk`), `js/systems/items.js` (đồ chợ đen chưa giám định, tiến độ đơn ở hội sở, rút món giảm sổ giám định), `js/systems/crossing.js` (`robbery` trả giá trị hàng mất; `arrive` gọi `TT.hoi.claim`), `js/systems/buildings.js` (đấu giá: món thắng có thể là đồ nhái; nhà đấu giá có nút giám định), `js/systems/eco.js` (nhịp tháng gọi `TT.hoi.tick`), `js/ui/shop.js` (mục Nhiệm vụ, Vay, Bảo hiểm trong cửa sổ hội; mục Giám định ở chợ đen), `js/data/eco.js` (`hq`, `gd`, `ins`, `loan`, `jobs`, `cargo`), `js/files.js`, `tools/baseline.js` và `tools/econ-check.js` (`--hq=off`), `tests.html` (bài E7b). Không đổi `TT.VERSION`; trường mới (`c.sus`, `c.hoi.loan`, `c.hoi.ins`, `c.hoi.job`) đọc qua hàm và khởi tạo muộn.
+- **Giám định:** món mua ở chợ đen và món thắng đấu giá chưa rõ thật giả, lưu ở `c.sus[id] = {n, f}` (n món, f là đồ nhái, người chơi không thấy). Giám định một loại: phí `6 x (1 + cảnh giới)` vàng; độ chính xác `0,55 + 0,08 x tầm nhìn` (tầm nhìn 0 đến 5 theo `TT.eco.insight`). Kết quả đúng: "nhái" thì bỏ phần nhái khỏi túi, "thật" thì hết nghi. Sai (chỉ khi thật ra là nhái): nói "thật" với xác suất 0,3, còn lại "chưa chắc". Tầm nhìn từ 4 (Thương nhân cấp cao hoặc hội viên có nghề) thì miễn phí, và đồ nhái bị bỏ ngay khi mua. Đồ chợ đen nhái xác suất `nhái x (1 - 0,15 x tầm nhìn)`, như cũ, nhưng nay chỉ lộ khi giám định. Bán hoặc dùng bớt món thì số nghi giảm theo.
+- **Vay hội (chỉ hội viên không nợ):** hạn mức theo bậc `[200, 600, 2000, 6000, 15000] x 10 vàng`, một khoản một lúc, lãi đơn 8% mỗi năm, trả trong 24 tháng. Quá hạn: mất quyền lợi hội viên (giảm giá, phí bán, vay, bảo hiểm, đơn), thiện cảm hội giảm 6 mỗi năm đến khi trả hết. Không tịch thu tài sản, không khai trừ vì nợ (khai trừ vì phí năm vẫn như cũ). Trả hết thì quyền lợi trở lại.
+- **Bảo hiểm chuyến buôn (chỉ hội viên không nợ):** phí 4% giá trị hàng buôn trong túi, một hợp đồng một chuyến. Khi tới nơi, nếu bị cướp thì bồi thường `min(trần, 60% hàng mất)`, trần là 30% giá trị hàng đã mua bảo hiểm. Không bị cướp thì phí mất.
+- **Nhiệm vụ hội:** mỗi quý mỗi hội có ba đơn (tất định theo hội và quý): giao hoặc thu mua 3, 5 hoặc 8 món của một nhóm, tại hội sở của hội. Thưởng `số món x 1,3 x giá món đại diện`, thiện cảm +5, cộng vào tổng giao dịch (để lên bậc). Một đơn một lúc, hết quý chưa xong thì thiện cảm -3. Chỉ hội viên của hội đó nhận đơn.
+- **Công tắc `D.ECO.hq = false`:** không vay, bảo hiểm, đơn, giám định; đồ chợ đen nhái lộ ngay khi mua như cũ.
+
+**Kiểm chứng:**
+- `node tools/baseline.js --check` và `--hq=off --check`: 40/40 trùng khít mốc (E7b không chạm thế giới; người chơi không có trong mô phỏng thế giới).
+- `node tools/econ-check.js --check` và `--hq=off --check`: 40/40 băm 63 chỉ số giá trùng khít mốc.
+- `tests.html` **105 đạt, 0 lỗi**. Bài E7b mới: độ chính xác giám định theo tỉ lệ (400 lần), phí và miễn phí theo tầm nhìn, đồ thật không bị kết luận nhái, vay theo hạn mức, lãi, quá hạn và trả hết, bảo hiểm phí và trần và một hợp đồng một chuyến, đơn nhận và xong (đúng chiều, thưởng), hết quý thì hỏng, lưu/tải, bản cũ, tắt thì đóng, đọc bảng đơn nhanh.
+- Playwright: cửa sổ hội (Thương hội), chợ đen và nhà đấu giá ở máy tính 1366x850 và điện thoại 390x844: hiện đủ chữ và nút, không lỗi console, không tràn ngang.
+
+**Đo lại `tools/econ-sim.js` (40 hạt giống 101 đến 140, 300 năm):** trước và sau E7b giống nhau: lệch giá 0,118, chênh giá vùng 1,46, cú sốc 454,3 mỗi thế giới. Lãi buôn tối đa trung bình **49,2%** (max 104%), vẫn chưa đạt khoảng 25%. Lý do: E7b chỉ đổi phía người chơi, còn công cụ đo chỉ có NPC buôn. Chưa có công cụ đo chuyến buôn của người chơi.
+
+**Khác kế hoạch / chưa làm:**
+1. Đo chuyến buôn của người chơi (lãi ròng, bảo hiểm, phí) chưa có công cụ; chỉ tiêu 25% vẫn mở, cần chặng riêng.
+2. Hộ tống trong đơn hội chưa làm (cần hệ đoàn buôn); chỉ có giao và thu mua.
+3. Giám định chỉ cho đồ chợ đen và đấu giá; hàng rong và kho tông không nhái.
+4. Con số (phí giám định 6 vàng, lãi 8%, trần bảo hiểm 30%, thưởng 1,3 lần giá) là số đoán, cần chơi thử.
+5. Quá hạn không tịch thu tài sản và không khai trừ tức thì; nếu cần áp lực hơn, phải thêm ở chặng sau.
+
 ### A.11 Nhật ký bản 5
 - 2026-10-17: bạn bảo bắt đầu thiết lập kế hoạch kinh tế sau khi hoàn thiện thế giới (F4, F2, tài nguyên). Đọc `items.js` (chợ giá tĩnh), `buildings.js` (hạn mức, kho cửa hàng), `factions.js` (hội). Viết mục A: điều kiện nền đã có, thu gọn mô hình thành 63 chỉ số giá (9 vùng x 7 nhóm), công thức cung cầu lấy từ tài nguyên, dân số, tông, hội, chiến sự, chặng E0 đến E6 mới, bảng mốc E0, tiêu chí, rủi ro, 7 câu hỏi. Chưa code.
 

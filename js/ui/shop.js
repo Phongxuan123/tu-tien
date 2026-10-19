@@ -94,6 +94,59 @@
     return box;
   }
 
+  // Nhiệm vụ, vay và bảo hiểm của hội sở (E7b): chỉ chữ, bậc và nút.
+  function hoiDeals(c, lead) {
+    const box = h('div', { class: 'shop-lim', style: 'margin:6px 0' }), s = TT.hoi.S(c), perk = TT.hoi.perk(c);
+    const act = r => { msg = r.text; render(); };
+    if (!D.ECO.hq) return null;
+    if (!perk) {
+      box.appendChild(h('div', null, 'Nhiệm vụ, vay và bảo hiểm chỉ dành cho hội viên không nợ hội.' + (s.loan && s.loan.od ? ' Khoản vay của bạn đã quá hạn, hãy trả hết trước.' : ' Bạn chưa là hội viên của ' + lead.n + '.')));
+      if (s.loan) box.appendChild(h('div', { class: 'btns', style: 'margin-top:4px' }, h('button', { class: 'sm', onclick: () => act(TT.hoi.repay(c, TT.hoi.owed(c))) }, 'Trả hết nợ (' + TT.ls.fmt(TT.hoi.owed(c)) + ')')));
+      return box;
+    }
+    box.appendChild(h('div', null, 'Bậc của bạn: ' + TT.hoi.rankName(c).toLowerCase() + '.'));
+    // đơn hội
+    box.appendChild(h('div', { style: 'margin-top:6px;font-weight:bold' }, 'Nhiệm vụ hội'));
+    if (s.job && s.job.hid === perk.id) box.appendChild(h('div', null, 'Đang làm: ' + TT.hoi.jobText(s.job) + '. Thưởng ' + TT.ls.fmt(s.job.reward) + ', thiện cảm +' + s.job.rep + '.'));
+    else if (s.job) box.appendChild(h('div', { class: 'small' }, 'Bạn đang làm một đơn khác.'));
+    TT.hoi.board(lead.id).forEach(b => {
+      const ok = !s.job && lead.id === perk.id;
+      box.appendChild(h('div', { class: 'btns', style: 'margin-top:4px' }, h('span', null, (b.kind === 'giao' ? 'Giao ' : 'Thu mua ') + b.qty + ' ' + D.ECO.names[b.g] + ', thưởng ' + TT.ls.fmt(b.reward)),
+        h('button', { class: 'sm', disabled: ok ? null : 'disabled', onclick: () => act(TT.hoi.accept(c, lead.id, b.i)) }, 'Nhận đơn')));
+    });
+    // vay
+    box.appendChild(h('div', { style: 'margin-top:8px;font-weight:bold' }, 'Vay hội'));
+    const lim = TT.hoi.loanLimit(c);
+    if (s.loan) {
+      box.appendChild(h('div', null, 'Đang nợ ' + TT.ls.fmt(TT.hoi.owed(c)) + ' (gốc ' + TT.ls.fmt(s.loan.p) + ', lãi ' + TT.ls.fmt(s.loan.int) + '). ' + (s.loan.od ? 'Đã quá hạn.' : 'Còn ' + Math.max(0, s.loan.due - TT.world.months) + ' tháng để trả.')));
+      box.appendChild(h('div', { class: 'btns', style: 'margin-top:4px' }, h('button', { class: 'sm', onclick: () => act(TT.hoi.repay(c, TT.hoi.owed(c))) }, 'Trả hết nợ')));
+    } else {
+      box.appendChild(h('div', { class: 'small' }, 'Hạn mức theo bậc: ' + TT.ls.fmt(lim) + '. Lãi ' + Math.round(D.ECO.loan.rate * 100) + '% mỗi năm, trả trong hai năm.'));
+      box.appendChild(h('div', { class: 'btns', style: 'margin-top:4px' },
+        h('button', { class: 'sm', onclick: () => act(TT.hoi.borrow(c, Math.floor(lim / 2))) }, 'Vay một nửa'),
+        h('button', { class: 'sm', onclick: () => act(TT.hoi.borrow(c, lim)) }, 'Vay hết hạn mức')));
+    }
+    // bảo hiểm
+    box.appendChild(h('div', { style: 'margin-top:8px;font-weight:bold' }, 'Bảo hiểm chuyến buôn'));
+    if (s.ins) box.appendChild(h('div', null, 'Chuyến tới đây đã có bảo hiểm: bồi thường tới ' + TT.ls.fmt(s.ins.cap) + ' nếu bị cướp.'));
+    else {
+      const v = TT.hoi.cargoValue(c);
+      box.appendChild(h('div', { class: 'small' }, v > 0 ? 'Hàng buôn trong túi trị giá ' + TT.ls.fmt(v) + '. Phí ' + Math.round(D.ECO.ins.rate * 100) + '%, bồi thường tới ' + Math.round(D.ECO.ins.cap * 100) + '% giá trị hàng.' : 'Bạn chưa mang hàng buôn nào.'));
+      box.appendChild(h('div', { class: 'btns', style: 'margin-top:4px' }, h('button', { class: 'sm', disabled: v > 0 ? null : 'disabled', onclick: () => act(TT.hoi.insure(c)) }, 'Mua bảo hiểm chuyến này')));
+    }
+    return box;
+  }
+
+  // Giám định đồ chợ đen và đấu giá chưa rõ thật giả (E7b).
+  function gdPanel(c) {
+    const ids = Object.keys(c.sus || {}), box = h('div', { class: 'shop-lim', style: 'margin:6px 0' });
+    box.appendChild(h('div', null, 'Giám định: đồ mua ở chợ đen hoặc thắng đấu giá có thể là đồ nhái. ' + (TT.gd.free(c) ? 'Với tầm nhìn của bạn, giám định miễn phí.' : 'Phí ' + TT.ls.fmt(TT.gd.fee(c)) + ' mỗi lần, có thể không chắc.')));
+    if (!ids.length) box.appendChild(h('div', { class: 'small' }, 'Túi bạn không có món nào cần giám định.'));
+    ids.forEach(id => box.appendChild(h('div', { class: 'btns', style: 'margin-top:4px' }, h('span', null, D.ITEMS[id].n + ' (' + c.sus[id].n + ' món)'),
+      h('button', { class: 'sm', onclick: () => { msg = TT.gd.appraise(c, id).text; render(); } }, 'Giám định'))));
+    return box;
+  }
+
   function renderShop(c) {
     panel.innerHTML = ''; panel.appendChild(head(c));
     const buysTxt = TT.bld.buysText(cur), rows = TT.market.stock(c, cur), left = TT.bld.left(c), lim = TT.bld.limitOf(c);
@@ -102,7 +155,8 @@
       h('button', { class: mode === 'sell' ? 'on' : '', onclick: () => { mode = 'sell'; sel = null; msg = ''; render(); } }, 'Bán'),
       h('span', { class: 'small' }, 'Tài sản: ' + TT.ls.fmt(TT.ls.wealth(c)))));
     panel.appendChild(h('div', { class: 'shop-lim' + (left < lim * 0.1 ? ' bad' : '') }, 'Hạn mức giao dịch tháng này ở nơi này: còn ' + TT.ls.fmt(left) + ' trên ' + TT.ls.fmt(lim) + '. ' + (mode === 'sell' ? 'Cửa hàng này chỉ thu: ' + buysTxt + '.' : 'Hàng ở đây có hạn, hết thì chờ tháng sau họ nhập thêm.')));
-    if (cur === 'hoi' && TT.hoi) { const hp = hoiPanel(c); if (hp) panel.appendChild(hp); }
+    if (cur === 'hoi' && TT.hoi) { const hp = hoiPanel(c); if (hp) panel.appendChild(hp); const lead = TT.hoi.leadAt(c.region); if (lead) { const hd = hoiDeals(c, lead); if (hd) panel.appendChild(hd); } }
+    if (cur === 'den' && D.ECO.hq && TT.gd) panel.appendChild(gdPanel(c));
     const grid = h('div', { class: 'shop-grid' });
     let list;
     if (mode === 'buy') list = rows.map(r => ({ id: r.id, n: D.ITEMS[r.id].n, price: r.price, qty: r.qty, ok: r.qty > 0 && TT.ls.can(c, r.price) }));

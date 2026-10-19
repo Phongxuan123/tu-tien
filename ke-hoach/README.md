@@ -12,7 +12,7 @@ Trang tổng ở gốc dự án: [KE-HOACH.md](../KE-HOACH.md) (bảng tiến đ
 | [B-nghe-nghiep.md](B-nghe-nghiep.md) | Nghề nghiệp | Đã code, còn vài mục nhỏ |
 | [C-nga-re.md](C-nga-re.md) | Ngã rẽ cuộc đời thay ô "Hướng đi" | Đã code, còn vài mục nhỏ |
 | [D-ky-ngo.md](D-ky-ngo.md) | Kỳ ngộ có cốt truyện (đã gộp vào Q) | Thay bằng Q |
-| [E-kinh-te.md](E-kinh-te.md) | Kinh tế: giá cung cầu, thương thành, shop tông môn, buôn đường dài, đấu giá, thương hội | Bản 6 đã gộp quyết định của bạn; E0 đến E6 và E7a (thuế vào giá, móc S) đã làm; còn E7b (giám định, hội) |
+| [E-kinh-te.md](E-kinh-te.md) | Kinh tế: giá cung cầu, thương thành, shop tông môn, buôn đường dài, đấu giá, thương hội | Bản 6 đã gộp quyết định của bạn; E0 đến E6, E7a (thuế vào giá, móc S) và E7b (giám định, hội) đã làm; còn đo chuyến buôn người chơi |
 | [F-hoan-thien-the-gioi.md](F-hoan-thien-the-gioi.md) | Sơ đồ thế giới và các chỗ trống cần hoàn thiện trước khi làm kinh tế | Chờ bạn xem sơ đồ |
 | [G-nhat-bao.md](G-nhat-bao.md) | Nhật báo tu tiên bản 2: tổng san bốn năm, người bán báo gia hạn, thay khung Thiên hạ | Chờ duyệt, chưa code |
 | [H-phat-trien-thanh-tri.md](H-phat-trien-thanh-tri.md) | Phát triển thành trì (kho ý tưởng: bảng tin chợ miễn phí, bậc thành, dịch vụ) | Ý tưởng, lưu lại |

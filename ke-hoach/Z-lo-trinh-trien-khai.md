@@ -114,13 +114,13 @@
 - [x] Bài kiểm thử: tổng `share` bằng 1, không quá 3 ô, quy tắc lồng, đẩy ô yếu nhất, đại điện đúng chủ.
 - **Cổng chơi thử 3:** thẻ tông + tab/mục Tín ngưỡng + một vòng đời ở vùng có nơi thờ tự.
 
-### Đợt 5. Kinh tế còn tồn, nối S (E7) (khoảng 2 lượt) — E7a đã xong 2026-10-19 (xem E mục A.18: thuế vào giá, móc S, đo lại; chỉ tiêu lãi buôn chưa đạt, ghi ở A.18); E7b (giám định, hội) còn lại
-- [ ] **Giám định** (đồ nhái, thông tin bất cân xứng; dịch vụ nhà đấu giá/chợ đen).
-- [ ] **Hội: nhiệm vụ, vay, bảo hiểm** (phần E4b còn lại; cần UI riêng ở cửa sổ hội).
+### Đợt 5. Kinh tế còn tồn, nối S (E7) (khoảng 2 lượt) — E7a đã xong 2026-10-19 (E mục A.18); E7b đã xong 2026-10-19 (E mục A.19: giám định, vay, đơn, bảo hiểm); chỉ tiêu lãi buôn (khoảng 25%) vẫn chưa đạt, cần chặng đo chuyến buôn người chơi
+- [x] **Giám định** (E7b; đồ nhái, thông tin bất cân xứng; nhà đấu giá và chợ đen).
+- [x] **Hội: nhiệm vụ, vay, bảo hiểm** (E7b; trong cửa sổ hội; hộ tống chưa làm).
 - [x] **Thuế vào giá** theo triều (E7a): `giá x (1 + thuế_suất x 0,15)` đọc từ `nat` và dân tâm; hiển thị ở Nha môn (F2 phần sau).
 - [x] Móc S vào kinh tế (E7a; cú sốc `chien_tong` khai báo, S6 gọi sau): lễ hội tôn giáo tạo cầu, thuế tôn giáo là nguồn cho triều, quốc vận cao ổn giá, chiến tranh tổng (S6) làm cú sốc lớn.
 - [x] Đo lại bằng `tools/econ-sim.js` (E7a: 48,5% trước, 49,2% sau, chưa đạt khoảng 25%; xem E A.18) các chỉ tiêu E (lãi buôn tối đa 25% trung bình...).
-- **Cổng chơi thử 4:** chơi thử kinh tế E0 đến E6 + E7a (và E7b khi xong).
+- **Cổng chơi thử 4:** chơi thử kinh tế E0 đến E6 + E7a + E7b.
 
 ### Đợt 6. Quân đội, chiến tranh tổng, triều chính, F2 phần sau (S6, S7) (khoảng 4 lượt)
 - [ ] **S6**: quân lực, phẩm, sát khí, tướng, quân trận, bảng lính tương đương; `strength()` dùng `CL`; **engine chiến tranh tổng** (đa bên, nhiều chiến tuyến, 10-18 năm) cho Đại chiến Phù Lệnh (Q 24.5b); bản sắc quân 9 nước; đo lại chiến tranh (tách đại chiến).
@@ -274,5 +274,6 @@
 - 2026-10-19: **Đợt 4, S4 xong** (S5 để phiên sau). Trạng thái tông theo thế giới (`world.fac.sx`), `power` suy từ bảy chỉ số, năm chính sách có tác dụng nhỏ có trần, thanh trừng hiếm (sổ ân oán, sử ký, tin), thẻ tông đọc giá trị hiện có; công tắc `D.SECT_MOD.on` tắt thì 40 hạt giống trùng khít từng băm. 40 hạt giống: chiến tranh 53,5 → 52,7, diệt vong 8,2 → 7,8, đổi chủ 4,8 → 5,8, thanh trừng 2,2 mỗi 300 năm mỗi thế giới. `tests.html` 100 đạt, 1 lỗi: bài "Nhịp quyết định" đo 12 hạt giống ra 6,07 lần/phút (bật S4) so với 4,99 (tắt); đo 40 hạt giống ra 5,60 so với 5,44, nên không phải hồi quy thật, nhưng bài 12 hạt giống vẫn đỏ, cần bạn quyết định ngưỡng hoặc cỡ mẫu. Chi tiết ở S mục 15.15.
 - 2026-10-18: thêm `ke-hoach/PROMPT-phien-moi.md` (ba prompt cho Đợt 4: 4A Sonnet S4, 4B Haiku dữ liệu tín ngưỡng, 4C Sonnet S5 cơ chế) và mục "Quy ước phiên làm việc" trong `CLAUDE.md` (mỗi phiên một đợt, chạy lần lượt, đọc có chọn lọc, chọn model theo việc).
 - 2026-10-19: **Đợt 4, S5 xong** (Đợt 4 trọn vẹn). Tín ngưỡng: ba ô mỗi vùng, quy tắc lồng, đẩy ô yếu nhất, giáo hội, quốc giáo và khoan dung, phái hiếm, 27 nơi thờ tự đăng ký lúc chạy (9 biểu tượng pixel, dịch vụ cầu an, nghe giảng, cứu trợ, chữa bệnh), tín ngưỡng cá nhân, móc nhỏ có trần; công tắc tắt `D.FAITH.on = false` trùng khít 40/40 hạt giống. Đo 40 hạt giống: trước 52,7 chiến tranh, 7,8 diệt vong, 5,8 đổi chủ; sau 49,4 / 6,2 / 4,6 (100 hạt giống: 58,7/8,3/6,3 tắt, 59,2/7,9/6,1 bật). `tests.html` 103 đạt, 0 lỗi. Cổng chơi thử 3 đã sẵn sàng. Tiếp theo: Đợt 5.
+- 2026-10-19: **Đợt 5, E7b xong** (giám định ở chợ đen và nhà đấu giá, vay hội có quá hạn, bảo hiểm chuyến buôn có trần, đơn hội; công tắc `D.ECO.hq`; 105 bài đạt; world và giá trùng khít với và không có E7b). Lãi buôn tối đa vẫn 49,2%, cần đo chuyến buôn người chơi.
 - 2026-10-19: **Đợt 5, E7a xong** (thuế vào giá theo triều, lễ hội tôn giáo, thuế hương hỏa, quốc vận làm nhỏ cú sốc, khai báo `chien_tong`; công tắc `D.ECO.sx` trùng khít 40 hạt giống cả thế giới và giá; 104 bài đạt). Đo: chiến tranh 49,4 → 47,5, diệt vong 6,2 → 6,0; lãi buôn tối đa 48,5% (chưa đạt 25%). Còn E7b.
 - 2026-10-19: Đợt 4 (S4, S5) đã xong ở các phiên khác; mình kiểm lại trên nhánh: 103 bài đạt, đường cơ sở 40 hạt giống trùng khít. Đã thêm prompt Đợt 5 (5A thuế vào giá và móc S, 5B giám định và hội vay, bảo hiểm, nhiệm vụ) vào `PROMPT-phien-moi.md`.

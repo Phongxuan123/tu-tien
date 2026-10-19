@@ -66,6 +66,18 @@
     },
     rob: { minValue: 150, base: 0.05, perValue: 20000, max: 0.5, loss: [0.25, 0.6] }, // cướp đường: hạ phẩm tối thiểu, xác suất nền, thêm theo giá trị hàng, trần, tỉ lệ mất
     nhai: 0.1,                // xác suất đồ nhái ở chợ đen
-    dgia: { lots: 3, bids: [1.0, 1.25, 1.6], rivalMin: 0.9, rivalMax: 1.7 }
+    dgia: { lots: 3, bids: [1.0, 1.25, 1.6], rivalMin: 0.9, rivalMax: 1.7, fake: 0.05 },
+    // E7b: công tắc hội và giám định (false thì về cách cũ: đồ chợ đen nhái lộ ngay khi mua, không có vay, đơn, bảo hiểm, giám định)
+    hq: true,
+    // giám định: phí (x (1 + cảnh giới)), miễn phí khi tầm nhìn từ insight này trở lên; độ chính xác = acc0 + accK x tầm nhìn; sai thì nói "thật" với xác suất wrong
+    gd: { fee: 6, free: 4, acc0: 0.55, accK: 0.08, wrong: 0.3 },
+    // bảo hiểm chuyến buôn: phí rate x giá trị hàng; bồi thường cover x hàng mất, trần cap x giá trị hàng mua bảo hiểm
+    ins: { rate: 0.04, cover: 0.6, cap: 0.3 },
+    // vay hội: hạn mức theo bậc (linh thạch x RATE), lãi đơn hằng năm, hạn trả sau term tháng; quá hạn thì thiện cảm giảm mỗi năm và mất quyền lợi
+    loan: { limit: [200, 600, 2000, 6000, 15000], rate: 0.08, term: 24, overRep: 6 },
+    // đơn hội: jobs mỗi quý cho mỗi hội, số lượng qty, thưởng bonus x giá món đại diện của nhóm mỗi món, thiện cảm rep (thất bại trừ failRep)
+    jobs: { n: 3, qty: [3, 5, 8], bonus: 1.3, rep: 5, failRep: 3 },
+    // hàng buôn được cướp và bảo hiểm (các nhóm)
+    cargo: ['dan', 'bua', 'thao', 'khoang', 'yeu']
   };
 })();

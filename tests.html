@@ -2181,7 +2181,7 @@ test('Kinh tế (E): giá theo cung cầu trong khoảng, hạn dùng cộng d�
   const au = shopper('tc_vinh_do', { gold: 500000 }); ok(TT.bld.at(au).indexOf('dgia') >= 0, 'thành trì có nhà đấu giá');
   const sv = TT.bld.service(au, 'dgia'), lots = TT.bld.auctionLots(au); eq(lots.length, E.dgia.lots, 'số món đấu giá'); eq(sv.options.length, E.dgia.lots * E.dgia.bids.length, 'ba mức giá mỗi món');
   const top = sv.options.filter(o => /x1\.6/.test(o.label)); let won = 0; top.forEach((o, i) => { const before = au.gold; o.run(); if (au.gold < before) won++; }); ok(won >= 1, 'giá cao nhất thắng được ít nhất một món: ' + won);
-  ok(TT.bld.service(au, 'dgia').options.every(o => o.disabled), 'mỗi món chỉ ra giá một lần');
+  ok(TT.bld.service(au, 'dgia').options.filter(o => !/^Giám định/.test(o.label)).every(o => o.disabled), 'mỗi món chỉ ra giá một lần');
   const rb = shopper('tc_vinh_do', { gold: 10, realm: 0 }); TT.items.add(rb, 'linh_thao', 2000); let hit = 0; for (let i = 0; i < 60; i++) { TT.items.add(rb, 'linh_thao', 2000 - TT.items.count(rb, 'linh_thao')); TT.cross.robbery(rb, 'tu_than'); if (TT.items.count(rb, 'linh_thao') < 2000) hit++; } ok(hit > 0 && hit < 60, 'hàng buôn nhiều thì có lúc bị cướp: ' + hit + '/60');
   const poor = shopper('tc_vinh_do', { gold: 10, realm: 0 }); TT.items.add(poor, 'linh_thao', 1); for (let i = 0; i < 40; i++) TT.cross.robbery(poor, 'tu_than'); eq(TT.items.count(poor, 'linh_thao'), 1, 'hàng ít không bị cướp');
   // lưu/tải
@@ -2807,6 +2807,79 @@ test('Kinh tế nối S (E7a): thuế suất đúng công thức và trong kho�
   const ms = performance.now() - t1; ok(ms < 6000, 'kinh tế nối S 400 năm mất ' + Math.round(ms) + ' ms');
 });
 
+test('Hội và giám định (E7b): giám định theo tầm nhìn, vay trả và quá hạn, bảo hiểm có trần, đơn hội nhận và xong, hết quý thì hỏng, tắt thì đóng, lưu/tải, bản cũ', () => {
+  const E = D.ECO, H = TT.hoi, G = TT.gd, W = () => TT.world, near = (x, y, m) => ok(Math.abs(x - y) < 1e-6, m + ': ' + x + ' vi ' + y);
+  TT.life.createWorld(911); W().months += 12; TT.fac.yearly();
+  const rid = D.REGIONS.map(r => r.id).find(id => TT.fac.hoiAt(id).length); ok(rid, 'có vùng có hội');
+  const lead = H.leadAt(rid); ok(lead, 'có hội dẫn đầu');
+  const mk = () => { const c = shopper(TT.map.placesOf(rid)[0].id, { gold: 1000000 }); c.kind = 'player'; return c; };
+  const mem = (c, rank) => { const s = H.S(c); s.m = { id: lead.id, rank, since: 0, owed: 0 }; s.rep[lead.id] = 80; };
+  const id = 'linh_thao';
+  // 1. giám định: độ chính xác theo tầm nhìn, đồ nhái bị bỏ khi giám định đúng, sai theo tỉ lệ
+  const acc = G.acc(mk()); ok(acc >= E.gd.acc0 - 1e-9 && acc <= 0.98 + 1e-9, 'độ chính xác trong khoảng');
+  const N = 400; let nhai = 0, that = 0, bad = 0;
+  for (let i = 0; i < N; i++) {
+    const c = mk(); TT.items.add(c, id, 1); c.sus = { [id]: { n: 1, f: 1 } }; const g0 = c.gold, r = G.appraise(c, id);
+    if (!G.free(c)) ok(c.gold < g0, 'giám định mất phí khi tầm nhìn thấp');
+    if (r.verdict === 'nhái') { nhai++; ok(TT.items.count(c, id) === 0, 'đồ nhái bị bỏ khỏi túi'); }
+    if (r.verdict === 'thật') that++;
+    if (['nhái', 'thật', 'chưa chắc'].indexOf(r.verdict) < 0) bad++;
+  }
+  ok(Math.abs(nhai / N - acc) < 0.08, 'đồ nhái nhận đúng theo độ chính xác: ' + nhai / N + ' vs ' + acc);
+  ok(Math.abs(that / N - (1 - acc) * E.gd.wrong) < 0.06, 'sai nói là thật theo tỉ lệ: ' + that / N);
+  eq(bad, 0, 'kết quả chỉ là nhái, thật hoặc chưa chắc');
+  let ok2 = 0; for (let i = 0; i < 100; i++) { const c = mk(); TT.items.add(c, id, 1); c.sus = { [id]: { n: 1, f: 0 } }; if (G.appraise(c, id).verdict === 'nhái') ok2++; } eq(ok2, 0, 'đồ thật không bao giờ bị kết luận nhái');
+  const cm = mk(); TT.items.add(cm, id, 3); G.mark(cm, id, 1); if (G.free(cm)) eq(TT.items.count(cm, id), 3, 'tầm nhìn cao: bỏ đồ nhái ngay'); else eq(cm.sus[id].f, 1, 'chợ đen: đồ nhái chưa lộ');
+
+  // 2. vay hội: hạn mức theo bậc, lãi, quá hạn, trả hết
+  const c3 = mk(); mem(c3, 1); const lim = H.loanLimit(c3); near(lim, E.loan.limit[1] * D.LS.RATE, 'hạn mức theo bậc');
+  ok(!H.borrow(c3, lim + 1).ok, 'vượt hạn mức thì không vay'); const g3 = c3.gold;
+  ok(H.borrow(c3, Math.floor(lim / 2)).ok, 'vay trong hạn mức'); ok(c3.gold > g3, 'tiền vào túi');
+  ok(!H.borrow(c3, 1).ok, 'đang nợ thì không vay thêm');
+  H.yearly(c3); near(c3.hoi.loan.int, c3.hoi.loan.p * E.loan.rate, 'lãi một năm');
+  const rep3 = H.rep(c3, lead.id); W().months = c3.hoi.loan.due + 1; H.yearly(c3);
+  ok(c3.hoi.loan.od, 'quá hạn thì đánh dấu'); ok(!H.perk(c3) && H.member(c3), 'mất quyền lợi nhưng vẫn là hội viên, không bị tịch thu');
+  ok(H.rep(c3, lead.id) < rep3, 'quá hạn thì thiện cảm giảm'); ok(!H.borrow(c3, 1).ok, 'quá hạn không vay thêm');
+  ok(H.repay(c3, H.owed(c3)).ok && !c3.hoi.loan, 'trả hết thì hết nợ'); ok(H.perk(c3), 'trả hết thì có lại quyền lợi');
+
+  // 3. bảo hiểm chuyến buôn: phí, một hợp đồng một chuyến, bồi thường có trần
+  const c4 = mk(); mem(c4, 0); ok(!H.insure(c4).ok, 'không có hàng thì không mua bảo hiểm'); TT.items.add(c4, id, 20);
+  const gi = c4.gold; ok(H.insure(c4).ok, 'mua bảo hiểm'); ok(c4.gold < gi, 'đóng phí'); const p4 = c4.hoi.ins;
+  near(p4.cap, Math.ceil(p4.v * E.ins.cap), 'trần bồi thường'); ok(!H.insure(c4).ok, 'một chuyến một hợp đồng');
+  const g4 = c4.gold; H.claim(c4, 1e9); near(c4.gold - g4, p4.cap, 'bị cướp nặng thì bồi thường đúng trần'); ok(!c4.hoi.ins, 'tới nơi là hết hiệu lực');
+  H.insure(c4); const g5 = c4.gold; H.claim(c4, 0); near(c4.gold, g5, 'không bị cướp thì không bồi thường');
+  H.insure(c4); const g6 = c4.gold; H.claim(c4, 100); near(c4.gold - g6, Math.min(c4.hoi.ins === null ? 0 : 0, 0) + Math.min(Math.ceil(p4.v * E.ins.cap), Math.ceil(100 * E.ins.cover)), 'bị cướp nhẹ thì bồi thường theo phần');
+  const c5 = mk(); TT.items.add(c5, id, 5); ok(!H.insure(c5).ok, 'không phải hội viên thì không mua bảo hiểm');
+
+  // 4. đơn hội: bảng tất định, nhận một đơn, xong thì thưởng, hết quý thì hỏng
+  const B = H.board(lead.id); eq(B.length, E.jobs.n, 'đủ đơn trong quý'); ok(JSON.stringify(H.board(lead.id)) === JSON.stringify(B), 'bảng đơn tất định');
+  const c6 = mk(); mem(c6, 1); const b0 = B[0];
+  ok(H.accept(c6, lead.id, 0).ok, 'nhận đơn'); ok(!H.accept(c6, lead.id, 1).ok, 'một đơn một lúc');
+  const pid = Object.keys(D.ITEMS).find(k => TT.eco.group(k) === b0.g);
+  H.progress(c6, pid, 1, b0.kind !== 'thu_mua'); eq(c6.hoi.job.got, 0, 'làm sai chiều thì không tính');
+  const gb = c6.gold, rp6 = H.rep(c6, lead.id); H.progress(c6, pid, b0.qty, b0.kind === 'thu_mua');
+  ok(!c6.hoi.job, 'đủ số thì xong đơn'); near(c6.gold - gb, b0.reward, 'thưởng đúng'); ok(H.rep(c6, lead.id) > rp6, 'thiện cảm tăng');
+  const c7 = mk(); mem(c7, 1); H.accept(c7, lead.id, 0); const rp7 = H.rep(c7, lead.id);
+  W().months = (Math.floor(W().months / 3) + 1) * 3; H.tick(c7);
+  ok(!c7.hoi.job, 'hết quý thì đơn hỏng'); ok(H.rep(c7, lead.id) < rp7, 'hết quý thì thiện cảm giảm');
+
+  // 5. lưu/tải và bản cũ
+  const P = TT.player(); mem(P, 1); H.borrow(P, 100); TT.items.add(P, id, 4); G.mark(P, id, 0.5); H.insure(P);
+  const snap = TT.save.snapshot(), j0 = JSON.stringify([P.hoi, P.sus]);
+  TT.save.restore(snap); const P2 = TT.player(); eq(JSON.stringify([P2.hoi, P2.sus]), j0, 'vay, bảo hiểm, đơn và giám định giữ nguyên sau lưu/tải');
+  const old = JSON.parse(snap), op = Object.values(old.world.chars).find(x => x.kind === 'player');
+  delete op.sus; delete op.hoi.loan; delete op.hoi.ins; delete op.hoi.job; TT.save.restore(JSON.stringify(old));
+  const P3 = TT.player(); ok(P3 && H.perk(P3) !== undefined, 'bản cũ không có vay, bảo hiểm, đơn vẫn chạy');
+  ok(!G.appraise(P3, id).ok, 'bản cũ không có món cần giám định'); ok(H.owed(P3) === 0, 'bản cũ không nợ');
+  W().months += 12; TT.fac.yearly(); H.yearly(P3); ok(true, 'bản cũ chạy tiếp');
+
+  // 6. tắt thì đóng: không vay, không bảo hiểm, không đơn, không giám định, đồ chợ đen lộ ngay như cũ
+  D.ECO.hq = false; const c8 = mk(); mem(c8, 1); TT.items.add(c8, id, 5);
+  ok(!H.borrow(c8, 1).ok, 'tắt: không vay'); ok(!H.insure(c8).ok, 'tắt: không bảo hiểm'); ok(!H.accept(c8, lead.id, 0).ok, 'tắt: không nhận đơn');
+  c8.sus = { [id]: { n: 1, f: 1 } }; ok(!G.appraise(c8, id).ok, 'tắt: không giám định'); D.ECO.hq = true;
+  // 7. hiệu năng: bảng đơn và giám định đọc nhanh
+  const t0 = performance.now(); for (let i = 0; i < 2000; i++) { H.board(lead.id); H.perk(c6); H.loanLimit(c6); } const ms = performance.now() - t0; ok(ms < 500, 'đọc bảng đơn 2000 lần mất ' + Math.round(ms) + ' ms');
+});
 runNext();
 </script>
 </body>

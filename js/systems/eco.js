@@ -198,7 +198,7 @@
       });
       // lịch sử, hồi sức ép, tin giá
       const pl = TT.player();
-      if (pl && pl.alive !== false) TT.items.tick(pl);
+      if (pl && pl.alive !== false) { TT.items.tick(pl); if (TT.hoi) TT.hoi.tick(pl); }
       D.REGIONS.forEach(r => E.groups.forEach(g => {
         const h = s.h[r.id][g]; h.push(Math.round(s.p[r.id][g] * 1000) / 1000); if (h.length > E.hist) h.shift();
         const k = r.id + '|' + g; if (s.press[k]) { s.press[k] *= (1 - E.press.rec); if (Math.abs(s.press[k]) < 0.002) delete s.press[k]; }
