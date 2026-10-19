@@ -233,3 +233,20 @@ NHIỆM VỤ: js/systems/childhood.js (TT.childhood: plan(c) bốc danh sách s�
 Quy tắc như 8A. Công tắc D.CHILDHOOD.on = false thì `--check` trùng khít (thêm cờ --childhood=off). Bật thì đo 40 hạt giống, ghi số. Kiểm thử "Tuổi thơ (8A3)": số sự kiện mỗi hồi theo p2/p3 (đo trên 2.000 lần bốc: khoảng 1,75 mỗi hồi), không lặp, không gọi rng, kẹp trần, auto chọn theo affinity, lưu/tải, công tắc. Playwright: cả luồng Đời mới → ba hồi → Tổng kết trên máy tính và điện thoại.
 Cuối: ghi "8A3 đã làm" vào Z, Q mục 22; KE-HOACH.md; push theo CLAUDE.md. Báo ngắn gọn.
 ```
+
+## 8B. Sonnet: khung tuyến `TT.story` + vòng quay `TT.wheel` + tuyến mẫu A1-A3 + life-sim (cần 8A; tốt nhất sau 8A3)
+
+```
+Repo: Phongxuan123/tu-tien. Gắn repo, clone nhánh `add-game-project` (trả lời tiếng Việt, ngắn gọn, xưng "mình", gọi tôi là "bạn"). Đọc CLAUDE.md. Điều kiện: 8A đã có trên nhánh (TT.nature, TT.kv); thiếu thì dừng và báo tôi.
+
+Đọc có chọn lọc: Z mục "Đợt 8" (Đặc tả 8A, Đặc tả 8B là bản chốt, các mục "đã làm"); Q mục 7 (vòng quay, 7.2 đến 7.8), 9.1 (xương sống A), 10 (kiến trúc tuyến), 6.5 (khóa mềm, phí trái tính); js/systems/decisions.js (cả file, 217 dòng: handlers, w.pending thuần dữ liệu), js/systems/events.js 120-250 (chooseIndex, cách đưa hộp), js/ui/quests.js, js/systems/cultivation.js 215-240 (đột phá), tools/baseline.js (mẫu chạy Playwright cho life-sim).
+
+NHIỆM VỤ: đúng "Đặc tả 8B".
+1. js/systems/story.js (TT.story) và js/systems/wheel.js (TT.wheel), handler 'story' và 'wheel' trong decisions.js; gọi tick tháng của story chỉ cho người chơi; mọi hàm đọc không gọi rng.
+2. js/data/stories/bb_a.js: tuyến A1 đến A3 (mỗi mốc 1 đến 2 chặng, 2 đến 4 lựa chọn, có gate và gia ở vài lựa chọn, 1 vòng quay ở A3, ít nhất 2 hậu quả trễ, kết cục cộng khí vận theo Q 5.3). Chữ tự viết ngắn gọn, giọng pha, nghiêm ở chuyện lớn.
+3. Giao diện: hộp chặng (nhãn Truyện, chấm hợp/trái tính, khóa có lý do), hộp vòng quay SVG, mục "Truyện của đời bạn" trong tab Nhiệm vụ; dừng thời gian ở x8/x16 khi có hộp.
+4. tools/story-lint.js (chạy được bằng node, kiểm toàn bộ D.STORY.arcs), lệnh TT.story.jump, tools/life-sim.js (`node tools/life-sim.js --seed=101 [--years=80]`, ra tools/life-sim/101.txt; thêm thư mục vào .gitignore trừ 3 tệp mẫu cho hạt giống 101, 102, 103).
+
+Quy tắc: không đổi TT.VERSION, trường mới khởi tạo muộn; công tắc D.STORY.on = false thì `node tools/baseline.js --check` trùng khít (cờ --story=off). Bật thì đo 40 hạt giống trước/sau và nhịp quyết định (bài "Nhịp quyết định" phải vẫn < 6 lần/phút). Kiểm thử "Truyện và vòng quay (8B)": story-lint sạch, mở tuyến đúng điều kiện, hạn tự tiến theo mac, hậu quả trễ chín đúng khoảng, gate và gia, vai lấy NPC có sẵn, vòng quay (tổng 100, một yếu tố, điểm trong [−10, +15], quay lại 1 lần, trừ khí vận, chặn vùng cao nhất và khi thiếu điểm, +1 khi vùng cao nhất), lưu/tải giữa chặng và giữa vòng quay, công tắc. Playwright: hộp chặng, vòng quay, tab Nhiệm vụ trên máy tính và điện thoại.
+Cuối: ghi "8B đã làm" vào Z, Q mục 22; KE-HOACH.md; push theo CLAUDE.md. Báo ngắn gọn, kèm đường dẫn 3 tệp life-sim mẫu để tôi đọc.
+```
