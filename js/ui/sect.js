@@ -5,7 +5,7 @@
   const D = TT.data, h = ui.h;
 
   let sub = 'tq';
-  const SUBS = [['tq', 'Tổng quan'], ['nv', 'Việc tông'], ['dm', 'Đồng môn'], ['lu', 'Luật và tuyệt học'], ['vv', 'Vượt vùng']];
+  const SUBS = [['tq', 'Tổng quan'], ['nv', 'Việc tông'], ['dm', 'Đồng môn'], ['lu', 'Luật và tuyệt học'], ['vv', 'Vượt vùng'], ['lt', 'Liên tông']];
   const refresh = () => { if (ui.resetSide) ui.resetSide(); ui.markDirty(); };
 
   function sectPlaceOf(rid) { return TT.map.placesOf(rid).find(p => p.type === 'tong_mon') || null; }
@@ -199,11 +199,12 @@
     const bar = h('div', { class: 'pf-tabs' });
     SUBS.forEach(x => bar.appendChild(h('button', { class: sub === x[0] ? 'on' : '', onclick: () => { sub = x[0]; refresh(); } }, x[1])));
     box.appendChild(bar);
-    if (!({ tq: 1, nv: 1, dm: 1, lu: 1, vv: 1 })[sub]) sub = 'tq';
-    ({ tq: buildTq, nv: buildNv, dm: buildDm, lu: buildLu, vv: buildVv })[sub](box, c);
+    if (!({ tq: 1, nv: 1, dm: 1, lu: 1, vv: 1, lt: 1 })[sub]) sub = 'tq';
+    ({ tq: buildTq, nv: buildNv, dm: buildDm, lu: buildLu, vv: buildVv, lt: buildLt })[sub](box, c);
   }
   ui.openSectTab = function (s) { if (s) sub = s; ui.activeTab = 'sect'; refresh(); };
   function buildVv(box, c) { box.appendChild(ui.crossSection(c)); }
+  function buildLt(box, c) { ui.interBlock(box, c, true); }
 
   function buildNonMember(box, c) {
     box.appendChild(h('h2', null, 'Tông môn'));
@@ -223,9 +224,10 @@
       box.appendChild(card);
     });
     box.appendChild(ui.crossSection(c));
+    ui.interBlock(box, c, false); // liên tông (S8): ai cũng xem được
   }
 
   ui.say = function (t) { const m = ui.$('msg'); if (m) m.textContent = t; };
 
-  ui.addTab({ id: 'sect', label: 'Tông môn', key: c => JSON.stringify(data(c)), build: (box, c) => (c.sect ? buildMember(box, c) : buildNonMember(box, c)) });
+  ui.addTab({ id: 'sect', label: 'Tông môn', key: c => JSON.stringify(data(c)) + (TT.inter ? TT.inter.sig() : ''), build: (box, c) => (c.sect ? buildMember(box, c) : buildNonMember(box, c)) });
 })();

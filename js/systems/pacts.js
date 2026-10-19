@@ -51,7 +51,7 @@
       const L = pact.S(), same = q => (q.a === xId && q.b === aId) || (q.a === aId && q.b === xId);
       const p = L.find(q => q.kind === 'minh_uoc' && same(q));
       const hon = L.some(q => q.kind === 'hon_uoc' && same(q)) ? 0.08 : 0; // thông gia khiến đồng minh giúp thêm một chút (S7)
-      return (p ? clamp(0.85 - p.strain / 160, 0.25, 0.9) : 0.6) + hon;
+      return (p ? clamp(0.85 - p.strain / 160, 0.25, 0.9) : 0.6) + hon + TT.inter.helpBonus(xId, aId); // ước pháp của minh ước liên tông (S8)
     },
     // Mối đoạn tuyệt gần đây giữa hai thế lực (cả hai chiều); trả về { m } hoặc null.
     rift(a, b) {

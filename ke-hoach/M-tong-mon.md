@@ -1,6 +1,6 @@
 # Thiết kế lại Tông môn (một trụ cột của thế giới)
 
-- Trạng thái: Đang làm. M1, M2, M3, M5a và M7 đã code (2026-10-17); M4 (chính trị nội bộ) hoãn theo ý bạn; liên tông (M5b) và M6 (lập tông, làm chưởng môn) chờ
+- Trạng thái: Đang làm. M1, M2, M3, M5a và M7 đã code (2026-10-17); M4 (chính trị nội bộ) hoãn theo ý bạn; liên tông (M5b) đã làm ở S8 (2026-10-19), M6 (lập tông, làm chưởng môn) chờ
 - Ngày bắt đầu: 2026-10-16
 - Liên quan: `js/data/sects.js`, `js/systems/sect.js`, `js/ui/sect.js`, `js/systems/factions.js` (tông là thế lực kind "tong"), F-hoan-thien-the-gioi.md (F2 nghĩa vụ giữa các thế lực), I-cong-trinh.md (I4/I5: sơn môn, kho cống hiến, hội sở trong phố), A-nhiem-vu.md, B-nghe-nghiep.md, C-nga-re.md
 
@@ -80,7 +80,7 @@ Gia nhập (qua thi tuyển hoặc tiến cử); **khách khanh** (không bậc,
 - [x] M2: bảng nhiệm vụ tông (12 loại việc, 4 đường) + thử luyện nhập môn xuất sắc (thi tuyển giữ như cổng hiện có)
 - [x] M3: sư phụ nội môn, danh sách đồng môn, đại bỉ 5 năm một lần
 - [ ] M4: chính trị nội bộ: phe phái, tranh ngôi, nội gián, phản đồ (HOÃN, làm sau theo ý bạn)
-- [x] M5a: tài nguyên tông (linh mạch, mỏ, kho, cống nạp, chiếm mỏ khi thắng, quyên góp)`n- [ ] M5b: liên tông (minh ước, giải đấu liên tông, đại chiến có hậu quả; nối F2, F3)
+- [x] M5a: tài nguyên tông (linh mạch, mỏ, kho, cống nạp, chiếm mỏ khi thắng, quyên góp)`n- [x] M5b: liên tông (minh ước, giải đấu liên tông, đại chiến có hậu quả; nối F2, F3), đã làm ở S8 (2026-10-19; S mục 15.20)
 - [ ] M6: người chơi: khách khanh, nằm vùng, phản bội, lập tông, làm chưởng môn
 - [x] M7: phố tông môn chín công trình đã gắn vào game, nút hành động dời từ tab sang công trình, tab thành "Thẻ đệ tử" (2026-10-17)
 - [ ] Kiểm thử, đo cân bằng, chơi thử máy tính và điện thoại, ghi KE-HOACH.md, snapshot

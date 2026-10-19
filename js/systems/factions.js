@@ -146,6 +146,7 @@
       fac.declareWars();
       TT.totalwar.yearly(); // chiến tranh tổng: mở, hao sức, kết thúc (S6b)
       TT.court.yearly(); // triều chính và F2 phần sau: hoàng quyền, trưng binh, thông gia, thuế thương hội (S7)
+      TT.inter.yearly(); // liên tông: tông ↔ triều, ước pháp, giải đấu, Thiên hạ công ước (S8)
       fac.rebuilds();
       fac.spawnClans();
       fac.npcCasualties();
@@ -235,6 +236,7 @@
       (b.ally || []).forEach(i => { const x = fac.get(i); if (x && fac.alive(x) && !x.war && rng.P(TT.pact.helpP(i, b.id))) { war.sb.push(i); } });
       a.war = b.war = war.id; war.sa.concat(war.sb).forEach(i => { fac.get(i).war = war.id; });
       f.wars.push(war);
+      TT.inter.warStart(war, a, b); // đại chiến liên tông (S8)
       fac.relAdd(a, b, -25, ['chien', a.n + ' tuyên chiến với ' + b.n + ' vì ' + reason]);
       const pl0 = TT.player(); if (pl0 && pl0.region === war.front) TT.log(pl0, 'Chiến loạn bùng lên ở ' + regName(war.front) + ': ' + a.n + ' đánh ' + b.n + '.', 'bad', 'Vì ' + reason + '. Ở vùng chiến tuyến: nguy hiểm +' + D.FAC.frontDanger + ', kiếm tiền -' + Math.round((1 - D.FAC.frontGold) * 100) + '%, giá mua +' + Math.round((D.FAC.frontPrice - 1) * 100) + '%.');
       fac.chron(a.n + ' tuyên chiến với ' + b.n + ' vì ' + reason + '. Chiến sự bùng lên ở ' + regName(war.front) + (war.sa.length + war.sb.length ? ' (có đồng minh tham chiến)' : '') + '.', 'war');
@@ -253,7 +255,7 @@
         if (!fac.alive(a) || !fac.alive(b)) { fac.endWar(war, 'draw'); return; }
         war.years++;
         const sa = fac.strength(a, war.sa) + rng.R(-8, 8), sb = fac.strength(b, war.sb) + rng.R(-8, 8);
-        war.score = rng.clamp(war.score + (sa - sb) / 6, -60, 60);
+        war.score = rng.clamp(war.score + (sa - sb) / 6 + TT.inter.warTick(war), -60, 60); // cho mượn quân, cấm vận (S8)
         [[a, war.sa], [b, war.sb]].forEach((pr, i) => {
           const x = pr[0], hard = i === 0 ? Math.max(0, -(sa - sb)) : Math.max(0, sa - sb);
           x.power = rng.clamp(x.power - rng.R(1, 4) - hard * 0.05, 1, 100); x.unity = rng.clamp(x.unity - rng.R(1, 3), 5, 100); x.wealth = rng.clamp(x.wealth - rng.R(1, 4), 0, 100);
@@ -268,6 +270,7 @@
       const f = fac.S(), a = fac.get(war.a), b = fac.get(war.b);
       f.wars = f.wars.filter(x => x.id !== war.id);
       [war.a, war.b].concat(war.sa, war.sb).forEach(i => { const x = fac.get(i); if (x && x.war === war.id) x.war = null; });
+      TT.inter.warEnd(war, res); // đại chiến liên tông (S8)
       if (res === 'draw') {
         fac.relAdd(a, b, 15, ['hoa_nghi', 'Hòa nghị sau ' + war.years + ' năm chiến tranh']);
         fac.chron('Chiến tranh giữa ' + a.n + ' và ' + b.n + ' kết thúc bằng hòa nghị sau ' + war.years + ' năm.', 'good');
@@ -297,6 +300,7 @@
       const f = fac.S(), w = S0();
       x.state = 'diệt'; x.diedAt = w.months; x.deadYears = 0; x.war = null;
       if (by) TT.diplo.log(by, x, 'diet', 0, by.n + ' tiêu diệt ' + x.n);
+      if (by) TT.inter.onDestroy(x, by); // đồng minh bên bị diệt thù bên thắng (S8)
       if (!quiet) fac.chron(x.n + ' ' + why + '.', 'bad');
       if (x.kind === 'tong') {
         f.ruins[x.home] = w.months;

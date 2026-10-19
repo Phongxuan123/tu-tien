@@ -5,6 +5,7 @@
 //   --eco=off        tắt móc kinh tế E7a (D.ECO.sx = false): phải trùng khít mốc trước E7a
 //   --hq=off         tắt hội và giám định E7b (D.ECO.hq = false)
 //   --tw=off         tắt chiến tranh tổng S6b (D.TOTALWAR.on = false): phải trùng khít mốc trước S6b
+//   --intersect=off  tắt liên tông S8 (D.INTERSECT.on = false): phải trùng khít mốc trước S8
 //   --seeds=101,102 --years=60   tùy chọn
 const fs = require('fs');
 const path = require('path');
@@ -22,6 +23,7 @@ const ECO_OFF = arg('eco') === 'off';
 const HQ_OFF = arg('hq') === 'off';
 const TW_OFF = arg('tw') === 'off';
 const COURT_OFF = arg('court') === 'off';
+const INTER_OFF = arg('intersect') === 'off';
 
 (async () => {
   const browser = await playwright.chromium.launch({ executablePath: process.env.CHROMIUM_PATH || '/opt/pw-browsers/chromium', args: ['--no-sandbox'] });
@@ -31,7 +33,7 @@ const COURT_OFF = arg('court') === 'off';
   await page.addScriptTag({ path: path.join(__dirname, 'econ-sim.js') });
   const out = [];
   for (const s of SEEDS) {
-    out.push(await page.evaluate(([seed, years, off, hqOff, twOff, courtOff]) => { if (TT.data.ECO) { TT.data.ECO.sx = !off; TT.data.ECO.hq = !hqOff; } TT.data.TOTALWAR.on = !twOff; TT.data.COURT.on = !courtOff; return econSim(seed, years, false); }, [s, YEARS, ECO_OFF, HQ_OFF, TW_OFF, COURT_OFF]));
+    out.push(await page.evaluate(([seed, years, off, hqOff, twOff, courtOff, interOff]) => { if (TT.data.ECO) { TT.data.ECO.sx = !off; TT.data.ECO.hq = !hqOff; } TT.data.TOTALWAR.on = !twOff; TT.data.COURT.on = !courtOff; TT.data.INTERSECT.on = !interOff; return econSim(seed, years, false); }, [s, YEARS, ECO_OFF, HQ_OFF, TW_OFF, COURT_OFF, INTER_OFF]));
   }
   await browser.close();
   if (errs.length) { console.error(errs.join('\n')); process.exit(2); }
