@@ -68,3 +68,48 @@ Quy tắc: viết tôn trọng (S mục 3), không phản diện hóa tôn giáo
 
 ## Cổng chơi thử 3 (sau 4C)
 Bạn xem: thẻ tông (chỉ số, chính sách, thanh trừng), mục "Tín ngưỡng" và nơi thờ tự ở vài vùng, một vòng đời ở vùng có đại điện.
+
+---
+
+# ĐỢT 5 (E7: kinh tế còn tồn, nối với S)
+
+Trạng thái lúc viết (2026-10-19): Đợt 0 đến 4 đã xong (S1 đến S5), F3 vẫn hoãn; 103 bài kiểm thử đạt, đường cơ sở 40 hạt giống. Chạy lần lượt **5A (Sonnet) → 5B (Sonnet)**; 5B không phụ thuộc 5A nhưng cùng sửa `tests.html` nên đừng chạy song song.
+
+## 5A. Sonnet: thuế vào giá và móc S vào kinh tế
+
+```
+Repo: Phongxuan123/tu-tien. Gắn repo, clone nhánh `add-game-project` (trả lời tiếng Việt, ngắn gọn). Đọc CLAUDE.md của repo trước (quy ước làm việc và push).
+
+Đọc có chọn lọc (grep -n "^#" rồi đọc đúng mục):
+- ke-hoach/Z-lo-trinh-trien-khai.md: mục 2, mục 5, mục 6, "Đợt 5".
+- ke-hoach/E-kinh-te.md: A.2, A.3, A.12 đến A.14, A.17 (chỉ tiêu và trạng thái E đã làm).
+- ke-hoach/S-quoc-gia-tong-mon-ton-giao.md: 15.14 (S3), 15.16 (S5, mục tín ngưỡng) và mục 8.6.
+- Mã: js/systems/eco.js, js/data/eco.js, js/systems/buildings.js (dịch vụ Nha môn), js/systems/nation.js, js/systems/faith.js, js/systems/population.js, tools/econ-sim.js.
+
+NHIỆM VỤ: Đợt 5 phần "thuế vào giá" và "móc S vào kinh tế".
+1. Thuế vào giá theo triều: giá mua nhân (1 + thuế_suất_vùng x 0,15). thuế_suất đọc từ triều của vùng, dân tâm (F4) và quốc vận (S3): chiến sự hoặc dân tâm thấp thì cao, vận cao thì dịu. Hiện ở dịch vụ Nha môn (chữ và bậc, không số). Đừng đếm đôi với thuế kéo kho triều của population.js (`taxPull`): chỉ thêm tác động lên giá, hoặc nối hai chiều có chủ ý và ghi rõ.
+2. Móc S: (a) lễ hội tôn giáo theo tín ngưỡng ô 1 của vùng tạo cầu tạm thời cho một vài nhóm hàng (đan, bùa, thảo...) vào các tháng lễ; (b) một phần nhỏ thuế tôn giáo chảy về kho triều; (c) quốc vận cao làm biên độ cú sốc giá nhỏ lại (có trần, có công tắc); (d) khai báo sẵn loại cú sốc `chien_tong` để chiến tranh tổng (S6) gọi sau, chưa kích hoạt.
+3. Công tắc tắt D.ECO.sx = false (hoặc tên tương tự) làm mọi móc này bằng 1 hoặc 0: bằng chứng trùng khít: `node tools/baseline.js --check` và một phép kiểm cho kinh tế (mở rộng tools/econ-sim.js để in hash chỉ số giá 63 ô sau N năm cho vài hạt giống, lưu mốc, tắt thì phải trùng).
+4. Đo lại E bằng tools/econ-sim.js: lãi buôn tối đa trung bình quanh 25%, chênh giá giữa vùng, số cú sốc; ghi số trước và sau. Đo 40 hạt giống 101 đến 140 trước và sau cho chỉ tiêu thế giới.
+
+Quy tắc: hàm đọc không gọi rng; không đổi TT.VERSION; trường mới khởi tạo muộn; chữ tiếng Việt, tên nước thật không xuất hiện, tôn giáo viết tôn trọng. Bài kiểm thử mới: thuế vào giá đúng công thức và trong khoảng, lễ hội chỉ đúng tháng, tắt thì trùng khít, lưu/tải, bản cũ, hiệu năng. Chạy đầy đủ `node tools/run-tests.js`; kiểm giao diện bằng Playwright (Nha môn, máy tính và điện thoại). Ghi "E7a đã làm" (E-kinh-te.md mục A.18), cập nhật Z và KE-HOACH.md, rồi push theo CLAUDE.md. Báo ngắn gọn: đã làm, số kiểm thử, số đo, việc cần tôi chơi thử, điều chưa làm.
+```
+
+## 5B. Sonnet: giám định, và hội (nhiệm vụ, vay, bảo hiểm)
+
+```
+Repo: Phongxuan123/tu-tien. Gắn repo, clone nhánh `add-game-project` (trả lời tiếng Việt, ngắn gọn). Đọc CLAUDE.md của repo trước. Nếu phiên 5A chưa đẩy xong thì dừng và báo tôi (cùng sửa tests.html).
+
+Đọc có chọn lọc: ke-hoach/Z-lo-trinh-trien-khai.md "Đợt 5"; ke-hoach/E-kinh-te.md A.13 đến A.17 (nhất là A.15 quyền lợi theo bậc hội và "Chưa làm: giám định, nhiệm vụ/vay/bảo hiểm hội"). Xem js/systems/hoi.js (86 dòng), js/systems/eco.js, js/systems/buildings.js (nhà đấu giá, chợ đen, đồ nhái), js/systems/crossing.js (TT.cross.robbery), js/ui/shop.js (cửa sổ hội), js/data/eco.js.
+
+NHIỆM VỤ: Đợt 5 phần E còn tồn.
+1. Giám định: dịch vụ ở nhà đấu giá và chợ đen: trả phí để biết đồ có phải hàng nhái không (thông tin bất cân xứng); Thương nhân cấp cao và hội viên tự thấy dấu hiệu; có xác suất giám định sai nhỏ ở bậc thấp; kết quả cho thấy "thật", "nhái", "chưa chắc".
+2. Hội: (a) nhiệm vụ hội (bảng đơn của hội: giao hàng, hộ tống, thu mua; thưởng tiền, thiện cảm, bậc); (b) vay hội (hạn mức theo bậc, lãi hằng năm, hạn trả, quá hạn thì thiện cảm giảm và mất quyền lợi, không phá sản người chơi tức thì); (c) bảo hiểm chuyến buôn (phí theo phần trăm giá trị hàng, bồi thường một phần khi bị cướp ở TT.cross.robbery, trần bồi thường).
+3. Giao diện riêng trong cửa sổ hội (js/ui/shop.js): các mục Nhiệm vụ, Vay, Bảo hiểm, chỉ hiện chữ và bậc, nút rõ ràng; trên điện thoại không tràn ngang.
+4. Công tắc tắt và bằng chứng: tắt thì kinh tế và thế giới trùng khít đường cơ sở (baseline --check và hash chỉ số giá của econ-sim, như phiên 5A).
+
+Quy tắc: hàm đọc không gọi rng; không đổi TT.VERSION; trường mới khởi tạo muộn; chữ tiếng Việt cổ trang. Bài kiểm thử mới: giám định đúng và sai theo bậc, vay và trả và quá hạn, bảo hiểm bồi thường có trần, nhiệm vụ hội nhận và hoàn thành, lưu/tải, bản cũ, tắt thì trùng khít. Chạy đầy đủ `node tools/run-tests.js`; kiểm giao diện bằng Playwright. Đo lại tools/econ-sim.js (lãi buôn tối đa trung bình quanh 25%) trước và sau. Ghi "E7b đã làm" (E-kinh-te.md mục A.19), cập nhật Z và KE-HOACH.md, rồi push theo CLAUDE.md. Báo ngắn gọn.
+```
+
+## Sau Đợt 5: Cổng chơi thử 4
+Bạn chơi thử kinh tế (giá, thuế ở Nha môn, lễ hội, giám định, hội vay và bảo hiểm). Sau đó mới chạy **Đợt 6** (S6 quân đội và chiến tranh tổng, S7 triều chính, F2 phần sau); mình sẽ soạn prompt Đợt 6 khi bạn xác nhận Đợt 5 ổn.
