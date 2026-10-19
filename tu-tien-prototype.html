@@ -1,0 +1,628 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>1 trong 8 tỷ: Tu Tiên</title>
+<style>
+:root{--bg:#14110f;--panel:#1d1915;--line:#352e26;--text:#e8dfd0;--dim:#9a8f7e;--gold:#d9a441;--red:#c4553f;--green:#6fa86b;--blue:#6a9ac4;--white:#e8e8e8}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--text);font-family:Georgia,"Times New Roman",serif;line-height:1.5}
+main{max-width:760px;margin:0 auto;padding:16px}
+h1{font-size:1.25rem;margin:4px 0 2px;color:var(--gold);letter-spacing:.5px}
+.sub{color:var(--dim);font-size:.85rem;margin-bottom:12px}
+.panel{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:12px;margin-bottom:12px}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:8px;font-size:.9rem}
+.grid b{color:var(--gold)}
+.sec{font-size:.75rem;color:var(--dim);text-transform:uppercase;letter-spacing:1px;margin:10px 0 4px}
+.sec:first-child{margin-top:0}
+.bar{height:8px;background:#2a241d;border-radius:4px;overflow:hidden;margin-top:3px}
+.bar i{display:block;height:100%;background:var(--blue)}
+.bar.hp i{background:var(--green)}
+.bar.el i{background:var(--gold)}
+.bar.di i{background:#b57edc}
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.chip{border:1px solid var(--line);border-radius:999px;padding:2px 10px;font-size:.82rem;cursor:help}
+.chip.q0{color:var(--white);border-color:#777}
+.chip.q1{color:var(--green);border-color:var(--green)}
+.chip.q2{color:var(--gold);border-color:var(--gold)}
+.chip.bad{border-style:dashed}
+#log{height:260px;overflow-y:auto;font-size:.95rem}
+#log p{margin:0 0 7px}
+#log .age{color:var(--dim)}
+#log .good{color:var(--green)}
+#log .bad{color:var(--red)}
+#log .big{color:var(--gold);font-weight:bold}
+.ev{border-color:var(--gold)}
+.ev h3{margin:0 0 6px;color:var(--gold);font-size:1rem}
+.btns{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:8px}
+button{font:inherit;background:#2a241d;color:var(--text);border:1px solid var(--line);border-radius:8px;padding:8px 13px;cursor:pointer}
+button:hover:not(:disabled){border-color:var(--gold)}
+button:disabled{opacity:.4;cursor:not-allowed}
+button.primary{background:var(--gold);color:#1a1408;border-color:var(--gold);font-weight:bold}
+button.on{border-color:var(--gold);color:var(--gold)}
+.end h2{margin:0 0 6px;color:var(--red)}
+.end.win h2{color:var(--gold)}
+.small{font-size:.8rem;color:var(--dim)}
+.time{color:var(--dim);font-size:.85rem;align-self:center;margin-left:4px}
+</style>
+</head>
+<body>
+<main>
+  <h1>1 trong 8 tỷ: Tu Tiên</h1>
+  <div class="sub">Bạn được sinh ra ngẫu nhiên. Thời gian cứ trôi, bạn chọn hướng đi. Có thể thành tiên, cũng có thể làm nông dân tạp linh căn cả đời.</div>
+  <div class="panel" id="stats"></div>
+  <div class="panel" id="log"></div>
+  <div id="action"></div>
+  <div class="small" id="rec"></div>
+</main>
+<script>
+const $ = id => document.getElementById(id);
+const R = (a, b) => a + Math.random() * (b - a);
+const RI = (a, b) => Math.floor(R(a, b + 1));
+const P = p => Math.random() < p;
+const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
+function shuffle(a) { a = a.slice(); for (let i = a.length - 1; i > 0; i--) { const j = RI(0, i); [a[i], a[j]] = [a[j], a[i]]; } return a; }
+function wpick(list, wf) {
+  wf = wf || (x => x.w);
+  const t = list.reduce((a, x) => a + wf(x), 0);
+  let r = Math.random() * t;
+  for (const x of list) { r -= wf(x); if (r <= 0) return x; }
+  return list[0];
+}
+
+const REALMS = ["Phàm nhân", "Luyện Khí", "Trúc Cơ", "Kim Đan", "Nguyên Anh", "Hóa Thần", "Phi Thăng"];
+const NEED = [30, 100, 300, 900, 2500, 7000];
+const LIFE = [70, 130, 260, 520, 1000, 2000, Infinity];
+const MONTH_MS = 5000 / 12; // 1 năm = 5 giây ở tốc độ x1
+
+const ELEM = [{ id: "kim", n: "Kim" }, { id: "moc", n: "Mộc" }, { id: "thuy", n: "Thủy" }, { id: "hoa", n: "Hỏa" }, { id: "tho", n: "Thổ" }];
+const DI = [{ id: "loi", n: "Lôi" }, { id: "bang", n: "Băng" }, { id: "phong", n: "Phong" }, { id: "am", n: "Âm" }, { id: "duong", n: "Dương" }];
+
+// q: 0 trắng, 1 xanh, 2 vàng. g: 1 tốt, 0 xấu
+const TRAITS = [
+  { n: "Thân cường", g: 1, q: 0, d: "Sinh lực tối đa +20", m: { hpMax: 20 } },
+  { n: "Mắt tinh", g: 1, q: 0, d: "Công kích +3", m: { atk: 3 } },
+  { n: "Tay khéo", g: 1, q: 0, d: "Kiếm vàng nhiều hơn 30%", m: { gold: 0.3 } },
+  { n: "Tâm tĩnh", g: 1, q: 0, d: "Niệm lực +5", m: { nl: 5 } },
+  { n: "Mệnh hảo", g: 1, q: 0, d: "Vận may +3", m: { luck: 3 } },
+  { n: "Ngộ tính cao", g: 1, q: 1, d: "Tu luyện nhanh hơn 25%", m: { train: 0.25 } },
+  { n: "Phúc duyên", g: 1, q: 1, d: "Khí vận +8", m: { kv: 8 } },
+  { n: "Cốt cách thượng thừa", g: 1, q: 1, d: "Công kích +6, sinh lực tối đa +30", m: { atk: 6, hpMax: 30 } },
+  { n: "Thiên sinh đạo thể", g: 1, q: 2, d: "Tu luyện nhanh hơn 50%, đột phá dễ hơn 8%", m: { train: 0.5, brk: 0.08 } },
+  { n: "Đại khí vận giả", g: 1, q: 2, d: "Khí vận +20, vận may +8", m: { kv: 20, luck: 8 } },
+  { n: "Thể nhược", g: 0, q: 0, d: "Sinh lực tối đa -20", m: { hpMax: -20 } },
+  { n: "Vụng về", g: 0, q: 0, d: "Kiếm vàng ít hơn 30%", m: { gold: -0.3 } },
+  { n: "Hay quên", g: 0, q: 0, d: "Niệm lực -4", m: { nl: -4 } },
+  { n: "Xui xẻo", g: 0, q: 0, d: "Vận may -3", m: { luck: -3 } },
+  { n: "Lười biếng", g: 0, q: 0, d: "Tu luyện chậm hơn 10%", m: { train: -0.1 } },
+  { n: "Tâm ma quấn thân", g: 0, q: 1, d: "Đột phá khó hơn 10%", m: { brk: -0.1 } },
+  { n: "Thọ ngắn", g: 0, q: 1, d: "Thọ nguyên giảm 15%", m: { life: -0.15 } },
+  { n: "Đa bệnh", g: 0, q: 1, d: "Sinh lực tối đa -30, hay đổ bệnh", m: { hpMax: -30 }, sick: true },
+  { n: "Thiên cơ ghét bỏ", g: 0, q: 2, d: "Khí vận -20, vận may -8", m: { kv: -20, luck: -8 } },
+  { n: "Mệnh cô tinh", g: 0, q: 2, d: "Tu luyện chậm hơn 30%, vận may -5", m: { train: -0.3, luck: -5 } }
+];
+const QNAME = ["trắng", "xanh", "vàng"];
+
+const ORIGINS = [
+  { name: "con nhà nông", gold: 5, luck: 0, w: 50 },
+  { name: "con thương nhân", gold: 40, luck: 1, w: 25 },
+  { name: "thiếu gia thế gia", gold: 100, luck: 2, w: 10 },
+  { name: "cô nhi lang thang", gold: 0, luck: 4, w: 15 }
+];
+
+let s = null, timer = null, lastSig = "", logDirty = true;
+let store = { best: 0, lives: 0 };
+try { store = Object.assign(store, JSON.parse(localStorage.getItem("tt8b") || "{}")); } catch (e) {}
+function save() { try { localStorage.setItem("tt8b", JSON.stringify(store)); } catch (e) {} }
+
+function log(t, cls) { s.log.push({ t, cls: cls || "" }); logDirty = true; }
+function xp(n) { s.xp += n; }
+function gold(n) { s.gold = Math.max(0, s.gold + n); }
+function hp(n) { s.hp = clamp(s.hp + n, 0, hpMax()); }
+function die(cause) { if (s.over) return; s.over = true; s.cause = cause; log(cause, "bad"); finish(); }
+
+// ---------- chỉ số ----------
+function mod(k) { return s.traits.reduce((a, t) => a + (t.m[k] || 0), 0); }
+function hpMax() { return Math.max(20, Math.round(100 + s.realm * 40 + mod("hpMax") + s.trainHp)); }
+function atk() { return Math.max(1, Math.round(s.baseAtk + s.realm * 10 + mod("atk") + s.trainAtk)); }
+function nl() { return Math.max(1, Math.round(s.baseNl + s.realm * 6 + mod("nl") + s.trainNl)); }
+function kv() { return s.baseKv + mod("kv"); }
+function luck() { return s.baseLuck + mod("luck"); }
+function lp(p) { return clamp(p + luck() * 0.01, 0.02, 0.95); }
+function lifeSpan() { const L = LIFE[s.realm]; return L === Infinity ? L : Math.round(L * (1 + mod("life"))); }
+function tc() {
+  const ps = s.tuchat.attrs.map(a => a.p);
+  const main = Math.max.apply(null, ps);
+  const n = Math.max(1, ps.filter(p => p >= 5).length);
+  return { main, n, total: s.tuchat.total };
+}
+function trainMul() { const t = tc(); return Math.max(0.15, (0.4 + t.main / 60) * (1 - 0.06 * (t.n - 1)) + mod("train")); }
+function ngo() { return Math.min(1.5, tc().main / 150 + nl() / 100); }
+function breakChance() {
+  const t = tc();
+  return clamp(0.7 - s.realm * 0.08 - 0.03 * (t.n - 1) + luck() * 0.004 + nl() * 0.003 + ngo() * 0.05 + mod("brk") + (s.ring ? 0.08 : 0), 0.1, 0.95);
+}
+function fight(enemy) { const a = atk(); return P(clamp(a / (a + enemy) + luck() * 0.005, 0.05, 0.95)); }
+function canBreak() { return s.realm < 6 && s.xp >= NEED[s.realm]; }
+
+// ---------- tư chất & tiên thiên ----------
+function rollTuChat() {
+  const total = 50 + Math.round(150 * Math.pow(Math.random(), 3.5));
+  const nEl = wpick([{ k: 1, w: 15 }, { k: 2, w: 25 }, { k: 3, w: 25 }, { k: 4, w: 20 }, { k: 5, w: 15 }]).k;
+  const attrs = shuffle(ELEM).slice(0, nEl).map(e => ({ n: e.n, di: false, p: 0 }));
+  if (P(0.08)) { const d = DI[RI(0, 4)]; attrs.push({ n: d.n, di: true, p: 0 }); }
+  const ws = attrs.map(a => Math.pow(0.2 + Math.random(), 2) * (a.di ? 1.5 : 1));
+  const sum = ws.reduce((a, b) => a + b, 0);
+  attrs.forEach((a, i) => { a.p = Math.max(1, Math.round(total * ws[i] / sum)); });
+  const diff = total - attrs.reduce((a, b) => a + b.p, 0);
+  let mi = 0; attrs.forEach((a, i) => { if (a.p > attrs[mi].p) mi = i; });
+  attrs[mi].p = Math.max(1, attrs[mi].p + diff);
+  return { total: attrs.reduce((a, b) => a + b.p, 0), attrs };
+}
+function addTuChat(n) {
+  const at = s.tuchat.attrs; let mi = 0;
+  at.forEach((a, i) => { if (a.p > at[mi].p) mi = i; });
+  at[mi].p += n; s.tuchat.total += n;
+  return at[mi].n;
+}
+function awakenDi() {
+  if (s.tuchat.attrs.some(a => a.di)) return false;
+  const d = DI[RI(0, 4)], p = RI(15, 30);
+  s.tuchat.attrs.push({ n: d.n, di: true, p }); s.tuchat.total += p;
+  return d.n;
+}
+function rollTraits() {
+  const cnt = wpick([{ k: 1, w: 50 }, { k: 2, w: 35 }, { k: 3, w: 15 }]).k, out = [];
+  for (let i = 0; i < cnt; i++) {
+    const g = P(0.5) ? 1 : 0, q = wpick([{ q: 0, w: 60 }, { q: 1, w: 30 }, { q: 2, w: 10 }]).q;
+    const pool = TRAITS.filter(t => t.g === g && t.q === q && out.indexOf(t) < 0);
+    if (pool.length) out.push(pool[RI(0, pool.length - 1)]);
+  }
+  return out;
+}
+function addGoodTrait() {
+  const pool = TRAITS.filter(t => t.g === 1 && t.q <= 1 && s.traits.indexOf(t) < 0);
+  if (!pool.length) return null;
+  const t = pool[RI(0, pool.length - 1)]; s.traits.push(t); return t;
+}
+function removeBadTrait() {
+  const bad = s.traits.filter(t => !t.g);
+  if (!bad.length) return null;
+  const t = bad[RI(0, bad.length - 1)]; s.traits.splice(s.traits.indexOf(t), 1); return t;
+}
+
+// ---------- vòng đời ----------
+function newLife() {
+  const origin = wpick(ORIGINS);
+  store.lives++;
+  s = {
+    months: 12 * 12, age: 12, realm: 0, xp: 0, hp: 100, gold: origin.gold,
+    baseAtk: 5 + RI(0, 4), baseNl: 8 + RI(0, 6), baseKv: RI(0, 10), baseLuck: RI(0, 4) + origin.luck,
+    trainHp: 0, trainAtk: 0, trainNl: 0,
+    origin, tuchat: rollTuChat(), traits: rollTraits(), ring: false, partner: false,
+    known: { kv: false, luck: false },
+    focus: "train", speed: 1, over: false, win: false, pending: null, log: [],
+    yXp: 0, yGold: 0, notified: false
+  };
+  if (P(0.005)) { s.ring = true; s.baseKv += 30; }
+  s.hp = hpMax();
+  log("Bạn được sinh ra là " + origin.name + ".", "big");
+  log("Mười hai năm lặng lẽ trôi qua. Hôm nay tông môn đến tuyển đệ tử, đo linh căn cho cả làng.");
+  const t = tc();
+  const names = s.tuchat.attrs.map(a => a.n + " " + a.p).join(", ");
+  log("Tư chất của bạn: " + t.total + " điểm (" + names + ").", t.total >= 120 ? "good" : t.total < 70 ? "bad" : "");
+  if (s.tuchat.attrs.some(a => a.di)) log("Trong cơ thể bạn có linh khí biến dị. Trưởng lão nhìn bạn rất lâu.", "good");
+  if (t.n >= 4) log("Linh căn tạp nhiều thuộc tính, dễ học nhiều thuật nhưng tu hành sẽ chậm.");
+  else if (t.n === 1) log("Linh căn thuần một thuộc tính, tu hành rất nhanh.", "good");
+  if (s.traits.length) log("Tiên thiên của bạn: " + s.traits.map(x => x.n).join(", ") + ".");
+  if (s.ring) {
+    log("Chiếc nhẫn trên ngón tay bạn phát sáng. Có tiếng thì thầm của một lão gia gia. Mệnh Long Ngạo Thiên!", "big");
+  }
+  log("Bạn bước chân vào con đường tu tiên.", "age");
+  save();
+  logDirty = true; lastSig = "";
+  render();
+  startLoop();
+}
+
+function startLoop() {
+  clearTimeout(timer);
+  const loop = () => {
+    if (s && !s.over && !s.pending && s.speed > 0) tick();
+    timer = setTimeout(loop, s && s.speed > 0 ? MONTH_MS / s.speed : 200);
+  };
+  timer = setTimeout(loop, MONTH_MS);
+}
+
+function tick() {
+  s.months++;
+  const f = s.focus, m = 1 / 12;
+  if (f === "train") {
+    const g = RI(4, 8) * (1 + s.realm * 1.2) * trainMul() * (s.ring ? 1.5 : 1) * m;
+    xp(g); s.yXp += g; s.trainNl += 0.04;
+    if (s.realm >= 1 && P(0.02 * (1 - Math.min(0.8, nl() / 100)) * m)) {
+      hp(-40); log("Tẩu hỏa nhập ma! Khí huyết nghịch chuyển, bạn mất 40 sinh lực.", "bad");
+    }
+  } else if (f === "forge") {
+    s.trainAtk += 0.15 * (1 + s.realm * 0.3); s.trainHp += 0.5;
+    hp(1);
+  } else if (f === "work") {
+    const g = RI(4, 12) * (1 + s.realm) * Math.max(0.2, 1 + mod("gold")) * m;
+    gold(g); s.yGold += g;
+  } else if (f === "rest") {
+    hp(35 * m);
+  }
+  hp(0.4);
+  const kvb = kv();
+  const pe = (f === "seek" ? 0.07 : 0.011) + kvb * (f === "seek" ? 0.002 : 0.0003);
+  if (P(clamp(pe, 0.005, 0.2))) triggerEvent();
+  if (!s.pending) {
+    if (s.realm >= 2) s.known.luck = true;
+    if (s.realm >= 3) s.known.kv = true;
+  }
+  if (s.hp <= 0) return die("Tuổi " + s.age + ": thân thể kiệt quệ, bạn gục xuống và không dậy nữa.");
+  if (s.months % 12 === 0) {
+    s.age++;
+    const parts = [];
+    if (f === "train") parts.push("tu vi +" + Math.round(s.yXp));
+    if (f === "work") parts.push("vàng +" + Math.round(s.yGold));
+    if (f === "forge") parts.push("thân thể cường tráng hơn");
+    if (f === "rest") parts.push("dưỡng sức");
+    if (f === "seek") parts.push("rong ruổi tìm cơ duyên");
+    log("Tuổi " + s.age + ": " + parts.join(", ") + ".", "age");
+    s.yXp = 0; s.yGold = 0;
+    if (s.age >= lifeSpan()) return die("Tuổi " + s.age + ": thọ nguyên cạn kiệt. Bạn nhắm mắt giữa lúc đang tu hành.");
+  }
+  if (canBreak() && !s.notified) {
+    s.notified = true; s.speed = 0;
+    log("Tu vi đã đầy. Có thể thử đột phá lên " + REALMS[s.realm + 1] + " (xác suất khoảng " + Math.round(breakChance() * 100) + "%).", "good");
+  }
+  render();
+}
+
+function doBreak() {
+  if (!canBreak() || s.pending || s.over) return;
+  const c = breakChance();
+  log("Bạn bắt đầu đột phá lên " + REALMS[s.realm + 1] + "...", "age");
+  if (P(c)) {
+    s.realm++; s.xp = 0; s.notified = false;
+    s.hp = hpMax();
+    log("Đột phá thành công! Bạn đã đạt cảnh giới " + REALMS[s.realm] + ".", "big");
+    if (s.realm >= 6) { s.win = true; s.over = true; log("Thiên môn mở rộng, bạn bay lên không trung. Phi thăng!", "big"); finish(); return; }
+    log("Thọ nguyên tăng lên " + lifeSpan() + " tuổi.", "good");
+  } else {
+    s.xp = s.xp * 0.6; s.notified = false;
+    hp(-35);
+    log("Đột phá thất bại! Tu vi hao tổn, sinh lực -35.", "bad");
+    if (P(0.06 + s.realm * 0.02)) die("Tuổi " + s.age + ": thiên lôi giáng xuống, thân tử đạo tiêu.");
+    else if (s.hp <= 0) die("Tuổi " + s.age + ": thương thế quá nặng sau đột phá thất bại.");
+  }
+  render();
+}
+
+function usePill() {
+  if (s.gold < 30 || s.pending || s.over) return;
+  gold(-30);
+  const g = 10 + NEED[Math.min(s.realm, 5)] * 0.12;
+  xp(g);
+  log("Bạn uống một viên đan dược, tu vi +" + Math.round(g) + ".", "good");
+  if (P(0.15)) { hp(-15); log("Đan độc phát tác, sinh lực -15.", "bad"); if (s.hp <= 0) die("Tuổi " + s.age + ": chết vì uống đan dược kém chất lượng."); }
+  render();
+}
+
+// ---------- sự kiện ----------
+const NR = () => NEED[Math.min(s.realm, 5)];
+const EVENTS = [
+  {
+    w: 3, when: () => !s.ring && s.realm <= 2, title: "Chiếc nhẫn kỳ lạ",
+    text: "Ven đường bạn nhặt được một chiếc nhẫn cũ, hơi ấm lạ thường. Có tiếng thì thầm: \"Tiểu tử, ta là đại năng ngàn năm trước...\"",
+    ch: [
+      { l: "Đeo vào", f: () => {
+        if (P(lp(0.4))) { s.ring = true; xp(15); return "Lão gia gia là thật! Ông truyền cho bạn công pháp. Từ nay tu luyện nhanh hơn rõ rệt."; }
+        gold(-20); return "Chiếc nhẫn là đồ giả của gã lừa đảo. Bạn mất 20 vàng.";
+      } },
+      { l: "Vứt đi", f: () => "Bạn vứt nhẫn đi. Cẩn tắc vô áy náy." }
+    ]
+  },
+  {
+    w: 3, when: () => s.ring, title: "Lão gia gia lên lớp",
+    text: "Giọng nói trong nhẫn vang lên: \"Tiểu tử, hôm nay ta kể cho ngươi nghe chuyện hồi ta còn là thiên hạ đệ nhất...\"",
+    ch: [
+      { l: "Chăm chú nghe", f: () => { xp(NR() * 0.15 * (0.7 + ngo() * 0.6)); return "Bạn học được vài điều quý giá giữa mười điều khoác lác."; } },
+      { l: "Giả vờ ngủ gật", f: () => "Lão gia gia thở dài một tiếng rồi im lặng cả tháng." }
+    ]
+  },
+  {
+    w: 2, when: () => s.realm <= 1 && s.age < 50, title: "Từ hôn",
+    text: "Thiếu chủ một gia tộc lớn đến tận nơi, ném xuống tờ giấy từ hôn. Hình như bạn chưa từng đính hôn với ai, nhưng họ cứ khăng khăng.",
+    ch: [
+      { l: "\"Ba mươi năm Hà Đông, ba mươi năm Hà Tây!\"", f: () => { xp(10); return "Cả sảnh cười ồ lên, nhưng uất khí hóa thành động lực. Tu vi +10."; } },
+      { l: "Ký giấy rồi đi", f: () => { gold(10); return "Bạn nhận 10 vàng đền bù và rời đi, nhẹ nhõm bất ngờ."; } }
+    ]
+  },
+  {
+    w: 2, when: () => s.realm >= 1, title: "Thiếu chủ ngạo mạn",
+    text: "Một thiếu chủ tông môn chặn đường, quát: \"Phế vật như ngươi cũng xứng ở đây sao?\"",
+    ch: [
+      { l: "Đánh trả", f: () => {
+        if (fight(12 + s.realm * 10)) { gold(25); s.baseLuck++; return "Bạn đánh hắn bầm dập. Thu được 25 vàng, vận may tăng."; }
+        hp(-30); return "Hắn mạnh hơn dự đoán. Sinh lực -30.";
+      } },
+      { l: "Nhẫn nhịn", f: () => "Bạn cúi đầu bỏ đi. Hắn cười hả hê. Bạn ghi nhớ trong lòng." }
+    ]
+  },
+  {
+    w: 2, when: () => s.realm >= 1, title: "Bí cảnh mở ra",
+    text: "Một bí cảnh cổ xưa xuất hiện gần đây. Nhiều người lao vào, không ít người không ra.",
+    ch: [
+      { l: "Tiến vào", f: () => {
+        const r = Math.random() - luck() * 0.005;
+        if (r < 0.4) { xp(NR() * 0.2); gold(30); return "Bạn tìm được bảo vật! Tu vi tăng mạnh, thêm 30 vàng."; }
+        if (r < 0.7) return "Bí cảnh trống rỗng, chỉ còn mạng nhện và tiếng gió.";
+        hp(-50); return "Bạn bị cấm chế đánh trọng thương. Sinh lực -50.";
+      } },
+      { l: "Bỏ qua", f: () => "Bạn không mạo hiểm. Sống lâu mới làm được việc lớn." }
+    ]
+  },
+  {
+    w: 2, when: () => s.gold >= 30, title: "Thương nhân bán đan",
+    text: "Một thương nhân bí ẩn mời bạn mua \"đan dược tuyệt thế\", giá chỉ 30 vàng.",
+    ch: [
+      { l: "Mua (30 vàng)", f: () => {
+        gold(-30);
+        if (P(lp(0.65))) { xp(15 + s.realm * 20); return "Đan dược thật! Tu vi tăng lên."; }
+        hp(-20); return "Đan dược giả, bạn đau bụng. Sinh lực -20.";
+      } },
+      { l: "Từ chối", f: () => "Bạn bỏ đi. Nghe nói người sau mua được hàng thật." }
+    ]
+  },
+  {
+    w: 2, when: () => s.realm >= 1, title: "Yêu thú tấn công",
+    text: "Một con yêu thú lao ra từ bụi rậm, mắt đỏ rực.",
+    ch: [
+      { l: "Chiến đấu", f: () => {
+        if (fight(6 + s.realm * 12)) { gold(20); xp(NR() * 0.05); return "Bạn hạ được nó, thu yêu đan bán được 20 vàng."; }
+        hp(-45); return "Bạn bị thương nặng. Sinh lực -45.";
+      } },
+      { l: "Bỏ chạy", f: () => { hp(-10); return "Bạn chạy thoát nhưng bị cào rách vai. Sinh lực -10."; } }
+    ]
+  },
+  {
+    w: () => (s.traits.some(t => t.sick) ? 5 : 2), when: () => s.realm === 0, title: "Bệnh tật",
+    text: "Bạn đổ bệnh nặng. Thân phàm nhân mong manh hơn bạn nghĩ.",
+    ch: [
+      { l: "Chữa trị (20 vàng)", f: () => { if (s.gold >= 20) { gold(-20); return "Thầy thuốc chữa khỏi cho bạn."; } hp(-40); return "Bạn không đủ tiền. Sinh lực -40."; } },
+      { l: "Chịu đựng", f: () => { hp(-30); return "Bạn nghiến răng chịu đựng. Sinh lực -30."; } }
+    ]
+  },
+  {
+    w: 2, when: () => s.age >= 20 && !s.partner, title: "Duyên phận",
+    text: "Một người có duyên với bạn ngỏ ý đồng hành cùng bạn trên con đường tu đạo.",
+    ch: [
+      { l: "Kết duyên", f: () => { s.partner = true; s.baseLuck += 3; hp(15); return "Có người bên cạnh, bạn thấy lòng nhẹ nhõm. Vận may tăng."; } },
+      { l: "Chuyên tâm đại đạo", f: () => { xp(NR() * 0.1); return "Bạn dồn hết tâm sức vào tu luyện. Tu vi tăng."; } }
+    ]
+  },
+  {
+    w: 2, when: () => s.realm >= 1, title: "Tông môn phát lương",
+    text: "Tông môn phát bổng lộc hằng năm.",
+    ch: [{ l: "Nhận", f: () => { const g = RI(10, 30) * (1 + s.realm); gold(g); return "Bạn nhận " + g + " vàng."; } }]
+  },
+  {
+    w: 1.5, when: () => true, title: "Cao nhân chỉ điểm",
+    text: "Một lão nhân áo vải ngồi bên đường gọi bạn lại: \"Tiểu hữu, ta thấy ngươi có duyên.\"",
+    ch: [
+      { l: "Lắng nghe", f: () => {
+        xp(NR() * 0.18 * (0.7 + ngo() * 0.6)); s.baseLuck++;
+        if (P(0.1)) { const a = addTuChat(RI(6, 15)); return "Lời chỉ điểm khiến bạn thông suốt. Tu vi tăng, vận may tăng, và tư chất hệ " + a + " cũng tăng thêm!"; }
+        return "Lời chỉ điểm khiến bạn sáng ra nhiều điều. Tu vi tăng, vận may tăng.";
+      } },
+      { l: "Nghi ngờ bỏ đi", f: () => "Có thể ông ấy là cao nhân thật. Cũng có thể là kẻ bán thuốc dạo." }
+    ]
+  },
+  {
+    w: 2, when: () => !s.known.kv || !s.known.luck, title: "Thầy tướng xem số",
+    text: "Một thầy tướng ngồi dưới gốc cây, nhìn chằm chằm vào trán bạn rồi gọi: \"Lại đây, ta xem cho miễn phí.\"",
+    ch: [
+      { l: "Để ông xem", f: () => {
+        s.known.kv = true; s.known.luck = true;
+        let r = "Thầy tướng phán: khí vận của bạn là " + kv() + ", vận may là " + luck() + ".";
+        if (P(0.1)) { const t = removeBadTrait(); if (t) r += " Ông còn hóa giải giúp bạn nghiệp chướng \"" + t.n + "\"!"; }
+        return r;
+      } },
+      { l: "Không tin", f: () => "Bạn lắc đầu bỏ đi. Thầy tướng lẩm bẩm gì đó sau lưng." }
+    ]
+  },
+  {
+    w: 1.5, when: () => s.realm >= 1, title: "Linh tuyền ẩn mình",
+    text: "Bạn phát hiện một dòng suối nhỏ tỏa linh khí mờ ảo giữa rừng sâu.",
+    ch: [
+      { l: "Uống thử", f: () => {
+        const r = Math.random();
+        if (r < 0.1 + kv() * 0.001) { const a = addTuChat(RI(8, 20)); return "Linh khí tẩy luyện kinh mạch! Tư chất hệ " + a + " tăng mạnh."; }
+        if (r < 0.15 + kv() * 0.001) { const d = awakenDi(); if (d) return "Linh khí đánh thức huyết mạch ẩn! Bạn thức tỉnh thuộc tính biến dị hệ " + d + "!"; xp(NR() * 0.1); return "Linh khí dồi dào, tu vi tăng."; }
+        if (r < 0.6) { xp(NR() * 0.08); return "Bạn uống một ngụm, linh khí chảy khắp cơ thể. Tu vi tăng."; }
+        hp(10); return "Chỉ là nước suối thường, nhưng uống vào cũng khoan khoái.";
+      } },
+      { l: "Bỏ qua", f: () => "Bạn nghi có bẫy nên đi tiếp." }
+    ]
+  },
+  {
+    w: 1, when: () => s.realm >= 1, title: "Cổ động phủ",
+    text: "Sau một trận mưa lớn, vách núi sạt lở, lộ ra cửa vào của động phủ bỏ hoang.",
+    ch: [
+      { l: "Khám phá", f: () => {
+        const r = Math.random();
+        if (r < 0.1 + kv() * 0.001) { const t = addGoodTrait(); if (t) return "Bạn nhận được truyền thừa của chủ nhân động phủ! Có thêm tiên thiên \"" + t.n + "\" (phẩm " + QNAME[t.q] + ")."; }
+        if (r < 0.2) { const t = removeBadTrait(); if (t) return "Chủ nhân động phủ để lại một bí pháp tẩy tủy. Bạn xóa được tiên thiên xấu \"" + t.n + "\"!"; }
+        if (r < 0.6) { xp(NR() * 0.15); gold(15); return "Bạn tìm được ít linh thạch và tâm đắc tu luyện. Tu vi tăng, thêm 15 vàng."; }
+        if (r < 0.8) return "Động phủ trống rỗng, chỉ có xương người.";
+        hp(-30); return "Cấm chế còn hiệu lực. Sinh lực -30.";
+      } },
+      { l: "Quay đi", f: () => "Bạn không chắc nên bỏ đi." }
+    ]
+  },
+  {
+    w: 1, when: () => !s.known.kv, title: "Đạo quán hoang",
+    text: "Bạn gặp một đạo quán hoang tàn. Bàn thờ còn lư hương nghi ngút.",
+    ch: [
+      { l: "Thắp hương cầu nguyện", f: () => {
+        if (P(0.15)) { s.baseKv += RI(3, 8); s.known.kv = true; return "Lư hương rực sáng! Khí vận của bạn tăng lên rõ rệt, và bạn cảm nhận được nó."; }
+        return "Hương cháy hết, không có gì xảy ra. Lòng bạn nhẹ đi đôi chút.";
+      } },
+      { l: "Đi tiếp", f: () => "Bạn bỏ qua đạo quán." }
+    ]
+  }
+];
+
+function triggerEvent() {
+  const list = EVENTS.filter(e => e.when());
+  if (!list.length) return;
+  const e = wpick(list, x => (typeof x.w === "function" ? x.w() : x.w));
+  s.pending = {
+    title: e.title, text: e.text,
+    choices: e.ch.map(c => ({
+      label: c.l,
+      fn: () => {
+        const res = c.f();
+        log(res, /Sinh lực -|mất|thương|giả|thất bại/.test(res) ? "bad" : (/tăng|nhận|hóa giải|xóa|thức tỉnh|thiết/.test(res) ? "good" : ""));
+        s.pending = null;
+        if (s.hp <= 0) die("Tuổi " + s.age + ": bạn không qua khỏi trận này.");
+        render();
+      }
+    }))
+  };
+}
+
+function finish() {
+  if (s.realm > store.best) store.best = s.realm;
+  save();
+  render();
+}
+
+function verdict() {
+  if (s.win) return "Phi thăng thành công. Trong 8 tỷ người, bạn là người hiếm hoi làm được.";
+  if (s.realm === 0) return "Bạn chưa kịp bước vào tiên đạo. Phần lớn chúng ta là như vậy.";
+  if (s.realm <= 2) return "Một tu sĩ bình thường. Có người nhớ đến bạn ít lâu.";
+  if (s.realm <= 4) return "Một cường giả một phương. Sử sách tông môn có ghi tên bạn.";
+  return "Bạn chỉ còn cách thiên môn một bước. Tiếc thật.";
+}
+
+// ---------- giao diện ----------
+const FOCUS = [["train", "Tu luyện"], ["forge", "Rèn thể"], ["work", "Kiếm sống"], ["seek", "Tìm cơ duyên"], ["rest", "Nghỉ ngơi"]];
+const SPEEDS = [[0, "⏸"], [1, "x1"], [2, "x2"], [4, "x4"], [8, "x8"]];
+
+function renderStats() {
+  const need = s.realm < 6 ? NEED[s.realm] : 1;
+  const pct = Math.min(100, Math.round(s.xp / need * 100));
+  const hm = hpMax(), hpp = Math.round(s.hp / hm * 100);
+  const mo = s.months % 12 + 1;
+  const life = lifeSpan();
+  const t = tc();
+  const tcHtml = s.tuchat.attrs.slice().sort((a, b) => b.p - a.p).map(a =>
+    "<div>" + a.n + (a.di ? " (biến dị)" : "") + ": <b>" + a.p + "</b><div class=\"bar " + (a.di ? "di" : "el") + "\"><i style=\"width:" + Math.min(100, a.p / 2) + "%\"></i></div></div>"
+  ).join("");
+  const traits = s.traits.length
+    ? s.traits.map(x => "<span class=\"chip q" + x.q + (x.g ? "" : " bad") + "\" title=\"" + x.d + " (phẩm " + QNAME[x.q] + ")\">" + (x.g ? "▲ " : "▼ ") + x.n + "</span>").join("")
+    : "<span class=\"small\">Không có</span>";
+  $("stats").innerHTML =
+    "<div class=\"sec\">Thời gian</div><div class=\"grid\"><div>Tuổi: <b>" + s.age + "</b> / " + (life === Infinity ? "∞" : life) + " <span class=\"small\">(tháng " + mo + ")</span></div>" +
+    "<div>Cảnh giới: <b>" + REALMS[s.realm] + "</b></div>" +
+    "<div>Tu vi: <b>" + Math.floor(s.xp) + "/" + need + "</b><div class=\"bar\"><i style=\"width:" + pct + "%\"></i></div></div>" +
+    "<div>Vàng: <b>" + Math.floor(s.gold) + "</b></div></div>" +
+    "<div class=\"sec\">Chỉ số cơ bản</div><div class=\"grid\">" +
+    "<div>Sinh lực: <b>" + Math.round(s.hp) + "/" + hm + "</b><div class=\"bar hp\"><i style=\"width:" + hpp + "%\"></i></div></div>" +
+    "<div>Công kích: <b>" + atk() + "</b></div><div>Niệm lực: <b>" + nl() + "</b></div></div>" +
+    "<div class=\"sec\">Chỉ số ẩn và suy ra</div><div class=\"grid\">" +
+    "<div>Khí vận: <b>" + (s.known.kv ? kv() : "???") + "</b></div>" +
+    "<div>Vận may: <b>" + (s.known.luck ? luck() : "???") + "</b></div>" +
+    "<div title=\"Tốc độ tu luyện, tính từ thuộc tính cao nhất\">Tốc độ tu: <b>x" + trainMul().toFixed(2) + "</b></div>" +
+    "<div title=\"Khả năng ngộ ra, tính từ thuộc tính cao nhất và niệm lực\">Linh ngộ: <b>" + ngo().toFixed(2) + "</b></div></div>" +
+    "<div class=\"sec\">Tư chất: " + t.total + " điểm, " + t.n + " thuộc tính chính</div><div class=\"grid\">" + tcHtml + "</div>" +
+    "<div class=\"sec\">Tiên thiên</div><div class=\"chips\">" + traits + "</div>";
+}
+
+function renderLog() {
+  if (!logDirty) return;
+  logDirty = false;
+  const lg = $("log");
+  lg.innerHTML = "";
+  s.log.slice(-80).forEach(x => {
+    const p = document.createElement("p");
+    p.className = x.cls;
+    p.textContent = x.t;
+    lg.appendChild(p);
+  });
+  lg.scrollTop = lg.scrollHeight;
+}
+
+function renderAction() {
+  const sig = [s.over, s.pending && s.pending.title, canBreak(), s.focus, s.speed, s.gold >= 30].join("|");
+  if (sig === lastSig) return;
+  lastSig = sig;
+  const ac = $("action");
+  ac.innerHTML = "";
+  const btn = (label, fn, cls, dis) => {
+    const b = document.createElement("button");
+    b.textContent = label;
+    if (cls) b.className = cls;
+    if (dis) b.disabled = true;
+    b.onclick = fn;
+    return b;
+  };
+  if (s.over) {
+    const d = document.createElement("div");
+    d.className = "panel end" + (s.win ? " win" : "");
+    d.innerHTML = "<h2>" + (s.win ? "Phi thăng!" : "Đạo tiêu") + "</h2>" +
+      "<p>" + (s.win ? "Bạn đã phi thăng ở tuổi " + s.age + "." : s.cause) + "</p>" +
+      "<p>Xuất thân: " + s.origin.name + ". Tư chất: " + tc().total + " điểm. Cảnh giới đạt được: <b>" + REALMS[s.realm] + "</b>.</p>" +
+      "<p>" + verdict() + "</p>";
+    const row = document.createElement("div");
+    row.className = "btns";
+    row.appendChild(btn("Đầu thai", newLife, "primary"));
+    d.appendChild(row);
+    ac.appendChild(d);
+    return;
+  }
+  if (s.pending) {
+    const d = document.createElement("div");
+    d.className = "panel ev";
+    d.innerHTML = "<h3>" + s.pending.title + "</h3><p>" + s.pending.text + "</p>";
+    const row = document.createElement("div");
+    row.className = "btns";
+    s.pending.choices.forEach(c => row.appendChild(btn(c.label, c.fn)));
+    d.appendChild(row);
+    ac.appendChild(d);
+    return;
+  }
+  const d = document.createElement("div");
+  d.className = "panel";
+  const sp = document.createElement("div");
+  sp.className = "btns";
+  SPEEDS.forEach(x => sp.appendChild(btn(x[1], () => { s.speed = x[0]; render(); }, s.speed === x[0] ? "on" : "")));
+  const tm = document.createElement("span");
+  tm.className = "time";
+  tm.textContent = "Tốc độ thời gian";
+  sp.appendChild(tm);
+  d.appendChild(sp);
+  const fr = document.createElement("div");
+  fr.className = "btns";
+  if (canBreak()) fr.appendChild(btn("Đột phá lên " + REALMS[s.realm + 1], doBreak, "primary"));
+  FOCUS.forEach(x => fr.appendChild(btn(x[1], () => { s.focus = x[0]; render(); }, s.focus === x[0] ? "on" : "")));
+  fr.appendChild(btn("Uống đan (30 vàng)", usePill, "", s.gold < 30));
+  d.appendChild(fr);
+  ac.appendChild(d);
+}
+
+function render() {
+  renderStats();
+  renderLog();
+  renderAction();
+  $("rec").textContent = "Kiếp thứ " + store.lives + " · Cảnh giới cao nhất từng đạt: " + REALMS[store.best];
+}
+
+newLife();
+</script>
+</body>
+</html>

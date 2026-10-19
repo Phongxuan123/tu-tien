@@ -1,0 +1,204 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Mô phỏng Hồ sơ nhân vật</title>
+<style>
+:root{--bg:#0e131a;--panel:#151c26;--line:#222d3b;--text:#e4e9f0;--dim:#8794a6;--gold:#d9a441;--green:#6fd8a4;--red:#ff6f45;--teal:#4fd1c5;--pink:#ff7ab6;--violet:#a98be8;--blue:#6aa8ff}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--text);font:14px/1.5 system-ui,"Segoe UI",sans-serif;padding:16px}
+.wrap{max-width:420px;margin:0 auto}
+h1{font-size:15px;color:var(--dim);font-weight:600;margin:0 0 8px}
+.note{font-size:12px;color:var(--dim);margin:0 0 12px}
+.panel{background:var(--panel);border:1px solid var(--line);border-radius:10px;overflow:hidden}
+button{font:inherit;color:var(--text);background:#1d2733;border:1px solid #2c394b;border-radius:6px;padding:4px 10px;cursor:pointer}
+button:hover{background:#26344a}
+button.sm{font-size:12px;padding:2px 8px}
+.tabs{display:flex;gap:4px;padding:6px 8px;border-bottom:1px solid var(--line);flex-wrap:wrap;background:#111821}
+.tabs button{font-size:12.5px;padding:3px 9px;border-radius:99px}
+.tabs button.on{background:#2b3f5e;border-color:#47638f;color:#fff}
+.body{padding:12px;max-height:640px;overflow:auto}
+
+/* thẻ đầu hồ sơ */
+.card{display:grid;grid-template-columns:84px 1fr;gap:12px;align-items:center;padding:10px;border:1px solid #2c394b;border-radius:10px;background:linear-gradient(135deg,#1b2638,#151c26)}
+.av{width:84px;height:104px;border-radius:8px;background:linear-gradient(#1c2a4a,#0e1626);border:1px solid #2c394b;image-rendering:pixelated}
+.nm{font-size:18px;font-weight:700}
+.sub{font-size:12.5px;color:var(--dim)}
+.chips{display:flex;flex-wrap:wrap;gap:5px;margin-top:6px}
+.chip{font-size:11.5px;padding:1px 8px;border-radius:99px;background:#223048;color:#b8c7dd}
+.chip.g{background:#233b30;color:var(--green)}.chip.v{background:#2e2a4a;color:var(--violet)}.chip.o{background:#3b3020;color:var(--gold)}
+
+.sec{margin:14px 0 6px;font-size:11.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--dim);display:flex;align-items:center;gap:8px}
+.sec:after{content:"";flex:1;height:1px;background:var(--line)}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.tile{padding:8px 10px;border:1px solid #243041;border-radius:8px;background:#121923;cursor:pointer}
+.tile:hover{border-color:#47638f}
+.tile .k{font-size:11px;color:var(--dim)}
+.tile .v{font-size:14px;font-weight:600}
+.tile .s{font-size:11.5px;color:var(--dim)}
+.bar{height:5px;background:#1f2937;border-radius:3px;margin-top:5px;overflow:hidden}
+.bar i{display:block;height:100%;background:var(--teal)}
+.bar.g i{background:var(--green)}.bar.y i{background:var(--gold)}.bar.r i{background:var(--red)}
+.rel{display:flex;align-items:center;gap:10px;padding:6px 8px;border:1px solid #243041;border-radius:8px;margin-bottom:6px;background:#121923;cursor:pointer}
+.rel .pf{width:30px;height:30px;border-radius:50%;display:grid;place-items:center;font-weight:700;background:#25344c}
+.rel .t{font-size:12px;color:var(--dim)}
+.rec{display:grid;grid-template-columns:repeat(3,1fr);gap:6px}
+.rec div{padding:6px 8px;border-radius:8px;background:#121923;border:1px solid #243041;text-align:center}
+.rec b{display:block;font-size:15px;color:var(--gold)}.rec span{font-size:11px;color:var(--dim)}
+
+/* chỉ số (nội dung tab Nhân vật cũ) */
+.stats{display:grid;grid-template-columns:1fr 1fr;gap:6px 14px}
+.stats div{font-size:13px}
+.attr{display:flex;align-items:center;gap:8px;font-size:13px;margin-bottom:4px}
+.attr .n{width:50px}
+.attr .bar{flex:1;margin:0}
+.attr b{width:26px;text-align:right}
+.trait{display:inline-block;margin:2px 3px 2px 0;padding:2px 8px;border-radius:6px;font-size:12px;border:1px solid #2c394b;background:#17202c}
+.trait.hot{border-color:var(--gold);color:var(--gold)}
+
+/* thành tựu */
+.ach{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.ac{padding:8px 10px;border-radius:8px;border:1px solid #243041;background:#121923}
+.ac.lock{opacity:.45}
+.ac .i{font-size:20px}.ac b{display:block;font-size:13px}.ac span{font-size:11.5px;color:var(--dim)}
+.tl{position:relative;margin:6px 0 0 8px;padding-left:16px;border-left:2px solid #2c394b}
+.tl .it{position:relative;margin-bottom:10px}
+.tl .it:before{content:"";position:absolute;left:-24px;top:5px;width:11px;height:11px;border-radius:50%;background:var(--gold);border:2px solid var(--panel)}
+.tl .it.good:before{background:var(--green)}.tl .it.bad:before{background:var(--red)}
+.tl .w{font-size:11.5px;color:var(--dim)}.tl .x{font-weight:600}
+
+/* đánh dấu */
+.mk{display:grid;grid-template-columns:28px 1fr;gap:8px;padding:8px 0;border-bottom:1px solid #1b2431}
+.mk .ic{width:24px;height:24px;border-radius:6px;display:grid;place-items:center;background:#1d2733}
+.mk .w{font-size:11.5px;color:var(--dim)}
+.mk .nt{color:var(--gold);font-style:italic;font-size:12.5px}
+.star{color:var(--gold);cursor:pointer;float:right}
+
+/* kiếp trước */
+.life{border:1px solid #2c394b;border-radius:10px;padding:10px;margin-bottom:8px;background:#121923}
+.life h4{margin:0 0 2px;font-size:14px;color:var(--violet)}
+.life .d{font-size:12.5px;color:var(--dim)}
+.life .legacy{margin-top:6px;font-size:12.5px}
+.life .legacy b{color:var(--gold)}
+.hint{font-size:11.5px;color:var(--dim);margin-top:10px;padding:6px 8px;border-left:2px solid var(--teal);background:#101821}
+.legend{margin-top:12px;font-size:12px;color:var(--dim)}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>Mô phỏng Hồ sơ nhân vật (bản xem thử, chưa nối vào game)</h1>
+  <p class="note">Đây là tab bên trái, thay cho tab "Nhân vật" cũ. Bấm các nút tròn ở đầu để chuyển mục. Bấm ô nhỏ để giả lập nhảy sang tab khác (Quan hệ, Nghề, Nhiệm vụ).</p>
+  <div class="panel">
+    <div class="tabs" id="tabs"></div>
+    <div class="body" id="body"></div>
+  </div>
+  <div class="legend" id="toast"></div>
+</div>
+
+<script>
+const $=id=>document.getElementById(id);
+const TABS=[['tong','Tổng quan'],['chiso','Chỉ số'],['tt','Thành tựu'],['dd','★ Đánh dấu'],['kt','Kiếp trước']];
+let cur='tong';
+function toast(t){$('toast').textContent='→ (giả lập) '+t}
+
+function avatar(){
+  const c=document.createElement('canvas');c.width=21;c.height=26;c.className='av';
+  const g=c.getContext('2d');
+  const px=(x,y,w,h,col)=>{g.fillStyle=col;g.fillRect(x,y,w,h)};
+  px(0,0,21,26,'#1a2748');
+  for(let i=0;i<14;i++)px((i*7)%21,(i*5)%11,1,1,'#cfd8ff');
+  px(0,21,21,5,'#274a3a');px(0,21,21,1,'#3f7a5a');
+  px(8,5,5,5,'#e8c9a0');px(7,4,7,2,'#1d1d2a');px(7,6,1,3,'#1d1d2a');px(13,6,1,3,'#1d1d2a');
+  px(9,7,1,1,'#14110f');px(11,7,1,1,'#14110f');
+  px(6,10,9,8,'#3a6ea5');px(6,10,9,1,'#5f93c9');px(9,10,3,8,'#2c5585');
+  px(5,11,1,6,'#e8c9a0');px(15,11,1,6,'#e8c9a0');
+  px(7,18,3,4,'#27304a');px(11,18,3,4,'#27304a');
+  px(16,9,1,10,'#c9d2dd');px(15,8,3,1,'#d9a441');
+  return c;
+}
+
+function tong(){
+  const box=document.createElement('div');
+  const card=document.createElement('div');card.className='card';
+  card.appendChild(avatar());
+  const info=document.createElement('div');
+  info.innerHTML='<div class="nm">Nguyễn Vân</div><div class="sub">Nữ · 16 tuổi / thọ nguyên 112 · Kiếp thứ 3</div>'+
+    '<div class="sub">Con ngư dân · Bạch Sa Ngư Thôn, Đông Hải</div>'+
+    '<div class="chips"><span class="chip o">Trúc Cơ tầng 1</span><span class="chip v">Thủy Nguyệt Cung · Nội môn</span><span class="chip g">Nghề: Dược sư</span><span class="chip">Đạo: Kiếm sống</span></div>';
+  card.appendChild(info);box.appendChild(card);
+
+  box.insertAdjacentHTML('beforeend','<div class="sec">Đang theo</div>');
+  const g=document.createElement('div');g.className='grid2';
+  g.innerHTML=
+   '<div class="tile" data-go="Tab Nhiệm vụ"><div class="k">Nhiệm vụ lớn</div><div class="v">Đạt Kim Đan sơ kỳ</div><div class="s">còn 6 năm · 38%</div><div class="bar"><i style="width:38%"></i></div></div>'+
+   '<div class="tile" data-go="Tab Nhiệm vụ"><div class="k">Gần hạn nhất</div><div class="v" style="color:var(--red)">Cứu Lâm Tố</div><div class="s">còn 1 năm 4 tháng</div><div class="bar r"><i style="width:82%"></i></div></div>'+
+   '<div class="tile" data-go="Tab Nghề"><div class="k">Nghề chính</div><div class="v">Dược sư · cấp 3</div><div class="s">thạo 42%</div><div class="bar y"><i style="width:42%"></i></div></div>'+
+   '<div class="tile" data-go="Tab Tông môn"><div class="k">Tông môn</div><div class="v">Nội môn đệ tử</div><div class="s">cống hiến 128 / 300</div><div class="bar g"><i style="width:43%"></i></div></div>';
+  box.appendChild(g);
+
+  box.insertAdjacentHTML('beforeend','<div class="sec">Người thân cận</div>');
+  [['LT','Lâm Tố','Đạo lữ · thiện cảm 91','Đang bị hải tặc giam giữ'],['TN','Trần Nhất','Sư phụ · thiện cảm 74','Ở Thủy Nguyệt Cung'],['HM','Hạ Minh','Bạn · thiện cảm 58','Đang tu luyện ở Lam Cảng']].forEach(r=>{
+    const d=document.createElement('div');d.className='rel';d.innerHTML='<div class="pf">'+r[0]+'</div><div><b>'+r[1]+'</b> <span class="t">'+r[2]+'</span><div class="t">'+r[3]+'</div></div>';
+    d.onclick=()=>toast('Mở tab Quan hệ, chọn '+r[1]);box.appendChild(d)});
+
+  box.insertAdjacentHTML('beforeend','<div class="sec">Kỷ lục kiếp này</div>');
+  box.insertAdjacentHTML('beforeend','<div class="rec"><div><b>16</b><span>năm sống</span></div><div><b>Trúc Cơ</b><span>cảnh giới cao nhất</span></div><div><b>420</b><span>linh thạch nhiều nhất</span></div></div>');
+  box.insertAdjacentHTML('beforeend','<div class="hint">Không lặp lại sinh lực, tu vi, vàng: những số sống đó vẫn nằm ở khung nổi Trạng thái. Hồ sơ chỉ nói nhân vật là ai và đã đi tới đâu.</div>');
+  box.querySelectorAll('[data-go]').forEach(t=>t.onclick=()=>toast('Chuyển sang '+t.dataset.go));
+  return box;
+}
+
+function chiso(){
+  const b=document.createElement('div');
+  const row=(n,v,max,cls)=>'<div class="attr"><span class="n">'+n+'</span><div class="bar '+(cls||'')+'"><i style="width:'+v/max*100+'%"></i></div><b>'+v+'</b></div>';
+  b.innerHTML='<div class="sec" style="margin-top:0">Tư chất: 62 điểm, 3 thuộc tính chính</div>'+
+    row('Thủy',24,30)+row('Mộc',21,30,'g')+row('Phong',9,30,'y')+row('Thổ',4,30)+row('Hỏa',4,30,'r')+
+    '<div class="sec">Đạo tâm và danh vọng</div><div class="stats">'+
+    '<div>Đạo tâm: <b>71/100</b></div><div>Đạo điểm: <b>5</b></div><div>Thiên cơ điểm: <b>2</b></div><div>Danh vọng: <b>Tiểu hữu</b> (41)</div><div>Thiên hướng: <b>Chính đạo</b></div><div>Nghiệp: <b>0</b></div></div>'+
+    '<div class="sec">Tiên thiên</div><span class="trait hot">Thủy linh thể</span><span class="trait">Mắt tinh</span><span class="trait">Hay lo xa</span><span class="trait">Đa cảm</span>'+
+    '<div class="sec">Môi trường</div><div class="stats"><div>Ẩm thấp, gió biển</div><div>Kháng: <b>13%</b></div></div>'+
+    '<div class="hint">Đây là nguyên nội dung tab "Nhân vật" cũ, chỉ chuyển chỗ, không viết lại.</div>';
+  return b;
+}
+
+const ACH=[['☯','Trúc Cơ','Đạt cảnh giới Trúc Cơ',1],['⚔','Sống sót thiên kiếp','Qua thiên kiếp với dưới 10 sinh lực',1],['♥','Kết đạo lữ','Kết duyên cùng Lâm Tố',1],['⌂','Nội môn','Được nhận làm nội môn',1],['◈','Chủ nhà giàu','Có 500 linh thạch cùng lúc',0],['✦','Hoàn thành 5 nhiệm vụ','3/5',0],['➶','Đi hết một vùng','Ghé 7/10 nơi ở Đông Hải',0],['☼','Người của thiên hạ','Được tên trong Nhật báo',0]];
+function tt(){
+  const b=document.createElement('div');
+  b.innerHTML='<div class="sec" style="margin-top:0">Danh hiệu (4/8)</div><div class="ach">'+ACH.map(a=>'<div class="ac '+(a[3]?'':'lock')+'"><div class="i">'+a[0]+'</div><b>'+a[1]+'</b><span>'+a[2]+'</span></div>').join('')+'</div>'+
+   '<div class="sec">Mốc đời (việc lớn, mới trên cùng)</div><div class="tl">'+
+   [['16 tuổi · Tháng 4','Bạn và Lâm Tố kết làm đạo lữ.','good'],['16 tuổi · Tháng 1','Thiên kiếp quá mạnh, bạn bị trọng thương!','bad'],['15 tuổi · Tháng 6','Đột phá thành công, đạt Trúc Cơ.','good'],['14 tuổi · Tháng 9','Lâm Tố bị hải tặc bắt đi.','bad'],['14 tuổi · Tháng 1','Được Thủy Nguyệt Cung nhận làm ngoại môn đệ tử.','good'],['13 tuổi · Tháng 2','Đột phá, đạt Luyện Khí.','good']].map(r=>'<div class="it '+r[2]+'"><div class="w">'+r[0]+'</div><div class="x">'+r[1]+'</div></div>').join('')+'</div>';
+  return b;
+}
+
+const MARKS=[['nguoi','♥','14 tuổi · Tháng 9','Lâm Tố bị hải tặc Hắc Phàm bắt đi. Bạn mất một người bạn.','Phải cứu cậu ấy sau khi lên Trúc Cơ'],['kp','➶','15 tuổi · Tháng 2','Vào bí cảnh San Hô Long Quật, tìm được Linh Châu.',''],['tu','☯','15 tuổi · Tháng 6','Đột phá thành công, đạt Trúc Cơ.','Nhớ: dùng Phá Cảnh Đan lần sau']];
+function dd(){
+  const b=document.createElement('div');
+  b.innerHTML='<div class="sec" style="margin-top:0">Mục đã ghim ('+MARKS.length+'/60)</div>';
+  MARKS.forEach(m=>{const d=document.createElement('div');d.className='mk';d.innerHTML='<div class="ic">'+m[1]+'</div><div><div class="w">'+m[2]+'<span class="star" title="Bỏ đánh dấu">★</span></div><div>'+m[3]+'</div>'+(m[4]?'<div class="nt">“'+m[4]+'”</div>':'<div class="nt" style="opacity:.5">+ thêm ghi chú</div>')+'</div>';b.appendChild(d)});
+  b.insertAdjacentHTML('beforeend','<div class="hint">Cùng danh sách với mục "★ Đánh dấu" ở khung Nhật ký. Ghim ở đâu cũng hiện ở cả hai nơi.</div>');
+  return b;
+}
+
+const LIVES=[
+  ['Kiếp 2: Trần Hạo','Nam · mất ở tuổi 71 · Kim Đan · Thanh Vân Tông','Con thương nhân Trung Châu. Đột phá Kim Đan năm 58 tuổi. Sư phụ bị ma tu sát hại.','Phước lành +3, pháp bảo bản mệnh (yếu đi), nợ ân tình 2'],
+  ['Kiếp 1: Lý Tiểu Hoa','Nữ · mất ở tuổi 34 · Luyện Khí · Nam Lâm','Con người hái thuốc. Chết vì tẩu hỏa nhập ma khi đột phá liều.','Phước lành +1, nghiệp 0']
+];
+function kt(){
+  const b=document.createElement('div');
+  b.innerHTML='<div class="sec" style="margin-top:0">Các kiếp trước</div>'+LIVES.map(l=>'<div class="life"><h4>'+l[0]+'</h4><div class="d">'+l[1]+'</div><div>'+l[2]+'</div><div class="legacy">Di sản: <b>'+l[3]+'</b></div></div>').join('')+
+   '<div class="hint">Tương lai: bấm một kiếp để xem sổ đời kiếp đó (chỉ việc lớn).</div>';
+  return b;
+}
+
+function render(){
+  const bar=$('tabs');bar.innerHTML='';
+  TABS.forEach(t=>{const b=document.createElement('button');b.className=cur===t[0]?'on':'';b.textContent=t[1];b.onclick=()=>{cur=t[0];render()};bar.appendChild(b)});
+  const body=$('body');body.innerHTML='';
+  body.appendChild({tong,chiso,tt,dd,kt}[cur]());
+  $('toast').textContent='';
+}
+render();
+</script>
+</body>
+</html>

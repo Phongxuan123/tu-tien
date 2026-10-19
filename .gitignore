@@ -1,0 +1,8 @@
+﻿# Bản sao nén và tệp tạm
+*.zip
+*.log
+Thumbs.db
+desktop.ini
+.claude/settings.local.json
+*.tmp
+node_modules/

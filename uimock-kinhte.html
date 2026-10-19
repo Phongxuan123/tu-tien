@@ -1,0 +1,226 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Mẫu: bảng số liệu thị trường của Thương nhân</title>
+<style>
+:root{--bg:#0f1520;--card:#161f2d;--line:#263447;--tx:#dbe4ee;--mut:#8da0b3;--acc:#e8497c;--cu:#4aa3ff;--cung:#f0a840;--ok:#3fb8b0;--bad:#e0564f}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--tx);font:14px/1.45 system-ui,"Segoe UI",sans-serif;padding:16px}
+h1{font-size:18px;margin:0 0 4px}h2{font-size:14px;margin:0 0 6px}.small{color:var(--mut);font-size:12px}
+.wrap{display:grid;grid-template-columns:300px 1fr;gap:14px;max-width:1200px;margin:0 auto}
+@media(max-width:860px){.wrap{grid-template-columns:1fr}}
+.card{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:12px;margin-bottom:12px}
+label{display:block;margin:8px 0 2px;color:var(--mut);font-size:12px}select,input[type=range]{width:100%}select{background:#0f1827;color:var(--tx);border:1px solid var(--line);border-radius:6px;padding:5px}
+button{background:#1d2a3d;color:var(--tx);border:1px solid var(--line);border-radius:7px;padding:6px 10px;cursor:pointer;margin:2px 2px 2px 0}button:hover{border-color:var(--acc)}button.on{border-color:var(--acc);color:#fff}
+.lock{opacity:.35;pointer-events:none;filter:grayscale(1)}.lockmsg{display:none;color:var(--mut);font-size:12px;margin-top:4px}.lock+.lockmsg,.card.lock .lockmsg{display:block}
+.big{font-size:28px;font-weight:700}.up{color:var(--bad)}.dn{color:var(--ok)}
+.row{display:flex;gap:10px;flex-wrap:wrap}.row>*{flex:1 1 220px}
+svg{width:100%;height:auto;display:block}.ev{display:inline-block;background:#26323f;border-radius:9px;padding:1px 8px;margin:2px 3px 2px 0;font-size:12px}
+table{border-collapse:collapse;width:100%}td,th{padding:3px 6px;border-bottom:1px solid var(--line);font-size:12px;text-align:right}th:first-child,td:first-child{text-align:left}
+.tag{font-size:11px;padding:1px 7px;border-radius:9px;background:#26323f;color:#cfd8e2}
+</style>
+</head>
+<body>
+<h1>Mẫu giao diện: bảng số liệu thị trường (nghề Thương nhân)</h1>
+<div class="small" style="margin-bottom:10px">Đây là bản mô phỏng nhỏ để hình dung. Chỉnh cấp nghề Thương nhân để xem cái gì được mở. Bấm biến cố để thấy đường cung, đường cầu và giá dịch chuyển. Các hệ số là số liệu thử, chưa phải số cuối của game.</div>
+<div class="wrap">
+ <div>
+  <div class="card">
+    <h2>Điều khiển</h2>
+    <label>Cấp nghề Thương nhân: <b id="lvv">2</b></label><input id="lv" type="range" min="0" max="5" value="2">
+    <div class="small" id="lvtxt"></div>
+    <label>Mặt hàng</label><select id="good"></select>
+    <label>Thị trấn đang đứng</label><select id="town"></select>
+    <div style="margin-top:8px"><button id="play" class="on">Tạm dừng</button><button id="step">+1 tháng</button><button id="reset">Làm lại</button></div>
+    <div class="small" id="date" style="margin-top:6px"></div>
+  </div>
+  <div class="card">
+    <h2>Gây biến cố</h2>
+    <div id="evbtns"></div>
+    <div class="small" style="margin-top:6px">Mỗi biến cố làm đường cung hoặc cầu dịch chuyển trong vài tháng rồi tan dần.</div>
+  </div>
+  <div class="card"><h2>Biến cố đang tác động</h2><div id="evlist" class="small">Không có.</div></div>
+ </div>
+ <div>
+  <div class="card" id="c0">
+    <div class="row"><div><div class="small" id="gname"></div><div class="big" id="price"></div><div id="trend" class="small"></div></div>
+    <div><div class="small">So với giá cân bằng bình thường</div><div class="big" id="pidx"></div><div class="small" id="pdesc"></div></div></div>
+  </div>
+  <div class="card" id="c1"><h2>Giá theo thời gian (36 tháng gần nhất)</h2><svg id="line" viewBox="0 0 640 200"></svg><div class="lockmsg">Cần Thương nhân cấp 1.</div></div>
+  <div class="card" id="c2"><h2>Cung và cầu tháng này</h2><div id="bars"></div><div class="lockmsg">Cần Thương nhân cấp 2.</div></div>
+  <div class="card" id="c3"><h2>Sơ đồ cung cầu (đường cung S, đường cầu D)</h2><svg id="sd" viewBox="0 0 640 300"></svg><div class="small" id="sdtxt"></div><div class="lockmsg">Cần Thương nhân cấp 3.</div></div>
+  <div class="card" id="c4"><h2>So sánh các thị trấn và chuyến buôn</h2><div class="row"><div><svg id="reg" viewBox="0 0 320 200"></svg></div><div id="route"></div></div><div class="lockmsg">Cần Thương nhân cấp 4.</div></div>
+  <div class="card" id="c5"><h2>Hai giá của cùng một món: tông môn và chợ tán tu</h2><div id="two"></div><div class="lockmsg">Cần Thương nhân cấp 5.</div></div>
+ </div>
+</div>
+<script>
+// ----- dữ liệu thử -----
+const GOODS = {
+  dan_thuong: { n: 'Đan thường (Hồi Xuân, Tụ Khí)', P0: 70, e: 0.4, es: 0.6, D0: 100, S0: 100, share: 0.7, unit: 'lô', season: 0.02 },
+  phap_bua:   { n: 'Bùa chú', P0: 75, e: 0.7, es: 0.7, D0: 60, S0: 60, share: 0.5, unit: 'lô', season: 0 },
+  linh_thao:  { n: 'Linh thảo', P0: 6, e: 0.6, es: 1.0, D0: 400, S0: 400, share: 0.1, unit: 'bó', season: 0.12 },
+  khoang:     { n: 'Khoáng thạch', P0: 8, e: 0.5, es: 0.9, D0: 300, S0: 300, share: 0.2, unit: 'khối', season: 0 }
+};
+const TOWNS = [
+  { n: 'Thanh Lam Trấn (thị trấn)', cost: { dan_thuong: 1.00, phap_bua: 1.00, linh_thao: 0.78, khoang: 1.25 }, dist: 0 },
+  { n: 'Bạch Sa Thôn (làng)', cost: { dan_thuong: 1.10, phap_bua: 1.08, linh_thao: 0.85, khoang: 1.30 }, dist: 1 },
+  { n: 'Liệt Hỏa Phường', cost: { dan_thuong: 1.05, phap_bua: 0.95, linh_thao: 1.30, khoang: 0.75 }, dist: 3 },
+  { n: 'Vĩnh Độ Thành (thành lớn)', cost: { dan_thuong: 0.92, phap_bua: 0.90, linh_thao: 1.05, khoang: 1.00 }, dist: 2 },
+  { n: 'Thiên Phủ (thủ phủ)', cost: { dan_thuong: 0.88, phap_bua: 0.85, linh_thao: 1.15, khoang: 1.05 }, dist: 5 }
+];
+const EVENTS = [
+  { id: 'chien', n: 'Chiến sự nổ ra ở tiền tuyến', dD: 1.6, dS: 0.8, months: 18, goods: { dan_thuong: 1, phap_bua: 1.2, linh_thao: 0.3, khoang: 0.8 } },
+  { id: 'bicanh', n: 'Bí cảnh mở gần đây', dD: 1.3, dS: 1, months: 6, goods: { dan_thuong: 1, phap_bua: 1, linh_thao: 0.5, khoang: 0.3 }, after: { dS: 1.15, months: 8 } },
+  { id: 'muaTot', n: 'Mùa thu hoạch tốt', dD: 1, dS: 1.3, months: 6, goods: { dan_thuong: 0.2, phap_bua: 0, linh_thao: 1, khoang: 0 } },
+  { id: 'han', n: 'Hạn hán, linh thảo khan', dD: 1, dS: 0.6, months: 9, goods: { dan_thuong: 0.35, phap_bua: 0, linh_thao: 1, khoang: 0 } },
+  { id: 'dongKho', n: 'Tông môn đóng kho (tông bị vây)', dD: 1, dS: 0.5, months: 24, goods: { dan_thuong: 1, phap_bua: 0.8, linh_thao: 0, khoang: 0 } },
+  { id: 'moKho', n: 'Tông môn mở kho bán rộng', dD: 1, dS: 1.4, months: 3, goods: { dan_thuong: 1, phap_bua: 0.8, linh_thao: 0, khoang: 0 } },
+  { id: 'botPha', n: 'Mùa đột phá (đại hội tu sĩ)', dD: 1.25, dS: 1, months: 4, goods: { dan_thuong: 1, phap_bua: 0.4, linh_thao: 0.3, khoang: 0 } },
+  { id: 'hoiTru', n: 'Thương hội đầu cơ tích trữ', dD: 1, dS: 0.8, months: 9, goods: { dan_thuong: 1, phap_bua: 0.8, linh_thao: 0.4, khoang: 0.3 } },
+  { id: 'hoiXa', n: 'Thương hội xả hàng nhập từ vùng khác', dD: 1, dS: 1.3, months: 4, goods: { dan_thuong: 0.8, phap_bua: 0.6, linh_thao: 0.8, khoang: 0.8 } },
+  { id: 'cuop', n: 'Đường buôn bị phong tỏa', dD: 1, dS: 0.7, months: 8, goods: { dan_thuong: 0.7, phap_bua: 0.7, linh_thao: 0.7, khoang: 0.7 } }
+];
+const LV_TXT = ['Chỉ thấy giá hiện tại.', 'Thấy lịch sử giá.', 'Thấy cung và cầu từng tháng.', 'Thấy sơ đồ đường cung, đường cầu và hướng dịch chuyển.', 'So sánh các thị trấn, tính lãi chuyến buôn.', 'Thấy giá tông môn và chợ tán tu, dự báo vài tháng.'];
+
+let st;
+function reset() {
+  st = { t: 0, shocks: [], hist: {}, p: {}, rnd: 7 };
+  Object.keys(GOODS).forEach(g => { TOWNS.forEach((tw, i) => { st.hist[g + i] = []; st.p[g + i] = GOODS[g].P0 * tw.cost[g]; }); });
+  for (let i = 0; i < 36; i++) tick(true);
+}
+function rand() { st.rnd = (st.rnd * 16807) % 2147483647; return st.rnd / 2147483647; }
+function shiftFor(g, townIdx) {
+  let dD = 1, dS = 1; const list = [];
+  st.shocks.forEach(s => {
+    const w = s.goods[g] || 0; if (!w) return;
+    if (s.townOnly != null && s.townOnly !== townIdx) return;
+    const fade = s.left < 3 ? s.left / 3 : 1;
+    dD *= 1 + (s.dD - 1) * w * fade; dS *= 1 + (s.dS - 1) * w * fade; list.push(s);
+  });
+  return { dD, dS, list };
+}
+function curves(g, i) {
+  const G = GOODS[g], tw = TOWNS[i], base = G.P0 * tw.cost[g], sh = shiftFor(g, i);
+  const season = 1 + G.season * Math.sin(2 * Math.PI * st.t / 12);
+  const D = p => G.D0 * sh.dD * Math.pow(p / base, -G.e);
+  const S = p => G.S0 * sh.dS * season * Math.pow(p / base, G.es);
+  return { G, base, sh, D, S, season };
+}
+function tick(silent) {
+  Object.keys(GOODS).forEach(g => TOWNS.forEach((tw, i) => {
+    const c = curves(g, i), key = g + i; let p = st.p[key];
+    const D = c.D(p), S = c.S(p), gap = (D - S) / ((D + S) / 2);
+    p = p * (1 + 0.35 * gap) * (1 + (rand() - 0.5) * 0.04);
+    p = Math.max(c.base * 0.45, Math.min(c.base * 3.2, p));
+    st.p[key] = p; st.hist[key].push(p); if (st.hist[key].length > 60) st.hist[key].shift();
+  }));
+  st.shocks.forEach(s => { s.left--; });
+  st.shocks = st.shocks.filter(s => { if (s.left <= 0) { if (s.after) { st.shocks.push({ n: s.n + ' (hậu quả)', dD: 1, dS: s.after.dS, goods: s.goods, left: s.after.months, total: s.after.months }); } return false; } return true; });
+  st.t++;
+}
+function fire(id) {
+  const e = EVENTS.find(x => x.id === id);
+  st.shocks.push({ id, n: e.n, dD: e.dD, dS: e.dS, goods: e.goods, left: e.months, total: e.months, after: e.after || null });
+  render();
+}
+
+// ----- vẽ -----
+const $ = id => document.getElementById(id);
+const fmt = x => (x >= 100 ? Math.round(x) : Math.round(x * 10) / 10);
+function lineChart(arr, base, marks) {
+  const W = 640, H = 200, pl = 42, pr = 8, pt = 10, pb = 22, n = arr.length;
+  const lo = Math.min(...arr, base * 0.8), hi = Math.max(...arr, base * 1.2);
+  const x = i => pl + (W - pl - pr) * i / (n - 1), y = v => pt + (H - pt - pb) * (1 - (v - lo) / (hi - lo));
+  let s = '';
+  for (let k = 0; k <= 4; k++) { const v = lo + (hi - lo) * k / 4; s += `<line x1="${pl}" x2="${W - pr}" y1="${y(v)}" y2="${y(v)}" stroke="#263447"/><text x="${pl - 4}" y="${y(v) + 4}" fill="#8da0b3" font-size="10" text-anchor="end">${fmt(v)}</text>`; }
+  s += `<line x1="${pl}" x2="${W - pr}" y1="${y(base)}" y2="${y(base)}" stroke="#8da0b3" stroke-dasharray="4 3"/><text x="${W - pr}" y="${y(base) - 3}" fill="#8da0b3" font-size="10" text-anchor="end">giá bình thường ${fmt(base)}</text>`;
+  s += `<polyline fill="none" stroke="#e8497c" stroke-width="2" points="${arr.map((v, i) => x(i) + ',' + y(v)).join(' ')}"/>`;
+  (marks || []).forEach(m => { const i = n - 1 - m.ago; if (i >= 0) s += `<line x1="${x(i)}" x2="${x(i)}" y1="${pt}" y2="${H - pb}" stroke="#f0a840" stroke-dasharray="2 3"/><text x="${x(i) + 3}" y="${pt + 10}" fill="#f0a840" font-size="10">${m.t}</text>`; });
+  s += `<text x="${pl}" y="${H - 6}" fill="#8da0b3" font-size="10">-36 tháng</text><text x="${W - pr}" y="${H - 6}" fill="#8da0b3" font-size="10" text-anchor="end">nay</text>`;
+  return s;
+}
+function sdChart(c, p) {
+  const W = 640, H = 300, pl = 46, pr = 12, pt = 12, pb = 30;
+  const base = c.base, G = c.G;
+  const qMax = G.D0 * 2.4, pMin = base * 0.4, pMax = base * 3.3;
+  const X = q => pl + (W - pl - pr) * Math.min(q, qMax) / qMax, Y = pr2 => pt + (H - pt - pb) * (1 - (pr2 - pMin) / (pMax - pMin));
+  let s = `<rect x="${pl}" y="${pt}" width="${W - pl - pr}" height="${H - pt - pb}" fill="none" stroke="#263447"/>`;
+  for (let k = 0; k <= 4; k++) { const v = pMin + (pMax - pMin) * k / 4; s += `<text x="${pl - 4}" y="${Y(v) + 4}" fill="#8da0b3" font-size="10" text-anchor="end">${fmt(v)}</text>`; }
+  s += `<text x="${(W + pl) / 2}" y="${H - 6}" fill="#8da0b3" font-size="11" text-anchor="middle">Số lượng (${G.unit} mỗi tháng)</text><text x="12" y="${pt + 10}" fill="#8da0b3" font-size="11">Giá</text>`;
+  const pts = f => { const a = []; for (let v = pMin; v <= pMax; v += (pMax - pMin) / 60) a.push(X(f(v)) + ',' + Y(v)); return a.join(' '); };
+  const D0 = v => G.D0 * Math.pow(v / base, -G.e), S0 = v => G.S0 * c.season * Math.pow(v / base, G.es);
+  s += `<polyline fill="none" stroke="#4aa3ff" stroke-width="1.5" stroke-dasharray="4 3" opacity=".6" points="${pts(D0)}"/><polyline fill="none" stroke="#f0a840" stroke-width="1.5" stroke-dasharray="4 3" opacity=".6" points="${pts(S0)}"/>`;
+  s += `<polyline fill="none" stroke="#4aa3ff" stroke-width="2.5" points="${pts(c.D)}"/><polyline fill="none" stroke="#f0a840" stroke-width="2.5" points="${pts(c.S)}"/>`;
+  s += `<text x="${X(c.D(pMax * 0.55)) + 4}" y="${Y(pMax * 0.55)}" fill="#4aa3ff" font-size="12">D (cầu)</text><text x="${X(c.S(pMax * 0.7)) + 4}" y="${Y(pMax * 0.7)}" fill="#f0a840" font-size="12">S (cung)</text>`;
+  // điểm cân bằng
+  let lo = pMin, hi = pMax; for (let k = 0; k < 40; k++) { const m = (lo + hi) / 2; if (c.D(m) > c.S(m)) lo = m; else hi = m; }
+  const pe = (lo + hi) / 2, qe = c.D(pe);
+  s += `<circle cx="${X(qe)}" cy="${Y(pe)}" r="5" fill="#3fb8b0"/><text x="${X(qe) + 8}" y="${Y(pe) - 6}" fill="#3fb8b0" font-size="11">cân bằng: giá ${fmt(pe)}</text>`;
+  s += `<line x1="${pl}" x2="${W - pr}" y1="${Y(p)}" y2="${Y(p)}" stroke="#e8497c" stroke-dasharray="5 3"/><text x="${W - pr}" y="${Y(p) - 4}" fill="#e8497c" font-size="11" text-anchor="end">giá đang bán ${fmt(p)}</text>`;
+  s += `<line x1="${X(c.D(p))}" x2="${X(c.D(p))}" y1="${Y(p) - 6}" y2="${Y(p) + 6}" stroke="#4aa3ff" stroke-width="3"/><line x1="${X(c.S(p))}" x2="${X(c.S(p))}" y1="${Y(p) - 6}" y2="${Y(p) + 6}" stroke="#f0a840" stroke-width="3"/>`;
+  return s;
+}
+function render() {
+  const g = $('good').value, ti = +$('town').value, lv = +$('lv').value, key = g + ti;
+  const c = curves(g, ti), p = st.p[key], hist = st.hist[key];
+  $('lvv').textContent = lv; $('lvtxt').textContent = 'Mở được: ' + LV_TXT[lv];
+  $('date').textContent = 'Tháng thứ ' + st.t + ' (năm ' + Math.floor(st.t / 12) + ', tháng ' + (st.t % 12 + 1) + ')';
+  ['c1', 'c2', 'c3', 'c4', 'c5'].forEach((id, k) => $(id).classList.toggle('lock', lv < k + 1));
+  // thẻ giá
+  const prev = hist[hist.length - 2] || p, d = (p - prev) / prev;
+  $('gname').textContent = c.G.n + ' · ' + TOWNS[ti].n;
+  $('price').textContent = fmt(p) + ' vàng';
+  $('trend').innerHTML = (d >= 0 ? '<span class="up">▲ ' : '<span class="dn">▼ ') + Math.abs(Math.round(d * 100)) + '%</span> so với tháng trước';
+  const idx = p / c.base; $('pidx').textContent = Math.round(idx * 100) + '%';
+  $('pidx').className = 'big ' + (idx > 1.15 ? 'up' : idx < 0.87 ? 'dn' : '');
+  $('pdesc').textContent = idx > 1.5 ? 'Khan hàng, đắt nhiều' : idx > 1.15 ? 'Hơi đắt' : idx < 0.7 ? 'Dư hàng, rẻ nhiều' : idx < 0.87 ? 'Hơi rẻ' : 'Quanh mức bình thường';
+  // biến cố
+  const act = c.sh.list.concat(st.shocks.filter(s => !c.sh.list.includes(s) && (s.goods[g] || 0) > 0));
+  $('evlist').innerHTML = st.shocks.length ? st.shocks.map(s => `<span class="ev">${s.n} · còn ${s.left} tháng</span>`).join('') : 'Không có.';
+  // 1: biểu đồ đường
+  const marks = []; st.shocks.forEach(s => { marks.push({ ago: Math.min(35, s.total - s.left), t: s.n.split(' ')[0] }); });
+  $('line').innerHTML = lineChart(hist.slice(-36), c.base, marks);
+  // 2: thanh cung cầu
+  const D = c.D(p), S = c.S(p), Dn = c.D(c.base), Sn = c.S(c.base) / c.season, m = Math.max(D, S, Dn, Sn) * 1.1;
+  const bar = (l, v, col, ref) => `<div style="display:flex;align-items:center;gap:8px;margin:3px 0"><div style="width:140px" class="small">${l}</div><div style="flex:1;background:#0f1827;border-radius:5px;position:relative;height:18px"><div style="width:${v / m * 100}%;background:${col};height:100%;border-radius:5px"></div><div style="position:absolute;left:${ref / m * 100}%;top:-2px;bottom:-2px;border-left:2px dashed #8da0b3"></div></div><div style="width:70px;text-align:right">${Math.round(v)} ${c.G.unit}</div></div>`;
+  $('bars').innerHTML = bar('Cầu (người cần mua)', D, '#4aa3ff', Dn) + bar('Cung (người bán ra)', S, '#f0a840', Sn) + `<div class="small">Vạch đứt là mức bình thường. ${D > S * 1.08 ? 'Cầu hơn cung: giá có xu hướng tăng.' : S > D * 1.08 ? 'Cung hơn cầu: giá có xu hướng giảm.' : 'Cung và cầu gần bằng nhau: giá ổn định.'}</div>`;
+  // 3: sơ đồ cung cầu
+  $('sd').innerHTML = sdChart(c, p);
+  const dd = c.sh.dD, ds = c.sh.dS;
+  $('sdtxt').innerHTML = `Đường nét liền là hiện tại, nét đứt là bình thường. ` +
+    (dd > 1.02 ? `Đường cầu <b>dời sang phải</b> (+${Math.round((dd - 1) * 100)}%). ` : dd < 0.98 ? `Đường cầu <b>dời sang trái</b> (${Math.round((dd - 1) * 100)}%). ` : '') +
+    (ds > 1.02 ? `Đường cung <b>dời sang phải</b> (+${Math.round((ds - 1) * 100)}%). ` : ds < 0.98 ? `Đường cung <b>dời sang trái</b> (${Math.round((ds - 1) * 100)}%). ` : '') +
+    (dd <= 1.02 && ds >= 0.98 && dd >= 0.98 && ds <= 1.02 ? 'Chưa có cú sốc nào.' : 'Cầu dời phải hoặc cung dời trái thì giá cân bằng tăng; ngược lại thì giảm. Độ nhạy của giá phụ thuộc độ dốc: ' + (c.G.e < 0.5 ? 'đồ thiết yếu nên đường cầu rất dốc, giá nhảy mạnh.' : 'đồ ít thiết yếu hơn nên giá nhảy vừa phải.'));
+  // 4: so sánh thị trấn
+  const ps = TOWNS.map((tw, i) => st.p[g + i]); const mx = Math.max(...ps) * 1.1;
+  let rs = ''; TOWNS.forEach((tw, i) => { const w = 220 * ps[i] / mx; rs += `<text x="2" y="${22 + i * 34}" fill="#8da0b3" font-size="10">${tw.n.split(' (')[0]}</text><rect x="2" y="${27 + i * 34}" width="${w}" height="12" rx="3" fill="${i === ti ? '#e8497c' : '#4aa3ff'}"/><text x="${w + 6}" y="${37 + i * 34}" fill="#dbe4ee" font-size="11">${fmt(ps[i])}</text>`; });
+  $('reg').innerHTML = rs;
+  let best = null; TOWNS.forEach((a, i) => TOWNS.forEach((b, j) => { if (i === j) return; const dist = Math.abs(a.dist - b.dist) || 1; const buy = st.p[g + i] * (1 + 0.08), sell = st.p[g + j] * (1 - 0.08), ship = st.p[g + i] * 0.015 * dist * (c.G.unit === 'khối' ? 1.6 : 1), fee = sell * 0.03; const profit = sell - buy - ship - fee; const pr = profit / buy; if (!best || pr > best.pr) best = { i, j, buy, sell, ship, fee, profit, pr, dist }; }));
+  $('route').innerHTML = best ? `<div class="small">Chuyến buôn lãi nhất hiện tại (1 đơn vị):</div><table><tr><td>Mua ở ${TOWNS[best.i].n.split(' (')[0]}</td><td>${fmt(best.buy)}</td></tr><tr><td>Cước ${best.dist} tháng đường</td><td>-${fmt(best.ship)}</td></tr><tr><td>Phí bán 3%</td><td>-${fmt(best.fee)}</td></tr><tr><td>Bán ở ${TOWNS[best.j].n.split(' (')[0]} (đã trừ chênh 8%)</td><td>${fmt(best.sell)}</td></tr><tr><th>Lãi ròng</th><th class="${best.profit > 0 ? 'dn' : 'up'}">${fmt(best.profit)} (${Math.round(best.pr * 100)}%)</th></tr></table><div class="small">Nếu đi theo đoàn của thương hội: cước giảm 40%, bị cướp giảm 60% (có hộ vệ), nhưng trả thêm phí hội 3% và hội cũng cạnh tranh nên chênh giá giữa hai nơi bị ép bớt. Lãi ròng ước tính: ${fmt(best.profit + best.ship * 0.4 - best.sell * 0.03 - best.profit * 0.25)}.</div><div class="small">Chưa tính xác suất bị cướp (khoảng ${Math.round(best.dist * 3)}%) và giá có thể đã đổi khi bạn tới nơi.</div>` : '';
+  // 5: hai giá
+  const G = c.G, share = G.share, mc = c.base * 0.6, lerner = Math.min(0.9, 0.15 + 0.5 * share), sectP = Math.max(mc * (1 + lerner), 0), openP = p;
+  const quota = 25 * (1 + lv), qm = Math.round(quota * 0.6);
+  $('two').innerHTML = `<table><tr><th></th><th>Giá</th><th>Ai mua được</th><th>Ghi chú</th></tr><tr><td>Kho tông môn (thành viên)</td><td>${fmt(sectP * 0.8)}</td><td>thành viên, hạn mức ${qm} ${G.unit}/quý</td><td>ổn định, không theo thị trường; cần cống hiến</td></tr><tr><td>Chợ tán tu (tự do)</td><td>${fmt(openP)}</td><td>ai cũng mua</td><td>giá theo cung cầu, chất lượng không đều</td></tr><tr><td>Tông bán cho người ngoài</td><td>${fmt(sectP * 1.2)}</td><td>người ngoài, bị giới hạn</td><td>cao hơn chợ khi tông giữ giá</td></tr></table>
+  <div class="small" style="margin-top:6px">Tông môn nắm khoảng ${Math.round(share * 100)}% nguồn cung ${G.n.toLowerCase()}. Phần lớn người mua ngoài tông phải dựa vào chợ tán tu, nơi giá nhảy mạnh mỗi khi tông đóng kho hoặc có chiến sự. Dự báo ngắn hạn: ${forecast(g, ti)}</div>`;
+}
+function forecast(g, ti) {
+  const c = curves(g, ti); const sh = c.sh;
+  const lastEnd = st.shocks.filter(s => (s.goods[g] || 0) > 0).sort((a, b) => b.left - a.left)[0];
+  if (!lastEnd) return 'không có biến cố nào đang tác động, giá quanh mức bình thường.';
+  const pe = Math.pow(sh.dD / sh.dS, 1 / (c.G.e + c.G.es));
+  return `biến cố "${lastEnd.n}" còn ${lastEnd.left} tháng, giá cân bằng hiện cao ${Math.round((pe - 1) * 100)}% so với bình thường; khi hết biến cố giá sẽ hồi dần trong khoảng 6 tháng.`;
+}
+
+// ----- khởi động -----
+Object.keys(GOODS).forEach(g => { const o = document.createElement('option'); o.value = g; o.textContent = GOODS[g].n; $('good').appendChild(o); });
+TOWNS.forEach((t, i) => { const o = document.createElement('option'); o.value = i; o.textContent = t.n; $('town').appendChild(o); });
+EVENTS.forEach(e => { const b = document.createElement('button'); b.textContent = e.n; b.onclick = () => fire(e.id); $('evbtns').appendChild(b); });
+['lv', 'good', 'town'].forEach(id => $(id).addEventListener('input', render));
+let playing = true; $('play').onclick = () => { playing = !playing; $('play').textContent = playing ? 'Tạm dừng' : 'Chạy tiếp'; $('play').classList.toggle('on', playing); };
+$('step').onclick = () => { tick(); render(); }; $('reset').onclick = () => { reset(); render(); };
+setInterval(() => { if (playing) { tick(); render(); } }, 900);
+reset(); render();
+</script>
+</body>
+</html>
