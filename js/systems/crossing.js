@@ -148,21 +148,23 @@
 
     // Cướp đường: người chơi mang nhiều hàng buôn qua vùng có thể bị cướp một phần. Thương đoàn hộ tống và bậc hội giảm rủi ro.
     robbery(c, method) {
-      if (c.kind !== 'player' || !TT.eco || method === 'tran_phap' || method === 'tong_mon') return;
-      const kinds = { dan: 1, bua: 1, thao: 1, khoang: 1, yeu: 1 }; let val = 0; const ids = [];
+      if (c.kind !== 'player' || !TT.eco || method === 'tran_phap' || method === 'tong_mon') return 0;
+      const kinds = {}; TT.data.ECO.cargo.forEach(g => { kinds[g] = 1; }); let val = 0; const ids = [];
       Object.keys(c.inv || {}).forEach(id => { const g = TT.eco.group(id); if (g && kinds[g]) { val += TT.items.value(c, id) * c.inv[id]; ids.push(id); } });
       const D0 = TT.data.ECO.rob;
-      if (val < D0.minValue * TT.data.LS.RATE) return;
+      if (val < D0.minValue * TT.data.LS.RATE) return 0;
       let p = Math.min(D0.max, D0.base + val / (D0.perValue * TT.data.LS.RATE)) * (method === 'thuong_doan' ? 0.4 : 1) * (1 - 0.1 * (TT.hoi.member(c) ? TT.hoi.member(c).rank + 1 : 0)) * (1 - 0.06 * Math.min(4, c.realm));
-      if (!rng.P(Math.max(0.02, p))) return;
+      if (!rng.P(Math.max(0.02, p))) return 0;
       const frac = rng.R(D0.loss[0], D0.loss[1]); let lost = 0;
       ids.forEach(id => { const n = Math.floor(c.inv[id] * frac); if (n > 0) { TT.items.remove(c, id, n); lost += TT.items.value(c, id) * n; } });
       if (lost > 0) TT.log(c, 'Dọc đường bọn cướp chặn lại, bạn mất khoảng ' + Math.round(frac * 100) + '% hàng buôn (trị giá ' + TT.ls.fmt(lost) + ').', 'bad');
+      return lost;
     },
 
     arrive(c, rid, placeId) {
       const from = c.cross ? c.cross.from : c.region;
-      cross.robbery(c, c.cross && c.cross.method);
+      const lost = cross.robbery(c, c.cross && c.cross.method);
+      TT.hoi.claim(c, lost);
       c.region = rid;
       c.place = placeId;
       c.cross = null;

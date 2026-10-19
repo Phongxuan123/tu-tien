@@ -248,10 +248,14 @@
             const price = Math.round(lot.base * m);
             out.options.push({ label: D.ITEMS[lot.id].n + ': ra giá ' + TT.ls.fmt(price) + ' (x' + m + ')', disabled: done ? (done === 'win' ? 'Đã thắng' : 'Đã ra giá') : (!TT.ls.can(c, price) ? 'Không đủ linh thạch' : false), run: () => {
               w.dg[key] = 'lose';
-              if (m >= lot.rival) { TT.ls.pay(c, price); w.dg[key] = 'win'; TT.items.add(c, lot.id); TT.log(c, 'Bạn thắng đấu giá ' + D.ITEMS[lot.id].n + ' với giá ' + TT.ls.fmt(price) + '.', 'good'); return 'Thắng! ' + D.ITEMS[lot.id].n + ' thuộc về bạn.'; }
+              if (m >= lot.rival) { TT.ls.pay(c, price); w.dg[key] = 'win'; TT.items.add(c, lot.id); if (D.ECO.hq) TT.gd.mark(c, lot.id, A.fake); TT.log(c, 'Bạn thắng đấu giá ' + D.ITEMS[lot.id].n + ' với giá ' + TT.ls.fmt(price) + '.', 'good'); return 'Thắng! ' + D.ITEMS[lot.id].n + ' thuộc về bạn.'; }
               TT.log(c, 'Bạn thua đấu giá ' + D.ITEMS[lot.id].n + ' vì có người trả cao hơn.', 'age'); return 'Có người trả cao hơn, bạn thua (không mất tiền).';
             } });
           });
+        });
+        // giám định món chưa rõ thật giả trong túi (E7b)
+        if (D.ECO.hq) Object.keys(c.sus || {}).forEach(sid => {
+          out.options.push({ label: 'Giám định ' + D.ITEMS[sid].n + (TT.gd.free(c) ? ' (miễn phí)' : ' (' + TT.ls.fmt(TT.gd.fee(c)) + ')'), run: () => TT.gd.appraise(c, sid).text });
         });
       } else if (id === 'lang') {
         out.info = true;

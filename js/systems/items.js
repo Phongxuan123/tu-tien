@@ -27,6 +27,7 @@
       if (items.count(c, id) < n) return false;
       c.inv[id] -= n;
       if (c.inv[id] <= 0) { delete c.inv[id]; if (c.invExp) delete c.invExp[id]; }
+      if (c.sus && c.sus[id] && TT.gd) TT.gd.trim(c, id);
       return true;
     },
     // Chồng sắp hỏng (còn 3 tháng trở xuống, thử mỗi tháng): chế độ Cân bằng và Tự động tự xử lý nếu đang ở nơi làm được: ở tông thì hiến kho tông, ở nơi có cửa hàng thu thì bán.
@@ -183,6 +184,7 @@
     // Sau giao dịch: mua dồn đẩy giá lên, bán dồn kéo giá xuống; thương hội ghi nhớ; chợ có thể kết thân.
     after(c, id, b, value, n, buying) {
       const g = TT.eco.group(id);
+      if (b === 'hoi' && D.ECO.hq && TT.hoi) TT.hoi.progress(c, id, n, buying); // đơn hội (E7b)
       if (g) TT.eco.push(c.region, g, (buying ? D.ECO.press.buy : -D.ECO.press.sell) * n);
       if (b === 'hoi') TT.hoi.onTrade(c, value, buying);
       if (b === 'cho' && buying) TT.eco.chat(c, value);
@@ -200,11 +202,13 @@
       if (price > TT.bld.left(c)) return { ok: false, text: 'Đã gần hết hạn mức giao dịch tháng này (còn ' + TT.ls.fmt(TT.bld.left(c)) + ').' };
       TT.ls.pay(c, price); st.q[id]--; TT.bld.spend(c, price);
       // chợ đen có thể bán đồ nhái; Thương nhân giỏi nhìn ra (giảm xác suất theo tầm nhìn thị trường)
-      if (b === 'den' && D.ITEMS[id].cat !== 'ls' && rng.P(D.ECO.nhai * (1 - 0.15 * TT.eco.insight(c)))) {
+      if (!D.ECO.hq && b === 'den' && D.ITEMS[id].cat !== 'ls' && rng.P(D.ECO.nhai * (1 - 0.15 * TT.eco.insight(c)))) {
         TT.log(c, 'Món ' + D.ITEMS[id].n + ' mua ở chợ đen hóa ra là đồ nhái, bạn mất ' + TT.ls.fmt(price) + '.', 'bad');
         return { ok: true, text: 'Đồ nhái! Bạn bị lừa, mất ' + TT.ls.fmt(price) + '.', bld: b };
       }
-      items.add(c, id); market.after(c, id, b, price, 1, true);
+      items.add(c, id);
+      if (b === 'den' && D.ECO.hq) TT.gd.mark(c, id, D.ECO.nhai * (1 - 0.15 * TT.eco.insight(c))); // E7b: đồ chợ đen chưa giám định, có thể là đồ nhái
+      market.after(c, id, b, price, 1, true);
       TT.log(c, 'Bạn mua ' + D.ITEMS[id].n + ' ở ' + TT.bld.name(b).toLowerCase() + ', giá ' + TT.ls.fmt(price) + '.', 'age');
       return { ok: true, text: 'Đã mua ' + D.ITEMS[id].n + '.', bld: b };
     },

@@ -93,7 +93,7 @@ Mục tiêu nhịp: một đời Phi Thăng khoảng 20 đến 30 phút thật; 
 |---|---|---|---|
 | E. Kinh tế: kế hoạch bản 6 (giá 63 chỉ số, cung cầu từ thế giới, hạn dùng, kênh mua có sức nặng, thiện cảm hội, gia nhập hội, E0 đến E6 một mạch) | ☑ | E0 đến E6 | [E-kinh-te](ke-hoach/E-kinh-te.md) mục A.17: giá 63 ô, hạn dùng, hội, thuế. Chưa: giám định, vay/bảo hiểm hội |
 | E7a. Thuế vào giá theo triều, móc S vào kinh tế (lễ hội, hương hỏa, quốc vận làm nhỏ cú sốc, khai báo chiến tranh tổng) | ☑ | E7a | [E-kinh-te](ke-hoach/E-kinh-te.md) mục A.18; công tắc `D.ECO.sx`. Chỉ tiêu lãi buôn (khoảng 25%) chưa đạt: đo 49% |
-| E7b. Giám định, nhiệm vụ/vay/bảo hiểm hội | ☐ | | Z Đợt 5 |
+| E7b. Giám định ở chợ đen và nhà đấu giá; hội: nhiệm vụ, vay, bảo hiểm chuyến buôn | ☑ | E7b | [E-kinh-te](ke-hoach/E-kinh-te.md) mục A.19; công tắc `D.ECO.hq`. Chưa: hộ tống, đo chuyến buôn người chơi |
 | Asset: biểu tượng vật phẩm, 22 công trình pixel | ☑ | ☐ | [I-cong-trinh](ke-hoach/I-cong-trinh.md), `asset-xem.html` |
 | I2 Phố công trình trong màn hình nhân vật (hover, bấm vào nhà) | ☑ | ☐ | I mục 13 |
 | I3 Cửa hàng mới: mua bán chỉ ở cửa hàng, hạn mức tháng, kho hàng, hàng rong, dịch vụ | ☑ | ☐ | I mục 13 |
@@ -186,7 +186,7 @@ Gợi ý thứ tự (bạn đổi tùy ý):
 2. **D. Kỳ ngộ có cốt truyện** (đã có kế hoạch, chờ làm).
 3. **S Hệ thống Quốc gia** (kế hoạch chờ bạn duyệt, [S-quoc-gia-tong-mon-ton-giao](ke-hoach/S-quoc-gia-tong-mon-ton-giao.md)); **M5b Liên tông** gộp vào chặng S5 của S, dùng lại hiệp ước F2 (minh ước, giải đấu); phần còn lại của F2 (nhiệm vụ thế lực, F5) ở [P](ke-hoach/P-nghia-vu-dan-so.md) mục 11.
 4. **Khu dưới bản đồ:** dải "Sắp tới", nhiều lớp bản đồ (thế lực, nguy hiểm), bộ lập lộ trình (O mục 3).
-5. **E7b Kinh tế** (giám định, nhiệm vụ/vay/bảo hiểm hội; E7a đã xong) và **G Nhật báo**.
+5. **G Nhật báo** (E7a và E7b đã xong; còn đo chuyến buôn người chơi và hộ tống hội).
 6. **I4/I5**: võ đài, kho đồ, hầm mỏ, bến tàu, nhà đấu giá, tòa soạn.
 7. **M6 Lập tông, làm chưởng môn** và **M4 chính trị nội bộ** (hoãn).
 8. **M8 còn lại:** yêu thú đồng hành, khí linh, phong thủy, trận pháp.
@@ -257,6 +257,7 @@ Gợi ý thứ tự (bạn đổi tùy ý):
 - **2026-10-18** **S3** (Đợt 3) xong: quốc vận, nho khí, thiên mệnh, phản phệ cơ bản; 99 bài đạt; đo 40 hạt giống 48,1 chiến tranh, 6,2 diệt vong, 4,5 đổi chủ mỗi 300 năm (trước 52,2 / 6,5 / 4,5).
 - **2026-10-19** **S4** (Đợt 4) xong: trạng thái tông theo thế giới, `power` suy từ chỉ số (công tắc tắt trùng khít 40 hạt giống), chính sách có tác dụng nhỏ, thanh trừng hiếm; 100 bài đạt, 1 lỗi (nhịp quyết định, 12 hạt giống, xem S 15.15). 40 hạt giống: chiến tranh 53,5 → 52,7, diệt vong 8,2 → 7,8, đổi chủ 4,8 → 5,8. Còn S5 (tôn giáo).
 - **2026-10-19** **S5** (Đợt 4) xong: tín ngưỡng, nơi thờ tự, giáo hội, quốc giáo; 103 bài đạt; đo 40 hạt giống 49,4 chiến tranh, 6,2 diệt vong, 4,6 đổi chủ mỗi 300 năm (trước 52,7 / 7,8 / 5,8); công tắc tắt trùng khít.
+- **2026-10-19** **E7b** (Đợt 5) xong: giám định (đồ chợ đen và đấu giá, sai theo tầm nhìn), vay hội (hạn mức theo bậc, lãi, quá hạn), bảo hiểm chuyến buôn có trần, đơn hội (giao và thu mua); 105 bài đạt; world và giá trùng khít.
 - **2026-10-19** **E7a** (Đợt 5) xong: thuế vào giá theo triều, lễ hội tôn giáo, thuế hương hỏa, quốc vận làm nhỏ cú sốc, chiến tranh tổng khai báo; 104 bài đạt; đo 40 hạt giống chiến tranh 49,4 → 47,5, diệt vong 6,2 → 6,0; lãi buôn tối đa 48,5% (chưa đạt 25%, để chặng sau); công tắc tắt trùng khít thế giới và giá.
 - Sắp xếp lại file kế hoạch tổng này; nhật ký cũ chuyển nguyên văn vào `ke-hoach/_nhat-ky-goc.md`.
 
