@@ -1789,7 +1789,7 @@ test('Thế lực: 9 vương triều, 9 tông môn, 8 gia tộc, thời đại; 
   try {
     for (let y = 0; y < 400; y++) {
       TT.world.months += 12; F.yearly();
-      F.list().forEach(x => { ok(isFinite(x.power) && x.power >= 1 && x.power <= 100 && isFinite(x.unity) && isFinite(x.wealth), x.id + ' số liệu hỏng năm ' + y); if (x.war) ok(f.wars.some(w => w.id === x.war), x.id + ' trỏ tới chiến tranh không còn'); });
+      F.list().forEach(x => { ok(isFinite(x.power) && x.power >= 1 && x.power <= 100 && isFinite(x.unity) && isFinite(x.wealth), x.id + ' số liệu hỏng năm ' + y); if (x.war && x.war !== 'tw' + (TT.totalwar.cur() || {}).id) ok(f.wars.some(w => w.id === x.war), x.id + ' trỏ tới chiến tranh không còn'); });
       F.list('trieu').forEach(x => ok(F.alive(x), 'vương triều không bao giờ diệt'));
       ok(f.wars.length <= 6, 'quá nhiều chiến tranh cùng lúc: ' + f.wars.length);
     }
@@ -2962,6 +2962,84 @@ test('Hội và giám định (E7b): giám định theo tầm nhìn, vay trả v
   c8.sus = { [id]: { n: 1, f: 1 } }; ok(!G.appraise(c8, id).ok, 'tắt: không giám định'); D.ECO.hq = true;
   // 7. hiệu năng: bảng đơn và giám định đọc nhanh
   const t0 = performance.now(); for (let i = 0; i < 2000; i++) { H.board(lead.id); H.perk(c6); H.loanLimit(c6); } const ms = performance.now() - t0; ok(ms < 500, 'đọc bảng đơn 2000 lần mất ' + Math.round(ms) + ' ms');
+});
+test('Chiến tranh tổng (S6b): đọc không gọi rng, khung mở đúng, giai đoạn theo thứ tự, kết đúng điều kiện, trần hậu quả, chỉ tiêu 150 năm, lưu/tải, tắt thì đóng, hiệu năng', () => {
+  const TW = TT.totalwar, K = D.TOTALWAR, W = () => TT.world, F = () => TT.fac.S();
+  const runYears = n => { for (let y = 0; y < n; y++) { W().months += 12; TT.fac.yearly(); } };
+  // 1. Hàm đọc không gọi rng và không khởi tạo gì
+  TT.life.createWorld(911); const st0 = TT.rng.getState();
+  TW.on(); TW.cur(); TW.frontRegions({}); TW.phaseOf({ years: 3, dur: 12 }); TW.parts({ side: {} });
+  eq(TT.rng.getState(), st0, 'hàm đọc không gọi rng'); ok(!F().tw && !F().twN, 'hàm đọc không mở chiến tranh');
+  // 2. Giai đoạn: theo số năm, không lùi
+  const ph = y => TW.phaseOf({ years: y, dur: 12 });
+  eq(ph(0), 'bung_no'); eq(ph(2), 'bung_no'); eq(ph(3), 'giang_co'); eq(ph(7), 'giang_co'); eq(ph(8), 'kiet_suc'); eq(ph(10), 'kiet_suc'); eq(ph(11), 'nghi_hoa');
+  // 3. Mở đúng khung: sáu đến chín bên, hai phe, 3 đến 4 chiến tuyến, 10 đến 18 năm; bên buộc chọn phe theo quan hệ S1
+  const tw = TW.start({ force: true }); ok(tw && F().tw === tw, 'mở được chiến tranh tổng');
+  const parts = TW.parts(tw);
+  ok(parts.length >= K.sides.min && parts.length <= K.sides.max, 'số bên 6 đến 9: ' + parts.length);
+  ok(tw.dur >= 10 && tw.dur <= 18, 'số năm 10 đến 18: ' + tw.dur);
+  ok(tw.fronts.length >= 3 && tw.fronts.length <= 4, 'chiến tuyến 3 đến 4: ' + tw.fronts.length);
+  ok(['a', 'b'].every(s => parts.some(x => tw.side[x.id] === s)), 'có đủ hai phe');
+  ok(parts.every(x => x.war === 'tw' + tw.id && (x.kind === 'trieu' || x.kind === 'tong')), 'bên tham chiến là triều hoặc tông, đánh dấu chiến tranh');
+  const A0 = TT.fac.get(tw.anchors[0]), B0 = TT.fac.get(tw.anchors[1]);
+  parts.filter(x => x !== A0 && x !== B0).forEach(x => eq(tw.side[x.id], TT.fac.relV(x, A0) >= TT.fac.relV(x, B0) ? 'a' : 'b', 'chọn phe theo quan hệ: ' + x.n));
+  tw.fronts.forEach(rid => ok(TT.eco.S().sh.some(x => x.kind === 'chien_tong' && x.region === rid), 'cú sốc chien_tong ở chiến tuyến ' + rid));
+  // 4. Chạy đến kết: giai đoạn không lùi, dân chiến tuyến không giảm quá trần, kết cục ghi lại đúng
+  const seen = ['bung_no'], floor = {}; tw.fronts.forEach(rid => { floor[rid] = tw.pop0[rid] * (1 - K.cap.pop); });
+  let guard = 0;
+  while (F().tw && guard++ < 30) {
+    W().months += 12; TT.fac.yearly();
+    if (tw.phase !== seen[seen.length - 1]) seen.push(tw.phase);
+    tw.fronts.forEach(rid => ok(TT.pop.get(rid).n >= floor[rid] - 1e-6, 'dân vùng chiến tuyến không dưới trần 25%'));
+  }
+  ok(!F().tw, 'chiến tranh kết thúc trong 30 năm');
+  const order = ['bung_no', 'giang_co', 'kiet_suc', 'nghi_hoa'];
+  ok(seen.every((p, i) => i === 0 || order.indexOf(p) > order.indexOf(seen[i - 1])), 'giai đoạn theo thứ tự: ' + seen.join(' > '));
+  const last = F().twLast; ok(last && last.n === tw.n && ['het_suc', 'mot_phe_thang', 'thien_menh', 'het_thoi_gian'].indexOf(last.kind) >= 0, 'ghi kết cục: ' + (last && last.kind));
+  if (last.kind === 'het_thoi_gian') eq(tw.years, tw.dur, 'hết năm thì đúng số năm');
+  if (last.kind === 'het_suc') ok(['kiet_suc', 'nghi_hoa'].indexOf(tw.phase) >= 0, 'hết sức chỉ đến khi kiệt sức hoặc nghị hòa');
+  ok(F().chron.some(e => e.t.indexOf('bùng nổ') >= 0 && e.k === 'war'), 'sử ký ghi mở chiến tranh');
+  ok(F().chron.some(e => e.t.indexOf(tw.n) >= 0 && /khép lại/.test(e.t)), 'sử ký ghi kết thúc');
+  // 5. Hậu quả có trần: diệt vong, đổi chủ, chia cắt đếm từ sử ký của mỗi lần
+  let maxD = 0, maxR = 0, maxC = 0;
+  [101, 102, 103, 104, 105, 106, 107, 108, 109, 110].forEach(seed => {
+    TT.life.createWorld(seed); const t2 = TW.start({ force: true }); if (!t2) return;
+    for (let y = 0; y < 30 && F().tw; y++) { W().months += 12; TT.fac.yearly(); }
+    const cnt = re => F().chron.filter(e => e.m >= t2.start && re.test(e.t)).length;
+    maxD = Math.max(maxD, cnt(/bị tiêu diệt trong/)); maxR = Math.max(maxR, cnt(/ bị phế, /)); maxC = Math.max(maxC, cnt(/bị chia cắt trong/));
+  });
+  ok(maxD <= K.cap.destroy, 'diệt vong không quá trần: ' + maxD);
+  ok(maxR <= K.cap.doiChu, 'đổi chủ không quá trần: ' + maxR);
+  ok(maxC <= K.cap.chiaCat, 'chia cắt không quá trần: ' + maxC);
+  // 6. Chỉ tiêu 150 năm: mở tự động không quá một lần trong 150 năm, dù điều kiện luôn đủ
+  TT.life.createWorld(77); const starts = [];
+  const tws = TW.start; TW.start = function (o) { const r = tws.apply(this, arguments); if (r) starts.push(W().months); return r; };
+  try {
+    for (let y = 0; y < 300; y++) {
+      TT.fac.list('trieu').forEach(x => { TT.nation.ent(x).van = 5; });
+      W().months += 12; TT.fac.yearly();
+    }
+  } finally { TW.start = tws; }
+  for (let i = 1; i < starts.length; i++) ok(starts[i] - starts[i - 1] >= K.open.gapYears * 12, 'hai đại chiến cách nhau đủ 150 năm');
+  // 7. Lưu/tải giữa chiến tranh; bản cũ không có trường mới vẫn chạy
+  TT.life.createWorld(905); TW.start({ force: true }); runYears(3);
+  const snap = TT.save.snapshot(), before = JSON.stringify(F().tw);
+  TT.life.createWorld(5); TT.save.restore(snap);
+  eq(JSON.stringify(F().tw), before, 'lưu/tải giữ chiến tranh đang diễn ra');
+  runYears(3); ok(true, 'tiếp tục sau khi tải');
+  delete F().tw; delete F().twAt; delete F().twN; runYears(20); ok(true, 'bản cũ không có chiến tranh tổng vẫn chạy');
+  // 8. Công tắc tắt: không mở, không gọi, không ghi trường mới
+  K.on = false; TT.life.createWorld(913); runYears(80);
+  ok(!F().tw && !F().twN && !F().twAt, 'tắt: không mở chiến tranh tổng nào');
+  eq(TW.start({ force: true }), null, 'tắt: start trả về null');
+  K.on = true;
+  // 9. Hiệu năng: 300 năm có chiến tranh tổng dưới một giây
+  TT.life.createWorld(5); const t1 = performance.now(); runYears(300); const ms = performance.now() - t1;
+  ok(ms < 1000, '300 năm mất ' + Math.round(ms) + ' ms');
+  // 10. Chữ trong game không nhắc tên nước thật
+  const txt = JSON.stringify([K.names, K.reasons, K.phaseName]);
+  ['Trung Quốc', 'Nhật Bản', 'Mỹ', 'Nga', 'Đức', 'Ấn Độ', 'Mông Cổ', 'Iran', 'Venice', 'La Mã', 'Hà Lan', 'Ottoman', 'Viking', 'Khmer'].forEach(w => ok(txt.indexOf(w) < 0, 'chữ không nhắc tên nước thật: ' + w));
+  line('info', '   300 năm có chiến tranh tổng: ' + Math.round(ms) + ' ms; mở tự động trong 300 năm ép điều kiện: ' + starts.length + ' lần; kết cục mẫu: ' + (last.kind) + ' sau ' + tw.years + ' năm');
 });
 runNext();
 </script>

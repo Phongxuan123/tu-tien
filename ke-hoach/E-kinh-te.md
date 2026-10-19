@@ -229,6 +229,10 @@ Hai con đường, đều cần ghé hội sở ở thành lớn:
 4. Con số (phí giám định 6 vàng, lãi 8%, trần bảo hiểm 30%, thưởng 1,3 lần giá) là số đoán, cần chơi thử.
 5. Quá hạn không tịch thu tài sản và không khai trừ tức thì; nếu cần áp lực hơn, phải thêm ở chặng sau.
 
+**Mốc lại sau S6a (2026-10-19):** `node tools/econ-check.js --save`; chỉ 27/40 hạt giống lệch băm giá, do S6a đổi dòng chiến tranh (lệch có chủ ý, bảng 63 chỉ số đo lại: lệch giá 0,118, chênh vùng 1,46, cú sốc 455,8 mỗi thế giới, lãi tối đa 49,1%).
+
+**S6b (2026-10-19):** cú sốc `chien_tong` đã có chỗ gọi: mỗi năm mỗi chiến tuyến của chiến tranh tổng gọi `TT.eco.raise` (trừ giai đoạn nghị hòa). Đo lại 40 hạt giống: lệch giá 0,123, chênh vùng 1,48, lãi tối đa 51,3%, cú sốc 454,0 mỗi thế giới; 33/40 băm lệch so với mốc sau S6a, có chủ ý (xem S mục 15.18).
+
 ### A.11 Nhật ký bản 5
 - 2026-10-17: bạn bảo bắt đầu thiết lập kế hoạch kinh tế sau khi hoàn thiện thế giới (F4, F2, tài nguyên). Đọc `items.js` (chợ giá tĩnh), `buildings.js` (hạn mức, kho cửa hàng), `factions.js` (hội). Viết mục A: điều kiện nền đã có, thu gọn mô hình thành 63 chỉ số giá (9 vùng x 7 nhóm), công thức cung cầu lấy từ tài nguyên, dân số, tông, hội, chiến sự, chặng E0 đến E6 mới, bảng mốc E0, tiêu chí, rủi ro, 7 câu hỏi. Chưa code.
 

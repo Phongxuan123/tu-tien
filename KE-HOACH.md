@@ -1,6 +1,6 @@
 # Kế hoạch tổng: "1 trong 8 tỷ: Tu Tiên"
 
-Cập nhật: 2026-10-17 · Kiểm thử tự động: **98/98 đạt** (`tests.html`) · Nhịp hỏi người chơi: 5,5 lần/phút (mục tiêu dưới 6).
+Cập nhật: 2026-10-19 · Kiểm thử tự động: **107/107 đạt** (`tests.html`) · Nhịp hỏi người chơi: 5,5 lần/phút (mục tiêu dưới 6).
 
 > **Cách đọc file này.** Đây là trang tổng, chỉ ghi *cái gì đã làm, cái gì chưa, xem chi tiết ở đâu*. Chi tiết thiết kế và nhật ký từng tính năng nằm trong thư mục [`ke-hoach/`](ke-hoach/README.md) (mỗi tính năng một file). Toàn bộ nhật ký cũ (M0 đến M7, số liệu, mặc định) được giữ nguyên văn ở [`ke-hoach/_nhat-ky-goc.md`](ke-hoach/_nhat-ky-goc.md).
 > Ký hiệu: ☑ đã làm và có kiểm thử · ☐ chưa làm · ◐ làm một phần · cột "Bạn kiểm" để bạn tích sau khi chơi thử.
@@ -88,6 +88,7 @@ Mục tiêu nhịp: một đời Phi Thăng khoảng 20 đến 30 phút thật; 
 | S4 Chỉ số tông theo từng thế giới, `power` suy từ bảy chỉ số, năm chính sách tác dụng nhỏ có trần, thanh trừng hiếm, thẻ tông đọc giá trị hiện có. Bài "Nhịp quyết định" đang lỗi ở 12 hạt giống (6,07 lần/phút, 40 hạt giống 5,60) | ☑ | ☐ | [S-quoc-gia-tong-mon-ton-giao](ke-hoach/S-quoc-gia-tong-mon-ton-giao.md) mục 15.15 |
 | S5 Tín ngưỡng: ba ô mỗi vùng, quy tắc lồng, giáo hội, quốc giáo, 27 nơi thờ tự có biểu tượng và dịch vụ, tín ngưỡng cá nhân, mục "Tín ngưỡng" trong Biên niên sử; công tắc tắt trùng khít | ☑ | ☐ | [S-quoc-gia-tong-mon-ton-giao](ke-hoach/S-quoc-gia-tong-mon-ton-giao.md) mục 15.16 |
 | S6a Quân lực: quân số theo dân và kho, phẩm, sát khí, tướng (có thể là tu sĩ), quân trận, bảng lính tương đương, bản sắc chín triều, `strength()` dùng quân lực; công tắc tắt trùng khít | ☑ | ☐ | [S-quoc-gia-tong-mon-ton-giao](ke-hoach/S-quoc-gia-tong-mon-ton-giao.md) mục 15.17 |
+| S6b Chiến tranh tổng: đa bên, nhiều chiến tuyến, 10 đến 18 năm, bốn giai đoạn, kết theo điều kiện, hậu quả có trần, phản phệ, tông buộc chọn phe, đại chiến đo riêng (tối đa một mỗi 150 năm); công tắc tắt trùng khít | ☑ | ☐ | [S-quoc-gia-tong-mon-ton-giao](ke-hoach/S-quoc-gia-tong-mon-ton-giao.md) mục 15.18 |
 
 ### 2.4 Kinh tế và công trình
 | Mục | Xong | Bạn kiểm | Chi tiết |
@@ -259,6 +260,7 @@ Gợi ý thứ tự (bạn đổi tùy ý):
 - **2026-10-19** **S4** (Đợt 4) xong: trạng thái tông theo thế giới, `power` suy từ chỉ số (công tắc tắt trùng khít 40 hạt giống), chính sách có tác dụng nhỏ, thanh trừng hiếm; 100 bài đạt, 1 lỗi (nhịp quyết định, 12 hạt giống, xem S 15.15). 40 hạt giống: chiến tranh 53,5 → 52,7, diệt vong 8,2 → 7,8, đổi chủ 4,8 → 5,8. Còn S5 (tôn giáo).
 - **2026-10-19** **S5** (Đợt 4) xong: tín ngưỡng, nơi thờ tự, giáo hội, quốc giáo; 103 bài đạt; đo 40 hạt giống 49,4 chiến tranh, 6,2 diệt vong, 4,6 đổi chủ mỗi 300 năm (trước 52,7 / 7,8 / 5,8); công tắc tắt trùng khít.
 - **2026-10-19** **S6a** (Đợt 6) xong: quân lực, phẩm, sát khí, tướng, quân trận, bảng lính tương đương, bản sắc chín triều; `strength()` dùng quân lực thay phần quốc vận của `power`; 106 bài đạt; đo 40 hạt giống 54,5 chiến tranh, 6,8 diệt vong, 10,3 đổi chủ mỗi 300 năm (trước 47,5 / 6,0 / 4,5); công tắc tắt trùng khít. Diệt vong chưa đạt ±25%.
+- **2026-10-19** **S6b** (Đợt 6) xong: chiến tranh tổng (mở tự động hoặc qua `TT.totalwar.start`), bốn giai đoạn, kết theo điều kiện, hậu quả có trần, cú sốc `chien_tong`; 107 bài đạt; đo 40 hạt giống: chiến tranh 57,0, diệt vong 7,7 (vào chỉ tiêu), đại chiến 0,6 mỗi 300 năm, 0 vi phạm 150 năm. Còn S7, F2 phần sau, cốt truyện Phù Lệnh.
 - **2026-10-19** **E7b** (Đợt 5) xong: giám định (đồ chợ đen và đấu giá, sai theo tầm nhìn), vay hội (hạn mức theo bậc, lãi, quá hạn), bảo hiểm chuyến buôn có trần, đơn hội (giao và thu mua); 105 bài đạt; world và giá trùng khít.
 - **2026-10-19** **E7a** (Đợt 5) xong: thuế vào giá theo triều, lễ hội tôn giáo, thuế hương hỏa, quốc vận làm nhỏ cú sốc, chiến tranh tổng khai báo; 104 bài đạt; đo 40 hạt giống chiến tranh 49,4 → 47,5, diệt vong 6,2 → 6,0; lãi buôn tối đa 48,5% (chưa đạt 25%, để chặng sau); công tắc tắt trùng khít thế giới và giá.
 - Sắp xếp lại file kế hoạch tổng này; nhật ký cũ chuyển nguyên văn vào `ke-hoach/_nhat-ky-goc.md`.

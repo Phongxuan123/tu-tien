@@ -92,7 +92,7 @@
     frontRegions() {
       const out = {};
       fac.S().wars.forEach(w => { out[w.front] = (out[w.front] || 0) + 1; });
-      return out;
+      return TT.totalwar.frontRegions(out); // chiến tranh tổng thêm chiến tuyến (S6b)
     },
     atFront(rid) { return !!fac.frontRegions()[rid]; },
     dangerAt(rid) { return (fac.atFront(rid) ? D.FAC.frontDanger : 0) + (TT.pop.unrest(rid) ? 1 : 0) + TT.nation.danger(rid); },
@@ -144,6 +144,7 @@
       TT.pact.yearly(); // hiệp ước: trả, oán, đoạn tuyệt (F2)
       fac.tickWars();
       fac.declareWars();
+      TT.totalwar.yearly(); // chiến tranh tổng: mở, hao sức, kết thúc (S6b)
       fac.rebuilds();
       fac.spawnClans();
       fac.npcCasualties();

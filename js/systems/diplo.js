@@ -64,7 +64,11 @@
 
     // ---------- đọc ----------
     history(a, b) { return diplo.peek(a, b).an.slice().reverse(); },
-    isWar(a, b) { return TT.fac.S().wars.some(w => (w.a === a.id && w.b === b.id) || (w.a === b.id && w.b === a.id)); },
+    isWar(a, b) {
+      const tw = TT.totalwar.cur(); // chiến tranh tổng (S6b): hai bên khác phe đang đánh nhau
+      if (tw && tw.side[a.id] && tw.side[b.id] && tw.side[a.id] !== tw.side[b.id]) return true;
+      return TT.fac.S().wars.some(w => (w.a === a.id && w.b === b.id) || (w.a === b.id && w.b === a.id));
+    },
     isAlly: (a, b) => (a.ally || []).indexOf(b.id) >= 0,
     // Hiệp ước giữa hai thế lực (không khởi tạo hiệp ước nếu chưa có: tránh gọi rng của pact.seed).
     pactsBetween(a, b) {
