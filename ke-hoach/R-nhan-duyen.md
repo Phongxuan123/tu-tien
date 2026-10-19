@@ -18,6 +18,7 @@
 7. **Giáo dưỡng là một quyết định ở một thời điểm** trong đời con (không phải chọn liên tục) (6.4).
 8. **"Đẩy duyên" bằng điểm khí vận** qua **giấc mơ hiện lựa chọn** (7.2); **không hiển thị dây duyên** cho người chơi.
 9. **Nút hành động** (tặng quà, tâm sự, song tu...) vẫn có để **đẩy tiến độ**, nhưng nhân vật **tự làm theo tính cách**; nút chỉ là **thúc đẩy ưu tiên thấp**; làm việc với NPC cần **cùng địa điểm**, nếu bạn bấm thì nhân vật sẽ **cố gắng đến tìm NPC** (ưu tiên thấp) (9.3).
+10. **(2026-10-19, phiên thiết kế Đợt 8)** R1 làm ở chặng 8D, **chỉ cho các cặp thân thiết của người chơi**; R2, R3 làm bản lõi khoảng 12 chặng mỗi cái ở 9B, 9C; **R4 dây duyên và giấc mơ đẩy duyên hoãn** sang Đợt 11 trở đi (tạm dùng nhân vật định mệnh đơn giản của Q2).
 ## 2. Hiện trạng (vì sao thấy chưa rõ)
 **Quan hệ** (`TT.rel`): mỗi cặp chỉ có **một số** `v` (−100 đến 100) và một **nhãn loại** `k` (`thu`, `ket_nghia`, `dao_lu`, `su_do`, `huyet`); cặp đạo lữ có thêm `love` (0 đến 100). Nhãn hiện ra theo ngưỡng (Quen biết, Bạn bè, Tri kỷ...). Không có chiều "tin", "nợ ơn/oán", "kính", không có **giai đoạn**.
 

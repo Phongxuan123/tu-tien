@@ -414,7 +414,7 @@ wheel {
 - Giao diện: **hộp "Vòng quay vận mệnh"**: tiêu đề tình huống, vòng chia vùng màu (tên vùng ghi cạnh vòng), thanh số 0 đến 100 phía dưới, dòng yếu tố "+N vì ...", số khí vận hiện có, nút Quay, nút Quay lại (kèm giá), kết quả. Chế độ giảm hiệu ứng: hiện kết quả ngay không xoay. Trong nhật ký: dòng "Vòng quay: 64 → vùng 'hợp nhất' (yếu tố Độ tin +9)".
 - Dữ liệu: trong dữ liệu chặng `wheel: {...}` (7.2); lưu `w.pending = { type: 'wheel', ..., rolled, mod, rerolls }` (thuần dữ liệu), `c.kvPts`.
 - Hệ: `TT.wheel` (`spin`, `reroll`, `resolve`, `factorValue`), handler `wheel` trong `decisions.js`, `TT.nature.mods` cung cấp điểm cộng cho yếu tố tính cách.
-- Kiểm thử: tổng độ rộng vùng = 100, số vùng 2 đến 4, đúng một yếu tố, điểm cộng nằm trong [−10, +15], quay lại trừ điểm khí vận và đúng giá, tối đa 2 lần, không quay lại ở vùng cao nhất, lưu/tải giữa chừng, tự động quay, mô phỏng lặp lại được.
+- Kiểm thử: tổng độ rộng vùng = 100, số vùng 2 đến 4, đúng một yếu tố, điểm cộng nằm trong [−10, +15], quay lại trừ điểm khí vận và đúng giá, tối đa 1 lần, không quay lại ở vùng cao nhất, lưu/tải giữa chừng, tự động quay, mô phỏng lặp lại được.
 
 
 
@@ -1028,6 +1028,13 @@ CỤM 10 ĐẠO TÂM
 
 ### 20.1 Đã chốt
 Xem bảng 1.2. Thêm các chi tiết đã chốt sau khi bạn chỉnh: thang tính cách −10 đến +10; điểm khí vận không tích theo thời gian; quay lại tối đa 1 lần mỗi vòng, không ở vùng cao nhất; T13, T14 mở từ Trúc Cơ và do vòng quay quyết; tiên thiên Quý 15%, Thiên 5%, giảm một nửa mỗi lần ra; nhân duyên, đạo lữ, con cái chuyển sang kế hoạch R.
+
+**Chốt 2026-10-19 (phiên thiết kế Đợt 8):**
+- Hệ v2 (tiên thiên, khí vận, tính cách) **chỉ áp cho người chơi và con của người chơi** ở Đợt 8-9; NPC giữ hệ cũ, chỉ có hàm ánh xạ đọc. NPC bốn trục để Đợt 11 trở đi.
+- Làm theo **lát cắt dọc** (Z Đợt 8: 8A tính cách + khí vận, 8B khung tuyến + vòng quay + một tuyến thật, 8C tiên thiên, 8D R1).
+- **Hoãn:** xương sống B đến E (Q4), xuất thân 9 đến 17, cấy/chuyển tiên thiên, chặng ghép và loại trừ (13.2), tuyến mẫu ngoài tuyến đầu, Q9 AI. **Thêm vào Đợt 9:** màn kết đời / bia mộ (21.1#1).
+- **Công cụ chơi thử:** `tools/life-sim.js` (truyện đời dạng văn bản, từ 8B), trang thử nghiệm (21.3#19, từ 8C).
+- Sửa mâu thuẫn: quay lại **tối đa 1 lần** mỗi vòng (bài kiểm thử ở 7.8 sửa theo).
 
 ### 20.2 Câu hỏi còn mở (mỗi câu có mặc định, bạn chỉ cần sửa chỗ muốn khác)
 **Giọng và nhịp truyện**

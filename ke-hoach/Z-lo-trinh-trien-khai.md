@@ -135,22 +135,23 @@
 - [x] Giao diện: mục "Liên tông" trong tab Tông môn; tin trong Nhật báo.
 - **Cổng chơi thử 5:** thế giới tự chạy 200-300 năm quan sát biên niên (hoặc chạy thử tốc độ cao): tông diệt, tông mới, liên minh, đại chiến có hợp lý không.
 
-### Đợt 8. Nền nhân vật và khung tuyến (Q0 đến Q2) + R1 (khoảng 8 lượt)
-- [ ] **Q1.1** tiên thiên v2 (6 ô, 4 phẩm, tương hợp, ẩn/thức tỉnh), chuyển 20 tiên thiên cũ.
-- [ ] **Q1.2** khí vận v2 (điểm khí vận chỉ từ chuyện lớn), bỏ chỉ số `kv` cũ.
-- [ ] **Q1.3** tính cách bốn trục (-10 đến +10), khóa mềm, định hướng mặc định, NPC chuyển nhãn cũ.
-- [ ] **Q2** `TT.story` (tuyến, chặng, hạn, hậu quả trễ, nhân quả, hàng đợi), `TT.wheel` (vòng quay), hộp chặng.
-- [ ] **R1** mô hình quan hệ (thanh, loại, giai đoạn, nhãn, thẻ) và chuyển bản lưu cũ.
-- [ ] Mỗi chặng nền: đo lại Trúc Cơ+ giữ 2%/5%/18% (±10%).
-- **Cổng chơi thử 6:** tạo nhân vật mới: tiên thiên mới, tính cách, vòng quay; không còn thấy `kv` cũ.
+### Đợt 8. Nền nhân vật và khung tuyến, làm theo lát cắt dọc (chốt lại 2026-10-19, phiên thiết kế)
+**Nguyên tắc riêng của Đợt 8-9 (chốt 2026-10-19):**
+- **Chỉ áp hệ mới cho người chơi và con của người chơi.** NPC giữ `baseKv`, `personality`, cách bốc tiên thiên cũ; chỉ có **hàm ánh xạ đọc** (ví dụ nhãn cũ ra bốn trục) khi chặng truyện cần đọc NPC. Vì vậy công tắc tắt phải trùng khít `tools/baseline/seeds.json`, và chỉ tiêu Trúc Cơ+ (đo trên NPC) gần như không đổi.
+- **Lát cắt dọc:** sớm có một tuyến truyện thật chạy được để chơi thử, không làm hết nền rồi mới có truyện.
+- **Chơi thử bằng đọc:** `tools/life-sim.js` chạy một đời rồi in truyện đời dạng văn bản (từ 8B); trang thử nghiệm chọn sẵn nhân vật (từ 8C).
+- [ ] **8A** (Sonnet) Q1.3 tính cách bốn trục + Q1.2 khí vận v2, chỉ cho người chơi; vỏ `S.kv` giữ cho mã cũ.
+- [ ] **8B** (Sonnet) Q2 `TT.story` + `TT.wheel` bản tối thiểu, **một tuyến thật** làm mẫu, `story-lint` rút gọn, lệnh nhảy tới chặng, `tools/life-sim.js`.
+- [ ] **8C** (Haiku dữ liệu, rồi Sonnet cơ chế) Q1.1 tiên thiên v2, chỉ cho người chơi; trang thử nghiệm.
+- [ ] **8D** (Sonnet) R1 lõi: bốn thanh (Tình, Tin, Kính, Ơn oán) và loại quan hệ cho cặp thân thiết của người chơi; chuyển bản lưu cũ.
+- **Cổng chơi thử 6:** đọc 3 bản `life-sim` + chơi 15 phút: tính cách đổi theo lựa chọn, vòng quay, tuyến mẫu, tiên thiên mới.
 
-### Đợt 9. Xuất thân, xương sống, đạo lữ, con cái (Q3, Q4, R2, R3, R4) (khoảng 12 lượt)
-- [ ] **Q3** 17 xuất thân + tuổi thơ, xương sống A (6 mốc), bốn tuyến mẫu T1, T2, T3, T5.
-- [ ] **Q4** bốn xương sống còn lại (Xuyên không, Trọng sinh, Huyết mạch, Thiên phạt).
-- [ ] **R2** đạo lữ (hành trình, tương hợp, hôn ước, lễ, song tu, thử thách, rạn nứt, tang; khoảng 28 chặng).
-- [ ] **R3** con cái (ý định, thai kỳ, giai đoạn, giáo dưỡng, tính cách và xuất thân của con, thừa kế; khoảng 28 chặng).
-- [ ] **R4** dây duyên (nhân vật định mệnh; nối vai Q 13.3).
-- **Cổng chơi thử 7:** một đời đầy đủ từ sinh đến chết/kế thừa với tuyến thân phận và gia đình.
+### Đợt 9. Một đời đầy đủ (gọn lại 2026-10-19)
+- [ ] **9A** 8 xuất thân đầu (17 sau) + tuổi thơ + xương sống A (6 mốc).
+- [ ] **9B** R2 đạo lữ lõi (khoảng 12 chặng: gặp, mến, tỏ tình, kết, thử thách, chia ly/vĩnh biệt).
+- [ ] **9C** R3 con cái lõi (khoảng 12 chặng, 5 quyết định mỗi con) + thừa kế + **màn kết đời / bia mộ** (Q 21.1#1).
+- **Cổng chơi thử 7:** một đời đầy đủ từ sinh đến chết/kế thừa.
+- **Hoãn sang Đợt 11 trở đi (chốt 2026-10-19, không làm nghèo lõi):** xương sống B đến E (Q4); xuất thân 9 đến 17; cấy/chuyển tiên thiên (đi cùng T13, T14); NPC bốn trục; R4 dây duyên và giấc mơ đẩy duyên (tạm dùng nhân vật định mệnh đơn giản của Q2); chặng ghép và loại trừ (Q 13.2); bốn tuyến mẫu còn lại; Q9 AI.
 
 ### Đợt 10. Người chơi vào cuộc: F5 và S9 (khoảng 3 lượt)
 - [ ] **F5** hồ sơ quan hệ của người chơi với từng thế lực (tín nhiệm theo thế lực, tai tiếng, danh vọng theo vùng) ở tab Hồ sơ.
@@ -283,3 +284,4 @@
 - 2026-10-19: **Đợt 6, S6a xong** (quân lực, phẩm, sát khí, tướng, quân trận, bảng lính tương đương, bản sắc chín triều, `strength()` dùng quân lực; công tắc `D.ARMY.on` trùng khít 40 hạt giống; 106 bài đạt). Đo 40 hạt giống: chiến tranh 47,5 → 54,5; diệt vong 6,0 → 6,8 (vẫn dưới mục tiêu, lệch có sẵn); đổi chủ 4,5 → 10,3 (trong chỉ tiêu, nguyên nhân chưa hiểu hết). S6b (chiến tranh tổng) để phiên sau.
 - 2026-10-19: **Đợt 6, S6b xong** (chiến tranh tổng: mở tự động hoặc do Q gọi, 10-18 năm, bốn giai đoạn, hậu quả có trần, phản phệ, tông buộc chọn phe, cú sốc `chien_tong`; công tắc `D.TOTALWAR.on`; 107 bài đạt; đo 40 hạt giống: chiến tranh 57,0, diệt vong 7,7, đổi chủ 9,8, đại chiến 0,6 mỗi thế giới, 0 vi phạm 150 năm). Còn lại: S7, F2 phần sau, cốt truyện Phù Lệnh (Q 24.5b).
 - 2026-10-19: **Đợt 7, S8 xong** (liên tông: vai trò tông với triều, thao túng kế vị có phản phệ, ước pháp, giải đấu 4 hoặc 10 năm, đại chiến liên tông có giới hạn, Thiên hạ công ước; công tắc `D.INTERSECT` trùng khít 40/40 mốc S7; 109 bài đạt; đo 40 hạt giống: chiến tranh 51,5 → 48,0, diệt vong 9,4 → 7,2 (dưới dải, gộp 80 hạt giống là 8,95, trong dải), đại chiến liên tông 1,3 mỗi 300 năm). Còn: Cổng chơi thử 5 (thế giới tự chạy 200 đến 300 năm).
+- 2026-10-19: **phiên thiết kế Đợt 8**: chốt áp hệ mới chỉ cho người chơi (NPC giữ cũ), chia Đợt 8 thành lát cắt dọc 8A đến 8D, gọn Đợt 9 thành 9A đến 9C (thêm màn kết đời), danh sách hoãn, công cụ `life-sim` và trang thử nghiệm.
