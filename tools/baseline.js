@@ -6,7 +6,8 @@
 //   tùy chọn: --set=sect.purge.chance=0.07 (chỉnh D.SECT_MOD; không tiền tố sect thì chỉnh D.NATION)
 //             --seeds=301,911 --years=300 --nation=off (tắt S3: phải trùng khít đường cơ sở trước S3)
 //             --faith=off (tắt S5: phải trùng khít đường cơ sở trước S5; --set=faith.entry.k=0.05 chỉnh D.FAITH)
-//             --sect=off (tắt S4: phải trùng khít đường cơ sở trước S4). Không ghi --seeds thì dùng danh sách trong seeds.json (nếu có).
+//             --sect=off (tắt S4: phải trùng khít đường cơ sở trước S4). --eco=off (tắt móc kinh tế E7a: D.ECO.sx = false).
+//             Không ghi --seeds thì dùng danh sách trong seeds.json (nếu có).
 const fs = require('fs');
 const path = require('path');
 const { pathToFileURL } = require('url');
@@ -22,11 +23,12 @@ const YEARS = +(arg('years') || 300);
 const NATION_OFF = arg('nation') === 'off';
 const SECT_OFF = arg('sect') === 'off';
 const FAITH_OFF = arg('faith') === 'off';
+const ECO_OFF = arg('eco') === 'off';
 const SET = arg('set') ? arg('set').split(',').map(x => x.split('=')) : []; // ví dụ --set=power.kVan=0,van.base=50: chỉnh D.NATION để đo thử
 
 // Chạy trong trang: trả về { hash, chiến tranh, diệt vong, đổi chủ, ... } cho một hạt giống.
-function inPage(seed, years, natOff, sectOff, faithOff, set) {
-  TT.data.NATION.on = !natOff; TT.data.SECT_MOD.on = !sectOff; TT.data.FAITH.on = !faithOff;
+function inPage(seed, years, natOff, sectOff, faithOff, set, ecoOff) {
+  TT.data.NATION.on = !natOff; TT.data.SECT_MOD.on = !sectOff; TT.data.FAITH.on = !faithOff; TT.data.ECO.sx = !ecoOff;
   set.forEach(kv => { const p = kv[0].split('.'), root = p[0] === 'sect' ? TT.data.SECT_MOD : p[0] === 'faith' ? TT.data.FAITH : TT.data.NATION; if (p[0] === 'sect' || p[0] === 'faith') p.shift(); let o = root; for (let i = 0; i < p.length - 1; i++) o = o[p[i]]; o[p[p.length - 1]] = +kv[1]; });
   TT.config.autosaveMonths = 1e12; TT.config.persistMeta = false;
   const hash = s => { let h = 2166136261 >>> 0; for (let i = 0; i < s.length; i++) { h ^= s.charCodeAt(i); h = Math.imul(h, 16777619) >>> 0; } return h.toString(16); };
@@ -65,7 +67,7 @@ function inPage(seed, years, natOff, sectOff, faithOff, set) {
   const errs = []; page.on('pageerror', e => errs.push(String(e)));
   await page.goto(pathToFileURL(path.join(__dirname, '..', 'sim.html')).href);
   const out = [];
-  for (const s of SEEDS) out.push(await page.evaluate(`(${inPage.toString()})(${s}, ${YEARS}, ${NATION_OFF}, ${SECT_OFF}, ${FAITH_OFF}, ${JSON.stringify(SET)})`));
+  for (const s of SEEDS) out.push(await page.evaluate(`(${inPage.toString()})(${s}, ${YEARS}, ${NATION_OFF}, ${SECT_OFF}, ${FAITH_OFF}, ${JSON.stringify(SET)}, ${ECO_OFF})`));
   await browser.close();
   if (errs.length) { console.error(errs.join('\n')); process.exit(2); }
   const stable = o => ({ seed: o.seed, rel: o.rel, list: o.list, chron: o.chron, pacts: o.pacts, wars: o.wars, destroyed: o.destroyed, rulers: o.rulers, chronLen: o.chronLen, relPairs: o.relPairs });

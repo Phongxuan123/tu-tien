@@ -164,6 +164,47 @@ Hai con đường, đều cần ghé hội sở ở thành lớn:
 - Đan, bùa, thảo còn 3 tháng: chế độ Cân bằng/Tự động tự hiến kho tông (nếu đang ở tông, đổi cống hiến, chung trần quyên năm) hoặc tự bán (nếu đang ở nơi có cửa hàng thu); Thủ công thì không tự làm. Nút Hiến tông thủ công trong túi đồ.
 - Chưa làm: giám định, nhiệm vụ/vay/bảo hiểm hội.
 
+### A.18 E7a đã làm (2026-10-19): thuế vào giá và móc S
+
+- **Mã:** `js/data/eco.js` (`sx`, `taxRate`, `taxK`, `vanCut`, `tithe`, `le`, cú sốc `chien_tong`), `js/systems/eco.js` (`rate`, `taxOld`, `tax`, `damp`, `festOf`, `raise`), `js/systems/faith.js` (thuế hương hỏa cuối `yearly`), `tools/baseline.js` (`--eco=off`), `tools/econ-sim.js` (mỗi năm gọi `fac.yearly`, băm 63 ô), `tools/econ-check.js` (mới, đường cơ sở kinh tế), `tests.html` (bài E7a). Không đổi `TT.VERSION`; trường mới đọc từ dữ liệu, không khởi tạo, không gọi `rng`.
+- **Thuế vào giá:** thuế suất vùng = 0,45 + 0,40 x (1 - kho triều/100) + 0,15 nếu chiến tuyến + 0,15 x (55 - dân tâm)/55 (khi dân tâm dưới 55) + 0,10 nếu loạn + 0,03 mỗi đoạn tuyệt của vùng - 0,15 x (vận - 50)/50 (khi vận trên 50); kẹp 0,2 đến 1,2. Giá mua nhân `1 + thuế suất x 0,15`, nên phần thêm nằm trong 0,03 đến 0,18 (cùng trần thuế cũ). Giá bán vẫn trừ một nửa phần thêm như cũ. Không đếm đôi với `taxPull`: thuế dân vẫn kéo kho triều như cũ, giá chỉ đọc kho.
+- **Lễ hội (cầu tạm thời):** mỗi tín ngưỡng có một tháng lễ và tối đa ba nhóm hàng (bảng `D.ECO.le`: Vu Lan tháng 8 cho bùa và linh thảo, Thượng nguyên tháng 1 cho đan và bùa, lễ Khổng Tử tháng 9 cho sách...). Chỉ trong tháng đó, cầu nhân `1 + mức lễ x min(1, 2 x tỉ phần ô 1)`; lý do "lễ ..." hiện ở Bảng giá của Nha môn.
+- **Thuế hương hỏa:** mỗi năm `0,02 x Σ(tỉ phần ô x hương hỏa)` cộng vào kho triều của vùng (triều còn sống). Đây là nguồn khác, không phải thuế dân; triều vẫn kéo về mức thuế dân nên tác động là dịch chuyển mức cân bằng, khoảng +0,6 kho mỗi năm.
+- **Quốc vận làm cú sốc nhỏ:** biên độ cú sốc (cả cầu và cung) nhân `1 - 0,3 x (vận - 50)/50`, tối đa giảm 30% ở vận 100, không giảm khi vận dưới 50.
+- **Chiến tranh tổng (S6):** khai báo `chien_tong` với `chance: 0` (không tự sinh, không gọi `rng`), 12 tháng, cầu x1,5 và cung x0,8. `TT.eco.raise(loại, vùng, báo trước)` đưa cú sốc vào hàng chờ; S6 gọi sau. Hiện chưa có chỗ gọi.
+- **Công tắc `D.ECO.sx = false`:** thuế về kiểu cũ (`taxOld`), không lễ, không giảm cú sốc, không thuế hương hỏa, `raise` trả về false.
+
+**Kiểm chứng:**
+- `node tools/baseline.js --eco=off --check`: 40/40 hạt giống trùng khít đường cơ sở trước E7a (thế giới không đổi).
+- `node tools/econ-check.js --eco=off --check`: 40/40 hạt giống trùng khít băm 63 chỉ số giá trước E7a.
+- Bật (mặc định): `baseline --check` lệch có chủ ý (hương hỏa đổi kho triều); đã lập lại mốc `seeds.json` và `econ.json`.
+- `tests.html` **104 đạt, 0 lỗi** (bài E7a mới: công thức và khoảng, lễ đúng tháng và đúng tỉ phần, quốc vận và trần, chiến tranh tổng không tự sinh, hương hỏa đúng công thức, tắt như cũ, lưu/tải, bản cũ, 400 năm có kinh tế nối S).
+- Playwright: Nha môn ở máy tính 1366x850 và điện thoại 390x844: hiện đủ, không lỗi console, không tràn ngang.
+
+**Đo (40 hạt giống 101 đến 140, 300 năm):**
+
+| Chỉ tiêu | Trước E7a | Sau E7a |
+|---|---|---|
+| Chiến tranh mỗi 300 năm | 49,4 | 47,5 |
+| Diệt vong | 6,2 | 6,0 |
+| Đổi chủ triều | 4,6 | 4,5 |
+| Mất mệnh | 0,8 | 1,0 |
+| Quốc vận cuối kỳ / nho khí | 53,9 / 57,5 | 53,0 / 56,0 |
+| Lệch giá so với thường (TB) | 0,117 | 0,118 |
+| Chênh giá giữa vùng (TB, max) | 1,46 (2,58) | 1,46 (2,56) |
+| Lãi buôn tối đa mỗi chuyến (TB, max) | 48,5% (101%) | 49,2% (104%) |
+| Cú sốc mỗi thế giới | 452,9 | 454,3 |
+
+- **Chưa đạt chỉ tiêu lãi buôn:** trung bình lãi tối đa khoảng 49%, không phải khoảng 25% như mục 6 của Z. Phép đo lấy mức lớn nhất trên mọi cạnh và nhóm mỗi năm, nên bị các chênh giá cực đoan kéo lên (max 104%). Thuế mới gần như không đổi mức giá trung bình nên không kéo được con số này. Cần chỉnh cơ chế thương hội (chênh giá đóng chậm), để một chặng riêng.
+- `econ-sim.js` nay gọi `fac.yearly` mỗi năm, nên số "trước" đo lại trên mã cũ bằng công cụ mới, không so với số E0 cũ.
+
+**Khác kế hoạch / chưa làm:**
+1. Kế hoạch ghi thuế "chữ và bậc, không số": Nha môn hiện vẫn ghi số `Thuế chợ N%` (có từ trước). Giữ nguyên, chờ bạn chọn.
+2. Giám định, nhiệm vụ hội, vay và bảo hiểm: chuyển sang **E7b** (chưa làm).
+3. `chien_tong` mới khai báo; S6 gọi `TT.eco.raise`.
+4. Hương hỏa và lễ hội chưa có giao diện riêng ngoài Bảng giá của Nha môn.
+5. Mức thuế, mức lễ, tỉ lệ hương hỏa là số đoán để chơi thử, chưa qua cân chỉnh.
+
 ### A.11 Nhật ký bản 5
 - 2026-10-17: bạn bảo bắt đầu thiết lập kế hoạch kinh tế sau khi hoàn thiện thế giới (F4, F2, tài nguyên). Đọc `items.js` (chợ giá tĩnh), `buildings.js` (hạn mức, kho cửa hàng), `factions.js` (hội). Viết mục A: điều kiện nền đã có, thu gọn mô hình thành 63 chỉ số giá (9 vùng x 7 nhóm), công thức cung cầu lấy từ tài nguyên, dân số, tông, hội, chiến sự, chặng E0 đến E6 mới, bảng mốc E0, tiêu chí, rủi ro, 7 câu hỏi. Chưa code.
 

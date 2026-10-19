@@ -264,6 +264,12 @@
         }
         L.khoan = clamp(L.khoan + (khoanTarget(t.id, L.faith, nho) - L.khoan) * K.khoan.pull, K.khoan.min, K.khoan.max);
       });
+      // thuế hương hỏa (E7a): một phần nhỏ hương hỏa của các ô nộp về kho triều vùng đó (không phân biệt quốc giáo)
+      if (D.ECO && D.ECO.sx) D.REGIONS.forEach(r => {
+        const tr = trieuOf(r.id); if (!tr || !TT.fac.alive(tr)) return;
+        let v = 0; faith.slotsOf(r.id).forEach(sl => { v += sl.share * faith.church(sl.chinh).huong; });
+        tr.wealth = clamp(tr.wealth + D.ECO.tithe.k * v, 0, 100);
+      });
       faith.sync();
     },
 

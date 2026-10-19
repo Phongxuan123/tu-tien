@@ -46,12 +46,25 @@
     push(rid, g, delta) { const s = eco.S(); if (!s) return; const k = rid + '|' + g; s.press[k] = clamp((s.press[k] || 0) + delta, -E.press.capDown, E.press.capUp); },
 
     // ---------- thuế (từ vương triều) ----------
-    tax(rid) {
+    // Phần thêm vào giá mua (kiểu cũ, E1): đọc kho triều và chiến sự. Dùng khi tắt móc (D.ECO.sx = false).
+    taxOld(rid) {
       const tr = TT.fac.list('trieu').find(t => t.region === rid && TT.fac.alive(t)), g = TT.pop.get(rid);
       let t = E.tax.base + (tr ? 0.10 * (1 - tr.wealth / 100) : 0.04) + (TT.fac.atFront(rid) ? 0.04 : 0) + (g && g.riot ? 0.02 : 0);
       TT.pact.S(); TT.fac.S().pacts.forEach(p => { if (p.defy) { const a = TT.fac.get(p.a); if (a && a.region === rid) t += 0.005; } });
       return clamp(t, E.tax.min, E.tax.max);
     },
+    // Thuế suất vùng 0 đến 1 (E7a): kho triều, chiến sự, dân tâm (F4), đoạn tuyệt, quốc vận (S3). Chiến sự hoặc dân tâm thấp thì cao, quốc vận cao thì dịu.
+    rate(rid) {
+      const T = E.taxRate, tr = TT.fac.list('trieu').find(t => t.region === rid && TT.fac.alive(t)), g = TT.pop.get(rid);
+      let t = T.base + (tr ? T.wealth * (1 - tr.wealth / 100) : 0);
+      if (TT.fac.atFront(rid)) t += T.front;
+      if (g) { t += T.mood * clamp((T.moodBase - g.mood) / T.moodBase, 0, 1); if (g.riot) t += T.riot; }
+      TT.pact.S(); TT.fac.S().pacts.forEach(p => { if (p.defy) { const a = TT.fac.get(p.a); if (a && a.region === rid) t += T.pact; } });
+      const v = TT.nation.viewAt(rid); if (v && v.init) t -= T.van * clamp((v.van - 50) / 50, 0, 1);
+      return clamp(t, T.min, T.max);
+    },
+    // Phần thêm vào giá mua, tính bằng tỉ lệ (0,03 đến 0,18): giá mua nhân (1 + thuế suất x 0,15).
+    tax(rid) { return E.sx ? eco.rate(rid) * E.taxK : eco.taxOld(rid); },
 
     // ---------- kênh mua và giá một món ----------
     fresh(c, id) { // 1 nếu không hỏng; giảm dần theo hạn dùng; 3 tháng cuối còn 40%
@@ -91,7 +104,29 @@
     shockMul(rid, g, kind, now) { // kind 'd' hoặc 's'; chỉ cú sốc đã bắt đầu
       let m = 1; const s = eco.S();
       s.sh.forEach(x => { if (x.region !== rid || x.start > now || x.until <= now) return; const t = E.shocks[x.kind]; const v = t && t[kind]; if (!v) return; m *= (v[g] != null ? v[g] : v['*'] != null ? v['*'] : 1); });
-      return m;
+      return m !== 1 ? 1 + (m - 1) * eco.damp(rid) : 1;
+    },
+    // Quốc vận cao làm biên độ cú sốc nhỏ lại (E7a): còn 1 - vanCut ở vận 100, không dưới thế.
+    damp(rid) {
+      if (!E.sx) return 1;
+      const v = TT.nation.viewAt(rid); if (!v || !v.init) return 1;
+      return 1 - E.vanCut * clamp((v.van - E.vanFrom) / (100 - E.vanFrom), 0, 1);
+    },
+    // Lễ hội tôn giáo của vùng trong tháng này (E7a): tín ngưỡng ô 1 nhân tỉ phần ô 1, đúng tháng lễ. Trả về null nếu không có.
+    festOf(rid) {
+      if (!E.sx || !D.FAITH || !D.FAITH.on || !TT.faith) return null;
+      const sl = TT.faith.slotsOf(rid)[0], f = sl && E.le[sl.chinh], m = (TT.world.months % 12) + 1;
+      if (!f || f.m !== m) return null;
+      const k = clamp(sl.share * 2, 0, 1), mul = {};
+      Object.keys(f.g).forEach(g => { mul[g] = 1 + f.g[g] * k; });
+      return { n: f.n, mul };
+    },
+    // Đưa một cú sốc có sẵn vào hàng chờ (S6 gọi cho chiến tranh tổng). Trả về false nếu tắt hoặc đã đang có.
+    raise(kind, rid, lead) {
+      const s = eco.S(), now = TT.world.months, t = E.shocks[kind];
+      if (!E.sx || !t || s.sh.some(x => x.kind === kind && x.region === rid && x.until > now)) return false;
+      s.sh.push({ kind, region: rid, start: now + (lead || 0), until: now + (lead || 0) + t.dur, said: false });
+      return true;
     },
 
     // ---------- một tháng ----------
@@ -102,7 +137,7 @@
       s.sh = s.sh.filter(x => x.until > now);
       D.REGIONS.forEach(r => {
         Object.keys(E.shocks).forEach(k => {
-          const t = E.shocks[k]; if (!rng.P(t.chance) || s.sh.some(x => x.kind === k && x.region === r.id)) return;
+          const t = E.shocks[k]; if (!t.chance || !rng.P(t.chance) || s.sh.some(x => x.kind === k && x.region === r.id)) return;
           const lead = rng.RI(t.lead[0], t.lead[1]);
           s.sh.push({ kind: k, region: r.id, start: now + lead, until: now + lead + t.dur, said: false });
         });
@@ -120,7 +155,7 @@
         const hoiTru = f.shocks.some(x => x.kind === 'hoiTru' && x.region === rid && x.until > now), hoiXa = f.shocks.some(x => x.kind === 'hoiXa' && x.region === rid && x.until > now);
         const rift = (f.rifts || []).some(x => { const a = TT.fac.get(x.a), b = TT.fac.get(x.b); return (a && a.kind === 'trieu' && a.region === rid) || (b && b.kind === 'trieu' && b.region === rid); });
         const si = eco.sectIdx(rid), raH = eco.ra(rid, 'herb'), raO = eco.ra(rid, 'ore'), raB = eco.ra(rid, 'beast');
-        const delta = TT.fac.hoiCover(rid), ds = {}, ss = {}, why = {};
+        const delta = TT.fac.hoiCover(rid), ds = {}, ss = {}, why = {}, fest = eco.festOf(rid);
         const S = {
           thao: 0.7 * raH + 0.3 * pop, khoang: 0.8 * raO + 0.2 * pop, yeu: 0.8 * raB + 0.2 * pop,
           dan: 0.55 * si + 0.3 * pop + 0.15 * raH, bua: 0.5 * si + 0.35 * pop + 0.15, khi: 0.45 * si + 0.3 * pop + 0.25 * raO, sach: 0.7 * si + 0.3 * pop
@@ -138,6 +173,7 @@
           const dd = eco.shockMul(rid, g, 'd', now), sm = eco.shockMul(rid, g, 's', now);
           if (dd !== 1) { d *= dd; why[g] = why[g] || (dd > 1 ? 'mùa đột phá' : ''); }
           if (sm !== 1) { sp *= sm; why[g] = why[g] || (sm > 1 ? 'tông mở kho hoặc mùa bội thu' : 'đường buôn phong tỏa'); }
+          if (fest && fest.mul[g]) { d *= fest.mul[g]; why[g] = why[g] || fest.n; }
           if (si < 0.5 && (g === 'dan' || g === 'sach')) why[g] = why[g] || 'tông đóng kho hoặc suy tàn';
           ds[g] = d; ss[g] = Math.max(0.15, sp);
         });

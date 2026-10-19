@@ -2750,6 +2750,63 @@ test('Tín ngưỡng (S5): ba ô mỗi vùng, tổng tỉ phần bằng 1, quy t
   TT.life.createWorld(5); const t1 = performance.now(); for (let y = 0; y < 400; y++) { TT.world.months += 12; TT.fac.yearly(); } const msT = performance.now() - t1; ok(msT < 3000, '400 năm mất ' + Math.round(msT) + ' ms'); line('info', '   400 năm có tín ngưỡng: ' + Math.round(msT) + ' ms');
 });
 
+test('Kinh tế nối S (E7a): thuế suất đúng công thức và trong khoảng, lễ hội đúng tháng, quốc vận làm cú sốc nhỏ có trần, chiến tranh tổng chưa tự sinh, thuế hương hỏa, tắt thì như cũ, lưu/tải, bản cũ, hiệu năng', () => {
+  const E = D.ECO, T = E.taxRate, W = () => TT.world, near = (x, y, m) => ok(Math.abs(x - y) < 1e-9, m + ': ' + x + ' vi ' + y);
+  TT.life.createWorld(301); W().months += 12; TT.fac.yearly();
+  // 1. thuế suất: trong khoảng, giá mua nhân (1 + suất x 0,15), đúng công thức theo từng yếu tố
+  D.REGIONS.forEach(r => {
+    const v = TT.eco.rate(r.id); ok(v >= T.min - 1e-9 && v <= T.max + 1e-9, 'thuế suất trong khoảng ' + r.id + ' ' + v);
+    near(TT.eco.tax(r.id), v * E.taxK, 'giá mua nhân ' + r.id); ok(TT.eco.tax(r.id) >= 0.03 - 1e-9 && TT.eco.tax(r.id) <= 0.18 + 1e-9, 'phần thêm trong 0,03 đến 0,18');
+  });
+  const rid = D.REGIONS.find(r => !TT.fac.atFront(r.id) && TT.fac.list('trieu').some(t => t.region === r.id)).id;
+  const tr = TT.fac.list('trieu').find(t => t.region === rid), g = TT.pop.get(rid), en = TT.nation.ent(tr);
+  const at = (wealth, mood, riot, van) => { tr.wealth = wealth; g.mood = mood; g.riot = riot; en.van = van; return TT.eco.rate(rid); };
+  near(at(0, 55, false, 50) - at(100, 55, false, 50), T.wealth, 'kho triều càng nghèo thuế càng cao');
+  near(at(50, 30, false, 50) - at(50, 55, false, 50), T.mood * 25 / 55, 'dân tâm thấp thì thuế cao, theo tỉ lệ');
+  near(at(50, 55, true, 50) - at(50, 55, false, 50), T.riot, 'loạn dân cộng thêm');
+  near(at(50, 55, false, 100) - at(50, 55, false, 50), -T.van, 'quốc vận cao thì thuế dịu (có trần ở vận 100)');
+  near(at(50, 55, false, 0) - at(50, 55, false, 50), 0, 'quốc vận thấp không làm thuế tăng thêm');
+  ok(at(0, 0, true, 0) <= T.max + 1e-9, 'thuế không vượt trần');
+  at(50, 55, false, 50);
+  // 2. lễ hội: chỉ đúng tháng lễ, nhân cầu theo tỉ phần ô 1
+  const sl = TT.faith.peek().slots.trung_chau; sl[0].chinh = 'phat'; sl[0].share = 0.5;
+  const setMonth = mo => { W().months = W().months - (W().months % 12) + (mo - 1); };
+  setMonth(8); const f8 = TT.eco.festOf('trung_chau'); ok(f8 && f8.n === E.le.phat.n, 'lễ đúng tháng 8');
+  near(f8.mul.bua, 1 + E.le.phat.g.bua, 'lễ nhân cầu bùa theo tỉ phần 0,5'); ok(f8.mul.dan === undefined, 'nhóm không có trong lễ không đổi');
+  sl[0].share = 0.2; setMonth(8); near(TT.eco.festOf('trung_chau').mul.bua, 1 + E.le.phat.g.bua * 0.4, 'tỉ phần thấp thì lễ nhẹ');
+  sl[0].share = 0.5; setMonth(7); ok(TT.eco.festOf('trung_chau') === null, 'tháng 7 không có lễ');
+  setMonth(9); ok(TT.eco.festOf('trung_chau') === null, 'tháng 9 không có lễ Vu Lan');
+  setMonth(8); D.FAITH.on = false; ok(TT.eco.festOf('trung_chau') === null, 'tắt tín ngưỡng thì không có lễ'); D.FAITH.on = true;
+  E.sx = false; ok(TT.eco.festOf('trung_chau') === null, 'tắt móc thì không có lễ'); E.sx = true; setMonth(8);
+  // 3. quốc vận làm cú sốc nhỏ lại, có trần; chiến tranh tổng chỉ khi được gọi
+  TT.eco.S().sh = [];
+  en.van = 100; near(TT.eco.damp(rid), 1 - E.vanCut, 'vận 100 giảm biên độ tối đa'); en.van = 50; near(TT.eco.damp(rid), 1, 'vận 50 không đổi'); en.van = 0; near(TT.eco.damp(rid), 1, 'vận thấp không đổi');
+  ok(TT.eco.raise('chien_tong', rid, 0), 'gọi được chiến tranh tổng');
+  ok(!TT.eco.raise('chien_tong', rid, 0), 'đang có thì không gọi lại'); ok(!TT.eco.raise('khong_co', rid, 0), 'cú sốc lạ bị bỏ qua');
+  const now = W().months; en.van = 100; near(TT.eco.shockMul(rid, 'bua', 'd', now), 1 + 0.5 * (1 - E.vanCut), 'cầu tăng 50% nhưng vận cao giảm còn 35%');
+  en.van = 50; near(TT.eco.shockMul(rid, 'bua', 'd', now), 1.5, 'vận 50 cầu tăng đủ 50%');
+  en.van = 100; near(TT.eco.shockMul(rid, 'bua', 's', now), 1 + (0.8 - 1) * (1 - E.vanCut), 'cung giảm 20%, vận cao còn 14%');
+  en.van = 50; TT.eco.S().sh = [];
+  for (let i = 0; i < 600; i++) { W().months++; TT.eco.monthly(); } ok(TT.eco.S().sh.every(x => x.kind !== 'chien_tong'), 'chiến tranh tổng không tự sinh trong 600 tháng');
+  E.sx = false; ok(!TT.eco.raise('chien_tong', rid, 0), 'tắt móc thì không gọi được'); E.sx = true;
+  // 4. thuế hương hỏa vào kho triều (chỉ khi bật), đúng k x tổng (tỉ phần x hương hỏa)
+  const w0 = tr.wealth; TT.faith.yearly(); let v = 0; TT.faith.slotsOf(rid).forEach(x => { v += x.share * TT.faith.church(x.chinh).huong; });
+  near(tr.wealth - w0, E.tithe.k * v, 'hương hỏa nộp về kho triều đúng công thức');
+  E.sx = false; const w1 = tr.wealth; TT.faith.yearly(); near(tr.wealth, w1, 'tắt thì không có thuế hương hỏa'); E.sx = true;
+  // 5. tắt thì như cũ: thuế kiểu cũ, không giảm cú sốc, không lễ, không hương hỏa
+  E.sx = false; D.REGIONS.forEach(r => near(TT.eco.tax(r.id), TT.eco.taxOld(r.id), 'tắt: thuế như cũ ' + r.id));
+  en.van = 100; near(TT.eco.damp(rid), 1, 'tắt: không giảm cú sốc'); E.sx = true;
+  // 6. lưu/tải và bản cũ (thiếu quốc vận, tín ngưỡng, kinh tế)
+  const snap = TT.save.snapshot(), t0 = TT.eco.tax(rid); TT.save.restore(snap); near(TT.eco.tax(rid), t0, 'thuế giữ nguyên sau lưu/tải');
+  const old = JSON.parse(snap); delete old.world.fac.nat; delete old.world.fac.faith; delete old.world.eco; TT.save.restore(JSON.stringify(old));
+  ok(isFinite(TT.eco.tax(rid)) && TT.eco.tax(rid) > 0, 'bản cũ vẫn tính được thuế'); ok(TT.eco.festOf(rid) === null || typeof TT.eco.festOf(rid).n === 'string', 'bản cũ đọc lễ được');
+  W().months += 12; TT.fac.yearly(); TT.eco.monthly(); ok(isFinite(TT.eco.index(rid, 'bua')), 'bản cũ chạy tiếp được');
+  // 7. hiệu năng: 400 năm có kinh tế nối S
+  TT.life.createWorld(5); const t1 = performance.now();
+  for (let y = 0; y < 400; y++) { for (let m = 0; m < 12; m++) { W().months++; TT.eco.monthly(); } TT.fac.yearly(); }
+  const ms = performance.now() - t1; ok(ms < 6000, 'kinh tế nối S 400 năm mất ' + Math.round(ms) + ' ms');
+});
+
 runNext();
 </script>
 </body>
