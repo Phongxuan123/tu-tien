@@ -37,7 +37,8 @@
       '<div>Sinh lực: <b>' + Math.round(c.hp) + '/' + hm + '</b><div class="bar hp"><i style="width:' + hpp + '%"></i></div></div>' +
       '<div>Công kích: <b>' + S.atk(c) + '</b></div><div>Niệm lực: <b>' + S.nl(c) + '</b></div></div>' +
       '<div class="sec">Chỉ số ẩn và suy ra</div><div class="grid">' +
-      '<div>Khí vận: <b>' + (c.known.kv ? S.kv(c) : '???') + '</b></div>' +
+      (D.NATURE.on ? '<div title="Tài nguyên tiêu được, chỉ cộng bằng chuyện lớn (kỳ ngộ vận mệnh, nhẫn thật, đột phá từ Kim Đan). Phần thụ động tính tối đa ' + TT.kv.passiveCap + '.">Khí vận: <b>' + TT.kv.pts(c) + ' điểm</b></div>'
+        : '<div>Khí vận: <b>' + (c.known.kv ? S.kv(c) : '???') + '</b></div>') +
       '<div>Vận may: <b>' + (c.known.luck ? S.luck(c) : '???') + '</b></div>' +
       '<div title="Tính từ thuộc tính cao nhất">Tốc độ tu: <b>x' + S.trainMul(c).toFixed(2) + '</b></div>' +
       '<div title="Tính từ thuộc tính cao nhất và niệm lực">Linh ngộ: <b>' + S.ngo(c).toFixed(2) + '</b></div></div>' +

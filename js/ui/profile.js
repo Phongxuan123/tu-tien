@@ -5,7 +5,7 @@
   const ui = TT.ui = TT.ui || {};
   const D = TT.data, h = ui.h;
 
-  let sub = 'tong';
+  let sub = 'tong', natOpen = '';
   const SUBS = [['tong', 'Tổng quan'], ['chiso', 'Chỉ số'], ['tt', 'Thành tựu'], ['dd', '★ Đánh dấu'], ['kt', 'Kiếp trước']];
   const ROBE = ['#8a8f99', '#3a6ea5', '#2a8a7a', '#c9a23a', '#9a78e0', '#e0709a', '#e8e8f0'];
   const CAT_ICON = { tu: '☯', chien: '⚔', tien: '◈', nguoi: '♥', tong: '⌂', nv: '✦', kp: '➶', the: '☼' };
@@ -59,6 +59,23 @@
       h('div', { class: 'small' }, (c.origin ? c.origin.charAt(0).toUpperCase() + c.origin.slice(1) + ' · ' : '') + (reg ? reg.n : '')),
       chips);
     box.appendChild(h('div', { class: 'pf-card' }, avatar(c), info));
+
+    // tính cách bốn trục và khí vận (8A): bấm một thanh để xem lịch sử đổi
+    if (D.NATURE.on) {
+      box.appendChild(h('div', { class: 'pf-sec' }, 'Tính cách · ' + TT.nature.summary(c)));
+      TT.nature.rows(c).forEach(r => {
+        const pct = Math.abs(r.v) / D.NATURE.max * 50, v = Math.round(r.v);
+        box.appendChild(h('div', { class: 'pn-row' + (r.recent ? ' recent' : ''), title: r.lo + ' ↔ ' + r.hi + '. Bấm để xem lịch sử đổi.', onclick: () => { natOpen = natOpen === r.id ? '' : r.id; refresh(); } },
+          h('div', null, h('b', null, r.n)),
+          h('div', { class: 'pn-bar' }, h('i', { class: r.v < 0 ? 'neg' : 'pos', style: (r.v < 0 ? 'right:50%;' : 'left:50%;') + 'width:' + pct + '%' })),
+          h('div', null, h('b', { class: 'pn-num' }, (v > 0 ? '+' : '') + v), ' ', h('span', { class: 'small' }, r.label))));
+        if (natOpen === r.id) {
+          const lg = (c.natureLog || []).filter(e => e.ax === r.id).slice().reverse().slice(0, 8);
+          box.appendChild(h('div', { class: 'pn-hist' }, ...(lg.length ? lg.map(e => h('div', null, 'Năm ' + Math.max(0, Math.floor((e.m - c.birthMonth) / 12)) + ': ' + (e.d > 0 ? '+' : '') + e.d + (e.why ? ' (' + e.why + ')' : ''))) : [h('div', null, 'Chưa đổi từ lúc sinh.')])));
+        }
+      });
+      box.appendChild(h('div', { class: 'pf-grid', style: 'margin-top:8px' }, tile('Khí vận', TT.kv.pts(c) + ' điểm', 'chỉ cộng bằng chuyện lớn', null, null)));
+    }
 
     // danh vọng (chuyển từ bảng chỉ số và tab Quan hệ về đây)
     box.appendChild(h('div', { class: 'pf-sec' }, 'Danh vọng'));
@@ -165,7 +182,7 @@
     if (sub === 'chiso') return ui.playerPanelHtml(c);
     if (sub === 'tong') {
       const q = topQuests(c);
-      return JSON.stringify([c.id, TT.age(c), c.realm, c.region, c.sect ? [c.sect.id, c.sect.rank, Math.floor(c.sect.contrib)] : 0, c.job && c.job.main, c.path && c.path.id, c.rep.danh, Math.round(c.rep.chinh), c.nghiep,
+      return JSON.stringify([natOpen, D.NATURE.on ? [TT.nature.rows(c).map(r => [r.v, r.recent ? 1 : 0]), TT.kv.pts(c), (c.natureLog || []).length] : 0, c.id, TT.age(c), c.realm, c.region, c.sect ? [c.sect.id, c.sect.rank, Math.floor(c.sect.contrib)] : 0, c.job && c.job.main, c.path && c.path.id, c.rep.danh, Math.round(c.rep.chinh), c.nghiep,
         q.big ? [q.big.id, Math.round(TT.quests.progress(c, q.big) * 100)] : 0, q.soon ? [q.soon.id, q.left(q.soon)] : 0,
         TT.rel.close(c, 3).map(x => [x.id, Math.round(x.r.v), x.c.alive, x.c.place]), Object.keys(c.visited || {}).length, c.gender, c.equip && c.equip.weapon]);
     }

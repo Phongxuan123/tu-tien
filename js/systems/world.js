@@ -401,6 +401,7 @@
     opts = opts || {};
     const w = TT.world;
     const prev = w.playerId != null ? w.chars[w.playerId] : null;
+    if (life.keepUndo && !opts.noUndo) { life.undo = TT.save.snapshot(); life.undoOpts = { boost: !!opts.boost }; } // giao diện: để "Bốc lại" quay về trước lúc sinh
     const rid = rng.wpick(D.REGIONS, r => r.birth * TT.pop.birthMul(r.id)).id;
     life.enterRegion(rid);
     const c = TT.createChar({ kind: 'player', age: 12, region: rid });
@@ -427,7 +428,7 @@
     TT.log(c, 'Bạn bước chân vào con đường tu tiên.', 'age');
     TT.fac.welcome(c);
     TT.news('Một người mới ra đời ở ' + reg.n + ': ' + c.name + ' (bạn).', 'good', [c.id]);
-    TT.bus.emit('reincarnate', { id: c.id });
+    TT.bus.emit('reincarnate', { id: c.id, kind: 'new', first: !prev });
     return c;
   };
 
@@ -479,7 +480,7 @@
     if (heir.nghiep) TT.log(heir, 'Nghiệp chướng đời trước để lại: ' + heir.nghiep + '.', 'bad');
     TT.fac.welcome(heir);
     TT.news(heir.name + ' kế thừa di sản của ' + prev.name + '.', 'age', [heir.id, prev.id]);
-    TT.bus.emit('reincarnate', { id: heir.id });
+    TT.bus.emit('reincarnate', { id: heir.id, kind: 'heir' });
     return heir;
   };
 

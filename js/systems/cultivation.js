@@ -235,6 +235,7 @@
         if (c.kind !== 'player' && c.realm >= 2) {
           TT.news(c.name + ' đột phá lên ' + D.REALM_NAMES[c.realm] + '.', 'good', [c.id]);
         }
+        if (c.kind === 'player' && c.realm >= 3) TT.kv.addOnce(c, 'realm' + c.realm, 1, 'đột phá ' + D.REALM_NAMES[c.realm]);
         if (c.realm >= 6) TT.life.ascend(c);
         else TT.log(c, 'Thọ nguyên tăng lên ' + S.lifeSpan(c) + ' tuổi.', 'good');
         return true;

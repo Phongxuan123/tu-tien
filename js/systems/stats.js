@@ -10,7 +10,8 @@
   S.hpMax = c => Math.max(20, Math.round((100 + c.realm * 40 + S.mod(c, 'hpMax') + c.trainHp) * (TT.loss ? TT.loss.hpMul(c) : 1)));
   S.atk = c => Math.max(1, Math.round(c.baseAtk + c.realm * 10 + S.mod(c, 'atk') + c.trainAtk));
   S.nl = c => Math.max(1, Math.round(c.baseNl + c.realm * 6 + S.mod(c, 'nl') + c.trainNl));
-  S.kv = c => c.baseKv + S.mod(c, 'kv');
+  // Người chơi (khi D.NATURE.on): điểm khí vận, thụ động tính tối đa 20, cộng phần Mệnh cách của tiên thiên. NPC giữ baseKv.
+  S.kv = c => (c.kind === 'player' && D.NATURE.on ? Math.min(TT.kv.pts(c), TT.kv.passiveCap) : c.baseKv) + S.mod(c, 'kv');
   S.luck = c => c.baseLuck + S.mod(c, 'luck') + (TT.nation ? TT.nation.luck(c) : 0);
 
   // Tư chất: main là điểm thuộc tính cao nhất, n là số thuộc tính chính (>= 5 điểm).

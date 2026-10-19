@@ -286,7 +286,7 @@
       id: 'cx_tam_ma', tier: 2, cross: true, manual: true, w: 1.5, cool: 0, title: 'Cô độc sinh tâm ma',
       text: 'Nhiều năm trời chỉ có một mình giữa hư không, những ký ức cũ hiện lên rõ ràng và đau đớn.',
       choices: [
-        { key: 'doi', label: 'Đối mặt từng ký ức', kind: 'risk', run: c => { const p = rng.clamp(0.4 + (c.daoTam - 50) * 0.008 + TT.stats.mod(c, 'tm'), 0.1, 0.9); if (P(p)) { dao(c, 3); xp(c, NR(c) * 0.03); return G('Bạn nhìn thẳng vào quá khứ và buông được. Đạo tâm vững hơn.'); } hp(c, -25); dao(c, -3); return B('Ký ức nuốt chửng bạn. Sinh lực -25, đạo tâm tổn thương.'); } },
+        { key: 'doi', label: 'Đối mặt từng ký ức', kind: 'risk', run: c => { const p = rng.clamp(0.4 + (c.daoTam - 50) * 0.008 + TT.stats.mod(c, 'tm') + TT.nature.mods(c).tamMa, 0.1, 0.9); if (P(p)) { dao(c, 3); xp(c, NR(c) * 0.03); return G('Bạn nhìn thẳng vào quá khứ và buông được. Đạo tâm vững hơn.'); } hp(c, -25); dao(c, -3); return B('Ký ức nuốt chửng bạn. Sinh lực -25, đạo tâm tổn thương.'); } },
         { key: 'tinh', label: 'Nhắm mắt tĩnh tâm', kind: 'safe', run: c => 'Bạn tĩnh tâm cho tới khi mọi thứ lắng xuống.' }
       ]
     },

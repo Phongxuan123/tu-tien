@@ -23,7 +23,7 @@
       choices: [
         {
           key: 'deo', label: 'Đeo vào', kind: 'risk', run: c => {
-            if (P(lp(c, 0.4))) { c.ring = true; c.baseKv += 15; xp(c, NR(c) * 0.06); return G('Lão gia gia là thật! Ông truyền cho bạn công pháp. Từ nay tu luyện nhanh hơn rõ rệt.'); }
+            if (P(lp(c, 0.4))) { c.ring = true; if (c.kind === 'player' && D.NATURE.on) TT.kv.add(c, 2, 'Nhẫn'); else c.baseKv += 15; xp(c, NR(c) * 0.06); return G('Lão gia gia là thật! Ông truyền cho bạn công pháp. Từ nay tu luyện nhanh hơn rõ rệt.'); }
             gold(c, -20); return B('Chiếc nhẫn là đồ giả của gã lừa đảo. Bạn mất 20 vàng.');
           }
         },
@@ -346,7 +346,7 @@
       choices: [
         {
           key: 'doi', label: 'Đối mặt tâm ma', kind: 'risk', run: c => {
-            const p = rng.clamp(0.35 + (c.daoTam - 50) * 0.008 + TT.stats.nl(c) * 0.003 + TT.stats.mod(c, 'tm'), 0.1, 0.9);
+            const p = rng.clamp(0.35 + (c.daoTam - 50) * 0.008 + TT.stats.nl(c) * 0.003 + TT.stats.mod(c, 'tm') + TT.nature.mods(c).tamMa, 0.1, 0.9);
             if (P(p)) { dao(c, 3); xp(c, NR(c) * 0.03); c.daoDiem += 1; return G('Bạn nhìn thẳng vào nó, màn sương tan đi. Đạo tâm vững vàng hơn, tu vi tăng.'); }
             hp(c, -30); dao(c, -3); return B('Tâm ma áp đảo, khí huyết nghịch chuyển. Sinh lực -30, đạo tâm tổn thương.');
           }
