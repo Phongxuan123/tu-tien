@@ -9,7 +9,8 @@
     // Trọng số khi gộp thành số tổng hợp `relV`. S1 chỉ dùng `tinh`; từ S2 bật `dao` (0,3) cho các cặp tông có giá trị.
     w: { tinh: 1, loi: 0, dao: 0.3, thong: 0 },
     // `dao` giữa hai tông suy từ khoảng cách giá trị (bình quân |chênh| trên 5 trục): gần hơn mức giữa thì thân, xa hơn thì khắc.
-    daoMid: 40, daoK: 1.5, daoMax: 60,
+    // Hành vi lệch xa nhau thì khắc: mỗi điểm chênh `nhan` quá ngưỡng daoNhanFree trừ daoNhanK điểm đạo thống (để tông tàn nhẫn không thành bạn của mọi tông chỉ vì giá trị gần nhau).
+    daoMid: 48, daoK: 1.5, daoMax: 60, daoNhanFree: 20, daoNhanK: 1.2,
     dimName: { tinh: 'Thiện cảm', loi: 'Lợi ích', dao: 'Đạo thống', thong: 'Thông gia', tin: 'Tín nhiệm', cua: 'Kiêng dè' },
     // Bậc quan hệ theo số tổng hợp (từ cao xuống thấp); 'dong_minh' và 'chien' ghi đè khi đúng điều kiện.
     levels: [
@@ -37,6 +38,7 @@
       trung_phat: { n: 'Bị trừng phạt', tone: 'bad' },
       doan_tuyet: { n: 'Đoạn tuyệt', tone: 'bad', tin: -25 },
       tich_thu: { n: 'Bị tịch thu', tone: 'bad' },
+      thanh_trung: { n: 'Thanh trừng nội bộ', tone: 'bad' },
       cat_hang: { n: 'Cắt hàng', tone: 'bad' }
     },
     // Nhãn hiệp ước (nhìn từ bên gánh `a` và bên hưởng `b`).

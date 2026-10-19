@@ -171,6 +171,7 @@
       } else {
         x.power = 35; x.unity = 40; x.leader = TT.genName('nam'); x.leaderAge = 40; x.tag = rng.pick(['chinh', 'trung', 'ta']);
         text = x.n + ' mất mệnh trời, ' + old + ' bị phế truất. Người cầm quyền mới là ' + x.leader + '.';
+        TT.sectmod.rulerChanged(x);
       }
       x.state = 'suy';
       e.van = M.vanAfter[kind]; e.nho = clamp(e.nho - M.nhoLoss, 0, 100); e.low = 0; e.falls++; e.vt = nat.tier(e.van).id; e.vtAt = Math.floor(TT.world.months / 12);

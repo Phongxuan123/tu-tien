@@ -2292,7 +2292,7 @@ test('Mạng quan hệ nhiều chiều (S1): giá trị cũ giữ nguyên, đọ
   ok(dp.describe(a, b).length > 3, 'có mô tả');
 
   // 8. Ma trận: lọc loại, kích thước, đường chéo rỗng, ô đối xứng
-  const M = dp.matrix(['trieu', 'tong']); eq(M.list.length, 18, '9 triều + 9 tông còn sống'); eq(M.cells.length, 18);
+  const M = dp.matrix(['trieu', 'tong']), alive = TT.fac.list('trieu').concat(TT.fac.list('tong')).filter(TT.fac.alive).length; eq(M.list.length, alive, 'mọi thế lực còn sống'); eq(M.cells.length, alive);
   M.cells.forEach((row, i) => row.forEach((c, j) => { if (i === j) eq(c, null, 'đường chéo'); else eq(c.total, M.cells[j][i].total, 'ô đối xứng'); }));
   eq(dp.matrix(['trieu']).list.length, 9); ok(dp.matrix(null).list.length >= 20, 'tất cả thế lực');
   const O = dp.of(a); ok(Array.isArray(O.friends) && Array.isArray(O.foes) && Array.isArray(O.lords), 'hồ sơ thế lực đủ trường');
@@ -2319,6 +2319,7 @@ test('Mạng quan hệ nhiều chiều (S1): giá trị cũ giữ nguyên, đọ
 });
 
 test('Tông môn hiện đại hóa (S2): giá trị, hành vi, công–tội, chính sách, nhãn suy ra, đạo thống, tên nhà, gia tộc, hội, triều', () => {
+  TT.life.createWorld(931); // thế giới mới: nhãn so với dữ liệu khởi đầu, không lẫn trạng thái của bài trước
   const ids = Object.keys(D.SECTS), G = D.SECT_GT, P = D.SECT_POLICY, K = D.DIPLO, dp = TT.diplo;
   eq(ids.length, 9);
   const oldAlign = { tc_thanh_van: 'chinh', dh_thuy_nguyet: 'chinh', ts_kim_phong: 'chinh', nl_bach_thao: 'chinh', bb_huyen_bang: 'trung', hs_liet_hoa: 'trung', hm_nhat_luan: 'trung', vt_am_hon: 'ta', ld_tu_loi: 'chinh' };
@@ -2345,6 +2346,11 @@ test('Tông môn hiện đại hóa (S2): giá trị, hành vi, công–tội, c
   ok(Math.abs(sum / n) < 8, 'đạo thống nền bình quân gần 0: ' + (sum / n).toFixed(1));
   ok(dp.daoBase(TT.fac.get('tc_thanh_van'), TT.fac.get('ts_kim_phong')) > 20, 'Thanh Vân và Kim Phong gần nhau về giá trị');
   ok(dp.daoBase(TT.fac.get('hs_liet_hoa'), TT.fac.get('hm_nhat_luan')) <= -40, 'Liệt Hỏa và Nhật Luân khắc nhau về giá trị');
+  // tông tàn nhẫn không được thành bạn của mọi tông chỉ vì giá trị gần nhau: Âm Hồn khắc đa số, kể cả các tông chính đạo
+  const vt = TT.fac.get('vt_am_hon'), others = T.filter(x => x !== vt), daoV = others.map(x => dp.daoBase(vt, x));
+  ok(daoV.filter(v => v > 0).length <= 2, 'Âm Hồn chỉ hợp tối đa hai tông: ' + daoV.join(','));
+  ok(daoV.reduce((p, q) => p + q, 0) / daoV.length < -10, 'Âm Hồn bình quân khắc các tông');
+  ['tc_thanh_van', 'dh_thuy_nguyet', 'nl_bach_thao'].forEach(i => ok(dp.daoBase(vt, TT.fac.get(i)) < 0, 'Âm Hồn khắc tông chính đạo ' + i));
   const tr = TT.fac.list('trieu')[0]; eq(dp.daoBase(tr, T[0]), 0, 'chỉ tông với tông mới có đạo thống nền (S2)');
   const a = TT.fac.get('tc_thanh_van'), b = TT.fac.get('ts_kim_phong'), pk = dp.peek(a, b); ok(pk.dao === dp.daoBase(a, b));
   ok(Math.abs(dp.total(a, b) - Math.max(-100, Math.min(100, pk.tinh + K.w.dao * pk.dao))) < 1e-9, 'tổng hợp có đạo thống');
@@ -2476,6 +2482,70 @@ test('Quốc vận và nho khí (S3): trong khoảng, đọc không đổi thế
   ['Trung Quốc', 'Nhật Bản', 'Mỹ', 'Nga', 'Đức', 'Ấn Độ', 'Mông Cổ', 'Iran', 'Venice'].forEach(w => ok(txt.indexOf(w) < 0, 'chữ game không nhắc tên nước thật: ' + w));
   TT.life.createWorld(5); const t1 = performance.now(); for (let y = 0; y < 400; y++) { TT.world.months += 12; TT.fac.yearly(); } const ms = performance.now() - t1; ok(ms < 3000, '400 năm mất ' + Math.round(ms) + ' ms');
   line('info', '   400 năm có quốc vận: ' + Math.round(ms) + ' ms');
+});
+
+test('Tông môn có trạng thái riêng theo thế giới (S4): đọc không đổi thế giới, hai thế giới độc lập, sức mạnh suy từ chỉ số, chính sách có trần, thanh trừng có hậu quả và cách quãng, công tắc tắt, đạo thống, giao diện, lưu/tải, bản cũ', () => {
+  const K = D.SECT_MOD, M = TT.sectmod, tongs = () => TT.fac.list('tong'), HM = 'hm_nhat_luan', h0 = D.SECTS[HM].nhan, ON = 5;
+  // 1. Đọc không gọi rng và không khởi tạo sx
+  TT.life.createWorld(911); const wA = TT.world, st0 = TT.rng.getState();
+  tongs().forEach(x => { M.view(x.id); M.peek(x.id); M.powerShift(x); M.unityMul(x); M.wealthTrend(x); M.milMul(x); M.warMul(x); M.allyCut(x); M.recruitMul(x.id); TT.diplo.daoBase(x, tongs()[0]); });
+  eq(TT.rng.getState(), st0, 'hàm đọc không gọi rng'); ok(!wA.fac.sx, 'hàm đọc không khởi tạo sx');
+  eq(M.view(HM).nhan, h0, 'chưa có bản ghi thì đọc giá trị khởi đầu'); eq(M.view(HM).init, false);
+  // 2. Hai thế giới độc lập; nhãn đọc theo thế giới đang chạy, dữ liệu chung không đổi
+  M.S(HM).nhan = 40; eq(D.SECTS[HM].align, 'chinh', 'nhãn theo thế giới đang chạy'); M.S(HM).nhan = -50; eq(D.SECTS[HM].align, 'ta');
+  eq(D.SECTS[HM].nhan, h0, 'dữ liệu chung không đổi khi thế giới đổi');
+  TT.life.createWorld(912); const wB = TT.world; eq(D.SECTS[HM].align, 'trung', 'thế giới mới: nhãn khởi đầu (sx=' + JSON.stringify(TT.world.fac.sx && TT.world.fac.sx[HM]) + ', seed=' + TT.world.seed + ', static=' + D.SECTS[HM].nhan + ')'); eq(M.view(HM).nhan, h0, 'thế giới mới: giá trị khởi đầu');
+  M.S(HM).gt[0] = 99; ok(wA.fac.sx[HM].nhan === -50 && wA.fac.sx[HM].gt[0] !== 99 && wB.fac.sx[HM].gt[0] === 99, 'hai thế giới không ảnh hưởng nhau');
+  // 3. Đọc không đổi diễn biến (cùng hạt giống, có đọc và không đọc)
+  const run = reader => { TT.life.createWorld(78); for (let y = 0; y < 80; y++) { TT.world.months += 12; TT.fac.yearly(); if (reader) tongs().forEach(x => { M.view(x.id); M.powerShift(x); M.milMul(x); M.unityMul(x); M.recruitMul(x.id); }); } const f = TT.fac.S(); return JSON.stringify([f.sx, f.rel, f.chron.length, Object.keys(f.list).map(k => f.list[k].state + Math.round(f.list[k].power))]); };
+  eq(run(true), run(false), 'gọi hàm đọc làm đổi diễn biến thế giới');
+  // 4. Sức mạnh suy từ bảy chỉ số: bình quân quanh 0, tăng theo chỉ số, công tắc tắt thì 0
+  TT.life.createWorld(913); const tg = tongs(), avg0 = tg.reduce((a, x) => a + M.powerShift(x), 0) / tg.length;
+  ok(Math.abs(avg0) < 0.6, 'độ lệch sức mạnh bình quân gần 0: ' + avg0.toFixed(2));
+  const tc = TT.fac.get('tc_thanh_van'), sTc = M.S(tc.id); sTc.chiso = sTc.chiso.map(() => 100); const hi = M.powerShift(tc); sTc.chiso = sTc.chiso.map(() => 0); ok(hi > 30 && M.powerShift(tc) < -40, 'chỉ số cao đẩy sức mạnh lên, thấp kéo xuống');
+  K.on = false; eq(M.powerShift(tc), 0); K.on = true;
+  // 5. Năm chính sách có trần: mọi lựa chọn nằm trong khoảng
+  let bad = 0;
+  tg.forEach(x => { const s = M.S(x.id), orig = s.chinhsach.slice(); D.SECT_POLICY.keys.forEach((k, i) => Object.keys(D.SECT_POLICY.opt[k]).forEach(o => {
+    s.chinhsach[i] = o; const inR = (v, a, b) => v >= a && v <= b;
+    if (!inR(M.milMul(x), K.cap.mil[0], K.cap.mil[1]) || !inR(M.warMul(x), K.cap.mul[0], K.cap.mul[1]) || !inR(M.unityMul(x), K.cap.mul[0], K.cap.mul[1]) || !inR(M.recruitMul(x.id), K.cap.mul[0], K.cap.mul[1])) bad++;
+    if (!inR(M.allyCut(x), -K.cap.ally, K.cap.ally) || !inR(M.wealthTrend(x), -K.cap.drift, K.cap.drift)) bad++;
+  })); s.chinhsach = orig; });
+  eq(bad, 0, 'mọi chính sách nằm trong trần');
+  // 6. Thanh trừng: đúng hậu quả, sử ký, sổ ân oán, nhãn theo hành vi mới; không lặp lại trong 80 năm
+  TT.life.createWorld(914); const x = TT.fac.get('ts_kim_phong'), yn = 100; TT.world.months += 12 * yn;
+  const s0 = JSON.parse(JSON.stringify(M.S(x.id))), u0 = x.unity, pw0 = x.power, c0 = TT.fac.S().chron.length;
+  M.purge(x, M.S(x.id), yn); const s1 = M.S(x.id);
+  ok(s0.nhan - s1.nhan >= K.purge.nhanCut[0] && s0.nhan - s1.nhan <= K.purge.nhanCut[1], 'hành vi tàn nhẫn thêm trong khoảng');
+  eq(s1.gt[0], Math.min(100, s0.gt[0] + K.purge.gtTu), 'trật tự tăng'); eq(s1.chinhsach[0], 'tap_quyen', 'thể chế tập quyền'); eq(s1.last, yn, 'ghi năm thanh trừng');
+  ok(x.unity < u0 && x.power < pw0, 'đoàn kết và sức mạnh giảm'); eq(x.tag, D.SECTS.ts_kim_phong.align, 'nhãn của tông (tag) theo hành vi mới');
+  ok(TT.fac.S().chron.slice(c0).some(e => /thanh trừng/.test(e.t)), 'ghi sử ký và tin');
+  const R2 = TT.fac.S().rel2 || {}; ok(Object.keys(R2).some(k => (R2[k].an || []).some(e => e.k === 'thanh_trung')), 'ghi vào sổ ân oán');
+  s1.chiso[ON] = 0; let due = false; for (let y = yn + 1; y < yn + 80; y++) if (M.purgeDue(x, s1, y)) due = true; eq(due, false, 'chưa đủ 80 năm thì không thanh trừng lại');
+  // 7. Tự xảy ra: hiếm, cách quãng ít nhất 80 năm cho mỗi tông (6 hạt giống x 300 năm)
+  let purges = 0, gapBad = 0; const pg = M.purge;
+  [101, 102, 103, 104, 105, 106].forEach(seed => { TT.life.createWorld(seed); const last = {}; M.purge = function (t, s, y) { if (last[t.id] != null && y - last[t.id] < 80) gapBad++; last[t.id] = y; purges++; return pg.apply(this, arguments); };
+    for (let y = 0; y < 300; y++) { TT.world.months += 12; TT.fac.yearly(); } M.purge = pg; });
+  eq(gapBad, 0, 'cùng một tông không thanh trừng khi chưa đủ 80 năm'); ok(purges / 6 <= 6, 'hiếm: bình quân ' + (purges / 6).toFixed(1) + ' lần mỗi 300 năm');
+  line('info', '   thanh trừng: ' + (purges / 6).toFixed(1) + ' lần mỗi 300 năm mỗi thế giới');
+  // 8. Công tắc tắt: không thanh trừng, hệ số trung tính, sx đứng yên
+  K.on = false; let off = 0; M.purge = function () { off++; return pg.apply(this, arguments); };
+  eq(M.milMul(x), 1); eq(M.unityMul(x), 1); eq(M.wealthTrend(x), 0); eq(M.warMul(x), 1); eq(M.allyCut(x), 0); eq(M.recruitMul(x.id), 1);
+  TT.life.createWorld(915); for (let y = 0; y < 300; y++) { TT.world.months += 12; TT.fac.yearly(); } M.purge = pg; K.on = true;
+  eq(off, 0, 'tắt thì không thanh trừng'); ok(!TT.world.fac.sx, 'tắt thì không dựng sx');
+  // 9. Đạo thống đọc theo thế giới đang chạy; lưu/tải; bản cũ; không đổi phiên bản
+  TT.life.createWorld(916); const a = TT.fac.get('tc_thanh_van'), b = TT.fac.get('ts_kim_phong'), d0 = TT.diplo.daoBase(a, b);
+  M.S(b.id).gt = M.S(a.id).gt.slice(); M.S(b.id).nhan = M.S(a.id).nhan; ok(TT.diplo.daoBase(a, b) > d0, 'giá trị gần nhau thì đạo thống tăng (theo thế giới)');
+  eq(TT.VERSION, 13, 'không đổi phiên bản bản lưu');
+  const j0 = JSON.stringify(TT.fac.S().sx), snap = TT.save.snapshot(); TT.save.restore(snap); eq(JSON.stringify(TT.fac.S().sx), j0, 'sx giữ nguyên sau lưu/tải');
+  delete TT.fac.S().sx; eq(M.view(tc.id).init, false); eq(D.SECTS.tc_thanh_van.align, 'chinh', 'bản cũ: nhãn khởi đầu');
+  TT.world.months += 12; TT.fac.yearly(); ok(Object.keys(TT.fac.S().sx || {}).length > 0, 'bản cũ: dựng sx ở năm kế tiếp');
+  // 10. Thẻ tông đọc giá trị hiện có
+  const ui = TT.ui; if (ui && ui.sectCard) {
+    M.S('ts_kim_phong').chinhsach[0] = 'than_quyen'; const box = ui.sectCard('ts_kim_phong', TT.player());
+    ok(/Thần quyền/.test(box.textContent), 'thẻ tông hiện chính sách đang có'); ok(/Ổn định nội bộ/.test(box.textContent), 'thẻ tông có bảy chỉ số');
+  }
+  ok(D.DIPLO.kinds.thanh_trung && D.DIPLO.kinds.thanh_trung.n, 'có loại ân oán thanh trừng');
 });
 
 test('Sự kiện nghịch lý bốn tông (natevents): đủ trường, nhãn có giá, không trùng id, chạy được', () => {

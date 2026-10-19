@@ -17,19 +17,21 @@
   ui.sectCard = function (id, c) {
     const d = D.SECTS[id], lv = know(c, id), box = h('div', { class: 'card sect-card' });
     if (!d || !d.gt) return box;
+    const V = TT.sectmod.view(id); // giá trị hiện có của thế giới đang chạy (S4), không phải dữ liệu chung
     box.appendChild(h('div', { class: 'small' }, d.phongcach));
     box.appendChild(h('div', { class: 'sec' }, 'Giá trị'));
     D.SECT_GT.keys.forEach((k, i) => {
-      const v = d.gt[i], A = D.SECT_GT.axes[k];
+      const v = V.gt[i], A = D.SECT_GT.axes[k];
       box.appendChild(h('div', { class: 'gt' }, h('span', { class: 'gl' }, A[0]), h('div', { class: 'tr' }, h('i', { style: 'left:' + Math.round(50 + v / 2) + '%' })), h('span', { class: 'gr' }, A[1]), h('span', { class: 'small gw' }, lean(k, v))));
     });
-    box.appendChild(h('div', { class: 'small' }, 'Hành vi gần đây: ' + nhanWord(d.nhan) + '.'));
+    box.appendChild(h('div', { class: 'small' }, 'Hành vi gần đây: ' + nhanWord(V.nhan) + '.'));
     box.appendChild(h('div', { class: 'sec' }, 'Sức mạnh'));
     const g = h('div', { class: 'gstat' });
-    D.SECT_STATS.keys.forEach((k, i) => { const v = d.chiso[i]; g.appendChild(h('div', { class: 'small' }, D.SECT_STATS.names[k] + ': ', h('b', null, statWord(v)), h('div', { class: 'bar' }, h('i', { style: 'width:' + v + '%' })))); });
+    D.SECT_STATS.keys.forEach((k, i) => { const v = Math.round(V.chiso[i]); g.appendChild(h('div', { class: 'small' }, D.SECT_STATS.names[k] + ': ', h('b', null, statWord(v)), h('div', { class: 'bar' }, h('i', { style: 'width:' + v + '%' })))); });
     box.appendChild(g);
     box.appendChild(h('div', { class: 'sec' }, 'Chính sách'));
-    D.SECT_POLICY.keys.forEach((k, i) => box.appendChild(h('div', { class: 'small' }, D.SECT_POLICY.names[k] + ': ', h('b', null, D.SECT_POLICY.opt[k][d.chinhsach[i]]))));
+    D.SECT_POLICY.keys.forEach((k, i) => box.appendChild(h('div', { class: 'small' }, D.SECT_POLICY.names[k] + ': ', h('b', null, D.SECT_POLICY.opt[k][V.chinhsach[i]]))));
+    if (V.last && lv >= 2) box.appendChild(h('div', { class: 'small bad-txt' }, 'Đã có đợt thanh trừng nội bộ (ghi trong sử ký).'));
     const nc = Math.min(d.cong.length, lv >= 3 ? 9 : lv), nt = Math.min(d.toi.length, lv >= 3 ? 9 : lv);
     box.appendChild(h('div', { class: 'sec' }, lv >= 3 ? 'Công và tội' : 'Tiếng đồn'));
     d.cong.slice(0, nc).forEach(t => box.appendChild(h('div', { class: 'small good-txt' }, 'Công: ' + t)));

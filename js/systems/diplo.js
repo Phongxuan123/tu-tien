@@ -24,10 +24,11 @@
 
     // Đạo thống nền giữa hai thế lực: hiện chỉ có giữa hai tông (từ khoảng cách giá trị gt), còn lại 0. Suy ra, không lưu, không rng.
     daoBase(a, b) {
-      const da = a.kind === 'tong' && D.SECTS[a.id], db = b.kind === 'tong' && D.SECTS[b.id];
-      if (!da || !db || !da.gt || !db.gt) return 0;
+      if (a.kind !== 'tong' || b.kind !== 'tong') return 0;
+      const da = TT.sectmod.view(a.id), db = TT.sectmod.view(b.id); // giá trị và hành vi của thế giới đang chạy (S4)
       let s = 0; for (let i = 0; i < 5; i++) s += Math.abs(da.gt[i] - db.gt[i]);
-      return Math.round(clamp((K.daoMid - s / 5) * K.daoK, -K.daoMax, K.daoMax));
+      const pen = Math.max(0, Math.abs(da.nhan - db.nhan) - K.daoNhanFree) * K.daoNhanK; // chênh hành vi (nhan)
+      return Math.round(clamp((K.daoMid - s / 5) * K.daoK - pen, -K.daoMax, K.daoMax));
     },
     // Đọc một cặp, không khởi tạo gì. fresh = true nghĩa là cặp chưa từng có chuyện (thiện cảm là mặc định suy ra).
     peek(a, b) {

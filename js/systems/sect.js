@@ -306,7 +306,7 @@
       }
       if (c.kind === 'npc' && c.tier === 'core' && c.place && !c.travel) {
         const d = D.SECTS[c.place];
-        if (d && TT.age(c) >= 13 && TT.age(c) <= 60 && rng.P(0.12)) {
+        if (d && TT.age(c) >= 13 && TT.age(c) <= 60 && rng.P(0.12 * TT.sectmod.recruitMul(c.place))) {
           const al = TT.rep.alignOf(c);
           const like = d.align === 'chinh' ? al >= -10 : d.align === 'ta' ? al <= 10 : true;
           if (like && sect.canJoin(c, c.place).ok) sect.join(c, c.place);
