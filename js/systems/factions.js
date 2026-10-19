@@ -135,6 +135,7 @@
       fac.ensureHoi();
       TT.pop.yearly(); // dân số, thiên tai, dân tâm (F4)
       TT.nation.yearly(); // quốc vận, nho khí, thiên mệnh của chín triều (S3)
+      TT.sectmod.yearly(); // chỉ số tông, thanh trừng hiếm (S4)
       fac.list().forEach(x => { if (fac.alive(x)) { if (x.kind === 'hoi') fac.tickHoi(x); else fac.tickInternal(x); } else { fac.tickDead(x); if (x.kind === 'hoi') fac.rebuildHoi(x); } });
       f.shocks = (f.shocks || []).filter(s => s.until > w.months);
       fac.tickRelations();
@@ -168,9 +169,9 @@
       const f = fac.S(), w = S0();
       x.leaderAge = (x.leaderAge || 40) + 1;
       // quyền lực hồi về mức trung bình, có nhiễu; chiến tranh và mất đoàn kết kéo xuống
-      x.power = rng.clamp(x.power + (52 + TT.nation.powerShift(x) - x.power) * 0.04 + rng.R(-3.5, 3.5) + (x.unity - 50) * 0.02, 1, 100);
-      x.unity = rng.clamp(x.unity + (60 - x.unity) * 0.06 + rng.R(-4, 4), 5, 100);
-      x.wealth = rng.clamp(x.wealth + rng.R(-3, 3) + (x.power - 50) * 0.04, 0, 100);
+      x.power = rng.clamp(x.power + (52 + TT.nation.powerShift(x) + TT.sectmod.powerShift(x) - x.power) * 0.04 + rng.R(-3.5, 3.5) + (x.unity - 50) * 0.02, 1, 100);
+      x.unity = rng.clamp(x.unity + (60 - x.unity) * 0.06 + rng.R(-4, 4) * TT.sectmod.unityMul(x), 5, 100);
+      x.wealth = rng.clamp(x.wealth + rng.R(-3, 3) + (x.power - 50) * 0.04 + TT.sectmod.wealthTrend(x), 0, 100);
       if (x.kind === 'trieu') TT.pop.taxPull(x); // thuế từ dân kéo kho triều
       if (x.kind === 'tong') TT.sect.resYearly(x); // linh mạch, mỏ, cống nạp kéo kho về mức của tông
       if (x.leaderAge >= 70 && rng.P((x.leaderAge - 68) * 0.04)) fac.succession(x, 'qua đời');
@@ -195,7 +196,7 @@
         if (a.tag === b.tag) d += 1; else if (a.tag !== 'trung' && b.tag !== 'trung') d -= 1;
         fac.relAdd(a, b, d, d <= -12 ? ['xung_dot', a.n + ' và ' + b.n + ' xảy ra xung đột'] : null);
         // liên minh: đã thân thiết và chưa có đồng minh
-        if (fac.relV(a, b) >= 38 && a.kind === b.kind && (a.ally || []).indexOf(b.id) < 0 && (a.ally || []).length < 2 && (b.ally || []).length < 2 && rng.P(0.25)) {
+        if (fac.relV(a, b) >= 38 - TT.sectmod.allyCut(a) && a.kind === b.kind && (a.ally || []).indexOf(b.id) < 0 && (a.ally || []).length < 2 && (b.ally || []).length < 2 && rng.P(0.25)) {
           a.ally = (a.ally || []).concat(b.id); b.ally = (b.ally || []).concat(a.id);
           fac.chron(a.n + ' và ' + b.n + ' kết thành đồng minh.', 'good'); TT.diplo.log(a, b, 'ket_minh', 0, 'Kết thành đồng minh');
         }
@@ -216,7 +217,7 @@
         cands.sort((x, y) => fac.relV(a, x) - fac.relV(a, y));
         const b = cands[0], r = fac.relV(a, b);
         if (r > -30) continue;
-        const p = D.FAC.warBase * f.tempo * fac.era().war * (1 + (-r - 30) / 60) * (a.unity < 40 ? 1.3 : 1) * (a.kind === 'trieu' ? 0.5 : 1) * TT.pact.warBoost(a, b);
+        const p = D.FAC.warBase * f.tempo * fac.era().war * (1 + (-r - 30) / 60) * (a.unity < 40 ? 1.3 : 1) * (a.kind === 'trieu' ? 0.5 : 1) * TT.pact.warBoost(a, b) * TT.sectmod.warMul(a);
         if (rng.P(p)) fac.startWar(a, b);
       }
     },
@@ -234,7 +235,7 @@
       fac.chron(a.n + ' tuyên chiến với ' + b.n + ' vì ' + reason + '. Chiến sự bùng lên ở ' + regName(war.front) + (war.sa.length + war.sb.length ? ' (có đồng minh tham chiến)' : '') + '.', 'war');
     },
     strength(x, sup) {
-      let s = x.power * (0.55 + 0.45 * x.unity / 100) * (0.8 + 0.4 * x.wealth / 100) * TT.pop.milMul(x);
+      let s = x.power * (0.55 + 0.45 * x.unity / 100) * (0.8 + 0.4 * x.wealth / 100) * TT.pop.milMul(x) * TT.sectmod.milMul(x);
       sup.forEach(i => { const y = fac.get(i); if (y) s += y.power * 0.3; });
       return s;
     },
@@ -275,6 +276,7 @@
       else if (lose.kind === 'trieu') {
         lose.state = 'suy'; lose.power = 35; lose.unity = 40; const old = lose.n; lose.leader = TT.genName('nam'); lose.leaderAge = 40; lose.tag = rng.pick(['chinh', 'trung', 'ta']);
         fac.chron(win.n + ' thắng ' + old + '. Triều đình đổi chủ, người cầm quyền mới là ' + lose.leader + '.', 'bad');
+        TT.sectmod.rulerChanged(lose);
       } else {
         lose.vassal = win.id; lose.power = rng.clamp(lose.power * 0.7, 1, 100); TT.pact.vassalize(lose, win);
         fac.chron(win.n + ' thắng ' + lose.n + ' sau ' + war.years + ' năm, ' + lose.n + ' phải thần phục và nộp cống.', 'bad');

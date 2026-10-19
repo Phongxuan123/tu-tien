@@ -128,9 +128,44 @@
   Object.keys(M).forEach(id => {
     const d = D.SECTS[id]; if (!d) return;
     Object.assign(d, M[id], { nhan0: M[id].nhan });
-    // `align` nay là nhãn SUY RA từ hành vi `nhan` (ngưỡng ở D.SECT_NHAN): mọi chỗ cũ đọc d.align vẫn chạy, nhưng nhãn đổi theo việc tông làm.
-    Object.defineProperty(d, 'align', { enumerable: true, configurable: true, get() { return d.nhan >= D.SECT_NHAN.chinh ? 'chinh' : d.nhan <= D.SECT_NHAN.ta ? 'ta' : 'trung'; } });
+    // `align` là nhãn SUY RA từ hành vi `nhan` (ngưỡng ở D.SECT_NHAN) của THẾ GIỚI đang chạy (world.fac.sx, xem systems/sectmod.js).
+    // Thế giới chưa có bản ghi thì dùng giá trị khởi đầu d.nhan; mọi chỗ cũ đọc d.align vẫn chạy.
+    Object.defineProperty(d, 'align', { enumerable: true, configurable: true, get() {
+      const s = TT.world && TT.world.fac && TT.world.fac.sx && TT.world.fac.sx[id];
+      const n = s ? s.nhan : d.nhan;
+      return n >= D.SECT_NHAN.chinh ? 'chinh' : n <= D.SECT_NHAN.ta ? 'ta' : 'trung';
+    } });
   });
+
+  // Mô hình tông (S4): sức mạnh suy từ chỉ số, tác dụng nhỏ có trần của năm chính sách, thanh trừng nội bộ hiếm.
+  // Mọi hệ số chỉnh được ở đây. on = false: mọi hệ số trung tính, thanh trừng không xảy ra (tools/baseline.js --sect=off).
+  D.SECT_MOD = {
+    on: true,
+    // power suy từ trung bình bảy chỉ số: 0,9 điểm cho mỗi điểm lệch khỏi 58,6 (trung bình khởi đầu của chín tông, hệ số bù).
+    power: { kStat: 0.9, statMid: 58.6 },
+    // Chỉ số kéo về mức khởi đầu mỗi năm (pull); ổn định nội bộ (on) theo đoàn kết (onUnity điểm cho mỗi điểm đoàn kết trên 60).
+    stat: { pull: 0.03, onUnity: 0.5 },
+    qsK: 0.1,                                   // quân sự (chỉ số) thêm vào sức mạnh đánh nhau: ±10% ở 0 và 100
+    cap: { mul: [0.8, 1.2], mil: [0.85, 1.15], drift: 1, ally: 6 },   // trần các hệ số (nhân, quân sự, cộng của cải, ngưỡng minh ước)
+    // Năm chính sách, theo thứ tự D.SECT_POLICY.keys. Mỗi dòng một chính sách.
+    theche: { tap_quyen: 0.7, hoi_dong: 1.1, bau_cu: 1.3, than_quyen: 0.8, the_tap: 1 },        // nhân biến động ngẫu nhiên của đoàn kết
+    kinhte: { ke_hoach: 0, thi_truong: 0.5, hon_hop: 0.2, tu_luc: -0.3, tai_nguyen: 0.3 },     // cộng vào của cải mỗi năm (điểm)
+    quansu: { thuong_truc: 1.08, nghia_vu: 1.05, thue_ngoai: 0.98, phong_thu: 1.02 },          // nhân sức mạnh khi đánh nhau
+    doingoai: { banh_truong: 1.2, lien_minh: 1, trung_lap: 0.9, co_lap: 0.85, buon_ban: 0.8 },   // nhân xác suất gây chiến
+    doingoaiMinh: { lien_minh: 6, buon_ban: 3, co_lap: -6 },                                    // hạ (âm: nâng) ngưỡng thân thiết để kết minh
+    nhantai: { thi_tuyen: 1, huyet_thong: 0.8, mo_cua: 1.25, bao_lanh: 1.1 },                   // nhân xác suất đệ tử xin gia nhập
+    // Thanh trừng nội bộ: khi ổn định (on) thấp hoặc triều vùng đổi chủ. Mỗi tông tối đa một lần mỗi cdMin..cdMax năm.
+    purge: {
+      cdMin: 80, cdMax: 150,
+      onBelow: 34, chance: 0.07,                // on dưới ngưỡng: mỗi năm có chance (băm, không rng)
+      rulerYears: 6, rulerChance: 0.1,          // triều vùng đổi chủ trong vài năm gần đây: mỗi năm có rulerChance
+      gtTu: 12, gtCa: 8,                        // giá trị: thêm trật tự và tập thể
+      nhanCut: [8, 15],                         // hành vi tàn nhẫn thêm (điểm)
+      onGain: 10, ttGain: 5,                    // ổn định và thông tin tăng ngay (kiểm soát)
+      unityHit: 10, powerCut: 4,                // đoàn kết và sức mạnh giảm
+      kill: [1, 3]                              // số đệ tử NPC bị trục khỏi tông (không đụng nhân vật người chơi)
+    }
+  };
 
   // Gia tộc (8): kiểu theo thứ tự id gt_0..gt_7 (không dùng rng). Hội (3) và 9 vương triều: nguyên mẫu để hiển thị mô tả.
   D.GIA_KIEU = {

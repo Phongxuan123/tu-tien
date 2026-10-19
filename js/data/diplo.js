@@ -38,6 +38,7 @@
       trung_phat: { n: 'Bị trừng phạt', tone: 'bad' },
       doan_tuyet: { n: 'Đoạn tuyệt', tone: 'bad', tin: -25 },
       tich_thu: { n: 'Bị tịch thu', tone: 'bad' },
+      thanh_trung: { n: 'Thanh trừng nội bộ', tone: 'bad' },
       cat_hang: { n: 'Cắt hàng', tone: 'bad' }
     },
     // Nhãn hiệp ước (nhìn từ bên gánh `a` và bên hưởng `b`).

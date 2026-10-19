@@ -85,6 +85,7 @@ Mục tiêu nhịp: một đời Phi Thăng khoảng 20 đến 30 phút thật; 
 | S1 Mạng quan hệ nhiều chiều: sổ ân oán, bậc quan hệ, ma trận và hồ sơ cặp trong Biên niên sử (không đổi cân bằng) | ☑ | ☐ | [S-quoc-gia-tong-mon-ton-giao](ke-hoach/S-quoc-gia-tong-mon-ton-giao.md) mục 15.12 |
 | S2 Tông môn hiện đại hóa: giá trị, hành vi, bảy chỉ số, chính sách, công–tội, bí mật, bộ máy tên cổ, thẻ tông; `align` suy ra từ hành vi; `dao` giữa các tông | ☑ | ☐ | [S-quoc-gia-tong-mon-ton-giao](ke-hoach/S-quoc-gia-tong-mon-ton-giao.md) mục 15.13 |
 | S3 Quốc vận và nho khí: thanh bậc ở Nha môn, mục "Quốc gia" trong Biên niên sử, thiên mệnh (đổi chủ, chia cắt, thôn tính), phản phệ cơ bản, `power` của triều suy ra | ☑ | ☐ | [S-quoc-gia-tong-mon-ton-giao](ke-hoach/S-quoc-gia-tong-mon-ton-giao.md) mục 15.14 |
+| S4 Chỉ số tông theo từng thế giới, `power` suy từ bảy chỉ số, năm chính sách tác dụng nhỏ có trần, thanh trừng hiếm, thẻ tông đọc giá trị hiện có. Bài "Nhịp quyết định" đang lỗi ở 12 hạt giống (6,07 lần/phút, 40 hạt giống 5,60) | ☑ | ☐ | [S-quoc-gia-tong-mon-ton-giao](ke-hoach/S-quoc-gia-tong-mon-ton-giao.md) mục 15.15 |
 
 ### 2.4 Kinh tế và công trình
 | Mục | Xong | Bạn kiểm | Chi tiết |
@@ -251,6 +252,7 @@ Gợi ý thứ tự (bạn đổi tùy ý):
 - **2026-10-18** Đợt 0 (công cụ chạy kiểm thử, đường cơ sở) và **S1** (mạng quan hệ nhiều chiều, ma trận trong Biên niên sử) xong: 97 bài đạt, hash cơ sở trùng khít.
 - **2026-10-18** **S2** (Đợt 2) xong: thẻ tông, giá trị, công–tội, bộ máy tên cổ, đạo thống giữa các tông; 98 bài đạt; đo 40 hạt giống 58,9 chiến tranh, 8,8 diệt vong mỗi 300 năm (đã sửa lỗi Âm Hồn hợp mọi tông sau rà soát).
 - **2026-10-18** **S3** (Đợt 3) xong: quốc vận, nho khí, thiên mệnh, phản phệ cơ bản; 99 bài đạt; đo 40 hạt giống 48,1 chiến tranh, 6,2 diệt vong, 4,5 đổi chủ mỗi 300 năm (trước 52,2 / 6,5 / 4,5).
+- **2026-10-19** **S4** (Đợt 4) xong: trạng thái tông theo thế giới, `power` suy từ chỉ số (công tắc tắt trùng khít 40 hạt giống), chính sách có tác dụng nhỏ, thanh trừng hiếm; 100 bài đạt, 1 lỗi (nhịp quyết định, 12 hạt giống, xem S 15.15). 40 hạt giống: chiến tranh 53,5 → 52,7, diệt vong 8,2 → 7,8, đổi chủ 4,8 → 5,8. Còn S5 (tôn giáo).
 - Sắp xếp lại file kế hoạch tổng này; nhật ký cũ chuyển nguyên văn vào `ke-hoach/_nhat-ky-goc.md`.
 
 ---
