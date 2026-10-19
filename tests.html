@@ -3138,6 +3138,144 @@ test('Triều chính (S7) và F2 phần sau: đọc không gọi rng, hoàng quy
   ['Trung Quốc', 'Nhật Bản', 'Mỹ', 'Nga', 'Đức', 'Ấn Độ', 'Mông Cổ', 'Iran', 'Venice', 'La Mã', 'Hà Lan', 'Ottoman', 'Viking', 'Khmer'].forEach(w => ok(txt.indexOf(w) < 0, 'chữ không nhắc tên nước thật: ' + w));
   line('info', '   300 năm có triều chính và F2 phần sau: ' + Math.round(ms) + ' ms');
 });
+test('Liên tông (S8): đọc không gọi rng, vai trò và bổng, quốc sư, thao túng và phản phệ, minh ước và ước pháp, giải đấu và báo danh, đại chiến và trần, Thiên hạ công ước, lưu/tải, bản cũ, tắt, hiệu năng', () => {
+  const I = TT.inter, K = D.INTERSECT, F = () => TT.fac.S(), W = () => TT.world, T = () => TT.fac.list('tong').filter(TT.fac.alive);
+  const TR = () => TT.fac.list('trieu').filter(TT.fac.alive);
+  const runYears = n => { for (let y = 0; y < n; y++) { W().months += 12; TT.fac.yearly(); } };
+  // 1. Hàm đọc không gọi rng và không tạo bản ghi
+  TT.life.createWorld(911); TT.pact.S(); const st0 = TT.rng.getState(), t0 = T()[0], x0 = TR()[0];
+  I.peekS(); I.roleOf(t0); I.armyMul(x0); I.manip(x0); I.helpBonus(t0.id, T()[1].id); I.mineAdd(t0.id); I.giaiOpen(); I.describe(t0); I.uocPairs(); I.bigWars(); I.sig(); I.trieuOfRegion(t0.region); I.entered({ sect: { id: t0.id } });
+  eq(TT.rng.getState(), st0, 'hàm đọc không gọi rng');
+  ok(!F().inter, 'hàm đọc không tạo bản liên tông');
+  // 2. Vai trò và bổng: cung phụng có hiệp ước bổng từ triều; rời vai trò thì bổng tan
+  TT.life.createWorld(913); TT.pact.S(); const tr2 = TR()[0], t2 = T().find(t => t.region === tr2.region) || T()[0];
+  I.setRole(t2, 'cung_phung');
+  ok(I.roleOf(t2) === 'cung_phung' && TT.pact.S().some(p => p.kind === 'bong' && p.b === t2.id), 'cung phụng có hiệp ước bổng');
+  I.setRole(t2, 'tu_do');
+  ok(!TT.pact.S().some(p => p.kind === 'bong' && p.b === t2.id) && I.roleOf(t2) === 'tu_do', 'rời cung phụng thì bổng tan');
+  // 3. Quốc sư tăng quân lực của triều đúng mức; vai trò khác không tăng
+  I.setRole(t2, 'quoc_su'); const trq = TT.fac.list('trieu').find(x => x.region === t2.region);
+  eq(I.armyMul(trq), 1 + K.role.armyBonus, 'quốc sư: hệ số quân lực đúng mức');
+  I.setRole(t2, 'tu_do'); eq(I.armyMul(trq), 1, 'không phải quốc sư thì không tăng quân');
+  // 4. Ngoài vòng pháp luật: triều yếu thì có thể thành; trừng phạt đưa tông về tự do và trừ sức
+  TT.life.createWorld(915); TT.pact.S(); const tr4 = TR()[0], t4 = T().find(t => t.region === tr4.region) || T()[0];
+  const P4 = { o: K.outlaw.p, pu: K.punish.p, hq: K.punish.hq };
+  try {
+    K.outlaw.p = 1; t4.power = 90; TT.court.ent(tr4).hq = 20; I.roleStep(tr4, 1);
+    ok(I.roleOf(t4) === 'ngoai_phap', 'triều yếu, tông mạnh thì thành ngoài vòng pháp luật');
+    const pw = t4.power; K.punish.p = 1; TT.court.ent(tr4).hq = 70; I.roleStep(tr4, 2);
+    ok(I.roleOf(t4) === 'tu_do' && t4.power < pw, 'triều mạnh thì trừng phạt, tông trở về tự do và mất sức');
+  } finally { K.outlaw.p = P4.o; K.punish.p = P4.pu; K.punish.hq = P4.hq; }
+  // 5. Thao túng kế vị: chỉ quốc sư hoặc cung phụng đủ mạnh; phản phệ khi quốc vận còn cao, trơn tru khi vận mạt
+  TT.life.createWorld(917); TT.pact.S(); const tr5 = TR()[0], t5 = T().find(t => t.region === tr5.region) || T()[0];
+  const P5 = K.manip.p; try {
+    K.manip.p = 1; t5.power = 80; I.setRole(t5, 'tu_do');
+    ok(I.manip(tr5) === null, 'tông tự do không thao túng được kế vị');
+    I.setRole(t5, 'quoc_su'); ok(I.manip(tr5) === t5, 'quốc sư đủ mạnh thao túng được kế vị');
+    const N5 = TT.nation.ent(tr5); N5.van = 85; const p5 = t5.power, u5 = t5.unity;
+    I.backlash(tr5, t5);
+    ok(t5.power < p5 && t5.unity < u5, 'quốc vận còn cao: tông chịu phản phệ');
+    N5.van = 10; const p5b = t5.power; I.backlash(tr5, t5);
+    ok(t5.power > p5b, 'quốc vận mạt: thao túng trơn tru, tông được thêm sức');
+    K.manip.p = 0; ok(I.manip(tr5) === null, 'không có xác suất thì không thao túng');
+  } finally { K.manip.p = P5; }
+  // 6. Minh ước liên tông: ước pháp đi cùng minh ước; có giúp thêm, chia mỏ; tan khi minh ước tan
+  TT.life.createWorld(919); TT.pact.S(); const [a6, b6] = T().slice(0, 2);
+  a6.ally = (a6.ally || []).concat([b6.id]); b6.ally = (b6.ally || []).concat([a6.id]);
+  TT.fac.relAdd(a6, b6, 100, ['hoa_nghi', 'thử ước pháp']);
+  TT.pact.add('minh_uoc', a6.id, b6.id, {});
+  const P6 = K.uoc.p; try { K.uoc.p = 1; I.uocStep(1); } finally { K.uoc.p = P6; }
+  const up = TT.pact.S().find(p => p.kind === 'uoc_phap');
+  ok(!!up && up.rate === 0, 'minh ước đủ thân thì thêm ước pháp, không trả kho');
+  ok(I.helpBonus(a6.id, b6.id) === K.uoc.help, 'ước pháp giúp đồng minh thêm khi lâm chiến');
+  const hpWith = TT.pact.helpP(a6.id, b6.id), iu = TT.pact.S().indexOf(up); TT.pact.S().splice(iu, 1);
+  const hpWithout = TT.pact.helpP(a6.id, b6.id); TT.pact.S().push(up);
+  ok(hpWith > hpWithout, 'pact.helpP cộng ước pháp khi lâm chiến');
+  b6.res = b6.res || { mach: 1, mo: 2 }; ok(I.mineAdd(a6.id) > 0, 'chia mỏ: đồng minh có mỏ thì được chia phần');
+  const mu = TT.pact.S().findIndex(p => p.kind === 'minh_uoc' && ((p.a === a6.id && p.b === b6.id) || (p.a === b6.id && p.b === a6.id)));
+  TT.pact.S().splice(mu, 1);
+  I.uocStep(2); ok(!TT.pact.S().some(p => p.kind === 'uoc_phap'), 'minh ước tan thì ước pháp tan');
+  // 7. Giải đấu: chu kỳ 4 hoặc 10 năm; bốc thăm xong thì lên lịch kỳ sau; báo danh chỉ trong năm trước kỳ
+  TT.life.createWorld(921); TT.pact.S(); const G7 = I.giaiS();
+  ok(K.giai.cycles.indexOf(G7.cycle) >= 0, 'chu kỳ giải là 4 hoặc 10 năm: ' + G7.cycle);
+  const n7 = G7.next; W().months = n7; I.giaiStep();
+  ok(G7.next === n7 + G7.cycle * 12 && !!G7.last, 'đến kỳ thì bốc thăm và lên lịch kỳ sau');
+  ok(G7.tuCach[G7.last.win] > W().months, 'người thắng có tư cách minh chủ');
+  const pl7 = TT.player(), sv7 = pl7.sect; const t7 = T()[0];
+  try {
+    W().months = G7.next - 72; ok(!I.giaiOpen(), 'sáu năm trước kỳ chưa mở báo danh');
+    W().months = G7.next - 6; pl7.sect = { id: t7.id, rank: 1 };
+    ok(I.giaiOpen(), 'trong năm trước kỳ thì mở báo danh');
+    ok(I.enter(pl7).ok && I.entered(pl7), 'thành viên báo danh được');
+    ok(I.enter(pl7).ok && !I.entered(pl7), 'báo danh lần hai là rút tên');
+    pl7.sect = null; ok(!I.enter(pl7).ok, 'không thuộc tông thì không báo danh được');
+  } finally { pl7.sect = sv7; }
+  // 8. Đại chiến liên tông: triều nhúng tay theo băm; cho mượn quân cộng điểm; cấm vận trừ kho; giới hạn một lần mỗi 150 năm; thua có hậu quả
+  TT.life.createWorld(923); TT.pact.S(); const [a8, b8] = T().slice(0, 2), tr8 = TT.fac.list('trieu').find(x => x.region === b8.region) || TR()[0];
+  const P8 = { n: K.war.nhung, hq: K.war.hqNhung, c: K.war.cam };
+  try {
+    K.war.nhung = 1; K.war.hqNhung = 0; I.S().lastBig = -99999;
+    const w8 = { id: 77, a: a8.id, b: b8.id, war: 0, years: 0, sa: [], sb: [], score: 0 };
+    I.warStart(w8, a8, b8);
+    ok(w8.lt === 1 && w8.stance === 'nhung_tay' && (w8.side === a8.id || w8.side === b8.id), 'triều cho mượn quân và chọn bên: ' + w8.stance);
+    const bias = I.warTick(w8); ok(Math.abs(bias) === K.war.bias, 'cho mượn quân cộng điểm chiến về phía bên được giúp');
+    const w9 = { id: 78, a: a8.id, b: b8.id, war: 0, years: 0, sa: [], sb: [], score: 0 };
+    I.warStart(w9, a8, b8); ok(!w9.lt && w9.stance === 'dung_ngoai', 'trong 150 năm không có đại chiến liên tông thứ hai');
+    const hq8 = TT.court.ent(tr8).hq; I.warEnd(w8, 'a');
+    ok(TT.court.ent(tr8).hq < hq8, 'triều mất uy sau đại chiến liên tông');
+    K.war.nhung = 0; K.war.cam = 1; I.S().lastBig = -99999; const w10 = { id: 79, a: a8.id, b: b8.id, war: 0, years: 0, sa: [], sb: [], score: 0 };
+    const wa = a8.wealth; I.warStart(w10, a8, b8);
+    eq(w10.stance, 'cam_van', 'cấm vận');
+    I.warTick(w10); ok(a8.wealth <= wa, 'cấm vận làm kho hai bên giảm');
+  } finally { K.war.nhung = P8.n; K.war.hqNhung = P8.hq; K.war.cam = P8.c; }
+  // 9. Thiên hạ công ước: quốc sư hoặc cung phụng và triều ký; ngoài vòng pháp luật thì vỡ và tông bị truy cứu
+  TT.life.createWorld(925); TT.pact.S(); const tr9 = TR()[0], t9 = T().find(t => t.region === tr9.region) || T()[0];
+  I.setRole(t9, 'quoc_su'); const P9 = K.cong.p; try { K.cong.p = 1; I.congStep(1); } finally { K.cong.p = P9; }
+  ok(I.S().cong[t9.region] === W().months, 'quốc sư và triều ký Thiên hạ công ước');
+  const p9 = t9.power; I.setRole(t9, 'ngoai_phap');
+  ok(I.S().cong[t9.region] === -1 && t9.power < p9, 'vi phạm công ước: công ước vỡ và tông bị truy cứu');
+  // 10. Trần hệ quả: diệt tông làm đồng minh thù, quan hệ luôn trong [-100, 100]
+  TT.life.createWorld(927); TT.pact.S(); runYears(3);
+  T().forEach(t => T().forEach(u => { if (t !== u) { const v = TT.diplo.total(t, u); ok(v >= -100 && v <= 100, 'quan hệ trong trần'); } }));
+  // 11. Lưu/tải giữ nguyên trạng thái mới; bản cũ không có trường mới vẫn chạy
+  TT.life.createWorld(929); TT.pact.S(); I.setRole(T()[0], 'cung_phung'); runYears(40);
+  const snap = TT.save.snapshot(), j0 = JSON.stringify([F().inter, F().pacts]);
+  TT.life.createWorld(5); TT.save.restore(snap);
+  eq(JSON.stringify([F().inter, F().pacts]), j0, 'lưu/tải giữ liên tông và ước pháp mới');
+  runYears(10); ok(true, 'tiếp tục sau khi tải');
+  delete F().inter; F().pacts = F().pacts.filter(p => ['bong', 'uoc_phap'].indexOf(p.kind) < 0);
+  runYears(20); ok(T().every(t => ['tu_do', 'quoc_su', 'cung_phung', 'ngoai_phap'].indexOf(I.roleOf(t)) >= 0), 'bản cũ không có liên tông vẫn chạy');
+  // 12. Đại chiến liên tông đếm riêng và không quá một lần mỗi 150 năm (chạy 300 năm)
+  TT.life.createWorld(931); TT.pact.S(); const starts = []; const sw = TT.fac.startWar;
+  TT.fac.startWar = function () { const r = sw.apply(this, arguments); const last = F().wars.slice(-1)[0]; if (last && last.lt) starts.push(W().months); return r; };
+  try { runYears(300); } finally { TT.fac.startWar = sw; }
+  let gap = Infinity; for (let i = 1; i < starts.length; i++) gap = Math.min(gap, starts[i] - starts[i - 1]);
+  ok(gap === Infinity || gap >= K.war.gap * 12, 'đại chiến liên tông cách nhau ít nhất 150 năm: ' + starts.length + ' lần');
+  // 13. Công tắc tắt: không tạo gì, không có ước pháp hay bổng, quân lực và chia mỏ trung tính
+  K.on = false; try {
+    TT.life.createWorld(917); TT.pact.S(); const x13 = TR()[0];
+    runYears(80);
+    ok(!F().inter, 'tắt: không tạo bản liên tông');
+    ok(!F().pacts.some(p => ['bong', 'uoc_phap'].indexOf(p.kind) >= 0), 'tắt: không có bổng hay ước pháp');
+    eq(I.armyMul(x13), 1, 'tắt: quân lực không đổi vì liên tông');
+    eq(I.helpBonus(1, 2), 0, 'tắt: không có điểm giúp thêm');
+    ok(!I.giaiOpen() && I.describe(T()[0]).roleKey === 'tu_do', 'tắt: đọc trả về trung tính');
+  } finally { K.on = true; }
+  // 14. Giao diện: chữ và bậc, không số (chỉ kiểm khi có giao diện)
+  TT.life.createWorld(929); runYears(3);
+  if (TT.ui && TT.ui.interBlock) {
+    const box = document.createElement('div');
+    TT.ui.interBlock(box, TT.player(), false);
+    const txt = box.textContent;
+    ok(txt.indexOf('Liên tông') >= 0 && !/\d/.test(txt), 'mục liên tông chỉ chữ và bậc, không số');
+  }
+  // 15. Hiệu năng và chữ trong game
+  TT.life.createWorld(5); const t15 = performance.now(); runYears(300); const ms = performance.now() - t15;
+  ok(ms < 1000, '300 năm có liên tông mất ' + Math.round(ms) + ' ms');
+  const txt = JSON.stringify([K.roles, K.stance, D.DIPLO.kinds, D.DIPLO.pactLabel]);
+  ['Trung Quốc', 'Nhật Bản', 'Mỹ', 'Nga', 'Đức', 'Ấn Độ', 'Mông Cổ', 'Iran', 'Venice', 'La Mã', 'Hà Lan', 'Ottoman', 'Viking', 'Khmer'].forEach(w => ok(txt.indexOf(w) < 0, 'chữ không nhắc tên nước thật: ' + w));
+  line('info', '   300 năm có liên tông: ' + Math.round(ms) + ' ms');
+});
 runNext();
 </script>
 </body>

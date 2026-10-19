@@ -18,7 +18,7 @@
 | **S Quốc gia, Tông, Tôn giáo** | Chỉ có kế hoạch (bản 3 + mục 15 triển khai S1) | Toàn bộ S1 đến S11 |
 | **Q Cốt truyện** | Chỉ có kế hoạch (bản 12, có mục 24) | Q1 đến Q10 |
 | **R Nhân duyên** | Chỉ có kế hoạch (bản 2) | R1 đến R6 |
-| **M5b Liên tông** | Chưa | Gộp vào S8 |
+| **M5b Liên tông** | Xong (S8, 2026-10-19) | Cổng chơi thử 5 còn chờ bạn |
 | **Khác liên quan** | G nhật báo, I2, I3, N, O, J, K, L, M1 đến M3, M5a, M7 đã xong | I4/I5 (dịch vụ công trình còn lại), M4, M6 (để sau) |
 
 **Cơ sở kỹ thuật hiện có:** 93 bài kiểm thử `tests.html` (khoảng 3 phút), `tools/econ-sim.js`, `tools/calib.js`, `tools/dgsim.js`, `tools/quest-sim.js`; mô phỏng thế giới 300 năm khoảng 260 ms; `TT.VERSION` giữ nguyên bằng cách khởi tạo muộn mọi trường mới.
@@ -130,9 +130,9 @@
 - [x] Bài kiểm thử (S6a): bảng lính tương đương (Kim Đan bị vây thua, Hóa Thần thắng đại quân nhỏ), tắt thì trùng khít, lưu/tải, bản cũ, hiệu năng.
 - [x] Bài kiểm thử (S6b): chiến tranh tổng không phá chỉ tiêu, phản phệ có trần, giai đoạn và kết đúng điều kiện, 150 năm, lưu/tải, tắt trùng khít (107 bài đạt).
 
-### Đợt 7. M5b Liên tông (S8) (khoảng 1,5 lượt)
-- [ ] Tông ↔ triều (quốc sư, cung phụng, ngoài vòng pháp luật, thao túng), minh ước liên tông, giải đấu 4 hoặc 10 năm, đại chiến liên tông có hậu quả, Thiên hạ công ước.
-- [ ] Giao diện: mục "Liên tông" trong tab Tông môn; tin trong Nhật báo.
+### Đợt 7. M5b Liên tông (S8) (khoảng 1,5 lượt) — ĐÃ XONG 2026-10-19 (xem S mục 15.20; còn Cổng chơi thử 5)
+- [x] Tông ↔ triều (quốc sư, cung phụng, ngoài vòng pháp luật, thao túng), minh ước liên tông, giải đấu 4 hoặc 10 năm, đại chiến liên tông có hậu quả, Thiên hạ công ước.
+- [x] Giao diện: mục "Liên tông" trong tab Tông môn; tin trong Nhật báo.
 - **Cổng chơi thử 5:** thế giới tự chạy 200-300 năm quan sát biên niên (hoặc chạy thử tốc độ cao): tông diệt, tông mới, liên minh, đại chiến có hợp lý không.
 
 ### Đợt 8. Nền nhân vật và khung tuyến (Q0 đến Q2) + R1 (khoảng 8 lượt)
@@ -282,3 +282,4 @@
 - 2026-10-19: Đợt 4 (S4, S5) đã xong ở các phiên khác; mình kiểm lại trên nhánh: 103 bài đạt, đường cơ sở 40 hạt giống trùng khít. Đã thêm prompt Đợt 5 (5A thuế vào giá và móc S, 5B giám định và hội vay, bảo hiểm, nhiệm vụ) vào `PROMPT-phien-moi.md`.
 - 2026-10-19: **Đợt 6, S6a xong** (quân lực, phẩm, sát khí, tướng, quân trận, bảng lính tương đương, bản sắc chín triều, `strength()` dùng quân lực; công tắc `D.ARMY.on` trùng khít 40 hạt giống; 106 bài đạt). Đo 40 hạt giống: chiến tranh 47,5 → 54,5; diệt vong 6,0 → 6,8 (vẫn dưới mục tiêu, lệch có sẵn); đổi chủ 4,5 → 10,3 (trong chỉ tiêu, nguyên nhân chưa hiểu hết). S6b (chiến tranh tổng) để phiên sau.
 - 2026-10-19: **Đợt 6, S6b xong** (chiến tranh tổng: mở tự động hoặc do Q gọi, 10-18 năm, bốn giai đoạn, hậu quả có trần, phản phệ, tông buộc chọn phe, cú sốc `chien_tong`; công tắc `D.TOTALWAR.on`; 107 bài đạt; đo 40 hạt giống: chiến tranh 57,0, diệt vong 7,7, đổi chủ 9,8, đại chiến 0,6 mỗi thế giới, 0 vi phạm 150 năm). Còn lại: S7, F2 phần sau, cốt truyện Phù Lệnh (Q 24.5b).
+- 2026-10-19: **Đợt 7, S8 xong** (liên tông: vai trò tông với triều, thao túng kế vị có phản phệ, ước pháp, giải đấu 4 hoặc 10 năm, đại chiến liên tông có giới hạn, Thiên hạ công ước; công tắc `D.INTERSECT` trùng khít 40/40 mốc S7; 109 bài đạt; đo 40 hạt giống: chiến tranh 51,5 → 48,0, diệt vong 9,4 → 7,2 (dưới dải, gộp 80 hạt giống là 8,95, trong dải), đại chiến liên tông 1,3 mỗi 300 năm). Còn: Cổng chơi thử 5 (thế giới tự chạy 200 đến 300 năm).

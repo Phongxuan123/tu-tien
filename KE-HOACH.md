@@ -88,6 +88,7 @@ Mục tiêu nhịp: một đời Phi Thăng khoảng 20 đến 30 phút thật; 
 | S4 Chỉ số tông theo từng thế giới, `power` suy từ bảy chỉ số, năm chính sách tác dụng nhỏ có trần, thanh trừng hiếm, thẻ tông đọc giá trị hiện có. Bài "Nhịp quyết định" đang lỗi ở 12 hạt giống (6,07 lần/phút, 40 hạt giống 5,60) | ☑ | ☐ | [S-quoc-gia-tong-mon-ton-giao](ke-hoach/S-quoc-gia-tong-mon-ton-giao.md) mục 15.15 |
 | S5 Tín ngưỡng: ba ô mỗi vùng, quy tắc lồng, giáo hội, quốc giáo, 27 nơi thờ tự có biểu tượng và dịch vụ, tín ngưỡng cá nhân, mục "Tín ngưỡng" trong Biên niên sử; công tắc tắt trùng khít | ☑ | ☐ | [S-quoc-gia-tong-mon-ton-giao](ke-hoach/S-quoc-gia-tong-mon-ton-giao.md) mục 15.16 |
 | S6a Quân lực: quân số theo dân và kho, phẩm, sát khí, tướng (có thể là tu sĩ), quân trận, bảng lính tương đương, bản sắc chín triều, `strength()` dùng quân lực; công tắc tắt trùng khít | ☑ | ☐ | [S-quoc-gia-tong-mon-ton-giao](ke-hoach/S-quoc-gia-tong-mon-ton-giao.md) mục 15.17 |
+| S8 Liên tông: tông ↔ triều (quốc sư, cung phụng, ngoài vòng pháp luật, thao túng kế vị có phản phệ), ước pháp của minh ước, giải đấu 4 hoặc 10 năm (báo danh), đại chiến liên tông có giới hạn 150 năm, Thiên hạ công ước; công tắc `D.INTERSECT` trùng khít | ☑ | ☐ | [S-quoc-gia-tong-mon-ton-giao](ke-hoach/S-quoc-gia-tong-mon-ton-giao.md) mục 15.20 |
 | S7 Triều chính: hoàng quyền, kế vị có tranh ngôi và nội chiến nhỏ có trần, thế gia trong triều, quốc sách với tu sĩ, quốc giáo gắn triều; F2 phần sau (trưng binh chư hầu, nhiệm vụ thế lực, thông gia, thuế thương hội); công tắc `D.COURT.on` trùng khít | ☑ | ☐ | [S-quoc-gia-tong-mon-ton-giao](ke-hoach/S-quoc-gia-tong-mon-ton-giao.md) mục 15.19 |
 | S6b Chiến tranh tổng: đa bên, nhiều chiến tuyến, 10 đến 18 năm, bốn giai đoạn, kết theo điều kiện, hậu quả có trần, phản phệ, tông buộc chọn phe, đại chiến đo riêng (tối đa một mỗi 150 năm); công tắc tắt trùng khít | ☑ | ☐ | [S-quoc-gia-tong-mon-ton-giao](ke-hoach/S-quoc-gia-tong-mon-ton-giao.md) mục 15.18 |
 
@@ -111,7 +112,7 @@ Mục tiêu nhịp: một đời Phi Thăng khoảng 20 đến 30 phút thật; 
 | M3 Sư phụ nội môn, đồng môn, đại bỉ năm năm một lần | ☑ | ☐ | M-tong-mon |
 | M4 Chính trị nội bộ (phe phái, tranh ngôi, nội gián, phản đồ) | ☐ | | hoãn theo ý bạn |
 | M5a Tài nguyên tông (linh mạch, mỏ, kho, cống nạp, chiếm mỏ, quyên góp) | ☑ | ☐ | M-tong-mon mục 8 |
-| M5b Liên tông (minh ước, giải đấu, đại chiến có hậu quả) | ☐ | | M-tong-mon, nối F2 |
+| M5b Liên tông (minh ước, giải đấu, đại chiến có hậu quả) | ☑ | S8 xong 2026-10-19 (vai trò với triều, ước pháp, giải đấu, đại chiến liên tông, Thiên hạ công ước); Cổng chơi thử 5 còn chờ | [S-quoc-gia-tong-mon-ton-giao](ke-hoach/S-quoc-gia-tong-mon-ton-giao.md) mục 15.20 |
 | M6 Người chơi lập tông, làm chưởng môn, khách khanh, nằm vùng | ☐ | | M-tong-mon |
 | M7 Phố tông môn 9 công trình, dịch vụ thật, tab Tông môn thành "Thẻ đệ tử" | ☑ | ☐ | M-tong-mon mục 9 và 10, `asset-tongmon.html` |
 
@@ -273,3 +274,4 @@ Gợi ý thứ tự (bạn đổi tùy ý):
 - [`ke-hoach/README.md`](ke-hoach/README.md): bảng các file kế hoạch từng tính năng (A đến O) và trạng thái.
 - [`ke-hoach/_nhat-ky-goc.md`](ke-hoach/_nhat-ky-goc.md): nhật ký gốc đầy đủ (số liệu M0-M7, mặc định tự chọn, linh thạch, hầm mộ, trang bị, giao diện).
 - [`MAP-THIET-KE.md`](MAP-THIET-KE.md): thiết kế bản đồ hai tầng. [`KICH-BAN-THE-GIOI.md`](KICH-BAN-THE-GIOI.md): kịch bản thế lực và chiến tranh. [`CREDITS.md`](CREDITS.md): ghi công tài nguyên bên ngoài (Kenney CC0).
+- **2026-10-19** **S8** (Đợt 7) xong: liên tông (tông ↔ triều, thao túng kế vị có phản phệ, ước pháp, giải đấu, đại chiến liên tông, Thiên hạ công ước). Tắt `D.INTERSECT.on` trùng khít 40/40 mốc S7. 109 bài đạt; đo 40 hạt giống: chiến tranh 51,5 → 48,0, diệt vong 9,4 → 7,2 (dưới dải 7,5; 80 hạt giống gộp là 8,95, đạt), đại chiến liên tông 1,3 mỗi 300 năm. Còn: Cổng chơi thử 5 (cho thế giới tự chạy 200 đến 300 năm).

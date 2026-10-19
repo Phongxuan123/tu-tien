@@ -61,7 +61,7 @@
       if (!this.on() || x.kind !== 'trieu') return 1;
       const A = this.peek(x), v = TT.nation.view(x);
       const tiep = (0.7 + 0.3 * x.wealth / 100) * this.trait(x.region).tiep, tuong = this.tuongRank(x, A.tuongTu);
-      return clamp(this.phOf(x) * (1 + 0.5 * A.tr) * (1 + 0.3 * A.sat / 100) * (0.7 + 0.6 * v.van / 100) * tiep * (1 + K.tuongMul * tuong) / K.ref * TT.court.levyMul(x), 0.4, 1.6); // trưng binh chư hầu (S7)
+      return clamp(this.phOf(x) * (1 + 0.5 * A.tr) * (1 + 0.3 * A.sat / 100) * (0.7 + 0.6 * v.van / 100) * tiep * (1 + K.tuongMul * tuong) / K.ref * TT.court.levyMul(x) * TT.inter.armyMul(x), 0.4, 1.6); // trưng binh chư hầu (S7); quốc sư (S8)
     },
     // Mô tả cho giao diện: chỉ chữ và bậc, không số.
     describe(x) {

@@ -120,10 +120,12 @@
       const p = clamp(S.base + (C.hq < H.weak ? S.weak * (H.weak - C.hq) / H.weak : 0) + (q >= K.civil.quyenMin ? S.quyen : 0) + (hadHeir ? 0 : S.noHeir), 0, S.max);
       if (hn('tranh', x.id, TT.world.months) >= p) { C.hq = clamp(C.hq + S.hqPeace, 0, 100); return; } // êm: hoàng quyền được củng cố nhẹ
       let who;
-      if (q >= S.quyenWin && q > C.hq) { who = 'the'; C.hq = clamp(C.hq - S.hqQuyen, 0, 100); }
+      const km = TT.inter.manip(x); // tông quốc sư hoặc cung phụng nâng người của mình (S8)
+      if (km) { who = 'km'; C.hq = clamp(C.hq - S.hqTong, 0, 100); TT.inter.backlash(x, km); }
+      else if (q >= S.quyenWin && q > C.hq) { who = 'the'; C.hq = clamp(C.hq - S.hqQuyen, 0, 100); }
       else if (hadHeir) { who = 'thaitu'; C.hq = clamp(C.hq - S.hqHeir, 0, 100); }
       else { who = 'tong'; C.hq = clamp(C.hq - S.hqTong, 0, 100); }
-      const what = { the: 'thế gia đưa người lên ngôi, tranh ngôi trong triều', thaitu: 'thái tử nối ngôi nhưng các phe vẫn tranh giành', tong: 'tông thất tranh ngôi, triều đình rối ren' }[who];
+      const what = km ? 'tông ' + km.n + ' nâng người của mình lên ngôi, triều đình rối ren' : { the: 'thế gia đưa người lên ngôi, tranh ngôi trong triều', thaitu: 'thái tử nối ngôi nhưng các phe vẫn tranh giành', tong: 'tông thất tranh ngôi, triều đình rối ren' }[who];
       let civil = false;
       if (C.hq < K.civil.hqMax && q >= K.civil.quyenMin && TT.world.months - C.civilAt >= K.civil.years * 12 && hn('noichien', x.id, y) < K.civil.p) {
         civil = true; C.civilAt = TT.world.months;

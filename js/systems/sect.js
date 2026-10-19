@@ -432,7 +432,7 @@
     priceMul(id) { return D.SECT_RES.priceMul[sect.resState(id)]; },
     resYearly(x) { // mỗi năm cho thế lực tông (gọi từ factions.tickInternal)
       const P = D.SECT_RES, r = sect.res(x.id); if (!r) return;
-      const target = P.wealthBase + P.perMach * r.mach + P.perMo * r.mo;
+      const target = P.wealthBase + P.perMach * r.mach + P.perMo * (r.mo + TT.inter.mineAdd(x.id)); // chia mỏ theo ước pháp (S8)
       x.wealth = rng.clamp(x.wealth + (target - x.wealth) * P.drift, 0, 100);
       // cống nạp cho vương triều nay do hiệp ước (systems/pacts.js) tính
       if (r.mach > 1 && rng.P(P.machLoss)) { r.mach--; TT.fac.chron('Linh mạch của ' + x.n + ' cạn dần, tông môn suy yếu.', 'bad'); }
