@@ -203,3 +203,33 @@ Quy tắc: hàm đọc không gọi rng, không khởi tạo dữ liệu; không
 Kiểm thử mới trong tests.html (nhóm "Tính cách và khí vận (8A)"): bốc không trung dung hết và không gọi rng (rng state trước/sau bằng nhau), dải và nhãn, quán tính và trần năm, ánh xạ kind, chooseIndex theo affinity, kvPts = baseKv cũ, không trần, S.kv thụ động trần 20, không tăng theo thời gian (chạy 80 năm không sự kiện), nguồn cộng, bản lưu cũ, lưu/tải, công tắc tắt. Chạy `node tools/run-tests.js` đầy đủ. Kiểm giao diện hộp Đời mới và Hồ sơ bằng Playwright (máy tính và điện thoại), không lỗi console.
 Cuối: ghi "8A đã làm" (Z, mục Đợt 8; Q mục 22 nhật ký), cập nhật KE-HOACH.md, commit, push theo CLAUDE.md, mở PR nháp nếu chưa có. Báo ngắn gọn: đã làm, số kiểm thử, số đo, việc cần tôi chơi thử, điều chưa làm.
 ```
+
+## 8A2. Haiku: dữ liệu tuổi thơ (chỉ dữ liệu, chạy được trước hoặc sau 8A)
+
+```
+Repo: Phongxuan123/tu-tien. Gắn repo, clone nhánh `add-game-project` (trả lời tiếng Việt, ngắn gọn, xưng "mình", gọi tôi là "bạn"). Đọc CLAUDE.md của repo trước.
+
+Đọc: ke-hoach/Z-lo-trinh-trien-khai.md mục "Đợt 8", phần "Đặc tả tuổi thơ" và "Đặc tả 8A" (tên bốn trục: tinh, xuthe, daoduc, tudung; −10..+10). Xem js/data/events.js (30 dòng đầu) để biết kiểu viết `kind` và giọng chữ; js/data/traits.js để biết id các tật (g: 0).
+
+NHIỆM VỤ: chỉ viết DỮ LIỆU js/data/childhood.js, không sửa hệ thống.
+- D.CHILDHOOD = { on: true, p2: 0.5, p3: 0.5, cap: { atk: 6, nl: 6, hp: 30, luck: 3, daoTam: 10, tuchat: 1, kv: 1, bad: 1 }, ev: [...] }.
+- ev: 24 sự kiện trở lên, mỗi hồi (hoi: 1, 2, 3) ít nhất 8. Mỗi sự kiện: { id: 'th_...', hoi, w (trọng số 1 đến 3), t (tiêu đề ngắn), d (2 đến 3 câu, có thể dùng khe {ban} là tên bạn thuở nhỏ, chỉ khi có trường needBan: true), ch: [2 hoặc 3 lựa chọn] }.
+- Mỗi lựa chọn: { key, label, kind (risk/safe/fight/flee/help/pay hoặc kind mới đã giải thích trong chú thích), ax: { trục: ±1..±3 } (1 hoặc 2 trục), fx: { 1 đến 2 hiệu ứng trong: atk, nl, hp, gold, luck, daoTam, tuchat, kv, wake, bad, ban }, r (1 câu kết quả) }. tuchat và kv chỉ xuất hiện ở tối đa 3 lựa chọn mỗi loại trong cả bộ; mỗi lựa chọn có cái được và (nếu lợi lớn) cái mất.
+- Nội dung: Hồi 1 (0 đến 3 tuổi) là chuyện sơ sinh, bệnh, điềm lạ, cha mẹ; Hồi 2 (4 đến 7) là chơi đùa, bạn bè, học chữ, lần đầu thấy tu sĩ; Hồi 3 (8 đến 11) là việc nhà, đánh nhau, giữ lời, thử tư chất, gặp tán tu. Giọng đời thường pha nhẹ, chuyện buồn kể nhẹ nhàng. Không tên nước thật. Không cần biết xuất thân (bản theo xuất thân làm ở 9A).
+- Thêm vào js/files.js trong nhóm js/data. Thêm bài kiểm thử trong tests.html "Dữ liệu tuổi thơ (8A2)": mỗi hồi ≥ 8 sự kiện, id không trùng, mỗi sự kiện 2 đến 3 lựa chọn, ax chỉ dùng bốn trục và trong ±3, fx chỉ dùng khóa cho phép và 1 đến 2 khóa, bad trỏ đúng id tật, needBan khớp với khe {ban}, số lần dùng tuchat/kv ≤ 3.
+
+Kiểm: `node tools/run-tests.js` đạt toàn bộ, `node tools/baseline.js --check` trùng khít. Commit, push theo CLAUDE.md. Báo: số sự kiện mỗi hồi, kết quả kiểm thử.
+```
+
+## 8A3. Sonnet: nối tuổi thơ vào hộp Đời mới (cần 8A và 8A2)
+
+```
+Repo: Phongxuan123/tu-tien. Gắn repo, clone nhánh `add-game-project` (trả lời tiếng Việt, ngắn gọn, xưng "mình", gọi tôi là "bạn"). Đọc CLAUDE.md. Điều kiện: 8A và 8A2 đã có trên nhánh (thiếu thì dừng và báo tôi).
+
+Đọc: Z mục "Đợt 8" (Đặc tả 8A, Đặc tả tuổi thơ, mục "8A đã làm"); js/data/childhood.js; js/systems/nature.js; mã hộp Đời mới do 8A viết; js/systems/world.js (life.reincarnate, TT.social.childhood).
+
+NHIỆM VỤ: js/systems/childhood.js (TT.childhood: plan(c) bốc danh sách sự kiện ba hồi bằng băm, không gọi TT.rng; apply(c, ev, choice) áp ax qua TT.nature.shift (không tính trần năm) và fx có kẹp theo D.CHILDHOOD.cap cộng dồn trong c.childFx; auto(c) chọn theo affinity; summary(c)). Giao diện: sau khi xác nhận hộp Đời mới thì hiện lần lượt hộp từng sự kiện (tiêu đề hồi, chữ, lựa chọn có chấm "hợp tính"), rồi hộp Tổng kết 12 tuổi (đổi tính cách, chỉ số, tóm tắt từng hồi; nút "Đầu thai lại" và "Vào đời"). Ghi nhật ký tóm tắt. Chế độ Tự động và kiểm thử: chạy auto, không hiện hộp. Không dùng w.pending.
+
+Quy tắc như 8A. Công tắc D.CHILDHOOD.on = false thì `--check` trùng khít (thêm cờ --childhood=off). Bật thì đo 40 hạt giống, ghi số. Kiểm thử "Tuổi thơ (8A3)": số sự kiện mỗi hồi theo p2/p3 (đo trên 2.000 lần bốc: khoảng 1,75 mỗi hồi), không lặp, không gọi rng, kẹp trần, auto chọn theo affinity, lưu/tải, công tắc. Playwright: cả luồng Đời mới → ba hồi → Tổng kết trên máy tính và điện thoại.
+Cuối: ghi "8A3 đã làm" vào Z, Q mục 22; KE-HOACH.md; push theo CLAUDE.md. Báo ngắn gọn.
+```

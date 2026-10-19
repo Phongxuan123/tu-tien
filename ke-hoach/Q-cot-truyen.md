@@ -1039,6 +1039,8 @@ Xem bảng 1.2. Thêm các chi tiết đã chốt sau khi bạn chỉnh: thang t
 
 - **(Lượt 2, 2026-10-19)** Tính cách **định lúc sinh**, có **sự kiện định hướng trước 12 tuổi** (ở 9A, sau xuất thân). Điểm khí vận **bốc 0 đến 10 lúc sinh** như cũ (dùng lại lần rút `baseKv` nên thứ tự `rng` không đổi) và **không có trần**. Các câu còn lại của lượt 2 (Q18 đến Q21 mặc định, 8A chỉ tự dịch trục theo `kind`, chưa khóa mềm và phí trái tính với sự kiện cũ, tác động số chỉ độ liều và tâm ma) theo mặc định vì bạn không sửa.
 
+- **(Lượt 3 và 4, 2026-10-19)** Hộp "Đời mới" (Bốc lại không giới hạn, ngân sách 4 điểm, máy tự phân nếu không chỉnh); tính cách người chơi bốc ngẫu nhiên ±8, không trung dung hết. Khí vận vừa thụ động (tính tối đa 20) vừa tiêu được. **Tuổi thơ** kéo lên Đợt 8 (8A2, 8A3): sau hộp Đời mới là ba hồi (0-3, 4-7, 8-11 tuổi), mỗi hồi 1 đến 3 sự kiện (sự kiện 2 ra 50%, sự kiện 3 ra 25%), mỗi lựa chọn dịch trục và 1 đến 2 chỉ số khác (có trần), rồi hộp Tổng kết lúc 12 tuổi. Chi tiết ở Z "Đợt 8". Câu 13 mục 20.2 coi như đã chốt.
+
 ### 20.2 Câu hỏi còn mở (mỗi câu có mặc định, bạn chỉ cần sửa chỗ muốn khác)
 **Giọng và nhịp truyện**
 1. **Giọng truyện**: nghiêm túc tiên hiệp hay pha hài đời thường như các sự kiện cũ? *(mặc định: pha, nghiêm khi chuyện lớn)*

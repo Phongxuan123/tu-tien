@@ -150,13 +150,23 @@
   - *Khí vận*: `c.kvPts` = đúng lần rút `baseKv = rng.RI(0, 10)` hiện có (không thêm lần rút); **không trần**; **vừa thụ động vừa tiêu**: `S.kv(c)` của người chơi = min(kvPts, 20) + phần Mệnh cách của tiên thiên (`S.mod(c,'kv')`), nên tiêu điểm làm giảm vận thụ động. Nguồn cộng ở 8A: kỳ ngộ vận mệnh +2 (thay `baseKv += 3..8`), Nhẫn thật +2 (thay +15/+30), đột phá Kim Đan trở lên +1 mỗi cảnh giới; các nguồn khác ở 8B+. Không cộng theo thời gian. Sổ `c.kvLog` 20 mục. Hồ sơ: "Khí vận: N điểm". NPC giữ `baseKv` y nguyên.
   - *Bản lưu cũ*: người chơi chưa có `c.nature` thì suy từ `personality` (bảng Q 6.8) + băm; chưa có `kvPts` thì `kvPts = max(0, round(baseKv))`. Không đổi `TT.VERSION`.
   - *Công tắc*: `D.NATURE.on = false` thì mọi thứ chạy như cũ và `node tools/baseline.js --check` trùng khít. Bật thì đo 40 hạt giống (người chơi tự chọn khác nên thế giới có thể lệch nhẹ) và ghi số.
+- [ ] **8A2** (Haiku dữ liệu) + **8A3** (Sonnet nối) **Tuổi thơ** (chốt 2026-10-19, lượt 4; kéo lên từ 9A, bản chung không cần xuất thân; bản theo xuất thân thêm ở 9A).
+  **Đặc tả tuổi thơ:**
+  - *Luồng*: hộp Đời mới (bốc, chỉnh 4 điểm, Bốc lại) → bấm xác nhận → **ba hồi** lần lượt: Hồi 1 (0 đến 3 tuổi), Hồi 2 (4 đến 7), Hồi 3 (8 đến 11) → **hộp Tổng kết** lúc vào game 12 tuổi (tính cách đã đổi ra sao, chỉ số nhận được, dòng tóm tắt từng hồi; có nút "Đầu thai lại" bốc lại cả đời) → thế giới chạy như hiện nay.
+  - *Số sự kiện mỗi hồi*: luôn có sự kiện 1; sự kiện 2 xuất hiện **50%**; sự kiện 3 xuất hiện **25%** (tức 50% khi đã có sự kiện 2). Trung bình khoảng 5 sự kiện mỗi tuổi thơ.
+  - *Ngẫu nhiên*: bốc sự kiện bằng **băm** (hạt giống thế giới, id, hồi, thứ tự), **không gọi `TT.rng`**, không lặp sự kiện trong một đời.
+  - *Mỗi sự kiện*: 2 đến 3 lựa chọn; mỗi lựa chọn có `kind`, dịch trục `ax` (±1 đến ±3) và **1 đến 2 hiệu ứng chỉ số** trong danh sách cho phép: `atk`, `nl`, `hp` (chỉ số gốc), `gold`, `luck`, `daoTam`, `tuchat` (+1, hiếm), `kv` (±1, hiếm), `wake` (thức tỉnh một tiên thiên ẩn, chờ 8C; trước 8C bỏ qua), `bad` (nhận một tật cũ), `ban` (thiện cảm với bạn thuở nhỏ của `TT.social.childhood`).
+  - *Trần cả tuổi thơ* (cộng dồn, kẹp khi áp): atk +6, nl +6, hp +30, gold ≤ vàng xuất thân, luck ±3, daoTam ±10, tuchat +1, kv ±1, tối đa 1 tật; tổng không mạnh hơn một tiên thiên Hiếm.
+  - *Tự động / kiểm thử*: không hiện hộp; chọn theo độ hợp tính cách (`TT.nature.affinity`) và ghi tóm tắt vào nhật ký. Hộp chỉ là giao diện, không dùng `w.pending`.
+  - *Dữ liệu* `js/data/childhood.js` (`D.CHILDHOOD`): **ít nhất 8 sự kiện mỗi hồi (24 sự kiện)**, khe `{ban}` tùy chọn, chữ ngắn (2 đến 3 câu), giọng đời thường pha nhẹ.
+  - *Công tắc*: `D.CHILDHOOD.on`; tắt thì `--check` trùng khít. Bật thì người chơi mạnh hơn chút ở 12 tuổi: đo 40 hạt giống, ghi số.
 - [ ] **8B** (Sonnet) Q2 `TT.story` + `TT.wheel` bản tối thiểu, **một tuyến thật** làm mẫu, `story-lint` rút gọn, lệnh nhảy tới chặng, `tools/life-sim.js`.
 - [ ] **8C** (Haiku dữ liệu, rồi Sonnet cơ chế) Q1.1 tiên thiên v2, chỉ cho người chơi; trang thử nghiệm.
 - [ ] **8D** (Sonnet) R1 lõi: bốn thanh (Tình, Tin, Kính, Ơn oán) và loại quan hệ cho cặp thân thiết của người chơi; chuyển bản lưu cũ.
 - **Cổng chơi thử 6:** đọc 3 bản `life-sim` + chơi 15 phút: tính cách đổi theo lựa chọn, vòng quay, tuyến mẫu, tiên thiên mới.
 
 ### Đợt 9. Một đời đầy đủ (gọn lại 2026-10-19)
-- [ ] **9A** 8 xuất thân đầu (17 sau) + tuổi thơ + xương sống A (6 mốc).
+- [ ] **9A** 8 xuất thân đầu (17 sau) + sự kiện tuổi thơ theo xuất thân (thêm vào khung 8A2/8A3) + xương sống A (6 mốc).
 - [ ] **9B** R2 đạo lữ lõi (khoảng 12 chặng: gặp, mến, tỏ tình, kết, thử thách, chia ly/vĩnh biệt).
 - [ ] **9C** R3 con cái lõi (khoảng 12 chặng, 5 quyết định mỗi con) + thừa kế + **màn kết đời / bia mộ** (Q 21.1#1).
 - **Cổng chơi thử 7:** một đời đầy đủ từ sinh đến chết/kế thừa.
