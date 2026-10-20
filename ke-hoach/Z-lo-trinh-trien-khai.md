@@ -373,7 +373,7 @@
 | 5 | 9B-d | Haiku | khoảng 12 chặng đạo lữ | 1 |
 | 6 | 9K | Sonnet | **kết nghĩa qua trải nghiệm chung** (thay chỗ 9C, chốt 2026-10-20; xem Đợt 9) | 3 |
 | 7 | (hoãn) 9C, 9C-d | | con cái, thừa kế, màn kết đời: **để sau theo ý bạn** (chưa muốn làm phần kết) | (3 + 1) |
-| 8 | N1 đến N3 | Haiku | 3 gói nội dung tuyến (mỗi gói 3 đến 4 tuyến thân phận hoặc thế giới, viết đúng định dạng dữ liệu tuyến của 8B, chạy `story-lint`) | 4 |
+| 8 | N1 đến N3 | Haiku | **N1 đã làm (2026-10-20)**: T1 `tp_tan_tu`, T2 `tp_dao_tong`, T5 `tp_thuong_nhan`, W1 `tg_chien_su` (5 chặng, 1 vòng quay ở chặng cuối, 2 đến 5 hậu quả trễ mỗi tuyến; `js/data/stories/`, đăng ký trong `js/files.js`); còn N2 và N3 | 3 gói nội dung tuyến (mỗi gói 3 đến 4 tuyến thân phận hoặc thế giới, viết đúng định dạng dữ liệu tuyến của 8B, chạy `story-lint`) | 4 |
 | 9 | 8C | Sonnet | tiên thiên v2 bản gọn (tùy, nếu còn tiền) | 2,5 |
 | 10 | Hoàn thiện | Sonnet | cân bằng nhịp, sửa lỗi chơi thử, kiểm thử đầy đủ | 2,5 |
 | | **Cộng** | | | **khoảng 23** |
@@ -451,3 +451,4 @@
 - **2026-10-20** **8B** (Đợt 8) xong: khung truyện `TT.story` và vòng quay `TT.wheel`, tuyến A1 đến A3 (6 chặng, 1 vòng quay, 4 hậu quả trễ), `tools/story-lint.js`, `tools/life-sim.js`. Tắt `D.STORY.on` trùng khít 40/40; bật cũng trùng khít; nhịp quyết định 5,83 hộp/phút sau khi hạ sự kiện lẻ 15% (`evMul`). 137 bài đạt. Còn: 8C, 8D.
 - 2026-10-20: **phiên thiết kế Đợt 8 (kết)**: đọc life-sim sau 8B, chốt 8B2 (hạ 60 đến 70% nội dung xuống Luyện Khí trung kỳ, mốc theo cảnh giới hoặc tuổi, chống trôi tính cách, lọc nhật ký); kế hoạch theo ngân sách (mục 7b); chốt 8 xuất thân, mặc định R mục 12, gói N1, N2; viết đủ prompt 8B2, 9A-d, 9A, 9B, 9B-d, 9C, 9C-d, N1/N2.
 - 2026-10-20: theo ý bạn, **hoãn 9C, 9C-d** (con cái, kết đời); thay bằng **9K kết nghĩa qua trải nghiệm chung** (móc vào sự kiện có sẵn, chỉ thêm 3 sự kiện); Cổng 7 dời sau 9K; prompt N1/N2 bỏ phụ thuộc vào `kid`.
+- 2026-10-20: **N1 đã làm** (Haiku, dữ liệu): bốn tuyến mới trong `js/data/stories/` (`tp_tan_tu`, `tp_dao_tong`, `tp_thuong_nhan`, `tg_chien_su`), 20 chặng, lint sạch 15 tuyến và 47 chặng, `run-tests` lọc "Truyện" 11 đạt; toàn bộ 138 đạt. Life-sim 101-103 (80 năm, số hộp truyện trên cả đời): trước 13 / 14 / 18, sau 16 / 14 / 18. W1 đã chạy hết chuỗi trong đời 101 (mở ở 65 tuổi). **Chưa mở được**: T1, T2, T5, vì điều kiện nghề, tông, không tông chưa có trong `condOk` (chỉ có realm, stage, age, flag, sau, bond, hoac). Cờ tạm `tan_tu`, `dao_tong`, `nghe_thuong` chưa có hệ nào gán. Việc tiếp: thêm điều kiện `job`, `sect` (hoặc gán cờ từ `TT.sect`/nghề), rồi kiểm lại số hộp. `tools/story-lint.js` đã đọc cả thư mục nên không cần đổi.
