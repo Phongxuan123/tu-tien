@@ -1045,6 +1045,8 @@ Xem bảng 1.2. Thêm các chi tiết đã chốt sau khi bạn chỉnh: thang t
 
 - **(Lượt 6, 2026-10-20)** Tiến độ cảnh giới chậm là cố ý; **60 đến 70% nội dung từng dự tính từ Trúc Cơ hạ xuống Luyện Khí trung kỳ** (giữ T13, T14 và chuyện rất lớn ở Trúc Cơ+); mốc xương sống mở theo cảnh giới hoặc tuổi; chống trôi tính cách (quán tính dải cực 0,3, việc thường ngày ×0,5, Tự động chọn ngẫu nhiên theo trọng số hợp tính); lọc nhật ký. Theo ngân sách còn lại, thứ tự: 8B2 → 9A → 9B (gộp R1) → 9C → gói nội dung → 8C (Z mục 7b).
 
+- **(Lượt 7, 2026-10-20)** 8 xuất thân đầu: p1, p2, p3, p5, t1, t3, t6, t10 (trọng số 28/13/13/12/12/8/8/6). Gói nội dung N1 (T1, T2, T5, W1), N2 (T3, T9, chuỗi Nhẫn, W3), N3 chọn sau Cổng 7. Tiên thiên v2 (8C) quyết sau Cổng 7 theo tiền còn lại. Prompt toàn bộ ở `PROMPT-phien-moi.md`.
+
 ### 20.2 Câu hỏi còn mở (mỗi câu có mặc định, bạn chỉ cần sửa chỗ muốn khác)
 **Giọng và nhịp truyện**
 1. **Giọng truyện**: nghiêm túc tiên hiệp hay pha hài đời thường như các sự kiện cũ? *(mặc định: pha, nghiêm khi chuyện lớn)*
