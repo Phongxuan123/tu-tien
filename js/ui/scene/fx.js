@@ -70,10 +70,10 @@
 
   // ánh đèn lồng: quầng ba bậc nhấp nháy
   function drawLamps(ctx, pal, t, geo) {
-    if (pal.lit < 0.05) return; sc.use(ctx);
+    if (pal.lit < 0.05 && !(geo.lamps || []).some(l => l.always)) return; sc.use(ctx);
     (geo.lamps || []).forEach((l, i) => {
-      const fl = sc.reduced ? 1 : 0.85 + 0.15 * Math.sin(t * 6.3 + i * 2.3) * Math.sin(t * 2.1 + i), a = pal.lit * fl;
-      ctx.globalAlpha = a * 0.06; disc(l.x, l.y, 16, '#ffb070'); ctx.globalAlpha = a * 0.1; disc(l.x, l.y, 11, '#ffb070'); ctx.globalAlpha = a * 0.18; disc(l.x, l.y, 6, '#ffb070'); ctx.globalAlpha = a * 0.5; disc(l.x, l.y, 1, '#fff0c8');
+      const fl = sc.reduced ? 1 : 0.85 + 0.15 * Math.sin(t * 6.3 + i * 2.3) * Math.sin(t * 2.1 + i), a = (l.always ? Math.max(0.6, pal.lit) : pal.lit) * fl, c1 = l.c || '#ffb070';
+      ctx.globalAlpha = a * 0.06; disc(l.x, l.y, 16, c1); ctx.globalAlpha = a * 0.1; disc(l.x, l.y, 11, c1); ctx.globalAlpha = a * 0.18; disc(l.x, l.y, 6, c1); ctx.globalAlpha = a * 0.5; disc(l.x, l.y, 1, '#fff0c8');
     });
     ctx.globalAlpha = 1;
   }
@@ -93,5 +93,54 @@
     if (s.war) for (let i = 0; i < 3; i++) for (let k = 0; k < 9; k++) { ctx.globalAlpha = 0.45 - k * 0.04; ctx.fillStyle = '#5a5660'; ctx.fillRect(Math.round(300 + i * 56 + Math.sin(fr * 0.05 + k) * 4), Math.round(GY - 20 - k * 8 - (t * 3 + i * 10) % 12), 12 + k * 2, 8); ctx.globalAlpha = 1; }
   }
 
-  sc.fx = { PT, step, draw, reset, emit, burst, drawFireflies, drawLamps, drawFlags, weather, rnd };
+
+  // lửa đan đỉnh / lò luyện (động): ngọn lửa ba lớp
+  function drawFlames(ctx, pal, t, geo) {
+    (geo.flames || []).forEach((f, i) => {
+      const hw = Math.round(f.w / 2); sc.use(ctx);
+      ctx.globalAlpha = 0.18 + 0.06 * Math.sin(t * 5 + i); disc(f.x, f.y - 6, 18, '#ff8a2a'); ctx.globalAlpha = 1;
+      for (let k = -hw; k <= hw; k += 2) {
+        const e = 1 - Math.abs(k) / hw, h = Math.round(4 + (sc.reduced ? 1 : Math.sin(t * 9 + k * 1.3 + i) + 1) * 2.5 + e * 9);
+        ctx.fillStyle = '#d8321c'; ctx.fillRect(Math.round(f.x + k), Math.round(f.y - h), 2, h);
+        ctx.fillStyle = '#ff8a2a'; ctx.fillRect(Math.round(f.x + k), Math.round(f.y - h * 0.7), 2, Math.round(h * 0.7));
+        ctx.fillStyle = '#ffe07a'; ctx.fillRect(Math.round(f.x + k), Math.round(f.y - h * 0.4), 2, Math.round(h * 0.4));
+      }
+    });
+  }
+
+  // lớp nhấn nền riêng từng tông (động): gió + kiếm quang, sương xanh, hồn quang, cực quang, tro, nắng, sét
+  function accent(ctx, kind, pal, t, geo) {
+    if (!kind) return; const f = sc.FX(); sc.use(ctx);
+    if (kind === 'gio') {
+      ctx.fillStyle = '#ffffff';
+      for (let i = 0; i < 14 * f; i++) { const y = 14 + hash(i * 3.3) * 84, sp = 110 + hash(i) * 90, x = (((hash(i * 7.1) * W - t * sp) % (W + 40)) + W + 40) % (W + 40) - 20; ctx.globalAlpha = 0.3; ctx.fillRect(Math.round(x), Math.round(y), 14 + Math.floor(hash(i * 2) * 18), 1); }
+      const k = Math.floor(t / 2.2), ph = (t / 2.2) - k; if (ph < 0.18 && !sc.reduced) { const x0 = 60 + hash(k * 1.7) * 360, y0 = 12 + hash(k * 3.1) * 40; ctx.globalAlpha = 1 - ph / 0.18; sc.line(x0, y0, x0 + 26, y0 + 8, '#eaffff', 1); sc.line(x0 - 6, y0 - 2, x0, y0, '#7af4dc', 1); }
+      ctx.globalAlpha = 1;
+    } else if (kind === 'suong_xanh') {
+      for (let i = 0; i < 4; i++) { ctx.globalAlpha = 0.09; ctx.fillStyle = '#8ae8a0'; ctx.fillRect(0, GY - 50 + i * 12 + Math.round(Math.sin(t * 0.4 + i) * 3), W, 12); }
+      for (let i = 0; i < 18 * f; i++) { const x = hash(i * 9.1) * W + Math.sin(t * 0.5 + i) * 14, y = 60 + hash(i * 4.2) * 60 + Math.cos(t * 0.6 + i) * 6, b = Math.pow(Math.max(0, Math.sin(t * 1.3 + i * 2)), 2); ctx.globalAlpha = 0.2 + b * 0.8; ctx.fillStyle = '#d8ffa0'; ctx.fillRect(Math.round(x), Math.round(y), 1, 1); ctx.globalAlpha = b * 0.25; ctx.fillRect(Math.round(x) - 1, Math.round(y) - 1, 3, 3); }
+      ctx.globalAlpha = 1;
+    } else if (kind === 'hon_quang') {
+      for (let i = 0; i < 3; i++) { ctx.globalAlpha = 0.1; ctx.fillStyle = '#8a3ac8'; ctx.fillRect(0, GY - 36 + i * 11, W, 12); }
+      for (let i = 0; i < 16 * f; i++) { const yy = (((t * (8 + hash(i) * 8) + hash(i * 3) * 120) % 120)), y = GY - yy, x = hash(i * 6.1) * W + Math.sin(t * 1.2 + i) * 8; ctx.globalAlpha = Math.min(1, yy / 20) * (1 - yy / 130); ctx.fillStyle = i % 3 ? '#7af4dc' : '#d8b8ff'; ctx.fillRect(Math.round(x), Math.round(y), 1, 2); ctx.fillRect(Math.round(x) - 1, Math.round(y) + 2, 3, 1); }
+      ctx.globalAlpha = 1;
+    } else if (kind === 'sao_nuoc') {
+      for (let i = 0; i < 26 * f; i++) { const x = hash(i * 5.7) * W, y = 100 + hash(i * 2.9) * 22, b = Math.pow(Math.max(0, Math.sin(t * 1.8 + i * 3)), 3); ctx.globalAlpha = b * 0.9; ctx.fillStyle = '#ffffff'; ctx.fillRect(Math.round(x), Math.round(y), 2, 1); }
+      ctx.globalAlpha = 1;
+    } else if (kind === 'cuc_quang') {
+      if (pal.amb > 0.2) for (let i = 0; i < 3; i++) for (let x = 0; x < W; x += 2) { const y = 10 + i * 8 + Math.sin(x * 0.04 + t * 0.5 + i) * 6; ctx.globalAlpha = 0.18; ctx.fillStyle = ['#4af0a0', '#6ad0ff', '#b08aff'][i]; ctx.fillRect(x, Math.round(y), 2, 14); }
+      ctx.globalAlpha = 1;
+    } else if (kind === 'tro') {
+      for (let i = 0; i < 22 * f; i++) { const yy = ((t * (10 + hash(i) * 14) + hash(i * 3) * 120) % 120), x = hash(i * 6.1) * W + Math.sin(t + i) * 6; ctx.globalAlpha = 0.9 * (1 - yy / 130); ctx.fillStyle = i % 3 ? '#ff9a3a' : '#ffd060'; ctx.fillRect(Math.round(x), Math.round(GY - yy), 1, 1); }
+      ctx.globalAlpha = 1;
+    } else if (kind === 'nang') {
+      ctx.globalAlpha = 0.07 + 0.03 * Math.sin(t * 0.8); ctx.fillStyle = '#ffd060'; ctx.fillRect(0, 0, W, 90); ctx.globalAlpha = 1;
+      if (pal.amb < 0.4) for (let i = 0; i < 6; i++) { ctx.globalAlpha = 0.07; sc.line(380 + i * 4, 40, 300 + i * 40, GY, '#fff0a0', 2); } ctx.globalAlpha = 1;
+    } else if (kind === 'set') {
+      const k = Math.floor(t / 3.3), ph = t / 3.3 - k, rods = geo.rods || [];
+      if (rods.length && ph < 0.16 && !sc.reduced) { const r = rods[k % rods.length], a = 1 - ph / 0.16; ctx.globalAlpha = a * 0.15; ctx.fillStyle = '#d8d0ff'; ctx.fillRect(0, 0, W, 90); ctx.globalAlpha = a; let x = r.x + (hash(k) - 0.5) * 40, y = 0; while (y < r.y) { const nx = x + (r.x - x) * 0.25 + (hash(k * 7 + y) - 0.5) * 12; sc.line(x, y, nx, y + 8, '#ffffff', 1); x = nx; y += 8; } ctx.globalAlpha = 1; }
+    }
+  }
+
+  sc.fx = { drawFlames, accent, PT, step, draw, reset, emit, burst, drawFireflies, drawLamps, drawFlags, weather, rnd };
 })();

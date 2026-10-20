@@ -15,6 +15,8 @@ body{font-family:Consolas,monospace;background:#14110f;color:#e8dfd0;padding:16p
 <script>TT_LOAD(false);</script>
 <script src="js/ui/icons.js"></script>
 <script src="js/ui/bldart.js"></script>
+<script src="js/ui/sprites.js"></script>
+<script>TT_SCENE();</script>
 <script src="js/data/natevents.js"></script>
 <script>
 const out = document.getElementById('out');
@@ -4543,6 +4545,24 @@ test('Kết nghĩa (9K): công tắc D.BOND.mem tắt thì không ký ức, khô
   p.dgCool = 0; p.hp = S.hpMax(p); TT.dungeon.enter(p, p.place, 'bi_canh'); w.pending = null; ok(!p.dungeon.ally, 'tắt thì không có bạn đi cùng'); TT.dungeon.finish(p, 'rut');
 }));
 
+
+test('Cảnh pixel (T-C): dữ liệu kiểu tông, nơi thờ, bố cục cls đủ khóa; vẽ đủ chín tông, chín nơi thờ, mọi cls không lỗi và không đụng rng', () => {
+  const sc = TT.ui.sc, DS = sc.data;
+  Object.keys(D.SECTS).forEach(id => { const st = DS.SECT_STYLE[id]; ok(st, 'tông ' + id + ' có kiểu cảnh'); ok(st && sc.sectLand[st.land], 'tông ' + id + ' có công trình đặc trưng ' + (st && st.land)); });
+  D.FAITHS.forEach(f => { const fm = DS.FAITH_FORM[f.id]; ok(fm && sc.shrine.FORMS[fm], 'tín ngưỡng ' + f.id + ' có dáng kiến trúc'); });
+  Object.keys(DS.CLS_LAYOUT).forEach(c => DS.CLS_LAYOUT[c].forEach(m => ok(sc.places[m], 'cls ' + c + ' dùng module có thật: ' + m)));
+  Object.keys(D.PLACE_TYPES).forEach(k => ok(DS.CLS_LAYOUT[D.PLACE_TYPES[k].cls] || D.PLACE_TYPES[k].cls === 'road', 'cls ' + D.PLACE_TYPES[k].cls + ' có bố cục'));
+  Object.keys(DS.TERRAIN).forEach(id => ok(D.REGIONS[id] || Object.keys(D.REGIONS).some(r => D.REGIONS[r].id === id), 'địa hình ' + id + ' ứng với vùng'));
+  TT.life.createWorld(7); const S0 = TT.rng.getState(), base = TT.ui.scene.readState(); ok(base, 'readState có trạng thái');
+  const cv = document.createElement('canvas'); cv.width = sc.CFG.W; cv.height = sc.CFG.H;
+  const draw = (o) => { const s = Object.assign({}, base, { people: [], wid: '', mon: null, foe: null }, o); TT.ui.scene.preview(s, 3, cv); const d = cv.getContext('2d').getImageData(0, 0, cv.width, cv.height).data; let n = 0; for (let i = 3; i < d.length; i += 4) if (d[i] > 0) n++; return n; };
+  const street = ['son', 'chap', 'duoc', 'tang', 'ngoai', 'dien'];
+  Object.keys(D.SECTS).forEach(id => ok(draw({ cls: 'sect', sect: id, phase: 'night', terr: DS.TERRAIN.tay_son, vis: street, pages: 1, page: 0 }) > cv.width * cv.height * 0.9, 'vẽ tông ' + id));
+  D.FAITHS.forEach(f => ok(draw({ cls: 'shrine', phase: 'day', terr: DS.TERRAIN.trung_chau, vis: ['tho_' + f.id], pages: 1, page: 0 }) > 0, 'vẽ nơi thờ ' + f.id));
+  Object.keys(DS.CLS_LAYOUT).concat(['road', 'void']).forEach(cls => ['day', 'dusk', 'night'].forEach(ph => ok(draw({ cls, phase: cls === 'void' ? 'void' : ph, terr: DS.TERRAIN.dong_hai, vis: cls === 'town' ? ['thon', 'cho', 'yq', 'tro'] : [], pages: 1, page: 0 }) > 0, 'vẽ cls ' + cls + ' ' + ph)));
+  Object.keys(DS.TERRAIN).forEach(id => ok(draw({ cls: 'town', phase: 'day', terr: DS.TERRAIN[id], vis: [], pages: 1, page: 0 }) > 0, 'vẽ địa hình ' + id));
+  eq(TT.rng.getState(), S0, 'vẽ cảnh không gọi rng của mô phỏng');
+});
 
 runNext();
 </script>

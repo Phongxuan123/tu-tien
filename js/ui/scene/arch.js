@@ -7,6 +7,9 @@
   // màu mái: 'plain' ngói đỏ, 'sect' ngói ngọc, 'ruin' đen cháy
   sc.roofCols = (pal, kind) => {
     if (kind === 'sect') { const t = mix(pal.jade, pal.m4, 0.62); return { t, l: mix(pal.jade, pal.cloudLt, 0.45), d: mix(t, pal.ink, 0.4), d2: mix(t, pal.ink, 0.2), sh: mix(pal.wall, pal.ink, 0.6) }; }
+    if (kind === 'warm') { const t = mix('#b8703a', pal.m4, 0.3); return { t, l: mix(t, pal.cloudLt, 0.4), d: mix(t, pal.ink, 0.4), d2: mix(t, pal.ink, 0.2), sh: mix(pal.wall, pal.ink, 0.6) }; }
+    if (kind === 'ice') { const t = mix('#9fd0e8', pal.m4, 0.35); return { t, l: mix(t, '#ffffff', 0.6), d: mix(t, pal.ink, 0.35), d2: mix(t, pal.ink, 0.15), sh: mix(pal.wall, pal.ink, 0.5) }; }
+    if (kind === 'gold') { const t = mix('#d8a838', pal.m4, 0.3); return { t, l: mix(t, '#fff4c0', 0.5), d: mix(t, pal.ink, 0.45), d2: mix(t, pal.ink, 0.22), sh: mix(pal.wall, pal.ink, 0.6) }; }
     if (kind === 'ruin') { const t = mix(pal.roof, pal.ink, 0.3); return { t, l: mix(pal.lamp, pal.roofLt, 0.5), d: pal.ink, d2: mix(t, pal.ink, 0.4), sh: pal.ink }; }
     return { t: pal.roof, l: pal.roofLt, d: mix(pal.roof, pal.ink, 0.45), d2: mix(pal.roof, pal.ink, 0.2), sh: mix(pal.wall, pal.ink, 0.55) };
   };
@@ -134,44 +137,6 @@
     R(189, GY - 16, 3, 16, T(pal.woodDk)); lantern(188, GY - 22, pal, geo); geo.lamps.push({ x: 189.5, y: GY - 19 });
   }
 
-  function sectLayout(pal, T, geo, r, terr) {
-    const stone = T(mix(pal.wall, pal.m3, 0.3)), stoneLt = T(mix(pal.wall, '#fff', 0.35)), stoneDk = T(mix(pal.wall, pal.m4, 0.55));
-    const mc = sc.rockCols(pal, 'm4', 1, terr), mc2 = Object.assign({}, mc, { lt: mix(pal.m4, pal.rockLt, 0.5) });
-    const rc = sc.roofCols(pal, 'sect'), oh = { stone, stoneLt, wall: T(pal.wall), frame: T(pal.wood), roofC: rc, plat: 1, lamps: 1, door: 1, orn: pal.gold, gold: T(pal.gold), eave: 7 };
-    const pc = sc.pineCols(pal, T);
-    // vách trái + tháp
-    const tl = sc.tower(30, 134, 100, 56, 'mesa', mc2, mulberry(91));
-    sc.pagoda(80, tl[50] + 1, 18, 5, { stone, wall: T(pal.wall), frame: T(pal.wood), roofC: rc, gold: T(pal.gold) }, pal, geo);
-    for (const dx of [4, 12, 92, 96]) sc.pine(30 + dx, tl[dx] + 1, 14 + Math.floor(r() * 8), (dx < 50 ? -1 : 1) * 0.3, pc, 0.95, r);
-    // vách phải + đại điện
-    const tr = sc.tower(284, 136, 200, 70, 'mesa', mc2, mulberry(92)), top = tr[40];
-    for (let x = 292; x < 478; x += 6) R(x, top + 6 + (x % 12 === 0 ? 1 : 0), 1, 40 + (x % 5) * 3, mix(mc.base, mc.dk2, 0.5));
-    let gy = 999; for (let k = 20; k < 170; k++) gy = Math.min(gy, tr[k]); gy += 1;
-    R(300, gy - 2, 168, 3, stone); R(300, gy - 2, 168, 1, stoneLt);
-    const h1 = hall(372, gy, 84, 14, 9, Object.assign({}, oh, { eave: 8 }), pal, geo);
-    const h2 = hall(372, h1.top + 7, 46, 9, 8, Object.assign({}, oh, { plat: 0, lamps: 0, door: 0, eave: 6 }), pal, geo);
-    R(372, h2.top - 8, 1, 8, T(pal.gold)); disc(372, h2.top - 9, 2, T(pal.gold));
-    hall(446, gy, 22, 10, 7, Object.assign({}, oh, { plat: 0, lamps: 0, eave: 5 }), pal, geo);
-    rail(302, gy - 1, 330, gy - 1, 5, stone, stoneLt, 9); rail(414, gy - 1, 440, gy - 1, 5, stone, stoneLt, 9);
-    for (const k of [0, 1]) { const bx = 322 + k * 100; R(bx, gy - 30, 1, 28, T(pal.woodDk)); R(bx + 1, gy - 30, 8, 12, T(pal.wood)); glyphs(bx + 2, gy - 28, 1, T(pal.gold)); }
-    sc.pine(292, tr[8] + 1, 22, -0.28, pc, 1.2, r); sc.pine(474, tr[184] + 1, 18, 0.3, pc, 1.1, r); sc.pine(332, gy - 1, 14, -0.1, pc, 0.9, r);
-    // dốc đá + bậc đá dài lên núi
-    const sx0 = 190, sx1 = 292, sy0 = GY - 2, sy1 = gy + 1, sf = x => sy0 - (x - sx0) * (sy0 - sy1) / (sx1 - sx0);
-    for (let x = sx0; x < sx1; x++) { const yy = Math.round(sf(Math.floor((x - sx0) / 6) * 6 + sx0)); for (let y = yy; y < 134; y += 4) { const n = hash(x * 0.41 + y * 0.13); R(x, y, 1, Math.min(4, 134 - y), n < 0.2 ? mc.dk2 : n > 0.85 ? mc.lt : (x - sx0) < 14 ? mc.base : mc.dk); } }
-    for (let x = sx0; x < sx1; x += 6) { const yy = Math.round(sf(x)); R(x, yy, 6, 2, stoneLt); R(x, yy + 2, 6, 2, stoneDk); R(x, yy + 2, 1, 2, stone); }
-    rail(sx0, sy0 - 4, sx1, sy1 - 4, 5, stone, stoneLt, 12);
-    // sơn môn
-    const gx = 238, py = x => Math.round(sf(Math.floor((x - sx0) / 6) * 6 + sx0));
-    [gx - 12, gx + 6].forEach(x => { R(x, py(x) - 30, 5, 34, T(mix(pal.wall, '#fff', 0.2))); R(x, py(x) - 30, 1, 34, stoneLt); R(x + 4, py(x) - 30, 1, 34, stoneDk); R(x - 1, py(x) - 1, 7, 2, stoneDk); R(x - 1, py(x) - 33, 7, 3, stone); });
-    R(gx - 15, py(gx) - 40, 29, 4, T(pal.wood)); R(gx - 15, py(gx) - 44, 29, 1, T(pal.gold));
-    roof(gx - 1, py(gx) - 52, 19, 7, rc, T(pal.gold));
-    R(gx - 6, py(gx) - 31, 11, 8, T(pal.woodDk)); R(gx - 5, py(gx) - 30, 9, 6, T(pal.ink)); glyphs(gx - 4, py(gx) - 29, 2, T(pal.gold));
-    lantern(gx - 16, py(gx) - 36, pal, geo); lantern(gx + 10, py(gx) - 36, pal, geo);
-    [140, 170].forEach(x => { R(x, GY - 14, 3, 14, stone); R(x - 2, GY - 18, 7, 4, stone); R(x - 1, GY - 17, 5, 2, T(pal.gold)); R(x - 3, GY - 20, 9, 2, stoneLt); R(x - 1, GY - 22, 5, 2, stone); geo.lamps.push({ x: x + 1.5, y: GY - 16 }); });
-    const bal = (x0, x1) => { R(x0, GY - 8, x1 - x0, 2, stoneLt); R(x0, GY - 6, x1 - x0, 1, stoneDk); for (let x = x0; x < x1; x += 12) { R(x, GY - 10, 3, 11, stone); R(x - 1, GY - 11, 5, 2, stoneLt); } };
-    bal(0, 120);
-  }
-
   function ruinLayout(pal, T, geo, r) {
     const ink = pal.ink, edge = mix(pal.lamp, pal.ink, 0.55), bk = mix(pal.m4, ink, 0.55), bl = mix(pal.m3, ink, 0.35), rc = sc.roofCols(pal, 'ruin');
     let cx = 112, y = GY;
@@ -186,17 +151,21 @@
     [[246, 22], [330, 30]].forEach(([x, h]) => { R(x, GY - h, 2, h, bk); disc(x + 1, GY - h - 3, 3, pal.wall); R(x - 1, GY - h - 3, 1, 1, ink); R(x + 2, GY - h - 3, 2, 1, ink); geo.lamps.push({ x: x + 1, y: GY - h - 3 }); });
   }
 
-  // dựng lớp arch (kiến trúc + mặt đất). s.vis: phố công trình (vẽ động ở scene.js), nên chỉ dựng nền.
+  // module bố cục nền đăng ký ở đây (place.js, sect.js thêm các module khác); module trả về hàm thì hàm đó chạy sau khi vẽ mặt đất
+  sc.places = sc.places || {};
+  sc.places.town = townLayout; sc.places.ruin = ruinLayout;
+  sc.groundOf = drawGround;
+
+  // dựng lớp arch (bố cục nền theo cls + mặt đất). Phố công trình bấm được vẽ động ở scene.js, đứng phía trước lớp này.
   sc.paintArch = (pal, T, terr, s, geo, mode) => {
     sc.use(B.arch.begin(mode));
-    geo.lamps = []; geo.smokes = []; geo.flags = [];
-    const cls = s.cls, r = mulberry(terr.seed + 900), street = s.vis && s.vis.length && cls !== 'road' && cls !== 'void';
-    if (!s.c.dungeon && cls !== 'road' && cls !== 'void' && !street) {
-      if (cls === 'sect') sectLayout(pal, T, geo, r, terr);
-      else if (cls === 'ruin') ruinLayout(pal, T, geo, r);
-      else if (cls === 'town') townLayout(pal, T, geo, r, terr);
-      else if (sc.legacy) sc.legacy.struct(cls, pal, geo);
+    geo.lamps = []; geo.smokes = []; geo.flags = []; geo.flames = []; geo.rods = [];
+    const cls = s.cls, r = mulberry(terr.seed + 900), post = [], style = sc.data.SECT_STYLE[s.sect];
+    if (!s.c.dungeon && cls !== 'road' && cls !== 'void') {
+      (sc.data.CLS_LAYOUT[cls] || []).forEach(name => { const f = sc.places[name]; if (!f) return; const p = f(pal, T, geo, r, terr, s, style); if (typeof p === 'function') post.push(p); });
+      if (!(sc.data.CLS_LAYOUT[cls] || []).length && sc.legacy) sc.legacy.struct(cls, pal, geo);
     }
     drawGround(pal, T, terr, cls, r);
+    post.forEach(f => f());
   };
 })();

@@ -54,5 +54,26 @@
   const BYN = {}; Object.keys(TERRAIN).forEach(k => { BYN[TERRAIN[k].n] = TERRAIN[k]; });
   const terrOf = t => !t ? TERRAIN.trung_chau : (t.id && TERRAIN[t.id]) || BYN[t.n] || TERRAIN.trung_chau;
 
-  sc.data = { PHASES, TERRAIN, terrOf };
+  // ---------- kiểu riêng của chín tông (id tông = id địa điểm; xem js/data/sects.js) ----------
+  // land: công trình đặc trưng (js/ui/scene/sect.js); accent: lớp nhấn nền động (fx.accent); roof: màu mái (arch.roofCols); tint: pha màu đá, trời, mây vào bảng màu.
+  const SECT_STYLE = {
+    ts_kim_phong: { land: 'dai_kiem', accent: 'gio', roof: 'sect', tint: { rock: '#9aa8c0', rockK: 0.15 } },
+    nl_bach_thao: { land: 'dan_dinh', accent: 'suong_xanh', roof: 'warm', tint: { sky: '#7ad8a0', skyK: 0.12, cloud: '#b8e8c8', cloudK: 0.2 } },
+    vt_am_hon: { land: 'thap_xuong', accent: 'hon_quang', roof: 'ruin', tint: { sky: '#5a2a8a', skyK: 0.35, rock: '#3a2a52', rockK: 0.4, cloud: '#6a4a8a', cloudK: 0.35 } },
+    dh_thuy_nguyet: { land: 'cung_bien', accent: 'sao_nuoc', roof: 'sect', tint: {} },
+    tc_thanh_van: { land: 'cong_may', accent: '', roof: 'sect', tint: {} },
+    bb_huyen_bang: { land: 'cung_bang', accent: 'cuc_quang', roof: 'ice', tint: {} },
+    hs_liet_hoa: { land: 'lo_luyen', accent: 'tro', roof: 'plain', tint: {} },
+    hm_nhat_luan: { land: 'dai_nhat', accent: 'nang', roof: 'gold', tint: {} },
+    ld_tu_loi: { land: 'dao_quan', accent: 'set', roof: 'sect', tint: {} }
+  };
+  // bố cục nền theo loại nơi (cls): danh sách module trong sc.places (js/ui/scene/place.js, arch.js)
+  const CLS_LAYOUT = {
+    town: ['town'], tribe: ['tribe'], city: ['city'], port: ['port'], guild: ['market'], market: ['market'], mine: ['mine'], vein: ['vein'],
+    secret: ['portal'], ruin: ['ruin'], gate: ['gate'], shrine: ['courtyard'], sect: ['sect']
+  };
+  // dáng kiến trúc nơi thờ theo id tín ngưỡng (js/ui/scene/shrine.js); chỉ vẽ kiến trúc, không dùng biểu tượng thiêng làm trang trí
+  const FAITH_FORM = { phat: 'chua', thien_chua: 'nha_tho', hoi: 'thanh_duong', an_do: 'den_thap', dao_giao: 'dao_quan', nho: 'van_mieu', to_tien: 'tu_duong', than_dao: 'den_than', dan_gian: 'mieu' };
+
+  sc.data = { PHASES, TERRAIN, terrOf, SECT_STYLE, CLS_LAYOUT, FAITH_FORM };
 })();

@@ -47,7 +47,7 @@
       key: [c.id, c.region, c.place, !!c.travel, !!c.cross, !!c.dungeon, phase, wid, c.realm, c.gender, age < 12, age / (life === Infinity ? 1e9 : life) > 0.72, !!TT.loss.active(c), people.map(p => p.c.id).join(), TT.fac.atFront(c.region), pend ? (pend.evId || pend.type) : '', monId, foe ? foe.id : '', node ? node.t : '', c.dungeon ? c.dungeon.kind : '', JSON.stringify(geoEq), vis.join(), page, pages].join('|'),
       geo: geoEq, bl, vis, page, pages,
       mon: monId, foe, node, dgkind: c.dungeon ? c.dungeon.kind : '',
-      c, reg, pl, cls, wid, phase, terr: (DATA.TERRAIN[c.region] || DATA.TERRAIN.trung_chau), kid: age < 12, elder: life !== Infinity && age / life > 0.72, wound: !!TT.loss.active(c), people, war: TT.fac.atFront(c.region),
+      sect: pl && pl.type === 'tong_mon' ? pl.id : '', c, reg, pl, cls, wid, phase, terr: (DATA.TERRAIN[c.region] || DATA.TERRAIN.trung_chau), kid: age < 12, elder: life !== Infinity && age / life > 0.72, wound: !!TT.loss.active(c), people, war: TT.fac.atFront(c.region),
       boom: pend && pend.type === 'breakthrough', thunder: pend && pend.evId === 'tri_phase', rise: pend && pend.type === 'ascend', dead: pend && pend.type === 'death', year
     };
   }
@@ -56,8 +56,8 @@
   const palCache = {};
   const stormy = s => s.terr.n === 'storm' || s.wid === 'giong_bao';
   function palette(s) {
-    const terr = DATA.terrOf(s.terr), ph = DATA.PHASES[s.phase] ? s.phase : 'day', dg = !!(s.c && s.c.dungeon);
-    const key = [terr.id, ph, s.war && !dg ? 1 : 0, stormy(s) ? 1 : 0, s.dead ? 1 : 0].join('|');
+    const terr0 = DATA.terrOf(s.terr), ph = DATA.PHASES[s.phase] ? s.phase : 'day', dg = !!(s.c && s.c.dungeon), st0 = DATA.SECT_STYLE[s.sect], terr = st0 && st0.tint ? Object.assign({}, terr0, st0.tint) : terr0;
+    const key = [terr.id, ph, s.sect || '', s.war && !dg ? 1 : 0, stormy(s) ? 1 : 0, s.dead ? 1 : 0].join('|');
     if (palCache[key]) return palCache[key];
     const base = DATA.PHASES[ph], p = Object.assign({}, base), amb = base.amb, plain = ph === 'cave' || ph === 'void';
     if (!plain) {
@@ -79,7 +79,7 @@
   // ---------- dựng lớp tĩnh khi khóa đổi ----------
   function keysOf(s) {
     const terr = effTerr(s), dg = !!s.c.dungeon;
-    const sky = dg ? 'dg|' + s.dgkind : [terr.id, s.phase, s.war ? 1 : 0, stormy(s) ? 1 : 0, s.dead ? 1 : 0].join('|');
+    const sky = dg ? 'dg|' + s.dgkind : [terr.id, s.phase, s.sect || '', s.war ? 1 : 0, stormy(s) ? 1 : 0, s.dead ? 1 : 0].join('|');
     return { sky, arch: sky + '|' + s.cls + '|' + (s.vis && s.vis.length ? 1 : 0), terr: terr.id + '|' + s.phase, cls: s.cls };
   }
   function build(s, force) {
@@ -113,11 +113,11 @@
   function drawStreet(c2, s, pal, t) {
     lay = streetLayout(s.vis);
     if (t - streetLast > 0.1 || streetDirty) { // nhà vẽ ở tọa độ cũ 240x72 (mỗi nhà 30), rồi phóng 2x: giữ hoạt ảnh của ui.bld ở khoảng 10 khung/s
-      streetLast = t; streetDirty = false; streetX.clearRect(0, 0, W / 2, H / 2);
-      lay.forEach((b, i) => ui.bld.draw(streetX, b.id, b.x / 2, (GY + 4) / 2, b.w / 2, { hover: hoverIdx === i, frame: Math.floor(t * 9) }));
-      streetX.globalCompositeOperation = 'source-atop'; streetX.globalAlpha = pal.amb * 0.55; streetX.fillStyle = mix(pal.m3, pal.sky1, 0.3); streetX.fillRect(0, 0, W / 2, H / 2); streetX.globalAlpha = 1; streetX.globalCompositeOperation = 'source-over';
+      streetLast = t; streetDirty = false; streetX.clearRect(0, 0, W, H);
+      const T = tintFn(pal); lay.forEach((b, i) => sc.street.draw(streetX, b.id, b.x, GY + 4, b.w, { hover: hoverIdx === i, frame: Math.floor(t * 9) }, pal, T));
+      streetX.globalCompositeOperation = 'source-atop'; streetX.globalAlpha = pal.amb * 0.55; streetX.fillStyle = mix(pal.m3, pal.sky1, 0.3); streetX.fillRect(0, 0, W, H); streetX.globalAlpha = 1; streetX.globalCompositeOperation = 'source-over';
     }
-    c2.drawImage(streetCv, 0, 0, W, H);
+    c2.drawImage(streetCv, 0, 0);
   }
   function setPage(p) { pageNow = Math.max(0, p); st = null; }
   // nhãn tên công trình là chữ HTML nằm trên canvas (rõ nét), kèm nút chuyển phố
@@ -163,15 +163,16 @@
       if (terr.near && !trav) B.near.draw(c2, -PAD + Math.round(clock.sway * 0.4), 0);
       strip(B.front, dr * 6.5 + 300 + cam, GY - 40, 0.92);
       B.arch.draw(c2, 0, 0);
-      if (s.vis && s.vis.length && ui.bld && !trav) drawStreet(c2, s, pal, t);
-      sc.fx.drawLamps(c2, pal, t, geo); sc.fx.drawFlags(c2, pal, t, geo);
       strip(B.fog, dr * 9 + cam * 1.2, GY - 22, 0.5);
+      if (s.vis && s.vis.length && ui.bld && !trav) drawStreet(c2, s, pal, t);
+      sc.fx.drawLamps(c2, pal, t, geo); sc.fx.drawFlags(c2, pal, t, geo); sc.fx.drawFlames(c2, pal, t, geo);
       sc.fx.drawFireflies(c2, pal, t, terr);
+      { const sty = DATA.SECT_STYLE[s.sect]; if (sty) sc.fx.accent(c2, sty.accent, pal, t, geo); }
       if (s.cls === 'road') sc.drawRoadside(c2, pal, T, terr, cam);
     }
     sc.actor.draw(c2, s, pal, t);
     if (s.mon && ui.sprites) { sc.use(c2); const def = D.monsterById[s.mon], boss = def && def.boss; ui.sprites.monster(sc.R, s.mon, boss ? 356 : 340, sc.actor.FY, Math.floor(t * 9), boss ? 6 : 4); }
-    if (!dg) { B.over.draw(c2, 0, 0); sc.fx.draw(c2, pal, t, terr); strip(B.fog, -dr * 7 + 500 - cam * 1.5, GY - 8, 0.28); sc.fx.weather(c2, s, pal, t); }
+    if (!dg) { B.over.draw(c2, 0, 0); sc.fx.draw(c2, pal, t, terr); strip(B.fog, -dr * 7 + 500 - cam * 1.5, GY - 8, 0.16); sc.fx.weather(c2, s, pal, t); }
     sc.events.over(c2, s, pal, t);
   }
 
@@ -209,7 +210,7 @@
   function init() {
     cv = document.getElementById('scene'); cap = document.getElementById('scene-cap'); if (!cv) return;
     cv.width = W; cv.height = H; ctx = cv.getContext('2d'); ctx.imageSmoothingEnabled = false;
-    streetCv = sc.mk(W / 2, H / 2); streetX = streetCv.getContext('2d'); streetX.imageSmoothingEnabled = false;
+    streetCv = sc.mk(W, H); streetX = streetCv.getContext('2d'); streetX.imageSmoothingEnabled = false;
     // sân khấu bọc canvas để đặt nhãn công trình lên trên, bắt chuột rê và bấm vào công trình
     stage = document.createElement('div'); stage.className = 'sc-stage'; cv.parentNode.insertBefore(stage, cv); stage.appendChild(cv);
     ov = document.createElement('div'); ov.className = 'sc-ov'; stage.appendChild(ov);
@@ -225,7 +226,7 @@
   let pv = null, inPreview = false; const EMPTY = () => ({ sky: '', arch: '', terr: '', cls: '' });
   function preview(s, frames, target) {
     const keepCv = cv, keepCtx = ctx, keepSt = st;
-    if (!streetCv) { streetCv = sc.mk(W / 2, H / 2); streetX = streetCv.getContext('2d'); streetX.imageSmoothingEnabled = false; }
+    if (!streetCv) { streetCv = sc.mk(W, H); streetX = streetCv.getContext('2d'); streetX.imageSmoothingEnabled = false; }
     if (target) { cv = target; ctx = target.getContext('2d'); ctx.imageSmoothingEnabled = false; }
     inPreview = true; st = s;
     if (!pv || pv.s !== s) { built = EMPTY(); palTo = null; palCur = null; streetDirty = true; build(s, true); palCur = palTo; sc.fade.v = 1; pv = { s, built, palTo }; }
