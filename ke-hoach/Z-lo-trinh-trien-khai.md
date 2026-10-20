@@ -279,7 +279,17 @@
   - *life-sim 101-103 (100 năm, Tự động, đạo tu luyện)*: ký ức 4, 4, 0 (cặp 2, 3, 0), **không có kết nghĩa** (tu luyện ít bí cảnh và ít bạn đồng hành; ký ức chủ yếu từ thế sự và nhiệm vụ). Mẫu rộng hơn (hạt 104 đến 109, 2 đạo, 12 đời): ký ức 0 đến 23, kết nghĩa 3/12 đời (đều ở đạo tu luyện), ví dụ 106: kết nghĩa 75 tuổi, cứu hộ 81 tuổi, tặng vàng 92 đến 97, ký ức cuối và nhật ký nhắc lại lúc mất ở 102.
   - *Chưa làm / lưu ý*: ký ức chỉ ghi chung một bản cho cả hai (NPC với NPC không có d); vòng quay yếu tố Tin của "Lợi và nghĩa" thay bằng khóa mềm Đạo đức và xác suất theo Tin (đúng "hoặc" trong yêu cầu); thế sự chủ yếu ghi cho người ruột thịt và người ở cùng nơi nên có thể "cùng chống chọi" với cha mẹ; ký ức tuổi thơ có tuổi ước lượng theo hồi (5, 9, 13). Người chơi nên thử: bấm "Rủ đi cùng" rồi vào bí cảnh; chơi đạo giao du/mạo hiểm xem ký ức và kết nghĩa có đủ đều không (đang khoảng 1/4 đời), nhịp hộp "Huynh đệ gặp nạn", "Lợi và nghĩa", "Tái ngộ".
 - [ ] **9C** R3 con cái lõi (khoảng 12 chặng, 5 quyết định mỗi con) + thừa kế + **màn kết đời / bia mộ** (Q 21.1#1).
-- **Cổng chơi thử 7:** một đời đầy đủ từ sinh đến chết/kế thừa.
+- [ ] **9K** (Sonnet) **Kết nghĩa qua trải nghiệm chung** (chốt 2026-10-20; thay chỗ 9C trong ngân sách, cần 9B):
+  - *Vấn đề*: hiện chỉ cần thiện cảm ≥ 60 là `rel_ket_nghia` bật hộp "hợp nhau thì kết nghĩa", không có gắn bó thật.
+  - *Ký ức chung*: cặp người chơi–NPC có `d.mem` (tối đa 8 mục `{ m, loai, chu }`) và điểm **Nghĩa** (dùng thanh Tin và Kính của 9B). Ký ức sinh ra khi **hai người cùng trải qua sự kiện đã có sẵn**, ưu tiên móc vào hệ cũ, ít tạo sự kiện mới: cùng vào bí cảnh (`dungeon.enter`, `opp_bi_canh`), cùng đánh quái hoặc kẻ thù (`combat`, `rel_ke_thu`), giúp nhau lúc khó (`rel_nho_giup`, bị thương, thiếu tiền), cùng làm nhiệm vụ (`quests` hoàn thành cùng nơi), cùng gặp thiên tai, chiến sự, dịch ở vùng (sự kiện thế giới sẵn có), bạn thuở nhỏ `{ban}` của tuổi thơ (ký ức đầu tiên), cùng nghe giảng, luận đạo, đấu giá (`opp_cao_nhan`, `opp_luan_dao`, `opp_dau_gia`). Hoạn nạn (suýt chết, cứu mạng) nặng hơn chuyện vui.
+  - *Đồng hành*: khi người chơi đi bí cảnh, đánh nhau, làm nhiệm vụ mà có bạn thân (thiện cảm ≥ 40) cùng nơi, bạn đó có xác suất đi cùng (hoặc người chơi rủ bằng nút ưu tiên thấp theo R 1.1 mục 9): giúp nhẹ (+5 đến +10% thắng, chia chiến lợi phẩm), có thể bị thương hoặc chết thay; cả hai nhận ký ức.
+  - *Kết nghĩa*: hộp `rel_ket_nghia` chỉ bật khi có **ít nhất 3 ký ức chung, trong đó ít nhất 1 hoạn nạn** (thay ngưỡng thiện cảm 60); lời ngỏ và lời thề **nhắc lại ký ức** ("Nhớ đêm ở {nơi}, ngươi kéo ta ra khỏi..."); viết lại hộp này.
+  - *Sau kết nghĩa* (dùng sự kiện có sẵn, thêm ít): huynh đệ tự đến giúp khi `rel_ke_thu`; bị liên lụy thù của nhau; tặng đồ khi người kia thiếu; tin dữ khi huynh đệ chết (đã có đạo tâm −3, thêm ký ức cuối và dòng nhật ký). Chỉ thêm **3 sự kiện mới**: huynh đệ gặp nạn cầu cứu (đi hay không, có hậu quả trễ), thử thách tình nghĩa (lợi ích lớn đặt cạnh lời thề, vòng quay hoặc khóa theo Đạo đức), tái ngộ sau nhiều năm xa cách.
+  - *Hiển thị*: Hồ sơ cặp (tab Quan hệ) có mục "Kỷ niệm" liệt kê ký ức chung; life-sim in ký ức của các cặp thân.
+  - *Công tắc* `D.BOND.mem`; tắt thì `--check` trùng khít. Chỉ cặp của người chơi.
+- [ ] **(Hoãn theo ý bạn, 2026-10-20) 9C, 9C-d**: con cái, thừa kế, màn kết đời; prompt giữ ở `PROMPT-phien-moi.md` để làm sau.
+- **Cổng chơi thử 7 (sửa 2026-10-20):** sau 9K: một đời có xuất thân, tuổi thơ, xương sống A, đạo lữ, kết nghĩa (chưa có con cái và màn kết đời).
+
 - **Hoãn sang Đợt 11 trở đi (chốt 2026-10-19, không làm nghèo lõi):** xương sống B đến E (Q4); xuất thân 9 đến 17; cấy/chuyển tiên thiên (đi cùng T13, T14); NPC bốn trục; R4 dây duyên và giấc mơ đẩy duyên (tạm dùng nhân vật định mệnh đơn giản của Q2); chặng ghép và loại trừ (Q 13.2); bốn tuyến mẫu còn lại; Q9 AI.
 
 ### Đợt 10. Người chơi vào cuộc: F5 và S9 (khoảng 3 lượt)
@@ -361,8 +371,8 @@
 | 3 | 9A | Sonnet | hệ xuất thân, nối A4 đến A6 | 3 |
 | 4 | 9B | Sonnet | R1 lõi (gộp 8D) + cơ chế đạo lữ | 3 |
 | 5 | 9B-d | Haiku | khoảng 12 chặng đạo lữ | 1 |
-| 6 | 9C | Sonnet | con cái, thừa kế, màn kết đời | 3 |
-| 7 | 9C-d | Haiku | khoảng 12 chặng con cái, chữ bia mộ | 1 |
+| 6 | 9K | Sonnet | **kết nghĩa qua trải nghiệm chung** (thay chỗ 9C, chốt 2026-10-20; xem Đợt 9) | 3 |
+| 7 | (hoãn) 9C, 9C-d | | con cái, thừa kế, màn kết đời: **để sau theo ý bạn** (chưa muốn làm phần kết) | (3 + 1) |
 | 8 | N1 đến N3 | Haiku | 3 gói nội dung tuyến (mỗi gói 3 đến 4 tuyến thân phận hoặc thế giới, viết đúng định dạng dữ liệu tuyến của 8B, chạy `story-lint`) | 4 |
 | 9 | 8C | Sonnet | tiên thiên v2 bản gọn (tùy, nếu còn tiền) | 2,5 |
 | 10 | Hoàn thiện | Sonnet | cân bằng nhịp, sửa lỗi chơi thử, kiểm thử đầy đủ | 2,5 |
@@ -370,7 +380,7 @@
 
 **Cắt hoặc để vô thời hạn:** Đợt 10 (F5, S9); xương sống B đến E; R4 dây duyên; Q9 AI; S10, S11; phần lớn mục 24 (chỉ lấy vài tuyến vào gói N); tuyến V hình ảnh (assets).
 **Cách tiết kiệm (mọi phiên):** mỗi chặng một phiên mới (không kéo dài phiên); prompt ghi sẵn file và dòng cần đọc; chạy kiểm thử lọc theo từ khóa, chạy đầy đủ một lần cuối; Playwright chỉ chụp 1 đến 2 ảnh cần thiết; không dùng Opus; phiên thiết kế kết thúc sau khi viết xong prompt.
-**Chơi thử:** đọc `life-sim` sau mỗi chặng Sonnet; chơi thật ở sau 9C (Cổng 7).
+**Chơi thử:** đọc `life-sim` sau mỗi chặng Sonnet; chơi thật sau 9K (Cổng 7, chưa có con cái và màn kết đời).
 
 ## 8. Ước lượng tổng và thứ tự ưu tiên khi thiếu thời gian
 Đơn vị "lượt" là một đợt làm việc liên tục có kiểm thử.
@@ -440,3 +450,4 @@
 - **2026-10-20** **8A3** (Đợt 8) xong: tuổi thơ ba hồi cho người chơi (`TT.childhood`, hộp sự kiện và Tổng kết 12 tuổi, auto cho Tự động/kiểm thử). Tắt `D.CHILDHOOD.on` trùng khít 40/40; bật cũng trùng khít (chiến tranh 48,0, diệt vong 7,2, đổi chủ 9,5). 127 bài đạt. Còn: 8B.
 - **2026-10-20** **8B** (Đợt 8) xong: khung truyện `TT.story` và vòng quay `TT.wheel`, tuyến A1 đến A3 (6 chặng, 1 vòng quay, 4 hậu quả trễ), `tools/story-lint.js`, `tools/life-sim.js`. Tắt `D.STORY.on` trùng khít 40/40; bật cũng trùng khít; nhịp quyết định 5,83 hộp/phút sau khi hạ sự kiện lẻ 15% (`evMul`). 137 bài đạt. Còn: 8C, 8D.
 - 2026-10-20: **phiên thiết kế Đợt 8 (kết)**: đọc life-sim sau 8B, chốt 8B2 (hạ 60 đến 70% nội dung xuống Luyện Khí trung kỳ, mốc theo cảnh giới hoặc tuổi, chống trôi tính cách, lọc nhật ký); kế hoạch theo ngân sách (mục 7b); chốt 8 xuất thân, mặc định R mục 12, gói N1, N2; viết đủ prompt 8B2, 9A-d, 9A, 9B, 9B-d, 9C, 9C-d, N1/N2.
+- 2026-10-20: theo ý bạn, **hoãn 9C, 9C-d** (con cái, kết đời); thay bằng **9K kết nghĩa qua trải nghiệm chung** (móc vào sự kiện có sẵn, chỉ thêm 3 sự kiện); Cổng 7 dời sau 9K; prompt N1/N2 bỏ phụ thuộc vào `kid`.

@@ -271,7 +271,7 @@ Cuối: ghi "8B2 đã làm" vào Z (kèm số dòng nhật ký trước/sau, tí
 
 # Đợt 9 và gói nội dung (theo ngân sách, Z mục 7b; chốt 2026-10-20)
 
-Thứ tự: 8B2 → **9A-d (Haiku)** → **9A (Sonnet)** → **9B (Sonnet)** → **9B-d (Haiku)** → **9C (Sonnet)** → **9C-d (Haiku)** → Cổng chơi thử 7 → **N1, N2 (Haiku)** → (8C nếu còn tiền) → hoàn thiện. Mọi phiên: nhánh `add-game-project` (tạo lại từ origin/main nếu PR trước đã merge, nếu chưa thì checkout origin/add-game-project); TIẾT KIỆM: chỉ đọc đúng phần ghi, kiểm thử lọc theo từ khóa, chạy đầy đủ một lần cuối, Playwright tối đa 1 ảnh; trả lời tiếng Việt, ngắn gọn, xưng "mình", gọi tôi là "bạn"; đọc CLAUDE.md trước; cuối phiên ghi "… đã làm" vào Z (mục Đợt 9 hoặc 7b), push theo CLAUDE.md, báo ngắn gọn.
+Thứ tự (sửa 2026-10-20): 8B2 → **9A-d (Haiku)** → **9A (Sonnet)** → **9B (Sonnet)** → **9B-d (Haiku)** → **9K (Sonnet)** → Cổng chơi thử 7 → **N1, N2 (Haiku)** → (8C nếu còn tiền) → hoàn thiện. **9C, 9C-d hoãn** (bạn chưa muốn làm phần kết), prompt vẫn giữ bên dưới để dùng sau. Mọi phiên: nhánh `add-game-project` (tạo lại từ origin/main nếu PR trước đã merge, nếu chưa thì checkout origin/add-game-project); TIẾT KIỆM: chỉ đọc đúng phần ghi, kiểm thử lọc theo từ khóa, chạy đầy đủ một lần cuối, Playwright tối đa 1 ảnh; trả lời tiếng Việt, ngắn gọn, xưng "mình", gọi tôi là "bạn"; đọc CLAUDE.md trước; cuối phiên ghi "… đã làm" vào Z (mục Đợt 9 hoặc 7b), push theo CLAUDE.md, báo ngắn gọn.
 
 ## 9A-d. Haiku: dữ liệu 8 xuất thân, tuổi thơ theo xuất thân, chữ mốc A4 đến A6
 
@@ -324,7 +324,22 @@ NHIỆM VỤ: chỉ DỮ LIỆU js/data/stories/dao_lu.js: 3 đến 4 tuyến, t
 Kiểm: story-lint sạch; run-tests lọc "đạo lữ|9B|Truyện"; chạy life-sim 101-103 (in đời có chặng đạo lữ hay không). Ghi "9B-d đã làm". Push.
 ```
 
-## 9C. Sonnet: con cái, thừa kế, màn kết đời
+## 9K. Sonnet: kết nghĩa qua trải nghiệm chung (cần 9B; thay chỗ 9C)
+
+```
+Repo: Phongxuan123/tu-tien. Gắn repo, làm theo dòng "Mọi phiên" ở đầu mục Đợt 9 trong ke-hoach/PROMPT-phien-moi.md. Điều kiện: 9B đã có trên nhánh (TT.bond).
+Đọc: Z mục "Đợt 9" phần "9K" (bản chốt) và "9B đã làm"; R mục 4.1, 4.2, 1.1 mục 9 (nút hành động ưu tiên thấp, cùng địa điểm); js/data/relevents.js (rel_ket_nghia, rel_ke_thu, rel_nho_giup, opp_*); js/systems/social.js 130-160 (chỗ bật rel_ket_nghia); js/systems/dungeon.js (enter và kết thúc), js/systems/combat.js (chỗ đánh), js/systems/quests.js (hoàn thành); js/systems/world.js 55-65 (tin huynh đệ chết); js/ui/people.js (hồ sơ cặp).
+
+NHIỆM VỤ (đúng "9K"; chỉ cặp của người chơi; ưu tiên MÓC VÀO SỰ KIỆN SẴN CÓ, chỉ thêm 3 sự kiện mới):
+1. TT.bond.remember(c, o, loai, chu, nang) ghi d.mem (tối đa 8, giữ hoạn nạn) và cộng Tin/Kính; gọi ở các điểm móc liệt kê trong Z (bí cảnh, đánh nhau, nhờ giúp, nhiệm vụ, sự kiện thế giới ở vùng, bạn thuở nhỏ, nghe giảng/luận đạo/đấu giá). Chữ ký ức ngắn, có tên nơi.
+2. Đồng hành: TT.bond.ally(c) chọn bạn thân cùng nơi (thiện cảm ≥ 40) đi cùng theo xác suất (cao hơn nếu người chơi đã bấm "Rủ đi cùng", lệnh ưu tiên thấp); giúp +5 đến +10% thắng, chia chiến lợi phẩm, có thể bị thương/chết thay; ghi ký ức cho cả hai. Hệ số trong D.BOND.
+3. Viết lại rel_ket_nghia: chỉ bật khi ≥ 3 ký ức chung và ≥ 1 hoạn nạn (thay ngưỡng thiện cảm 60); chữ nhắc lại 1 đến 2 ký ức; giữ nhánh từ chối (nk).
+4. Sau kết nghĩa: huynh đệ tự đến giúp khi rel_ke_thu; liên lụy thù; tặng đồ khi thiếu; khi chết thêm ký ức cuối và nhật ký. Ba sự kiện mới (tự viết chữ, ngắn): "Huynh đệ gặp nạn" (đi cứu hay không, hậu quả trễ), "Lợi và nghĩa" (lợi lớn đặt cạnh lời thề; khóa mềm theo Đạo đức hoặc vòng quay yếu tố Tin), "Tái ngộ" (sau ≥ 10 năm không gặp).
+5. Giao diện: mục "Kỷ niệm" trong hồ sơ cặp; life-sim in ký ức các cặp thân.
+Công tắc D.BOND.mem; tắt thì baseline --check trùng khít. Kiểm thử "Kết nghĩa (9K)": ký ức sinh ở từng điểm móc (ít nhất 4 loại), trần 8 và giữ hoạn nạn, đồng hành giúp đúng biên, kết nghĩa không bật khi thiếu ký ức và bật khi đủ, chữ nhắc ký ức, ba sự kiện mới, lưu/tải, công tắc. life-sim 101-103 (100 năm): đếm ký ức, có kết nghĩa hay không. Ghi "9K đã làm"; push. Sau phiên này là Cổng chơi thử 7: báo tôi chơi thử.
+```
+
+## 9C. Sonnet: con cái, thừa kế, màn kết đời (HOÃN, chưa chạy)
 
 ```
 Repo: Phongxuan123/tu-tien. Gắn repo, làm theo dòng "Mọi phiên" ở đầu mục Đợt 9 trong ke-hoach/PROMPT-phien-moi.md. Điều kiện: 9B đã có trên nhánh.
@@ -338,13 +353,13 @@ NHIỆM VỤ (con của người chơi):
 Công tắc D.KID.on; tắt thì baseline --check trùng khít. Kiểm thử "Con cái và kết đời (9C)": xác suất theo cảnh giới, tối đa 2, tính cách con, 5 điểm quyết định, di chúc và kế thừa mang ơn oán, màn kết đời có đủ mục và lưu Sổ đời, lưu/tải, công tắc. Ghi "9C đã làm" (kèm khóa fx/điều kiện mới cho 9C-d). Push.
 ```
 
-## 9C-d. Haiku: khoảng 12 chặng con cái + chữ bia mộ
+## 9C-d. Haiku: khoảng 12 chặng con cái + chữ bia mộ (HOÃN, chưa chạy)
 
 ```
 Repo: Phongxuan123/tu-tien. Gắn repo, làm theo dòng "Mọi phiên" ở đầu mục Đợt 9 trong ke-hoach/PROMPT-phien-moi.md. Điều kiện: 9C đã có trên nhánh.
 Đọc: Z "9C đã làm"; R mục 6.2 đến 6.6; js/data/story.js (hướng dẫn); js/data/stories/con_mau.js, dao_lu.js (mẫu).
 NHIỆM VỤ: chỉ DỮ LIỆU: js/data/stories/con_cai.js khoảng 12 chặng phủ 5 điểm quyết định (mỗi điểm 2 đến 3 lựa chọn, có 1 vòng quay ở "nổi loạn" hoặc "thừa kế", yếu tố rel cha mẹ-con), thai kỳ (1 chặng, rủi ro kể gián tiếp), con gặp nạn hoặc thành danh (hậu quả trễ của giáo dưỡng, ít nhất 2). Bổ sung D.EPITAPH (khoảng 40 mảnh câu theo kết cục, tính cách cuối, chuyện lớn) để ghép dòng bia mộ.
-Kiểm: story-lint sạch; run-tests lọc "con|9C"; life-sim 101-103 với 120 năm, ghi đời nào có con, kết đời ra sao. Ghi "9C-d đã làm". Push. Sau phiên này là Cổng chơi thử 7: báo tôi chơi thử một đời đầy đủ.
+Kiểm: story-lint sạch; run-tests lọc "con|9C"; life-sim 101-103 với 120 năm, ghi đời nào có con, kết đời ra sao. Ghi "9C-d đã làm". Push.
 ```
 
 ## N1, N2. Haiku: gói nội dung tuyến (sau Cổng 7)
@@ -352,7 +367,7 @@ Kiểm: story-lint sạch; run-tests lọc "con|9C"; life-sim 101-103 với 120 
 ```
 Repo: Phongxuan123/tu-tien. Gắn repo, làm theo dòng "Mọi phiên" ở đầu mục Đợt 9 trong ke-hoach/PROMPT-phien-moi.md.
 Gói: N1 = T1 Tán tu, T2 Đệ tử tông, T5 Thương nhân, tuyến thế giới W1 (làng bị phá). N2 = T3 Đan sư, T9 Báo thù, chuỗi Nhẫn (chuyển từ sự kiện cũ c.ring, Q 14.3), tuyến thế giới W3. (Ghi gói đang làm ở dòng đầu khi dán prompt.)
-Đọc: Q mục 11.0 và đúng mục con của từng tuyến trong gói (grep tên tuyến), 12 (tuyến thế giới tương ứng), 7.5 (ví dụ vòng quay), 13.3 (dàn nhân vật); js/data/story.js (hướng dẫn, khóa fx và điều kiện, gồm bond và kid); mẫu bb_a.js, dao_lu.js.
-NHIỆM VỤ: chỉ DỮ LIỆU, mỗi tuyến một tệp js/data/stories/<id>.js, 4 đến 6 chặng, 1 vòng quay ở chặng cuối, ít nhất 2 hậu quả trễ, khóa mềm theo tính cách, điều kiện mở theo nghề/đạo/tông/vùng sẵn có (đọc tên trường trong js/data/jobs.js, paths.js, sects.js khi cần); 60 đến 70% chặng mở từ Luyện Khí trung kỳ trở xuống. Tuyến thế giới mở khi biến cố thế giới tương ứng xảy ra (đọc tên sự kiện/cú sốc trong js/data/eco.js hoặc natevents.js; nếu chưa có móc phù hợp thì mở theo điều kiện vùng + xác suất thấp và ghi chú để phiên hoàn thiện nối).
+Đọc: Q mục 11.0 và đúng mục con của từng tuyến trong gói (grep tên tuyến), 12 (tuyến thế giới tương ứng), 7.5 (ví dụ vòng quay), 13.3 (dàn nhân vật); js/data/story.js (hướng dẫn, khóa fx và điều kiện, gồm bond; KHÔNG dùng kid vì 9C hoãn); mẫu bb_a.js, dao_lu.js.
+NHIỆM VỤ: chỉ DỮ LIỆU, mỗi tuyến một tệp js/data/stories/<id>.js, 4 đến 6 chặng, 1 vòng quay ở chặng cuối, ít nhất 2 hậu quả trễ, khóa mềm theo tính cách, khi hợp thì cho bạn đồng hành/huynh đệ kết nghĩa tham gia (vai lấy người có ký ức chung, xem Z "9K"), điều kiện mở theo nghề/đạo/tông/vùng sẵn có (đọc tên trường trong js/data/jobs.js, paths.js, sects.js khi cần); 60 đến 70% chặng mở từ Luyện Khí trung kỳ trở xuống. Tuyến thế giới mở khi biến cố thế giới tương ứng xảy ra (đọc tên sự kiện/cú sốc trong js/data/eco.js hoặc natevents.js; nếu chưa có móc phù hợp thì mở theo điều kiện vùng + xác suất thấp và ghi chú để phiên hoàn thiện nối).
 Kiểm: story-lint sạch; run-tests lọc "Truyện"; life-sim 101-103 (đếm số hộp truyện mỗi đời, mục tiêu tăng rõ so với trước gói; nhịp dưới 6 hộp/phút). Ghi "N1 đã làm" (hoặc N2) vào Z mục 7b. Push.
 ```
