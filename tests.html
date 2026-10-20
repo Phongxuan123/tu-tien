@@ -3705,21 +3705,23 @@ test('Truyện và vòng quay (8B): gate (khóa mềm có lý do), gia (phí, th
 });
 
 test('Truyện và vòng quay (8B): khóa theo khoảng cách tính cách (3 điểm trái ý thì trái tính, 5 điểm thì không chọn được), lựa chọn mặc định không bị khóa', () => {
-  const p = storyWorld(107), T = TT.story, K = D.STORY; eq(K.traiAt, 3); eq(K.khoaAt, 5);
+  const p = storyWorld(107), T = TT.story, K = D.STORY; const L = K.traiAt, H = K.khoaAt; ok(L >= 2 && H > L && H <= 10, 'ngưỡng hợp lý: ' + L + '/' + H);
   const at = v => { p.nature = { tinh: 0, xuthe: 0, daoduc: v, tudung: 0 }; clearPending(); p.gold = 100; T.jump('bb_a3', 'c1'); return TT.world.pending.choices.find(x => x.key === 'tha'); }; // tha: ax daoduc +2 (gate min −6)
-  let c = at(-2); ok(!c.disabled && !c.trai, 'lệch 2: chọn được, chưa trái tính');
-  c = at(-3); ok(!c.disabled && c.trai, 'lệch 3: trái tính (mất đạo tâm) nhưng chọn được');
-  c = at(-4); ok(!c.disabled && c.trai, 'lệch 4: còn chọn được');
-  c = at(-5); ok(c.disabled && /Quá trái bản tính/.test(c.why) && /Đạo đức -5/.test(c.why), 'lệch 5: khóa, ghi lý do: ' + c.why);
+  let c = at(-(L - 1)); ok(!c.disabled && !c.trai, 'dưới ngưỡng trái: chọn được, chưa trái tính');
+  c = at(-L); ok(!c.disabled && c.trai, 'đủ ngưỡng trái: trái tính (mất đạo tâm) nhưng chọn được');
+  c = at(-(H - 1)); ok(!c.disabled && c.trai, 'sát ngưỡng khóa: còn chọn được');
+  c = at(-H); ok(c.disabled, 'đủ ngưỡng khóa: khóa (gate hoặc khoảng cách)');
+  p.nature = { tinh: 0, xuthe: 0, daoduc: -H, tudung: 0 }; clearPending(); T.jump('bb_a1', 'c1'); c = TT.world.pending.choices.find(x => x.key === 'theo_su'); // ax daoduc +1, không có gate
+  ok(c.disabled && /Quá trái bản tính/.test(c.why) && new RegExp('Đạo đức -' + H).test(c.why), 'khóa theo khoảng cách, ghi lý do: ' + c.why);
   c = at(8); ok(!c.disabled && !c.trai && c.hop, 'đúng hướng thì không khóa');
   eq(T.check(p, 'bb_a3', 'tha', 'c1').disabled, false);
   // lựa chọn mặc định (mac) không bao giờ bị khóa theo khoảng cách
   p.nature = { tinh: 10, xuthe: 0, daoduc: 0, tudung: 0 }; clearPending(); T.jump('bb_a3', 'c1'); const ne = TT.world.pending.choices.find(x => x.key === 'ne'); // ne: ax tinh +1, tudung −1; mac = ne
   p.nature = { tinh: -10, xuthe: 0, daoduc: 0, tudung: 10 }; clearPending(); T.jump('bb_a3', 'c1'); ok(!TT.world.pending.choices.find(x => x.key === 'ne').disabled, 'mac không khóa dù trái hết cỡ'); eq(D.STORY.arcById.bb_a3.chang.c1.mac, 'ne');
   // trục không nằm trong ax thì không tính
-  p.nature = { tinh: 0, xuthe: -10, daoduc: 4, tudung: 0 }; clearPending(); T.jump('bb_a3', 'c1'); ok(!TT.world.pending.choices.find(x => x.key === 'tha').disabled);
+  p.nature = { tinh: 0, xuthe: -10, daoduc: L - 1, tudung: 0 }; clearPending(); T.jump('bb_a3', 'c1'); ok(!TT.world.pending.choices.find(x => x.key === 'tha').disabled);
   // máy không chọn lựa chọn bị khóa
-  p.nature = { tinh: 0, xuthe: 0, daoduc: -5, tudung: 0 }; clearPending(); T.jump('bb_a3', 'c1'); const d = TT.world.pending; ok(!d.choices[d.def].disabled, 'mặc định không phải lựa chọn bị khóa');
+  p.nature = { tinh: 0, xuthe: 0, daoduc: -H, tudung: 0 }; clearPending(); T.jump('bb_a3', 'c1'); const d = TT.world.pending; ok(!d.choices[d.def].disabled, 'mặc định không phải lựa chọn bị khóa');
 });
 test('Truyện và vòng quay (8B): hậu quả trễ chín đúng khoảng, vai lấy NPC có sẵn trước khi dựng mới', () => {
   const p = storyWorld(95), T = TT.story, w = TT.world; clearPending();

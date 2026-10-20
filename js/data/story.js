@@ -16,7 +16,7 @@
     timeout: 25,                 // giây đếm ngược của hộp chặng ở chế độ Cân bằng
     fit: { hop: 1.1, trai: 0.9 },// độ hợp (TT.nature.affinity) từ hop trở lên là chấm "hợp tính", dưới trai là "trái tính"
     // Khoảng cách tính cách (điểm trục ngược chiều với hướng của lựa chọn, theo lc.ax): từ traiAt thì trái tính (mất đạo tâm), từ khoaAt thì khóa hẳn (không chọn được, hiện lý do).
-    traiAt: 3, khoaAt: 5,
+    traiAt: 4, khoaAt: 7,   // khóa hẳn chỉ ở đầu cực (±7 đến ±10, Q 6.5); 4 đến 6 là trái tính có phí
     trai: { daoTam: 1 },         // phí trái bản tính (Q 6.5): chọn lựa chọn trái tính thì mất bấy nhiêu đạo tâm
     loai: ['bb', 'tp', 'tg'],    // bb xương sống, tp tuyến thân phận, tg tuyến thế giới
     kinds: ['risk', 'safe', 'fight', 'flee', 'help', 'pay'],
