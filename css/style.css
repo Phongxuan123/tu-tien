@@ -132,7 +132,7 @@ details summary{cursor:pointer;color:var(--pink2);font-weight:bold}
 .panel.scene{position:sticky;top:calc(var(--hh) + 8px);z-index:6;padding:0;overflow:hidden;box-shadow:0 10px 24px rgba(0,0,0,.35)}
 .panel.scene.floating{position:fixed;z-index:35;margin:0;border-color:var(--pink);box-shadow:0 14px 40px rgba(0,0,0,.55)}
 .panel.scene.floating .fgrip,.floatcard.floating .fgrip{cursor:move}
-.scene canvas{display:block;width:100%;height:auto;aspect-ratio:240/72;image-rendering:pixelated;image-rendering:crisp-edges}
+.scene canvas{display:block;width:100%;height:auto;aspect-ratio:480/144;image-rendering:pixelated;image-rendering:crisp-edges}
 .scene-cap{position:absolute;left:8px;bottom:6px;font:11px/1.2 var(--mono);letter-spacing:.06em;text-transform:uppercase;color:#cfd6e4;background:rgba(8,10,20,.55);padding:3px 7px;border-radius:4px}
 .floatcard{position:fixed;z-index:36;right:26px;bottom:26px;width:250px;background:var(--panel);border:1px solid var(--pink);border-radius:12px;box-shadow:0 14px 40px rgba(0,0,0,.5);overflow:hidden}
 .floatcard .fgrip{border-radius:11px 11px 0 0}
@@ -217,7 +217,7 @@ body.has-modal{overflow:hidden}
 #decision .timer{height:5px;border-radius:3px;background:#1f2937;margin-top:14px;overflow:hidden}
 #decision .timer i{display:block;height:100%;background:var(--pink);width:100%}
 #decision .mfoot{display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end;margin-top:12px}
-#decision .mscene{display:block;width:100%;height:auto;aspect-ratio:240/72;image-rendering:pixelated;image-rendering:crisp-edges;border-bottom:1px solid #243040;background:#0b0f16}
+#decision .mscene{display:block;width:100%;height:auto;aspect-ratio:480/144;image-rendering:pixelated;image-rendering:crisp-edges;border-bottom:1px solid #243040;background:#0b0f16}
 @media(max-width:800px){#decision.modal{top:auto;bottom:0;left:0;transform:none;width:100%;max-height:92vh;border-radius:16px 16px 0 0}#decision .mtitle{font-size:23px}#decision .mtext{font-size:15px}}
 
 /* Nhật ký dạng dòng có cột tuổi và chi tiết nhỏ */
@@ -271,6 +271,7 @@ body.has-modal{overflow:hidden}
 .sc-ov .bl.h{color:#ffd870;background:#101826}
 .sc-ov .pg{position:absolute;top:34%;pointer-events:auto;cursor:pointer;background:#101826cc;color:#e8edf3;border:1px solid #3a4a62;border-radius:6px;padding:1px 7px;font-size:13px}
 .sc-ov .pg.l{left:3px}.sc-ov .pg.r{right:3px}.sc-ov .pg:hover{border-color:#e8497c}
+.sc-dbg{position:absolute;right:6px;top:6px;font:10px/1.3 var(--mono);background:#000b;color:#8f8;padding:2px 6px;border-radius:3px;pointer-events:none;white-space:pre;z-index:3}
 .sc-ov .pgtxt{position:absolute;right:6px;top:3px;font-size:10px;color:#cfd8e2;background:#101826a0;padding:0 5px;border-radius:4px}
 @media(max-width:800px){.sc-ov .bl{font-size:9.5px}}
 /* cửa sổ cửa hàng và dịch vụ */

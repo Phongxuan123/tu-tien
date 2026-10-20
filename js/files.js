@@ -10,9 +10,13 @@
     'js/systems/relations.js', 'js/systems/combat.js', 'js/systems/loss.js', 'js/systems/social.js', 'js/systems/sect.js', 'js/systems/factions.js', 'js/systems/population.js', 'js/systems/pacts.js', 'js/systems/diplo.js', 'js/systems/nation.js', 'js/systems/army.js', 'js/systems/totalwar.js', 'js/systems/court.js', 'js/systems/inter.js', 'js/systems/faith.js', 'js/systems/sectmod.js', 'js/systems/eco.js', 'js/systems/hoi.js', 'js/systems/appraise.js', 'js/systems/press.js', 'js/systems/family.js', 'js/systems/items.js', 'js/systems/tech.js', 'js/systems/craft.js', 'js/systems/dungeon.js', 'js/systems/fate.js', 'js/systems/auto.js', 'js/systems/report.js', 'js/systems/quests.js', 'js/systems/path.js', 'js/systems/resources.js', 'js/systems/jobs.js', 'js/systems/buildings.js', 'js/systems/rumors.js',
     'js/systems/ai.js', 'js/systems/decisions.js', 'js/systems/world.js', 'js/core/time.js', 'js/core/save.js'
   ];
+  // cảnh đầu cột: các module trong js/ui/scene/ rồi js/ui/scene.js (ghép lớp, giữ API TT.ui.scene)
+  var scene = ['js/ui/scene/core.js', 'js/ui/scene/data.js', 'js/ui/scene/sky.js', 'js/ui/scene/land.js', 'js/ui/scene/cloud.js', 'js/ui/scene/arch.js', 'js/ui/scene/fg.js', 'js/ui/scene/fx.js', 'js/ui/scene/actor.js', 'js/ui/scene/events.js', 'js/ui/scene/legacy.js', 'js/ui/scene.js'];
   var ui = [
-    'js/ui/dom.js', 'js/ui/side.js', 'js/ui/panels.js', 'js/ui/profile.js', 'js/ui/journal.js','js/ui/people.js', 'js/ui/quests.js', 'js/ui/jobs.js', 'js/ui/sect.js', 'js/ui/family.js', 'js/ui/icons.js', 'js/ui/bldart.js', 'js/ui/shop.js', 'js/ui/bag.js', 'js/ui/sectcard.js', 'js/ui/diplo.js', 'js/ui/inter.js', 'js/ui/nation.js', 'js/ui/faith.js', 'js/ui/history.js', 'js/ui/press.js', 'js/ui/dungeon.js', 'js/ui/rules.js', 'js/ui/terrain.js', 'js/ui/map.js', 'js/ui/sprites.js', 'js/ui/scene.js', 'js/ui/dock.js', 'js/ui/lifemap.js', 'js/ui/newlife.js', 'js/ui/childhood.js', 'js/ui/story.js', 'js/ui/controls.js', 'js/main.js'
-  ];
+    'js/ui/dom.js', 'js/ui/side.js', 'js/ui/panels.js', 'js/ui/profile.js', 'js/ui/journal.js','js/ui/people.js', 'js/ui/quests.js', 'js/ui/jobs.js', 'js/ui/sect.js', 'js/ui/family.js', 'js/ui/icons.js', 'js/ui/bldart.js', 'js/ui/shop.js', 'js/ui/bag.js', 'js/ui/sectcard.js', 'js/ui/diplo.js', 'js/ui/inter.js', 'js/ui/nation.js', 'js/ui/faith.js', 'js/ui/history.js', 'js/ui/press.js', 'js/ui/dungeon.js', 'js/ui/rules.js', 'js/ui/terrain.js', 'js/ui/map.js', 'js/ui/sprites.js'].concat(scene, ['js/ui/dock.js', 'js/ui/lifemap.js', 'js/ui/newlife.js', 'js/ui/childhood.js', 'js/ui/story.js', 'js/ui/controls.js', 'js/main.js'
+  ]);
+  // dành cho trang thử chỉ nạp lõi + cảnh (scenetest.html, uimock.html)
+  window.TT_SCENE = function () { scene.forEach(function (f) { document.write('<script src="' + f + '"><\/script>'); }); };
   window.TT_LOAD = function (withUi) {
     core.concat(withUi ? ui : []).forEach(function (f) { document.write('<script src="' + f + '"><\/script>'); });
   };
