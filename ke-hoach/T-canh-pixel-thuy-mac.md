@@ -1,6 +1,6 @@
 # T. Đổi cảnh và animation sang pixel thủy mặc kiểu tu tiên
 
-- Trạng thái: Chờ duyệt (đã có hai bản demo; chưa sửa mã game)
+- Trạng thái: **Đã chốt 2026-10-20** (mục 8), sẵn sàng làm; chưa sửa mã game
 - Ngày lập: 2026-10-20
 - Liên quan: `js/ui/scene.js`, `js/ui/sprites.js`, `js/ui/bldart.js`, [I-cong-trinh](I-cong-trinh.md) (công trình pixel), [M-tong-mon](M-tong-mon.md) (bản sắc tông), [S-quoc-gia-tong-mon-ton-giao](S-quoc-gia-tong-mon-ton-giao.md) (9 tín ngưỡng, nơi thờ tự), `CREDITS.md`
 - Phạm vi: **cảnh và animation** của màn hình nhân vật. **Chưa làm vật phẩm** (biểu tượng vật phẩm, trang bị hiện trên người nếu cần thì để sau).
@@ -31,8 +31,8 @@
 ### 4.1 Hướng kỹ thuật
 - **Vẽ bằng mã, hạt giống cố định, không tệp ảnh**: nền không tốn tải. Các lớp tĩnh (trời, núi, kiến trúc, mặt đất) vẽ **một lần** vào canvas đệm theo khóa (cảnh, pha, mùa); mỗi khung chỉ vẽ lớp động (mây trôi, hạt, nhân vật, thác, lửa, sự kiện).
 - Dùng khóa `key` của `readState()` sẵn có để biết khi nào dựng lại.
-- Vòng lặp: `requestAnimationFrame`, dừng khi tab ẩn. Mặc định **30 khung/giây** (nhẹ khoảng một nửa so với 60, nhìn gần như không khác với cảnh chậm); sự kiện nhanh (sét, ngự kiếm) cho phép 60. Mục tiêu dưới 4 ms mỗi khung; đo và in khi `?debug=1`.
-- Độ phân giải: **480×144** như demo (đề xuất; xem câu hỏi 1). Chuyển bằng cấu hình `W`, `H` trong module để không rải số cứng.
+- Vòng lặp: `requestAnimationFrame`, dừng khi tab ẩn. **30 khung/giây cho mọi thứ** (chốt), kể cả sự kiện; không công tắc. Mục tiêu dưới 4 ms mỗi khung; đo và in khi `?debug=1`.
+- Độ phân giải: **480×144** (chốt; demo đo 0,49 ms mỗi khung nên không nặng hơn đáng kể so với 240×72). Chuyển bằng cấu hình `W`, `H` trong module để không rải số cứng.
 - Giảm hiệu ứng: tôn trọng `prefers-reduced-motion` và có công tắc trong cài đặt (giảm hạt, bỏ rung và chớp).
 
 ### 4.2 Tách mã (làm một lần, về sau thêm cảnh chỉ thêm dữ liệu)
@@ -70,27 +70,38 @@ Giữ nguyên `ui.scene.W/H`, `mirror`, `setPage`, `layout`, `readState`, `palet
 | shrine | Biểu tượng theo từng tín ngưỡng (9) |
 | road | Cuộn nền, biển chỉ đường, cây ven đường |
 
+- **Chín tông (chốt 2026-10-20)**: nền của tông lấy **địa hình vùng của tông** (chín tông nằm ở chín vùng khác nhau nên nền đã khác) + **một lớp nhấn riêng** + **một công trình đặc trưng** (đều là dữ liệu và module):
+
+| Tông | Vùng | Công trình đặc trưng | Lớp nhấn nền | Ưu tiên |
+|---|---|---|---|---|
+| Kim Phong Môn (kiếm) | Tây Thiên Sơn | đại kiếm cắm đỉnh núi, kiếm trủng | gió, kiếm quang bay | **1** (đã có demo) |
+| Bách Thảo Môn (đan) | Nam Lâm | đan đỉnh có lửa, vườn dược liệu bậc thang | sương xanh, đom đóm | **1** (đã có demo) |
+| Âm Hồn Giáo (tà) | Vụ Trạch | tháp xương, cờ chiêu hồn, đèn ma xanh | đầm sương tím, hồn quang | **1** (tà đạo, tương phản mạnh) |
+| Thủy Nguyệt Cung | Đông Hải | cung điện trên mặt biển, cầu cong, lầu ngắm trăng | biển sóng, trăng phản chiếu | **1** (cảnh biển, khác hẳn núi) |
+| Thanh Vân Tông | Trung Châu | cổng mây, bậc đá dài, rùa đá đội bia | biển mây dày | 2 |
+| Huyền Băng Cung | Bắc Băng | cung băng tinh thể, cột băng | tuyết, cực quang | 2 |
+| Liệt Hỏa Tông | Hỏa Sơn | lò luyện trong núi lửa, võ đài | tro bay, dung nham | 2 |
+| Nhật Luân Giáo | Hoang Mạc | đài nhật luân (đĩa vàng lớn), điện bậc thang | nắng gắt, cát | 2 |
+| Tử Lôi Quan | Lôi Đảo | đạo quán trên đảo, cột dẫn lôi | sét tím, mây giông | 2 |
+
+  Ưu tiên 1 làm trước ở T-C; ưu tiên 2 cùng chặng nếu kịp, không thì dùng nền vùng + công trình. Bảng `cls` ở trên **giữ**, thêm: `shrine` vẽ **dáng kiến trúc** của nơi thờ (chùa, nhà thờ, thánh đường, đền, đạo quán, văn miếu, từ đường, đền thần, miếu) theo S mục 3 (tôn trọng, không dùng biểu tượng thiêng làm trang trí tùy tiện).
 - Ma vực của demo dùng cho `ruin` kiểu hung địa và các nơi bị chiến sự nặng.
-- **Hoạt ảnh và sự kiện**: `boom` thành đột phá (linh khí hút về, vòng sáng), `thunder` thành thiên kiếp (trời tối, mây xoáy, sét), `rise` thành phi thăng (ngự kiếm hoặc bay lên), `dead` giữ nhưng tối giản; `war` giữ trời đỏ + khói; thời tiết `wid` dùng hạt và lớp phủ.
-- **Nhân vật**: sprite 16×24 phóng 1,5 lần làm bản tạm; cần chốt có vẽ tay lại không. Tham số hiện có (`kid`, `elder`, `female`, `wound`, `gear`, `aura`) phải còn được dùng: tóc bạc, nhỏ hơn, vết thương, hào quang; trang bị là phần vật phẩm nên **để sau**. Đi liên tục (nghỉ ngắn), người nhà đi theo.
+- **Hoạt ảnh và sự kiện**: `boom` thành đột phá (linh khí hút về, vòng sáng), `thunder` thành thiên kiếp (trời tối, mây xoáy, sét), `rise` thành phi thăng (ngự kiếm hoặc bay lên), `dead` giữ nhưng tối giản; `war` giữ trời đỏ + khói. **Cảnh đổi theo thời tiết** (chốt, thay cho mùa): mỗi thời tiết vùng trong `js/data/regions.js` (khoảng 2 mỗi vùng: bão biển, ngư triều, bão gió, tuyết lở, mưa độc, linh vũ, bão tuyết, cực quang, phun trào, hỏa tinh, bão cát, thu hoạch, chiến loạn...) có một bộ thông số: lớp phủ màu trời, loại hạt (mưa, tuyết, cát, tro, lá, linh quang), gió (mây, cây, tà áo nghiêng), chớp; không có thời tiết thì cảnh thường. Mùa chỉ dùng nếu game đã có sẵn (kiểm ở T-A), không tự tạo.
+- **Nhân vật** (chốt): sprite 16×24 phóng **2x** (pixel đều). Ba kiểu di chuyển: **đi** (mọi lúc, đi liên tục, nghỉ ngắn), **bay** (lướt thấp, tà áo bay) và **ngự kiếm** (đứng trên kiếm, vệt kiếm quang); bay và ngự kiếm **mở từ Trúc Cơ** (`c.realm >= 2`), dùng khi đang đi đường (`c.travel`, `c.cross`) hoặc ngẫu nhiên khi rảnh ở nơi rộng (nhìn thấy cảnh giới qua dáng đi). Tham số hiện có (`kid`, `elder`, `female`, `wound`, `gear`, `aura`) phải còn được dùng: tóc bạc, nhỏ hơn, vết thương, hào quang; trang bị là phần vật phẩm nên **để sau**. Đi liên tục (nghỉ ngắn), người nhà đi theo.
 
 ### 4.4 Phố công trình bấm được
 Giữ cách chạy của `ui.bld.draw` (hover, bấm, phân trang) ở chặng đầu và vẽ phố lên **nền mới**; chỉnh kích thước nhà cho hợp tỉ lệ nhân vật. Đổi hình các nhà sang phong cách mới là chặng riêng (công trình, không phải vật phẩm).
 
-## 5. Các chặng (mỗi chặng một phiên; chạy lần lượt)
-Ước lượng thô, "lượt" như ở Z.
-
-| Chặng | Việc | Người chơi thấy gì | Lượt |
+## 5. Các chặng (gộp lại 2026-10-20 để tiết kiệm: 4 phiên Sonnet + 1 phiên Haiku)
+| Chặng | Model | Việc (gộp từ T0 đến T6 bản đầu) | Người chơi thấy gì |
 |---|---|---|---|
-| T0 | Tách module, `W/H` cấu hình, `rAF` + khóa dựng lại + đo khung; chưa đổi hình | Giống cũ, chạy mượt hơn | 1 |
-| T1 | Trời, núi, mây, thác, sương, 5 pha, 9 địa hình, chuyển pha mượt | Nền mới tu tiên; nhân vật và nhà cũ tạm | 2 |
-| T2 | Nhân vật + người nhà + hoạt ảnh đi/đứng; hạt; sự kiện đột phá, thiên kiếp, phi thăng, chết; quái | Nhân vật và hiệu ứng mới | 3 |
-| T3 | Công trình đặc trưng theo `cls` và theo bản sắc tông; nơi thờ tự 9 tín ngưỡng | Mỗi nơi có hình riêng | 3 |
-| T4 | Phố công trình (bldart) hợp phong cách, giữ tương tác, `mirror` trong cửa sổ | Phố bấm được trên nền mới | 1,5 |
-| T5 | Thời tiết, chiến sự, nội thất bí cảnh, `cave`, `void`, mùa | Đủ các tình huống | 2 |
-| T6 | Dọn mã cũ, bỏ phụ thuộc Kenney nếu không còn dùng, `CREDITS.md`, tài liệu, đo hiệu năng | Gọn, nhẹ | 1 |
+| **T-A** | Sonnet | tách module, `W/H` = 480×144, `rAF` 30 khung + khóa dựng lại + đo khung; trời, núi, mây, thác, sương, 5 pha, 9 địa hình, chuyển pha mượt; nhà và nhân vật cũ vẽ tạm lên nền mới (phóng theo tỉ lệ) | nền tu tiên mới, mượt hơn |
+| **T-B** | Sonnet | nhân vật 2x (đi, bay, ngự kiếm từ Trúc Cơ), người nhà, quái phóng 2x, hạt, sự kiện đột phá, thiên kiếp, phi thăng, chết | nhân vật và hiệu ứng mới |
+| **T-Cd** | Haiku | dữ liệu: thông số 9 địa hình, bảng `cls`, 9 tông (bảng 4.3), thời tiết vùng, nơi thờ (chỉ dữ liệu theo định dạng T-A/T-B đã đặt) | (chưa thấy) |
+| **T-C** | Sonnet | module công trình đặc trưng theo `cls`, 4 tông ưu tiên 1 (+ ưu tiên 2 nếu kịp), nơi thờ; phố công trình bấm được trên nền mới, `mirror` | mỗi nơi có hình riêng |
+| **T-D** | Sonnet | thời tiết vùng, chiến sự, bí cảnh, `cave`, `void`; dọn mã cũ, bỏ Kenney nếu không còn dùng, `CREDITS.md`, đo hiệu năng | đủ tình huống, gọn |
 
-Tổng khoảng **13,5 lượt**. Cổng chơi thử sau **T1** (xem nền trong game thật) và sau **T3**.
+Cổng chơi thử sau **T-A** (xem nền trong game thật) và sau **T-C**. **Ngân sách**: khoảng 4 phiên Sonnet + 1 Haiku; chạy T-A trước, xem rồi mới quyết làm tiếp (ưu tiên lõi truyện nếu tiền eo hẹp).
 
 ## 6. Kiểm thử và đo (mỗi chặng)
 - Đây là thay đổi giao diện: `node tools/baseline.js --check` phải **trùng khít** `tools/baseline/seeds.json` (không chạm mô phỏng); `node tools/run-tests.js` không thêm bài đỏ.
@@ -108,13 +119,27 @@ Tổng khoảng **13,5 lượt**. Cổng chơi thử sau **T1** (xem nền trong
 - **Phụ thuộc Kenney**: bỏ ở T6; đảm bảo không còn nơi nào cần tilemap trước khi xóa.
 - **Hệ số 1,5** cho nhân vật làm pixel không đều; chọn 2x hoặc vẽ lại 24×36 khi chốt (câu hỏi 2).
 
-## 8. Cần bạn chốt (có mặc định)
-1. **Độ phân giải**: 480×144 như demo, hay giữ 240×72 (nhẹ hơn nhưng ít chỗ cho núi và mây)? (Mặc định: 480×144.)
-2. **Nhân vật**: giữ hệ số 1,5 tạm rồi vẽ tay sau, đổi sang 2x, hay vẽ lại 24×36 ngay? (Mặc định: giữ 1,5 tạm.)
-3. **Bảng công trình đặc trưng** ở 4.3 có đúng ý bạn không, tông nào là tông "chính" cần nền riêng trước? (Mặc định: Kiếm Tông và Đan Tông như demo.)
-4. **Khung hình**: 30 hay 60 mặc định? (Mặc định: 30, sự kiện 60.)
-5. **Mùa**: cảnh có đổi theo mùa của game không, hay chỉ theo năm/pha? (Mặc định: kiểm lại `season` trong game ở T0, có thì dùng.)
-6. **Thứ tự**: làm sau Đợt nào của Z? (Mặc định: song song, không đụng mô phỏng; chạy trong nhánh riêng, mỗi chặng một PR.)
+## 8. Đã chốt (2026-10-20)
+1. **Độ phân giải 480×144** (không nặng hơn đáng kể).
+2. **Nhân vật 2x**; có **đi**, **bay**, **ngự kiếm** (bay và ngự kiếm mở từ Trúc Cơ).
+3. **Bảng công trình**: giữ bảng `cls`; chín tông theo bảng ở 4.3; **ưu tiên nền riêng trước: Kim Phong Môn, Bách Thảo Môn, Âm Hồn Giáo, Thủy Nguyệt Cung**.
+4. **30 khung/giây** cho mọi thứ.
+5. **Cảnh đổi theo thời tiết vùng** (mùa chỉ dùng nếu game có sẵn).
+6. **Làm ngay**, song song với lõi truyện (không đụng mô phỏng), nhánh riêng `canh-thuy-mac` từ `main`, mỗi chặng một commit, một PR cho cả T.
 
 ## 9. Nhật ký làm việc
 - 2026-10-20: lập kế hoạch từ hai bản demo (PR #6) và đối chiếu `scene.js`. Chưa sửa mã game.
+- 2026-10-20: chốt mục 8 (480×144, nhân vật 2x có đi/bay/ngự kiếm từ Trúc Cơ, 30 khung, cảnh theo thời tiết vùng, bảng chín tông và 4 tông ưu tiên); gộp T0 đến T6 thành T-A, T-B, T-Cd, T-C, T-D; thêm prompt (mục 10).
+
+## 10. Prompt các phiên
+Dùng chung: "Repo: Phongxuan123/tu-tien. Gắn repo, clone nhánh `main`. Trả lời tiếng Việt, ngắn gọn, xưng "mình", gọi tôi là "bạn". Đọc CLAUDE.md. Làm trên nhánh `canh-thuy-mac` (chưa có thì tạo từ origin/main; đã có thì checkout và merge origin/main). TIẾT KIỆM: chỉ đọc phần ghi dưới; Playwright chụp tối đa 4 ảnh và tự xem lại; kiểm thử chạy đầy đủ một lần cuối. Không gọi rng của mô phỏng, không sửa js/systems; `node tools/baseline.js --check` phải trùng khít. Cuối: ghi "T-x đã làm" vào ke-hoach/T-canh-pixel-thuy-mac.md (kèm ms mỗi khung), push theo CLAUDE.md, mở PR nháp nếu chưa có, báo ngắn."
+
+**T-A (Sonnet):** [dùng chung] + "Đọc ke-hoach/T-canh-pixel-thuy-mac.md mục 2, 4.1, 4.2, 4.3 (phần pha, địa hình), 8; demo-canh.html (lấy cách vẽ trời, núi Quế Lâm, đỉnh lơ lửng, thác, biển mây, sương, bảng màu, bộ đệm lớp); js/ui/scene.js (cả file, giữ API ui.scene), js/ui/dock.js và js/ui/panels.js chỗ dùng ui.scene (mirror, W/H). Làm chặng T-A: tách js/ui/scene/ theo 4.2 (đăng ký trong js/files.js), W/H = 480×144 cấu hình một chỗ, requestAnimationFrame 30 khung dừng khi tab ẩn, dựng lại lớp tĩnh theo key của readState, đo khung khi ?debug=1; nền mới cho 5 pha và 9 địa hình (thông số địa hình để trong một đối tượng dữ liệu riêng để T-Cd mở rộng); chuyển pha mượt; nhà, người, quái cũ vẽ tạm lên nền mới đúng tỉ lệ; giảm hiệu ứng theo prefers-reduced-motion. Kiểm ba cỡ dock và cửa sổ mirror. Chụp: 1 vùng núi ban ngày, 1 vùng biển ban đêm, 1 hang (cave), 1 trên điện thoại."
+
+**T-B (Sonnet):** [dùng chung] + "Đọc T mục 4.3 (nhân vật, sự kiện), 8, 'T-A đã làm'; js/ui/scene/actor.js, events.js, fx.js do T-A tạo; js/ui/sprites.js; demo-canh.html (nhân vật, ngự kiếm, đột phá, thiên kiếp). Làm T-B: nhân vật 16×24 phóng 2x vẽ lại cho đẹp (đạo bào, tóc búi, kiếm sau lưng; biến thể kid, elder, female, wound, aura), đi liên tục nghỉ ngắn, bay và ngự kiếm khi c.realm >= 2 (lúc đi đường hoặc thỉnh thoảng khi rảnh); người nhà đi theo; quái phóng 2x; hạt linh khí, đom đóm, hạc, kiếm quang; sự kiện boom (đột phá), thunder (thiên kiếp), rise (phi thăng), dead. Chụp: đi, ngự kiếm, đột phá, thiên kiếp."
+
+**T-Cd (Haiku):** [dùng chung] + "Đọc T mục 4.3 (bảng cls và bảng chín tông), 'T-A đã làm', 'T-B đã làm' (định dạng dữ liệu cảnh); js/data/sects.js (id tông), js/data/regions.js (id thời tiết), js/data/faiths.js (nơi thờ); S mục 3 (viết tôn trọng). Chỉ viết DỮ LIỆU vào tệp dữ liệu cảnh mà T-A/T-B đã đặt: thông số đủ 9 địa hình, mỗi cls một bố cục (danh sách module và vị trí), 9 tông (công trình đặc trưng, lớp nhấn, bảng màu, ưu tiên), mỗi thời tiết vùng một bộ (lớp phủ, hạt, gió, chớp), 9 nơi thờ (dáng kiến trúc). Thêm bài kiểm thử cú pháp dữ liệu (đủ khóa, id có thật). Không vẽ module mới."
+
+**T-C (Sonnet):** [dùng chung] + "Đọc T mục 4.3, 4.4, 8, các mục 'đã làm'; demo-tongmon.html (đại kiếm, kiếm trủng, đan đỉnh, vườn dược); js/ui/scene/arch.js; js/ui/bldart.js và ui.bld.draw. Làm T-C: module kiến trúc dùng chung (mái cong, điện, tháp, cổng, bậc đá, đèn lồng) và công trình đặc trưng cho 4 tông ưu tiên 1 (Kim Phong Môn, Bách Thảo Môn, Âm Hồn Giáo, Thủy Nguyệt Cung), 5 tông còn lại nếu kịp; bố cục theo cls; nơi thờ theo dáng kiến trúc; phố công trình bấm được (hover, bấm, phân trang) vẽ lên nền mới, mirror trong cửa sổ. Chụp: 4 tông ưu tiên 1."
+
+**T-D (Sonnet):** [dùng chung] + "Đọc T mục 4.3 (thời tiết, war, cave, void), 7, các mục 'đã làm'. Làm T-D: thời tiết vùng theo dữ liệu T-Cd (lớp phủ, hạt, gió nghiêng mây/cây/tà áo, chớp), chiến sự (trời đỏ, khói), nội thất bí cảnh, cave, void; dọn mã scene cũ không dùng, bỏ tilemap Kenney nếu không còn nơi nào dùng (cập nhật CREDITS.md), đo hiệu năng (ms mỗi khung trung bình, p95, thời gian dựng lại), giảm hiệu ứng. Chụp: 3 thời tiết, chiến sự."
