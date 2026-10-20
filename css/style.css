@@ -446,6 +446,13 @@ body.has-modal{overflow:hidden}
 .ch-dot{color:#5a6a7e;flex:none}.ch-dot.on{color:var(--green)}
 .ch-fit{margin-left:auto;color:var(--green)}
 .ch-hoi{margin:6px 0}
+.fitdot{display:inline-block;margin-left:8px;font-size:12px;font-weight:600}.fitdot.hop{color:var(--green)}.fitdot.trai{color:#d9985a}
+.wheel-box{display:flex;flex-direction:column;align-items:center;gap:6px;margin:10px 0}
+.wheel-svg{width:220px;max-width:70vw;height:auto}
+.wheel-leg{display:flex;flex-direction:column;gap:2px;font-size:13px}
+.wheel-leg .wl{display:flex;align-items:center;gap:8px;opacity:.75}.wheel-leg .wl.on{opacity:1;font-weight:700}
+.wheel-leg i{width:12px;height:12px;border-radius:3px;display:inline-block}
+.story-card{margin:6px 0}
 .nl-budget{margin-top:8px}
 .nl-foot{display:flex;gap:10px;justify-content:flex-end;margin-top:14px;position:sticky;bottom:-16px;padding:10px 0 2px;background:var(--panel)}
 .pn-row{grid-template-columns:78px 1fr 120px;cursor:pointer}

@@ -101,6 +101,8 @@
     if (d.type === 'break_reroll') return 'Thiên mệnh';
     if (d.type === 'nt_offer') return 'Nghịch Thiên';
     if (d.type === 'qreview') return 'Nhiệm vụ';
+    if (d.type === 'story') return 'Truyện';
+    if (d.type === 'wheel') return 'Vòng quay vận mệnh';
     if (d.type === 'crossroad') return 'Ngã rẽ';
     if (d.type === 'job') return 'Nghề nghiệp';
     if (d.type === 'death') return 'Đạo tiêu';
@@ -154,13 +156,15 @@
         body.appendChild(row);
       });
     }
+    if (d.type === 'wheel' && ui.story) body.appendChild(ui.story.wheelBox(d));
     const def = TT.decisions.safeDefault(d), list = h('div', { class: 'mchoices' });
     d.choices.forEach((ch, i) => {
-      const isDef = i === def, hint = ch.why || KIND_HINT[ch.kind] || '';
+      const isDef = i === def, hint = ch.why || ch.hint || KIND_HINT[ch.kind] || '';
+      const dot = d.type === 'story' && !ch.disabled ? (ch.hop ? h('span', { class: 'fitdot hop', title: 'Hợp tính bạn' }, '● hợp tính') : ch.trai ? h('span', { class: 'fitdot trai', title: 'Trái bản tính của bạn' }, '● trái tính') : null) : null;
       list.appendChild(h('button', {
         class: 'mch' + (isDef && d.timeout ? ' def' : '') + (ch.disabled ? ' off' : ''), disabled: ch.disabled ? 'disabled' : null, title: ch.why || null,
         onclick: () => TT.decisions.resolve(i)
-      }, h('span', { class: 'mn' }, String(i + 1)), h('span', { class: 'mt' }, h('b', null, (d.timeout && isDef ? '★ ' : '') + ch.label), hint ? h('small', null, hint) : null)));
+      }, h('span', { class: 'mn' }, String(i + 1)), h('span', { class: 'mt' }, h('b', null, (d.timeout && isDef ? '★ ' : '') + ch.label), dot, hint ? h('small', null, hint) : null)));
     });
     body.appendChild(list);
     if (d.timeout) {

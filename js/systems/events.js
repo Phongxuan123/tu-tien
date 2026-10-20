@@ -170,6 +170,7 @@
       p = rng.clamp(p, 0.004, 0.18);
       if (c.kind !== 'player') p *= 0.15; // NPC gặp ít sự kiện hơn để giữ nhịp tu luyện của thế giới
       else p /= Math.sqrt(TT.config.timeScale(c)); // thời gian chạy nhanh dần thì sự kiện mỗi năm thưa đi, số hộp hỏi mỗi phút thật không vọt lên
+      if (c.kind === 'player' && D.STORY.on) p *= D.STORY.evMul; // hộp truyện (8B) chiếm một phần nhịp: sự kiện lẻ thưa đi để tổng hộp mỗi phút vẫn dưới 6
       return p;
     },
 

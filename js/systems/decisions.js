@@ -70,6 +70,14 @@
       const c = TT.world.chars[d.charId];
       if (c && c.alive && d.choices[i].key === 'sub') TT.press.subscribe(c);
     },
+    story(d, i) {
+      const c = TT.world.chars[d.charId];
+      if (c && c.alive) TT.story.choose(c, d, d.choices[i].key);
+    },
+    wheel(d, i) {
+      const c = TT.world.chars[d.charId];
+      if (c && c.alive) TT.wheel.act(c, d, d.choices[i].key);
+    },
     death: rebirth,
     ascend: rebirth
   };

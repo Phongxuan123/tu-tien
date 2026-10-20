@@ -61,7 +61,7 @@ Mục tiêu nhịp: một đời Phi Thăng khoảng 20 đến 30 phút thật; 
 | C. Ngã rẽ cuộc đời, 5 con đường thay ô "Hướng đi" | ☑ | ☐ | [C-nga-re](ke-hoach/C-nga-re.md) |
 | D. Kỳ ngộ có cốt truyện (gộp vào Q) | ☐ | | [D-ky-ngo](ke-hoach/D-ky-ngo.md) |
 | R. Nhân duyên và quan hệ: đạo lữ (hành trình), con cái (một đời người), sư đồ, dây duyên, gộp tab Quan hệ + Gia đình | ☐ | Chờ bạn duyệt, chưa code | [R-nhan-duyen](ke-hoach/R-nhan-duyen.md) |
-| Q. Làm mới cốt truyện, lựa chọn, kỳ ngộ (tuyến truyện, nhân quả, manh mối, tuyến thế giới) | ☐ | Đợt 8: 8A xong 2026-10-19 (tính cách bốn trục, khí vận v2, hộp Đời mới; Q1.2, Q1.3 cho người chơi); 8A2 và 8A3 xong (tuổi thơ ba hồi, 2026-10-20); còn 8B, 8C, 8D | [Q-cot-truyen](ke-hoach/Q-cot-truyen.md) |
+| Q. Làm mới cốt truyện, lựa chọn, kỳ ngộ (tuyến truyện, nhân quả, manh mối, tuyến thế giới) | ☐ | Đợt 8: 8A xong 2026-10-19 (tính cách bốn trục, khí vận v2, hộp Đời mới; Q1.2, Q1.3 cho người chơi); 8A2 và 8A3 xong (tuổi thơ ba hồi, 2026-10-20); 8B xong 2026-10-20 (khung truyện, vòng quay, tuyến A1 đến A3); còn 8C, 8D | [Q-cot-truyen](ke-hoach/Q-cot-truyen.md) |
 
 ### 2.3 Thế giới và bản đồ
 | Mục | Xong | Bạn kiểm | Chi tiết |
@@ -277,3 +277,4 @@ Gợi ý thứ tự (bạn đổi tùy ý):
 - **2026-10-19** **S8** (Đợt 7) xong: liên tông (tông ↔ triều, thao túng kế vị có phản phệ, ước pháp, giải đấu, đại chiến liên tông, Thiên hạ công ước). Tắt `D.INTERSECT.on` trùng khít 40/40 mốc S7. 109 bài đạt; đo 40 hạt giống: chiến tranh 51,5 → 48,0, diệt vong 9,4 → 7,2 (dưới dải 7,5; 80 hạt giống gộp là 8,95, đạt), đại chiến liên tông 1,3 mỗi 300 năm. Còn: Cổng chơi thử 5 (cho thế giới tự chạy 200 đến 300 năm).
 - **2026-10-19** **8A** (Đợt 8) xong: tính cách bốn trục và khí vận v2 cho người chơi (`D.NATURE`, `TT.nature`, `TT.kv`), hộp Đời mới (ngân sách 4 điểm, Bốc lại), khối Tính cách ở Hồ sơ. Tắt `D.NATURE.on` trùng khít 40/40 mốc; 118 bài đạt. Chi tiết: ke-hoach/Z-lo-trinh-trien-khai.md, Đợt 8.
 - **2026-10-20** **8A3** (Đợt 8) xong: tuổi thơ ba hồi cho người chơi (`TT.childhood`), hộp sự kiện và Tổng kết 12 tuổi. Tắt `D.CHILDHOOD.on` trùng khít 40/40 mốc; 127 bài đạt. Chi tiết: ke-hoach/Z-lo-trinh-trien-khai.md, Đợt 8.
+- **2026-10-20** **8B** (Đợt 8) xong: khung truyện `TT.story` và vòng quay `TT.wheel`, tuyến xương sống A1 đến A3, `tools/story-lint.js`, `tools/life-sim.js`. Tắt `D.STORY.on` trùng khít 40/40 mốc; nhịp quyết định 5,83 hộp/phút; 137 bài đạt. Chi tiết: ke-hoach/Z-lo-trinh-trien-khai.md, Đợt 8.
