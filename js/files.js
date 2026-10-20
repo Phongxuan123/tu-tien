@@ -11,7 +11,7 @@
     'js/systems/ai.js', 'js/systems/decisions.js', 'js/systems/world.js', 'js/core/time.js', 'js/core/save.js'
   ];
   // cảnh đầu cột: các module trong js/ui/scene/ rồi js/ui/scene.js (ghép lớp, giữ API TT.ui.scene)
-  var scene = ['js/ui/scene/core.js', 'js/ui/scene/data.js', 'js/ui/scene/sky.js', 'js/ui/scene/land.js', 'js/ui/scene/cloud.js', 'js/ui/scene/arch.js', 'js/ui/scene/place.js', 'js/ui/scene/sect.js', 'js/ui/scene/shrine.js', 'js/ui/scene/street.js', 'js/ui/scene/fg.js', 'js/ui/scene/fx.js', 'js/ui/scene/actor.js', 'js/ui/scene/events.js', 'js/ui/scene/legacy.js', 'js/ui/scene.js'];
+  var scene = ['js/ui/scene/core.js', 'js/ui/scene/data.js', 'js/ui/scene/sky.js', 'js/ui/scene/land.js', 'js/ui/scene/cloud.js', 'js/ui/scene/arch.js', 'js/ui/scene/place.js', 'js/ui/scene/sect.js', 'js/ui/scene/shrine.js', 'js/ui/scene/street.js', 'js/ui/scene/fg.js', 'js/ui/scene/fx.js', 'js/ui/scene/weather.js', 'js/ui/scene/dungeon.js', 'js/ui/scene/actor.js', 'js/ui/scene/events.js', 'js/ui/scene.js'];
   var ui = [
     'js/ui/dom.js', 'js/ui/side.js', 'js/ui/panels.js', 'js/ui/profile.js', 'js/ui/journal.js','js/ui/people.js', 'js/ui/quests.js', 'js/ui/jobs.js', 'js/ui/sect.js', 'js/ui/bond.js', 'js/ui/family.js', 'js/ui/icons.js', 'js/ui/bldart.js', 'js/ui/shop.js', 'js/ui/bag.js', 'js/ui/sectcard.js', 'js/ui/diplo.js', 'js/ui/inter.js', 'js/ui/nation.js', 'js/ui/faith.js', 'js/ui/history.js', 'js/ui/press.js', 'js/ui/dungeon.js', 'js/ui/rules.js', 'js/ui/terrain.js', 'js/ui/map.js', 'js/ui/sprites.js'].concat(scene, ['js/ui/dock.js', 'js/ui/lifemap.js', 'js/ui/newlife.js', 'js/ui/childhood.js', 'js/ui/story.js', 'js/ui/controls.js', 'js/main.js'
   ]);

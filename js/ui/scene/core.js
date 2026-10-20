@@ -91,7 +91,9 @@
 
   // ---------- giảm hiệu ứng (prefers-reduced-motion) ----------
   const mq = window.matchMedia ? window.matchMedia('(prefers-reduced-motion: reduce)') : null;
-  sc.reduced = !!(mq && mq.matches);
-  if (mq && mq.addEventListener) mq.addEventListener('change', e => { sc.reduced = e.matches; });
+  // người chơi bật "giảm hiệu ứng" (dock.js) hoặc hệ điều hành yêu cầu: giảm hạt, bỏ rung và chớp, gió và trôi mây chậm lại
+  sc.reducedOS = !!(mq && mq.matches); sc.reducedUser = false; sc.reduced = sc.reducedOS;
+  sc.setReduced = v => { sc.reducedUser = !!v; sc.reduced = sc.reducedOS || sc.reducedUser; };
+  if (mq && mq.addEventListener) mq.addEventListener('change', e => { sc.reducedOS = e.matches; sc.reduced = sc.reducedOS || sc.reducedUser; });
   sc.FX = () => sc.reduced ? 0.35 : 1; // hệ số mật độ hạt / biên độ rung
 })();

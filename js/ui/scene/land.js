@@ -77,7 +77,7 @@
   // đỉnh lơ lửng: đỉnh bàn, thân treo ngược, rễ đá, cây, đình; thác ghi vào geo.falls
   sc.paintFloat = (pal, T, terr, geo, mode) => {
     sc.use(B.flt.begin(mode)); geo.falls = [];
-    const cc = rockCols(pal, 'm3', 0.9, terr), list = [];
+    const cc = rockCols(pal, terr.fltKey || 'm3', terr.fltKey ? 1.5 : 0.9, terr), list = [];
     terr.flt.forEach((f, i) => { list.push({ f, o: 0, i }); list.push({ f: Object.assign({}, f, { x: f.x + 480, w: Math.round(f.w * 0.85), up: Math.round(f.up * 0.9), pav: 0 }), o: 480, i: i + 10 }); });
     list.forEach(({ f, i }) => {
       const r = mulberry(70 + i * 13 + terr.seed), x0 = f.x - Math.floor(f.w / 2);

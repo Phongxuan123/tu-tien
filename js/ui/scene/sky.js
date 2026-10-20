@@ -7,10 +7,15 @@
   const STARS = [];
   { const r = mulberry(77); for (let i = 0; i < 120; i++) STARS.push({ x: Math.floor(r() * W), y: Math.floor(Math.pow(r(), 1.3) * 86), b: r() < 0.1, ph: r() * 6.28, sp: 0.8 + r() * 2 }); }
 
-  sc.paintSky = (pal, mode) => {
+  sc.paintSky = (pal, mode, nebula) => {
     sc.use(B.sky.begin(mode));
     sc.cur().clearRect(0, 0, W, CFG.H);
     vgrad(0, 0, W, 60, pal.sky0, pal.sky1, 6); vgrad(0, 60, W, 70, pal.sky1, pal.sky2, 6); R(0, 130, W, CFG.H - 130, pal.sky2);
+    if (nebula) { // hư không: tinh vân tím, quầng sáng xa
+      const g = sc.cur(), r = mulberry(31);
+      for (let i = 0; i < 9; i++) { const x = r() * W, y = 10 + r() * 90, rx = 40 + r() * 90, ry = 10 + r() * 24; for (let k = 3; k >= 1; k--) { g.globalAlpha = 0.05 * (4 - k); ell(x, y, rx * k / 3, ry * k / 3, i % 2 ? '#7a3aa8' : '#3a4ad8'); } }
+      g.globalAlpha = 1;
+    }
   };
 
   // dải mây cao, xếp mảnh lặp rộng TW

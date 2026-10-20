@@ -25,15 +25,16 @@
 
   // bước mô phỏng hạt; s = trạng thái cảnh
   function step(dt, s, geo) {
-    const f = sc.FX(), terr = s.terr;
+    const f = sc.FX(), terr = s.terr, w = sc.weather.wind(s), prof = sc.weather.profile(s);
     acc.qi += dt * 10 * f; while (acc.qi > 1) { acc.qi -= 1; spawnQi(); }
     const rate = ({ snow: 9, ash: 6, sand: 7, spark: 1.5 })[terr.fx] || 0;
     if (rate) { acc.fall += dt * rate * f; while (acc.fall > 1) { acc.fall -= 1; spawnFall(terr.fx); } }
+    if (s.war || (prof && prof.war)) { acc.war = (acc.war || 0) + dt; if (acc.war > 0.18) { acc.war = 0; sc.weather.WAR_X.forEach(x => PT.push({ k: 2, big: 1, x: x + rnd() * 6 - 3, y: GY - 12, vx: 5 + w * 24, vy: -(12 + rnd() * 6), l: 0, m: 6.5, ph: 0, s: rnd() })); } }
     acc.smoke += dt; if (acc.smoke > 0.45) { acc.smoke = 0; (geo.smokes || []).forEach(m => PT.push({ k: 2, x: m.x + rnd() * 2, y: m.y, vx: 3 + rnd() * 2, vy: -(7 + rnd() * 3), l: 0, m: 3.4, ph: 0, s: rnd() })); }
     for (let i = PT.length - 1; i >= 0; i--) {
       const p = PT[i]; p.l += dt;
       if (p.k === 3) { p.vy += (p.g || 0) * dt; if (p.dr !== 1) { const d = Math.pow(p.dr, dt * 60); p.vx *= d; p.vy *= d; } p.x += p.vx * dt; p.y += p.vy * dt; }
-      else p.x += (p.vx + (p.k === 0 ? Math.sin(p.l * 1.3 + p.ph) * 5 : p.k === 1 && p.kind === 'snow' ? Math.sin(p.l * 1.7 + p.ph) * 7 : 0)) * dt, p.y += p.vy * dt;
+      else p.x += (p.vx + (p.k === 2 ? 0 : w * 14) + (p.k === 0 ? Math.sin(p.l * 1.3 + p.ph) * 5 : p.k === 1 && p.kind === 'snow' ? Math.sin(p.l * 1.7 + p.ph) * 7 : 0)) * dt, p.y += p.vy * dt;
       if (p.l >= p.m || p.y > H + 4 || p.x > W + 20 || (p.k !== 3 && p.y < -8) || p.x < -30) { PT[i] = PT[PT.length - 1]; PT.pop(); }
     }
   }
@@ -52,7 +53,7 @@
         else if (p.kind === 'sand') { ctx.globalAlpha = Math.min(0.7, f); ctx.fillStyle = '#e8cc88'; ctx.fillRect(x, y, 3 + Math.floor(p.s * 3), 1); }
         else if (p.kind === 'spark') { ctx.globalAlpha = 0.6 * (1 - p.l / p.m); ctx.fillStyle = '#d8d0ff'; ctx.fillRect(x, y, 1, 1 + Math.floor(p.s * 4)); }
       } else if (p.k === 2) {
-        const u = p.l / p.m; ctx.globalAlpha = 0.55 * (1 - u) * Math.min(1, p.l * 3); ctx.fillStyle = mix(pal.cloudLt, pal.mist, 0.3); const r = 1 + Math.floor(u * 3); ctx.fillRect(x - r, y - r, r * 2 + 1, r * 2 + 1);
+        const u = p.l / p.m; ctx.globalAlpha = (p.big ? 0.8 : 0.55) * (1 - u) * Math.min(1, p.l * 3); ctx.fillStyle = p.big ? mix('#4a4650', pal.ink, 0.2 + pal.amb * 0.3) : mix(pal.cloudLt, pal.mist, 0.3); const r = (p.big ? 2 : 1) + Math.floor(u * (p.big ? 7 : 3)); ctx.fillRect(x - r, y - r, r * 2 + 1, r * 2 + 1);
       } else if (p.k === 3) {
         const u = 1 - p.l / p.m; ctx.globalAlpha = clamp(u * 1.5, 0, 1); ctx.fillStyle = p.col; ctx.fillRect(x, y, p.sz, p.sz);
       }
@@ -80,19 +81,6 @@
   function drawFlags(ctx, pal, t, geo) {
     (geo.flags || []).forEach(f => { for (let i = 0; i < f.w; i++) { const off = sc.reduced ? 0 : Math.round(Math.sin(t * 3.4 - i * 0.5 + f.ph) * (1 + i * 0.12)), hh = Math.round(f.h * (1 - i / f.w * 0.35)) - (hash(i * 3 + f.ph * 10) < 0.3 ? 3 : 0) - (i % 5 === 4 ? 5 : 0); ctx.fillStyle = i % 4 === 0 ? mix(f.col, pal.ink, 0.35) : f.col; ctx.fillRect(Math.round(f.x) + i, Math.round(f.y) + off, 1, Math.max(2, hh)); } });
   }
-
-  // thời tiết (giữ các loại của bản cũ, vẽ theo kích thước mới; T-D sẽ làm đầy đủ theo dữ liệu vùng)
-  function weather(ctx, s, pal, t) {
-    const w = s.wid, f = sc.FX(), fr = t * 9;
-    const rain = ['mua_doc', 'linh_vu', 'bao_bien', 'giong_bao'].indexOf(w) >= 0, snow = ['bao_tuyet', 'tuyet_lo'].indexOf(w) >= 0;
-    if (rain) { ctx.fillStyle = w === 'linh_vu' ? '#9affd0' : w === 'mua_doc' ? '#9ad84a' : '#9ab4e8'; for (let i = 0; i < 110 * f; i++) ctx.fillRect(Math.round((hash(i * 3.3) * W + t * 40) % W), Math.round((hash(i * 6.6) * H + t * 280) % H), 1, 4); }
-    if (snow) { ctx.fillStyle = '#ffffff'; for (let i = 0; i < 100 * f; i++) ctx.fillRect(Math.round((hash(i * 4.4) * W + Math.sin(t * 1.5 + i) * 6 + W) % W), Math.round((hash(i * 7.7) * H + t * 30) % H), 1, 1); }
-    if (w === 'bao_cat') { ctx.fillStyle = '#d8b66a'; for (let i = 0; i < 100 * f; i++) ctx.fillRect(Math.round((hash(i * 5.5) * W + t * 120) % W), Math.round(hash(i * 2.2) * H), 3, 1); }
-    if (w === 'da_quang') for (let i = 0; i < 14; i++) { const x = hash(i * 9.9) * W + Math.sin(fr * 0.05 + i) * 10, y = GY - 8 - hash(i * 1.1) * 52 + Math.cos(fr * 0.07 + i) * 6; ctx.globalAlpha = 0.5 + 0.5 * Math.sin(fr * 0.2 + i); ctx.fillStyle = '#d8f86a'; ctx.fillRect(Math.round(x), Math.round(y), 2, 2); ctx.globalAlpha = 1; }
-    if (w === 'phun_trao') { ctx.fillStyle = '#ff9a3a'; for (let i = 0; i < 14; i++) ctx.fillRect(Math.round(hash(i * 2.9) * W), Math.round(GY - ((t * 14 + i * 22) % 80)), 2, 2); }
-    if (s.war) for (let i = 0; i < 3; i++) for (let k = 0; k < 9; k++) { ctx.globalAlpha = 0.45 - k * 0.04; ctx.fillStyle = '#5a5660'; ctx.fillRect(Math.round(300 + i * 56 + Math.sin(fr * 0.05 + k) * 4), Math.round(GY - 20 - k * 8 - (t * 3 + i * 10) % 12), 12 + k * 2, 8); ctx.globalAlpha = 1; }
-  }
-
 
   // lửa đan đỉnh / lò luyện (động): ngọn lửa ba lớp
   function drawFlames(ctx, pal, t, geo) {
@@ -142,5 +130,5 @@
     }
   }
 
-  sc.fx = { drawFlames, accent, PT, step, draw, reset, emit, burst, drawFireflies, drawLamps, drawFlags, weather, rnd };
+  sc.fx = { drawFlames, accent, PT, step, draw, reset, emit, burst, drawFireflies, drawLamps, drawFlags, rnd };
 })();

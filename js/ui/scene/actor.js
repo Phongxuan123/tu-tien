@@ -146,7 +146,9 @@
     tq.globalAlpha = 1; tq.globalCompositeOperation = 'source-over';
     const gx = Math.round(x), gfy = Math.round(fy);
     if (o.aura) { const a = 0.14 + 0.08 * Math.sin((o.t || 0) * 2.2 + (o.ph || 0)); ctx.globalAlpha = a; sc.use(ctx); sc.ell(gx, gfy - 22, 20, 28, o.auraCol || '#ffe08a'); ctx.globalAlpha = a * 1.2; sc.ell(gx, gfy - 22, 12, 20, o.auraCol || '#ffe08a'); ctx.globalAlpha = 1; }
-    ctx.save(); ctx.translate(gx, gfy - 24 * K); if (dir < 0) ctx.scale(-1, 1); ctx.drawImage(tc, 0, 0, 16, 24, -8 * K, 0, 16 * K, 24 * K); ctx.restore();
+    ctx.save(); ctx.translate(gx, gfy);
+    const wd = sc.actor.wind || 0; if (Math.abs(wd) > 0.08 && !o.noWind) ctx.transform(1, 0, -wd * 0.16, 1, 0, 0); // gió nghiêng người và tà áo về phía thổi
+    ctx.translate(0, -24 * K); if (dir < 0) ctx.scale(-1, 1); ctx.drawImage(tc, 0, 0, 16, 24, -8 * K, 0, 16 * K, 24 * K); ctx.restore();
   }
   const shadow = (ctx, pal, x, y, a) => { ctx.globalAlpha = 0.3 * a; ctx.fillStyle = pal.ink; ctx.fillRect(Math.round(x) - 10, Math.round(y) - 1, 20, 1); ctx.fillRect(Math.round(x) - 7, Math.round(y), 14, 1); ctx.globalAlpha = 1; };
   // kiếm dưới chân + quầng sáng
@@ -179,5 +181,5 @@
     if (s.foe) blit(ctx, pal, { robe: '#5a2a3a', hair: '#14141c', sash: '#e8433a', female: s.foe.gender === 'nu', kid: false }, 'i' + (Math.floor(t / 0.9) % 2), 330, FY, -1, { aura: s.foe.realm >= 2, auraCol: '#c04a6a', t, ph: 5 });
   }
 
-  sc.actor = { update, draw, P, FY, FOL, REALM_ROBE, sprite };
+  sc.actor = { update, draw, P, FY, FOL, REALM_ROBE, sprite, wind: 0 };
 })();

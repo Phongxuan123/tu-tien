@@ -4564,6 +4564,21 @@ test('Cảnh pixel (T-C): dữ liệu kiểu tông, nơi thờ, bố cục cls �
   eq(TT.rng.getState(), S0, 'vẽ cảnh không gọi rng của mô phỏng');
 });
 
+test('Cảnh pixel (T-D): mọi thời tiết vùng có dữ liệu và vẽ được; chiến sự, nội thất bí cảnh, hư không, giảm hiệu ứng; không gọi rng', () => {
+  const sc = TT.ui.sc, DS = sc.data; TT.life.createWorld(8); const S0 = TT.rng.getState(), base = TT.ui.scene.readState();
+  const ids = {}; Object.keys(D.REGIONS).forEach(r => (D.REGIONS[r].weather || []).forEach(w => { ids[w.id] = 1; }));
+  ok(Object.keys(ids).length >= 18, 'đủ loại thời tiết trong dữ liệu vùng');
+  Object.keys(ids).forEach(id => ok(DS.WEATHER[id], 'thời tiết ' + id + ' có bộ thông số cảnh'));
+  const cv = document.createElement('canvas'); cv.width = sc.CFG.W; cv.height = sc.CFG.H;
+  const draw = (o, red) => { sc.setReduced(!!red); const s = Object.assign({}, base, { people: [], wid: '', mon: null, foe: null, vis: [], pages: 1, page: 0 }, o); TT.ui.scene.preview(s, 4, cv); sc.setReduced(false); const d = cv.getContext('2d').getImageData(0, 0, cv.width, cv.height).data; let n = 0; for (let i = 3; i < d.length; i += 4) if (d[i] > 0) n++; return n; };
+  Object.keys(DS.WEATHER).forEach(id => { ok(draw({ wid: id, cls: 'town', phase: 'night', terr: DS.TERRAIN.dong_hai }) > 0, 'vẽ thời tiết ' + id); ok(draw({ wid: id, cls: 'town', phase: 'day', terr: DS.TERRAIN.bac_bang }, true) > 0, 'vẽ thời tiết ' + id + ' khi giảm hiệu ứng'); });
+  ok(draw({ war: true, cls: 'city', phase: 'dusk', terr: DS.TERRAIN.trung_chau }) > 0, 'vẽ chiến sự');
+  ['bi_canh', 'tan_tich', 'hung_dia'].forEach(k => ['fight', 'treasure', 'rest', 'trap', 'boss', ''].forEach(n => ok(draw({ cls: 'secret', phase: 'cave', dgkind: k, node: n ? { t: n } : null, terr: DS.TERRAIN.trung_chau, c: Object.assign({}, base.c, { dungeon: { name: 'x', kind: k } }) }) > 0, 'vẽ bí cảnh ' + k + ' ' + n)));
+  ok(draw({ cls: 'void', phase: 'void', terr: DS.TERRAIN.trung_chau, c: Object.assign({}, base.c, { cross: true, realm: 3 }) }) > 0, 'vẽ hư không');
+  ok(sc.weather.wind({ wid: 'bao_tuyet', terr: DS.TERRAIN.bac_bang }) > 0.9, 'gió bão tuyết mạnh'); sc.setReduced(true); ok(sc.weather.wind({ wid: 'bao_tuyet', terr: DS.TERRAIN.bac_bang }) <= 0.5, 'giảm hiệu ứng làm gió yếu đi'); sc.setReduced(false);
+  eq(TT.rng.getState(), S0, 'vẽ cảnh không gọi rng của mô phỏng');
+});
+
 runNext();
 </script>
 </body>

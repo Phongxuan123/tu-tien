@@ -163,7 +163,6 @@
     const cls = s.cls, r = mulberry(terr.seed + 900), post = [], style = sc.data.SECT_STYLE[s.sect];
     if (!s.c.dungeon && cls !== 'road' && cls !== 'void') {
       (sc.data.CLS_LAYOUT[cls] || []).forEach(name => { const f = sc.places[name]; if (!f) return; const p = f(pal, T, geo, r, terr, s, style); if (typeof p === 'function') post.push(p); });
-      if (!(sc.data.CLS_LAYOUT[cls] || []).length && sc.legacy) sc.legacy.struct(cls, pal, geo);
     }
     drawGround(pal, T, terr, cls, r);
     post.forEach(f => f());

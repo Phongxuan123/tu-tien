@@ -1,5 +1,5 @@
 // Cảnh pixel thủy mặc ở đầu cột giữa: phản ánh nơi ở, vùng, thời tiết, chiến sự, gia đình và cảnh giới của nhân vật.
-// Tệp này chỉ ghép các lớp trong js/ui/scene/ (core, data, sky, land, cloud, arch, fg, fx, actor, events, legacy) và giữ API TT.ui.scene
+// Tệp này chỉ ghép các lớp trong js/ui/scene/ (core, data, sky, land, cloud, arch, place, sect, shrine, street, fg, fx, weather, dungeon, actor, events) và giữ API TT.ui.scene
 // (W, H, mirror, setPage, layout, readState, palette, preview, force...). Kích thước cảnh cấu hình ở js/ui/scene/core.js (CFG).
 // Vẽ hoàn toàn bằng mã, không tải ảnh. Lớp tĩnh dựng một lần theo khóa; mỗi khung (30/s, dừng khi tab ẩn) chỉ vẽ lớp động.
 (function () {
@@ -12,7 +12,7 @@
   let forced = null, cv, ctx, cap, ov, stage, dbg, st = null, frame = 0, rafId = 0, lastT = 0;
   let palFrom = null, palTo = null, palCur = null, built = { sky: '', arch: '', terr: '', cls: '' }, buildOk = false;
   const geo = { lamps: [], smokes: [], flags: [], falls: [] };
-  const clock = { t: 0, drift: 0, travel: 0, sway: 0 };
+  const clock = { t: 0, drift: 0, travel: 0, sway: 0, wind: 0 };
 
   // ---------- trạng thái cảnh từ dữ liệu game ----------
   const PAGE = 6; let lay = [], hoverIdx = -1, pageNow = 0, lastPlace = null;
@@ -54,10 +54,10 @@
 
   // ---------- bảng màu theo pha + địa hình + chiến sự + giông + chết ----------
   const palCache = {};
-  const stormy = s => s.terr.n === 'storm' || s.wid === 'giong_bao';
+  const stormy = s => s.terr.n === 'storm';
   function palette(s) {
     const terr0 = DATA.terrOf(s.terr), ph = DATA.PHASES[s.phase] ? s.phase : 'day', dg = !!(s.c && s.c.dungeon), st0 = DATA.SECT_STYLE[s.sect], terr = st0 && st0.tint ? Object.assign({}, terr0, st0.tint) : terr0;
-    const key = [terr.id, ph, s.sect || '', s.war && !dg ? 1 : 0, stormy(s) ? 1 : 0, s.dead ? 1 : 0].join('|');
+    const key = [terr.id, ph, s.sect || '', s.wid || '', s.war && !dg ? 1 : 0, stormy(s) ? 1 : 0, s.dead ? 1 : 0].join('|');
     if (palCache[key]) return palCache[key];
     const base = DATA.PHASES[ph], p = Object.assign({}, base), amb = base.amb, plain = ph === 'cave' || ph === 'void';
     if (!plain) {
@@ -65,6 +65,8 @@
       if (terr.sky) { const tint = mix(terr.sky, base.ink, amb * 0.75); ['sky0', 'sky1', 'sky2'].forEach((k, i) => { p[k] = mix(base[k], tint, terr.skyK * [0.8, 1, 1.1][i]); }); }
       if (terr.cloud) { const tint = mix(terr.cloud, base.ink, amb * 0.75); ['cloudLt', 'cloudMd', 'cloudDk'].forEach((k, i) => { p[k] = mix(base[k], tint, terr.cloudK * [0.6, 1, 0.8][i]); }); p.mist = mix(base.mist, tint, terr.cloudK * 0.5); }
     }
+    const wt = sc.weather.tintOf(s);
+    if (wt && !plain) { const tint = mix(wt.color, base.ink, amb * 0.75); ['sky0', 'sky1', 'sky2'].forEach((k, i) => { p[k] = mix(p[k], tint, wt.k * [0.8, 1, 1.1][i]); }); p.mist = mix(p.mist, tint, wt.k * 0.6); ['cloudLt', 'cloudMd', 'cloudDk'].forEach(k => { p[k] = mix(p[k], tint, wt.k * 0.7); }); }
     if (s.war && !dg) { p.sky0 = mix(p.sky0, '#401418', 0.4); p.sky1 = mix(p.sky1, '#6a2a22', 0.4); p.sky2 = mix(p.sky2, '#b04a2a', 0.45); p.mist = mix(p.mist, '#8a4a3a', 0.2); }
     if (stormy(s) && !plain) { ['sky0', 'sky1', 'sky2', 'mist'].forEach(k => { p[k] = mix(p[k], '#262040', 0.45); }); ['cloudLt', 'cloudMd', 'cloudDk'].forEach(k => { p[k] = mix(p[k], '#262040', 0.3); }); }
     if (s.dead) { ['sky0', 'sky1', 'sky2'].forEach(k => { p[k] = mix(p[k], '#000000', 0.5); }); p.amb = Math.max(p.amb, 0.55); }
@@ -73,13 +75,13 @@
   // màu cho vật thể tĩnh: tối dần về đêm
   const tintFn = pal => c => mix(mix(c, pal.mist, 0.1 * (1 - pal.amb)), pal.m4, pal.amb * 0.65);
   // địa hình dùng để vẽ: hư không đổi sang biển mây tím
-  const VOID_T = { sea: 1.2, water: 0, seaY: 96, mistK: 1, near: 0 };
+  const VOID_T = { sea: 1.2, water: 0, seaY: 96, mistK: 1, near: 0, cap: 'none', tree: 'dead', seed: 131, fltKey: 'm1', flt: [{ x: 110, y: 52, w: 34, up: 8, down: 22, fall: 0 }, { x: 300, y: 40, w: 46, up: 10, down: 28, fall: 0 }, { x: 420, y: 62, w: 24, up: 6, down: 16, fall: 0 }] };
   const effTerr = s => s.phase === 'void' ? Object.assign({}, DATA.terrOf(s.terr), VOID_T) : DATA.terrOf(s.terr);
 
   // ---------- dựng lớp tĩnh khi khóa đổi ----------
   function keysOf(s) {
     const terr = effTerr(s), dg = !!s.c.dungeon;
-    const sky = dg ? 'dg|' + s.dgkind : [terr.id, s.phase, s.sect || '', s.war ? 1 : 0, stormy(s) ? 1 : 0, s.dead ? 1 : 0].join('|');
+    const sky = dg ? 'dg|' + s.dgkind : [terr.id, s.phase, s.sect || '', s.wid || '', s.war ? 1 : 0, stormy(s) ? 1 : 0, s.dead ? 1 : 0].join('|');
     return { sky, arch: sky + '|' + s.cls + '|' + (s.vis && s.vis.length ? 1 : 0), terr: terr.id + '|' + s.phase, cls: s.cls };
   }
   function build(s, force) {
@@ -96,13 +98,14 @@
     if (!dg) {
       if (skyChanged) {
         geo.falls = []; const p = palTo;
-        sc.paintSky(p, mode); sc.paintHigh(p, terr.seed, mode);
-        if (s.phase === 'void') { sc.use(B.far.begin(mode)); sc.use(B.mid.begin(mode)); sc.use(B.flt.begin(mode)); sc.use(B.near.begin(mode)); }
+        sc.paintSky(p, mode, s.phase === 'void'); sc.paintHigh(p, terr.seed, mode);
+        if (s.phase === 'void') { sc.use(B.far.begin(mode)); sc.use(B.mid.begin(mode)); sc.paintFloat(p, T, terr, geo, mode); sc.use(B.near.begin(mode)); }
         else { sc.paintFar(p, terr, mode); sc.paintMid(p, terr, mode); sc.paintFloat(p, T, terr, geo, mode); sc.paintNear(p, T, terr, mode); }
         sc.paintSea(p, terr, mode); sc.paintWater(p, terr, mode); sc.paintFront(p, terr, mode); sc.paintFog(p, terr, mode);
       }
       sc.paintArch(palTo, T, terr, s, geo, skyChanged ? mode : 2); sc.paintOver(palTo, T, terr, s.cls, skyChanged ? mode : 2);
-    } else if (skyChanged) { geo.lamps = []; geo.smokes = []; geo.flags = []; geo.falls = []; }
+    } else if (skyChanged) { geo.falls = []; sc.dungeon.paint(palTo, s.dgkind, geo, mode); }
+    if (!dg && (s.war || (sc.weather.profile(s) && sc.weather.profile(s).war))) sc.weather.WAR_X.forEach(x => geo.lamps.push({ x, y: GY - 8, c: '#ff7a2a', always: true }));
     built = k; sc.fx.reset();
     sc.perf.rebuild = performance.now() - t0; sc.perf.rebuilds++;
   }
@@ -137,7 +140,8 @@
   // ---------- cập nhật động và vẽ một khung ----------
   function advance(dt, s) {
     clock.t += dt; const f = sc.FX();
-    clock.drift += dt * f;
+    clock.wind = sc.weather.wind(s); sc.actor.wind = clock.wind;
+    clock.drift += dt * f * (1 + Math.abs(clock.wind) * 2.5) * (clock.wind < 0 ? -1 : 1);
     sc.yearNow = s.year;
     const trav = (s.cls === 'road' || s.cls === 'void') && !s.mon && !s.foe && !(s.boom || s.thunder || s.rise || s.dead);
     const A = sc.actor.P;
@@ -147,23 +151,33 @@
     sc.actor.update(dt, s);
     if (!s.c.dungeon) sc.fx.step(dt, s, geo);
   }
+  // cây tiền cảnh nghiêng theo gió: chia lớp thành các dải ngang, dải càng cao càng lệch (đáy cố định)
+  function drawOver(c2, w, t) {
+    if (Math.abs(w) < 0.06) { B.over.draw(c2, 0, 0); return; }
+    const sway = w * (3.5 + Math.sin(t * 1.7) * 0.8), band = 12;
+    for (let y = 0; y < H; y += band) { const off = Math.round(sway * (1 - (y + band / 2) / H)), h = Math.min(band, H - y); c2.save(); c2.beginPath(); c2.rect(0, y, W, h); c2.clip(); B.over.draw(c2, off, 0); c2.restore(); }
+  }
   function render(s, c2) {
-    const pal = palCur || palTo, t = clock.t, terr = effTerr(s), dg = !!s.c.dungeon, trav = s.cls === 'road' || s.cls === 'void', cam = clock.travel + clock.sway, dr = clock.drift;
-    const T = tintFn(pal), strip = (b, off, y, a) => sc.strip(c2, b, off, y, a);
+    const pal = palCur || palTo, t = clock.t, terr = effTerr(s), dg = !!s.c.dungeon, trav = s.cls === 'road' || s.cls === 'void', cam = clock.travel + clock.sway, dr = clock.drift, w = clock.wind;
+    const T = tintFn(pal), strip = (b, off, y, a) => sc.strip(c2, b, off, y, a), prof = sc.weather.profile(s);
     c2.setTransform(1, 0, 0, 1, 0, 0); c2.globalAlpha = 1;
-    if (dg) sc.legacy.interior(c2, s, pal, t);
-    else {
+    if (dg) {
+      B.sky.draw(c2, 0, 0); B.arch.draw(c2, 0, 0);
+      sc.fx.drawLamps(c2, pal, t, geo); sc.fx.drawFlames(c2, pal, t, geo); sc.dungeon.drawFx(c2, s, pal, t, geo);
+    } else {
       B.sky.draw(c2, 0, 0); sc.drawSkyObjs(c2, pal, t, s);
       strip(B.high, dr * 2.2 + cam * 0.04, 4, 0.85);
       if (s.phase !== 'void') strip(B.far, cam * 0.15, 0, 1);
       if (terr.sea > 0 && !terr.water) strip(B.sea, dr * 1.8 + 420 + cam * 0.5, terr.seaY - 40, 0.8);
-      if (s.phase !== 'void') { strip(B.mid, cam * 0.25, 0, 1); strip(B.flt, cam * 0.32, 0, 1); sc.drawFalls(c2, pal, t, cam * 0.32, terr, geo); }
+      if (s.phase !== 'void') strip(B.mid, cam * 0.25, 0, 1);
+      strip(B.flt, cam * 0.32, 0, 1); sc.drawFalls(c2, pal, t, cam * 0.32, terr, geo);
       if (terr.water) { strip(B.water, 0, terr.water, 1); sc.drawWater(c2, pal, t, terr, cam); }
       if (terr.sea > 0) strip(B.sea, dr * 3.2 + cam * 0.8, terr.seaY - 14, 1);
       if (terr.near && !trav) B.near.draw(c2, -PAD + Math.round(clock.sway * 0.4), 0);
       strip(B.front, dr * 6.5 + 300 + cam, GY - 40, 0.92);
       B.arch.draw(c2, 0, 0);
       strip(B.fog, dr * 9 + cam * 1.2, GY - 22, 0.5);
+      if (prof && prof.fog) { strip(B.fog, dr * 5 + 150, GY - 34, prof.fog); strip(B.fog, -dr * 6 + 320, GY - 12, prof.fog * 0.8); }
       if (s.vis && s.vis.length && ui.bld && !trav) drawStreet(c2, s, pal, t);
       sc.fx.drawLamps(c2, pal, t, geo); sc.fx.drawFlags(c2, pal, t, geo); sc.fx.drawFlames(c2, pal, t, geo);
       sc.fx.drawFireflies(c2, pal, t, terr);
@@ -172,7 +186,9 @@
     }
     sc.actor.draw(c2, s, pal, t);
     if (s.mon && ui.sprites) { sc.use(c2); const def = D.monsterById[s.mon], boss = def && def.boss; ui.sprites.monster(sc.R, s.mon, boss ? 356 : 340, sc.actor.FY, Math.floor(t * 9), boss ? 6 : 4); }
-    if (!dg) { B.over.draw(c2, 0, 0); sc.fx.draw(c2, pal, t, terr); strip(B.fog, -dr * 7 + 500 - cam * 1.5, GY - 8, 0.16); sc.fx.weather(c2, s, pal, t); }
+    if (dg) drawOver(c2, 0, t); else drawOver(c2, w, t);
+    if (!dg) { sc.fx.draw(c2, pal, t, terr); strip(B.fog, -dr * 7 + 500 - cam * 1.5, GY - 8, 0.16); }
+    if (!dg) sc.weather.draw(c2, s, pal, t);
     sc.events.over(c2, s, pal, t);
   }
 
@@ -236,6 +252,6 @@
     const out = cv; cv = keepCv; ctx = keepCtx; st = keepSt; built = EMPTY(); palTo = null; palCur = null; inPreview = false; // ép dựng lại cảnh thật ở khung kế
     return out;
   }
-  ui.scene = { mirror: null, setPage, layout: () => lay, init, W, H, GY, state: () => st, draw: () => { if (st) render(st, ctx); }, readState, palette, preview, force: s => { forced = s; }, perf: sc.perf, config: CFG };
+  ui.scene = { mirror: null, setPage, layout: () => lay, init, W, H, GY, state: () => st, draw: () => { if (st) render(st, ctx); }, readState, palette, preview, force: s => { forced = s; }, perf: sc.perf, config: CFG, setReduced: sc.setReduced };
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init); else init();
 })();
