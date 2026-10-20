@@ -256,8 +256,8 @@ Hai tab hiện nay trùng nhau. Bố cục mới:
 
 ## 11. Các chặng làm (đề xuất)
 - [ ] **R0** duyệt kế hoạch; chốt mục 12.
-- [ ] **R1** mô hình quan hệ (4): thanh, loại, giai đoạn, chuyển bản lưu cũ, nhãn và thẻ; kiểm thử.
-- [ ] **R2** đạo lữ (5): hành trình, tương hợp, hôn ước, lễ, song tu mới, thử thách, rạn nứt, tang; viết khoảng 28 chặng.
+- [x] **R1** mô hình quan hệ (4): thanh, loại, giai đoạn, chuyển bản lưu cũ, nhãn và thẻ; kiểm thử. (xong 2026-10-20 ở phiên 9B, xem Z mục Đợt 9)
+- [~] **R2** đạo lữ (5): hành trình, tương hợp, hôn ước, lễ, song tu mới, thử thách, rạn nứt, tang; viết khoảng 28 chặng. (cơ chế xong ở 9B 2026-10-20; còn viết chặng chữ, phiên 9B-d)
 - [ ] **R3** con cái (6): ý định, khả năng, thai kỳ, giai đoạn, giáo dưỡng, tính cách và xuất thân của con, quan hệ cha mẹ-con, di chúc và kế thừa; viết khoảng 30 chặng.
 - [ ] **R4** nhân duyên (7): dây duyên, dấu, gặp, bỏ lỡ, dựng NPC, nối vai với Q.
 - [ ] **R5** giao diện Nhân duyên (gộp Quan hệ và Gia đình), gia phả, nút hành động.

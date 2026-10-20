@@ -47,6 +47,13 @@ button:disabled{opacity:.4;cursor:not-allowed}
 .bar.el i{background:var(--yellow)}
 .bar.di i{background:var(--violet)}
 .bar.danger i{background:var(--red)}
+.bond{margin:4px 0}
+.bondrow{display:grid;grid-template-columns:34px 1fr 28px;gap:6px;align-items:center}
+.bondrow .bar{margin-top:0}
+.bar.bd-love i{background:var(--pink2)}
+.bar.bd-trust i{background:var(--teal)}
+.bar.bd-respect i{background:var(--gold)}
+.chip.bad{color:var(--red);border-color:var(--red)}
 #map-svg{width:100%;height:auto;display:block;background:#101720;border:1px solid var(--line);border-radius:8px}
 #map-svg .edge{stroke:#34445a;stroke-width:2;stroke-dasharray:5 4}
 #map-svg .edge-lbl{fill:var(--dim);font-size:11px}

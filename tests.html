@@ -1164,7 +1164,8 @@ test('Con cái: thừa hưởng một phần tư chất bố mẹ, mang họ cha
   ok(TT.age(k1) >= 12 && k1.focus !== 'child', 'đủ 12 tuổi thì bắt đầu hành động');
 });
 
-test('Đạo lữ: tình cảm đủ thì kết đạo lữ, người chơi được nhiều đạo lữ, ghen tuông, NPC chỉ một đạo lữ', () => {
+function withBond(onv, fn) { const was = D.BOND.on; D.BOND.on = onv; try { return fn(); } finally { D.BOND.on = was; } }
+test('Đạo lữ: tình cảm đủ thì kết đạo lữ, người chơi được nhiều đạo lữ, ghen tuông, NPC chỉ một đạo lữ (bản cũ, công tắc D.BOND tắt)', () => withBond(false, () => {
   TT.life.createWorld(702);
   const p = adult({ gender: 'nam' }); p.kind = 'player'; TT.world.playerId = p.id;
   const a = adult({ gender: 'nu' }), b = adult({ gender: 'nu' }), c3 = adult({ gender: 'nam' });
@@ -1194,7 +1195,7 @@ test('Đạo lữ: tình cảm đủ thì kết đạo lữ, người chơi đư
     }
   }));
   TT.world.pending = null;
-});
+}));
 
 test('Song tu: tu nhanh hơn tu một mình, tăng đạo tâm và đạo điểm, có thể thụ thai và sinh con; con ở với cha mẹ', () => {
   TT.life.createWorld(703);
@@ -3677,7 +3678,7 @@ function withRoll(v, fn) { const o = TT.rng.RI; TT.rng.RI = function (a, b) { re
 
 test('Truyện và vòng quay (8B): story-lint sạch trên dữ liệu thật, và bắt được lỗi trên dữ liệu hỏng', () => {
   const errs = TT.story.lint(); eq(errs.length, 0, 'lint: ' + errs.join(' | '));
-  ok(D.STORY.arcs.length >= 3 && D.STORY.arcs.every(a => a.loai === 'bb'), 'A1 đến A3 đã đăng ký');
+  ok(D.STORY.arcs.filter(a => a.loai === 'bb').length >= 3, 'A1 đến A3 đã đăng ký');
   const bad = JSON.parse(JSON.stringify(D.STORY.arcs.filter(a => a.id === 'bb_a3')));
   bad[0].chang.c2.lc[0].wheel.vung[0].w = 20; bad[0].chang.c1.lc[0].toi = 'khong_co'; bad[0].chang.c1.lc[1].fx.tuy_y = 3; delete bad[0].chang.c1.lc[0].gate.why;
   bad[0].chang.c1.lc[2].ax = { tinh: 9 }; bad[0].chang.c2.lc[0].wheel.gia = 9; bad[0].chang.c1.d = 'Chào {la}.';
@@ -4080,6 +4081,280 @@ test('Xuất thân (9A): đầu thai bốc xuất thân mới và dựng cha m�
   for (let i = 0; i < 12; i++) { const p = TT.player(); seen[p.origin2] = 1; if (p.alive) TT.life.die(p, 'thử'); w.pending = null; TT.life.reincarnate({ boost: true }); const q = TT.player(); ok(q.id !== p.id && q.origin2 && q.origin === D.ORIGINS2_BY_ID[q.origin2].n, 'kiếp mới có xuất thân'); eq(q.parents.length > 0 || !D.ORIGINS2_BY_ID[q.origin2].cha_me.co, true); }
   ok(Object.keys(seen).length >= 2, 'qua nhiều kiếp ra nhiều xuất thân: ' + Object.keys(seen).join());
   const npc = Object.values(w.chars).find(c => c.kind === 'npc' && c.parents.length === 0 && c.tier === 'core'); ok(npc && !npc.origin2, 'NPC không có xuất thân v2');
+});
+
+// ---------------- Quan hệ và đạo lữ (9B) ----------------
+function bondSetup(seed, opts) {
+  const p = freshPlayer(seed, Object.assign({ realm: 1, gold: 500 }, opts || {}));
+  p.gender = 'nam'; p.birthMonth = TT.world.months - 12 * 25; TT.world.pending = null; p.nature = { tinh: 0, xuthe: 0, daoduc: 0, tudung: 0 }; // tính cách trung dung: không lựa chọn nào bị khóa
+  return p;
+}
+function npcFor(p, gender, age) {
+  const o = TT.life.spawnNpc(age || 25, p.region);
+  o.gender = gender || 'nu'; o.place = p.place; o.travel = null; o.cross = null; o.dest = null; o.tier = 'core'; o.kind = 'npc';
+  return o;
+}
+function stubP(val, fn) { const o = TT.rng.P; TT.rng.P = () => val; try { return fn(); } finally { TT.rng.P = o; } }
+function onlyArcs(arcs, fn) { const was = D.STORY.arcs; D.STORY.arcs = arcs; try { return fn(); } finally { D.STORY.arcs = was; } }
+
+test('Quan hệ và đạo lữ (9B): thanh, loại, nhãn; đọc không gọi rng và không ghi; NPC với NPC không có d', () => {
+  const p = bondSetup(901), o = npcFor(p), o2 = npcFor(p, 'nam');
+  TT.rel.add(p, o, 50);
+  const r = TT.rel.get(p, o); ok(!r.d, 'chưa khởi tạo');
+  const s0 = TT.rng.getState(), snap = JSON.stringify(TT.world.rel);
+  const b0 = TT.bond.bars(p, o); ok(b0 && b0.virtual && b0.trust > 0 && b0.show.indexOf('trust') >= 0, 'bars suy ra từ bản cũ');
+  TT.bond.label(p, o); TT.bond.compat(p, o); TT.bond.willing(o, p, 'to'); TT.bond.get(p, o); TT.bond.partners(p); TT.bond.dualFull(p); TT.bond.holds(r); TT.bond.than(p, o); TT.bond.type(p, o); TT.bond.find(p, {}); TT.bond.cond(p, o, { love: 1 });
+  eq(TT.rng.getState(), s0, 'hàm đọc không gọi rng'); eq(JSON.stringify(TT.world.rel), snap, 'hàm đọc không ghi');
+  const d = TT.bond.ensure(p, o); ok(d && d.t === 'ban' && d.love === 0 && d.trust > 0, 'khởi tạo muộn từ bản cũ'); ok(r.d === d);
+  const rs0 = d.respect; TT.bond.shift(p, o, { love: 30, trust: 20, respect: 10, debt: 50 });
+  eq(Math.round(d.love), 30); eq(Math.round(d.respect), Math.round(rs0 + 10)); eq(d.debt, 50);
+  TT.bond.shift(p, o, { love: 500, debt: -500 }); eq(d.love, 100, 'kẹp 100'); eq(d.debt, -100, 'kẹp −100');
+  const bb = TT.bond.bars(p, o); ok(!bb.virtual && bb.show.indexOf('love') >= 0 && bb.show.indexOf('trust') >= 0, 'bars thật, hiện thanh có giá trị');
+  eq(TT.bond.setType(p, o, 'dao_lu').t, 'dao_lu'); eq(r.k, 'dao_lu', 'đồng bộ rel.k'); ok(/^Đạo lữ/.test(TT.bond.label(p, o)));
+  TT.bond.setType(p, o, 'ban'); eq(r.k, '', 'về bạn thì bỏ k'); ok(/Bạn bè|Tri kỷ|Quen/.test(TT.bond.label(p, o)));
+  TT.bond.setType(p, o, 'cu'); eq(r.nl, 1); eq(TT.bond.label(p, o).indexOf('Người cũ'), 0);
+  TT.bond.setType(p, o, 'huyet'); eq(r.k, 'huyet'); eq(TT.bond.setType(p, o, 'khong_co'), null, 'loại lạ bị từ chối');
+  eq(TT.bond.shift(o, o2, { love: 5 }), null, 'NPC với NPC không có d'); eq(TT.bond.ensure(o, o2), null); ok(!TT.rel.ensure(o, o2).d);
+  eq(TT.bond.shift(p, o2, { love: 5 }).love, 5, 'cặp có người chơi, chưa quen vẫn tạo được qua shift (story)');
+});
+
+test('Quan hệ và đạo lữ (9B): chuyển bản lưu cũ một lần (love cũ vào d.love, k cũ thành loại), chỉ cặp thân thiết, trần số cặp', () => {
+  const p = bondSetup(902), a = npcFor(p), b = npcFor(p, 'nam', 50), c1 = npcFor(p, 'nu', 40), e = npcFor(p, 'nam', 30);
+  TT.rel.add(p, a, 70); const ra = TT.rel.get(p, a); ra.k = 'dao_lu'; ra.love = 80;
+  TT.rel.add(p, b, 60); const rb = TT.rel.get(p, b); rb.k = 'huyet';
+  TT.rel.add(p, c1, 45); const rc = TT.rel.get(p, c1);
+  TT.rel.add(p, e, 20); const re = TT.rel.get(p, e);
+  TT.bond.tick(p);
+  eq(ra.d.t, 'dao_lu'); eq(ra.d.love, 80); eq(ra.d.st, 'ben'); eq(ra.d.p, 'chinh');
+  eq(rb.d.t, 'huyet'); ok(rb.d.respect > 50, 'ruột thịt có Kính'); eq(rc.d.t, 'ban'); ok(!re.d, 'chưa thân thiết thì chưa có d');
+  ra.love = 10; TT.bond.tick(p); eq(ra.d.love, 80, 'chuyển đúng một lần, không chép lại');
+  TT.rel.add(p, e, 30); TT.bond.tick(p); ok(re.d, 'thân thiết về sau thì khởi tạo muộn');
+  for (let i = 0; i < 20; i++) { const o = npcFor(p, 'nu', 30 + i); TT.rel.add(p, o, 50); }
+  TT.bond.tick(p);
+  eq(TT.rel.list(p).filter(x => x.r.d).length, D.BOND.maxClose + 0, 'tối đa ' + D.BOND.maxClose + ' cặp thân thiết có chiều sâu');
+  const th = npcFor(p, 'nam', 30); TT.rel.add(p, th, -80); TT.rel.setKind(th, p, 'thu'); TT.bond.tick(p);
+  eq(TT.rel.get(p, th).d.t, 'thu', 'kẻ thù luôn có d dù quá trần'); ok(TT.rel.get(p, th).d.debt < 0, 'oán');
+});
+
+test('Quan hệ và đạo lữ (9B): giai đoạn từ gặp tới vĩnh biệt, không lùi, 1 chính + 2 phụ, phụ lên thay khi chính mất, chia tay', () => {
+  const p = bondSetup(903), a = npcFor(p), w = TT.world; TT.rel.add(p, a, 45);
+  const r = TT.rel.get(p, a), d = TT.bond.ensure(p, a); eq(d.st, 'gap');
+  TT.bond.shift(p, a, { love: 30 }); TT.bond.tick(p); eq(d.st, 'men');
+  eq(TT.bond.advance(p, a, 'to', { force: true }).ok, true); eq(d.st, 'to'); eq(d.t, 'thuong'); ok(TT.bond.holds(r), 'đang hứa hẹn thì không bốc lại hộp cũ');
+  TT.bond.advance(p, a, 'men'); eq(d.st, 'to', 'không lùi trên đường chính');
+  // hộp lễ kết đạo lữ tới sau 2 tháng
+  w.months += 2; TT.bond.tick(p); ok(w.pending && w.pending.evId === 'bond_ket', 'hộp lễ kết đạo lữ'); w.pending = null;
+  const L = TT.bond.advance(p, a, 'ket', { force: true }); ok(L.ok); eq(r.k, 'dao_lu'); eq(d.t, 'dao_lu'); eq(d.st, 'ket'); eq(d.p, 'chinh'); ok(d.love >= 60);
+  w.months += 6; TT.bond.tick(p); eq(d.st, 'ben');
+  ok(TT.bond.cond(p, a, { st: 'ket', love: 60 }) && TT.bond.cond(p, a, { st: 'men' }) && TT.bond.cond(p, a, { type: 'dao_lu' }), 'điều kiện đạt giai đoạn');
+  ok(!TT.bond.cond(p, a, { st: 'ran' }) && !TT.bond.cond(p, a, { type: 'thu' }) && !TT.bond.cond(p, a, { debt: 10 }), 'ran/biet khớp đúng; type; debt');
+  eq(TT.bond.find(p, { st: 'ben' }).id, a.id);
+  const b = npcFor(p, 'nu', 28), c3 = npcFor(p, 'nu', 29), e = npcFor(p, 'nu', 27);
+  [b, c3].forEach((x, i) => { TT.rel.add(p, x, 60); TT.bond.shift(p, x, { love: 60 }); ok(TT.family.eligible(p, x), 'còn chỗ'); TT.bond.advance(p, x, 'to', { force: true }); ok(TT.bond.advance(p, x, 'ket', { force: true }).ok); eq(TT.rel.get(p, x).d.p, 'phu', 'từ người thứ hai là phụ'); });
+  eq(TT.bond.partners(p).length, 3); eq(TT.bond.main(p).id, a.id);
+  TT.rel.add(p, e, 60); ok(!TT.family.eligible(p, e), 'đủ 1 chính + 2 phụ'); TT.bond.shift(p, e, { love: 60 }); TT.bond.advance(p, e, 'to', { force: true });
+  const full = TT.bond.advance(p, e, 'ket', { force: true }); ok(!full.ok && full.refused && TT.rel.get(p, e).k !== 'dao_lu', 'kết thêm bị chặn');
+  // vĩnh biệt
+  const dt0 = p.daoTam; a.alive = false; TT.bond.tick(p);
+  eq(d.st, 'biet'); ok(p.daoTam < dt0, 'tang làm đạo tâm lay'); ok(p.flags.mat_dao_lu); eq(TT.bond.main(p).id, b.id, 'đạo lữ phụ lên chính'); eq(TT.rel.get(p, b).d.p, 'chinh');
+  TT.bond.tick(p); eq(p.daoTam < dt0 - 5 || p.daoTam === dt0 - 5, true, 'tang chỉ tính một lần');
+  // chia tay
+  ok(TT.bond.breakup(p, b, 'thử nghiệm')); const rb = TT.rel.get(p, b); eq(rb.k, ''); eq(rb.d.t, 'cu'); eq(rb.d.st, 'ran'); eq(TT.bond.main(p).id, c3.id, 'phụ còn lại lên chính');
+  ok(/^Người cũ/.test(TT.bond.label(p, b)));
+});
+
+test('Quan hệ và đạo lữ (9B): hộp Duyên tình theo hành trình (NPC tỏ tình thì gật đầu là xong; mình ngỏ thì NPC có thể từ chối)', () => {
+  const p = bondSetup(904), a = npcFor(p), w = TT.world; TT.rel.add(p, a, 70); TT.bond.shift(p, a, { love: 70 });
+  const ev = D.eventById.rel_to_tinh, d = TT.bond.get(p, a);
+  w.pending = null; TT.events.apply(p, ev, 'dong_y', { otherId: a.id, initiator: 0 });
+  eq(d.st, 'to'); eq(TT.rel.get(p, a).k, '', 'chưa là đạo lữ, còn lễ kết'); eq(TT.family.partners(p).length, 0);
+  // ngỏ lời bị từ chối
+  const q = npcFor(p, 'nu', 24); TT.rel.add(p, q, 70); TT.bond.shift(p, q, { love: 70 }); const dq = TT.bond.get(p, q), l0 = dq.love;
+  stubP(false, () => TT.events.apply(p, ev, 'dong_y', { otherId: q.id, initiator: 1 }));
+  ok(dq.love < l0 && dq.ref === 1 && dq.st !== 'to', 'bị từ chối: Tình giảm, ghi số lần từ chối');
+  stubP(true, () => TT.events.apply(p, ev, 'dong_y', { otherId: q.id, initiator: 1 })); eq(dq.st, 'to', 'lần sau nhận lời');
+  // từ chối giữ tri kỷ giảm Tình qua bond
+  const z = npcFor(p, 'nu', 26); TT.rel.add(p, z, 70); TT.bond.shift(p, z, { love: 70 }); const lz = TT.bond.get(p, z).love;
+  TT.events.apply(p, ev, 'tu', { otherId: z.id, initiator: 1 }); eq(TT.bond.get(p, z).love, lz - 30);
+  // hộp lễ: ba kiểu lễ và đợi thêm
+  const lo = D.eventById.bond_ket; ['gian_di', 'tiec'].forEach((k, i) => { const x = i ? q : a; p.gold = 500; TT.events.apply(p, lo, k, { otherId: x.id }); eq(TT.rel.get(p, x).k, 'dao_lu', k); });
+  eq(p.gold, 400, 'tiệc mừng 100 vàng');
+  const cho = npcFor(p, 'nu', 25); TT.rel.add(p, cho, 70); TT.bond.shift(p, cho, { love: 70 }); TT.bond.advance(p, cho, 'to', { force: true });
+  TT.events.apply(p, lo, 'cho', { otherId: cho.id }); ok(TT.bond.get(p, cho).askM > w.months, 'đợi thêm thì hỏi lại sau'); eq(TT.rel.get(p, cho).k, '');
+});
+
+test('Quan hệ và đạo lữ (9B): tương hợp (bốn trục, ngũ hành, đạo, chính tà) đối xứng, trong −1..1, không rng; cùng tính hợp hơn trái tính; ý muốn, nỗi buồn tuổi thọ', () => {
+  const p = bondSetup(905), a = npcFor(p), b = npcFor(p, 'nu', 27);
+  p.nature = { tinh: 2, xuthe: 0, daoduc: 8, tudung: 5 }; a.nature = { tinh: 3, xuthe: 1, daoduc: 7, tudung: 6 }; b.nature = { tinh: -8, xuthe: -10, daoduc: -9, tudung: -8 };
+  const s0 = TT.rng.getState();
+  const hi = TT.bond.compat(p, a), lo = TT.bond.compat(p, b);
+  eq(TT.rng.getState(), s0, 'không rng'); eq(TT.bond.compat(a, p), hi, 'đối xứng'); ok(hi <= 1 && hi >= -1 && lo <= 1 && lo >= -1, 'trong −1..1');
+  ok(hi > lo + 0.4, 'cùng tính hợp hơn trái tính: ' + hi.toFixed(2) + ' so với ' + lo.toFixed(2));
+  eq(TT.bond.compatLabel(0.5), 'Rất hợp'); eq(TT.bond.compatLabel(0.2), 'Hợp'); eq(TT.bond.compatLabel(0), 'Bình thường'); eq(TT.bond.compatLabel(-0.6), 'Trái tính');
+  // đạo, chính tà, ngũ hành
+  const c0 = TT.bond.compat(p, a); a.direction = 'khac'; ok(TT.bond.compat(p, a) < c0, 'khác đường trừ nhẹ'); a.direction = p.direction;
+  p.rep.chinh = 90; a.align = -90; ok(TT.bond.compat(p, a) < c0, 'chính tà xung'); p.rep.chinh = 0; a.align = 0;
+  p.tuchat = { total: 50, attrs: [{ n: 'Kim', di: false, p: 50 }] }; a.tuchat = { total: 50, attrs: [{ n: 'Thủy', di: false, p: 50 }] }; const sinh = TT.bond.compat(p, a);
+  a.tuchat = { total: 50, attrs: [{ n: 'Mộc', di: false, p: 50 }] }; const khac = TT.bond.compat(p, a); ok(sinh > khac, 'tương sinh hợp hơn tương khắc');
+  // ý muốn của người kia
+  TT.rel.add(p, a, 50); const w0 = TT.bond.willing(a, p, 'to'); TT.bond.shift(p, a, { love: 90, trust: 90 }); const w1 = TT.bond.willing(a, p, 'to');
+  ok(w1 > w0 && w1 <= 0.95 && w0 >= 0.03, 'Tình cao thì dễ nhận lời hơn'); ok(TT.bond.willing(a, p, 'ket') > TT.bond.willing(a, p, 'to') - 0.2);
+  const x = npcFor(p, 'nam', 30); TT.family.pair(a, x); eq(TT.bond.willing(a, p, 'to'), 0.02, 'NPC đã có đạo lữ gần như không nhận');
+  // nỗi buồn tuổi thọ
+  p.realm = 1; a.realm = 3; const g = TT.bond.grief(p, a); ok(g && g.gap === 2 && g.lower === p); a.realm = 2; eq(TT.bond.grief(p, a), null);
+  a.realm = 3; TT.bond.advance(p, a, 'to', { force: true }); TT.bond.advance(p, a, 'ket', { force: true }); const dt0 = p.daoTam; const dd = TT.bond.get(p, a); const l0 = dd.love;
+  stubP(false, () => TT.bond.yearly(p)); ok(p.daoTam < dt0 && dd.nb === 1, 'chênh cảnh giới làm đạo tâm lay động'); ok(p.log.some(l => /cách nhau 2 cảnh giới/.test(l.t)), 'nhật ký nỗi buồn');
+  void l0;
+});
+
+test('Quan hệ và đạo lữ (9B): song tu 1-2 lần mỗi năm, thưởng giảm dần (100%, 60%, 20%), lần 3 không thụ thai, NPC có thể từ chối, AI bỏ song tu khi đủ', () => {
+  const p = bondSetup(906, { gender: 'nu' }), a = npcFor(p, 'nam'), w = TT.world;
+  p.gender = 'nu'; TT.rel.add(p, a, 60); TT.bond.shift(p, a, { love: 70 }); TT.bond.advance(p, a, 'to', { force: true }); TT.bond.advance(p, a, 'ket', { force: true });
+  w.months = Math.ceil(w.months / 12) * 12 + 12;
+  const d = TT.bond.get(p, a), y = Math.floor(w.months / 12);
+  const r1 = TT.bond.dual(p, a); eq(r1.mult, 1); ok(r1.conceive);
+  const rep = TT.bond.dual(p, a); ok(rep.repeat && rep.mult === 1 && !rep.conceive, 'cùng tháng không đếm hai lần'); eq(d.sy.n, 1);
+  w.months++; const r2 = TT.bond.dual(p, a); eq(r2.mult, 0.6); ok(r2.conceive);
+  ok(TT.bond.dualCount(p, a) === 2 && TT.bond.dualFull(p), 'đủ 2 buổi thì AI bỏ song tu');
+  w.months++; const r3 = TT.bond.dual(p, a); eq(r3.mult, 0.2); ok(!r3.conceive, 'từ lần 3 không thụ thai'); eq(TT.bond.dualCount(p, a), 3);
+  w.months = (y + 1) * 12; eq(TT.bond.dualCount(p, a), 0, 'sang năm thì tính lại'); ok(!TT.bond.dualFull(p)); eq(TT.bond.dual(p, a).mult, 1);
+  // NPC từ chối khi Tình thấp
+  w.months += 12; d.love = 10; const rf = stubP(true, () => TT.bond.dual(p, a)); ok(rf.refused && rf.mult === 0, 'tình thấp thì có thể từ chối'); d.love = 80; w.months += 12; ok(!stubP(true, () => TT.bond.dual(p, a)).refused, 'tình cao thì không từ chối');
+  // tích hợp cultivation: thưởng giảm dần theo buổi, lần 3 không có con
+  const orig = TT.rng.RI; TT.rng.RI = () => 6;
+  try {
+    w.months = (Math.floor(w.months / 12) + 1) * 12; d.love = 70; p.pregnant = null; p.lastBirth = -999; p.children = [];
+    const gain = () => { const x0 = p.yXp, dt = p.daoDiem; stubP(true, () => TT.cult.monthly(p, 'dual')); return { xp: p.yXp - x0, dd: p.daoDiem - dt }; };
+    const g1 = gain(); ok(!!p.pregnant, 'buổi 1: thụ thai (rng ép đúng)'); p.pregnant = null; p.lastBirth = -999; w.months++;
+    const g2 = gain(); ok(!!p.pregnant, 'buổi 2 còn thụ thai'); p.pregnant = null; p.lastBirth = -999; w.months++;
+    const g3 = gain(); ok(!p.pregnant, 'buổi 3 không thụ thai');
+    ok(g1.xp > g2.xp && g2.xp > g3.xp && g3.xp > 0, 'tu vi giảm dần: ' + [g1.xp, g2.xp, g3.xp].map(x => x.toFixed(2)).join(' > '));
+    ok(g1.dd > g2.dd && g2.dd > g3.dd, 'đạo điểm giảm dần');
+  } finally { TT.rng.RI = orig; }
+});
+
+test('Quan hệ và đạo lữ (9B): đạo lữ NPC tự chủ (từ chối, rời đi), thất bại thì Tình giảm rồi thành người cũ, NPC không bị ép', () => {
+  const p = bondSetup(907), a = npcFor(p), w = TT.world; TT.rel.add(p, a, 60); TT.bond.shift(p, a, { love: 60, trust: 40 });
+  const d = TT.bond.get(p, a);
+  [45, 25, 0].forEach((love, i) => { stubP(false, () => ok(TT.bond.advance(p, a, 'to').refused, 'lần ' + (i + 1) + ' bị từ chối')); eq(d.ref, i + 1); ok(d.love <= love + 0.001, 'Tình giảm còn ' + d.love); });
+  eq(d.t, 'cu', 'từ chối ba lần thì thành người cũ'); eq(TT.rel.get(p, a).nl, 1);
+  // NPC rời đi khi Tình thấp
+  const b = npcFor(p, 'nu', 26); TT.rel.add(p, b, 60); TT.bond.shift(p, b, { love: 70, trust: 50 }); TT.bond.advance(p, b, 'to', { force: true }); TT.bond.advance(p, b, 'ket', { force: true });
+  const db = TT.bond.get(p, b);
+  stubP(true, () => TT.bond.yearly(p)); eq(TT.family.partners(p).length, 1, 'Tình cao thì ở lại'); w.pending = null;
+  db.love = 5; db.trust = 5;
+  stubP(true, () => TT.bond.yearly(p)); eq(TT.family.partners(p).length, 0, 'Tình và Tin thấp thì NPC rời đi'); eq(db.t, 'cu'); ok(p.log.some(l => /quyết định rời đi/.test(l.t)));
+  // rạn nứt: Tình thấp liên tục hai năm thì hỏi
+  const c3 = npcFor(p, 'nu', 27); TT.rel.add(p, c3, 60); TT.bond.shift(p, c3, { love: 70, trust: 50 }); TT.bond.advance(p, c3, 'to', { force: true }); TT.bond.advance(p, c3, 'ket', { force: true });
+  const dc = TT.bond.get(p, c3); dc.love = 28; dc.trust = 60; c3.place = 'xa'; w.pending = null; // ở xa nên Tình tiếp tục giảm, và người chơi không bị NPC bỏ (P = false)
+  stubP(false, () => { TT.bond.yearly(p); eq(dc.low, 1); TT.bond.yearly(p); });
+  ok(w.pending && w.pending.evId === 'bond_ran', 'rạn nứt hỏi người chơi'); eq(dc.st, 'ran'); w.pending = null;
+  TT.events.apply(p, D.eventById.bond_ran, 'chia', { otherId: c3.id }); eq(dc.t, 'cu');
+  // hòa giải, hai nhánh
+  const e = npcFor(p, 'nu', 27); TT.rel.add(p, e, 60); TT.bond.shift(p, e, { love: 70, trust: 50 }); TT.bond.advance(p, e, 'to', { force: true }); TT.bond.advance(p, e, 'ket', { force: true }); const de = TT.bond.get(p, e); de.st = 'ran';
+  stubP(true, () => TT.events.apply(p, D.eventById.bond_ran, 'hoa', { otherId: e.id })); eq(de.st, 'ben', 'hòa giải thành');
+  de.st = 'ran'; const l1 = de.love; stubP(false, () => TT.events.apply(p, D.eventById.bond_ran, 'hoa', { otherId: e.id })); ok(de.love < l1, 'hòa giải hỏng thì Tình giảm');
+  // thử thách chung
+  ['nan', 'nha', 'duong'].forEach(v => { de.st = 'thu'; const t1 = de.trust; TT.events.apply(p, D.eventById.bond_thu_thach, 'chung', { otherId: e.id, v }); ok(de.trust > t1 && de.st === 'ben', v + ': cùng vượt qua tăng Tin'); de.st = 'thu'; const t2 = de.trust; TT.events.apply(p, D.eventById.bond_thu_thach, 'rieng', { otherId: e.id, v }); ok(de.trust < t2, v + ': né tránh giảm Tin'); });
+  // yearly của NPC không làm gì
+  w.pending = null; const s0 = TT.rng.getState(); TT.bond.yearly(e); TT.bond.tick(e); eq(TT.rng.getState(), s0, 'chỉ người chơi'); ok(!w.pending);
+});
+
+test('Quan hệ và đạo lữ (9B): hôn ước chỉ do thế lực/gia tộc ép người chơi, có nhánh từ chối, hết hạn tự hủy, có thể từ hôn', () => {
+  const p = bondSetup(908), a = npcFor(p), w = TT.world, par = npcFor(p, 'nam', 50); p.parents = [par.id]; p.sect = null;
+  stubP(true, () => TT.bond.yearly(p));
+  ok(w.pending && w.pending.evId === 'bond_hon_uoc', 'gia tộc ép hôn ước'); const ctx = w.pending.ctx; eq(ctx.by, 'toc'); w.pending = null;
+  const o = w.chars[ctx.otherId];
+  // từ chối
+  const gold0 = p.gold; TT.events.apply(p, D.eventById.bond_hon_uoc, 'tu', ctx); ok(!TT.bond.get(p, o) || TT.bond.get(p, o).t !== 'hon_uoc', 'từ chối thì không có hôn ước');
+  // bỏ trốn: hai nhánh
+  stubP(true, () => TT.events.apply(p, D.eventById.bond_hon_uoc, 'tron', ctx)); eq(p.gold, gold0 - 50);
+  p.rep.danh = 50; const dan = p.rep.danh; stubP(false, () => TT.events.apply(p, D.eventById.bond_hon_uoc, 'tron', ctx)); ok(p.rep.danh < dan, 'bỏ trốn hỏng thì mất danh');
+  // nhận
+  TT.events.apply(p, D.eventById.bond_hon_uoc, 'nhan', ctx); const d = TT.bond.get(p, o); eq(d.t, 'hon_uoc'); eq(d.st, 'hon'); eq(d.by, 'toc'); ok(d.han > w.months); eq(TT.bond.label(p, o), 'Hôn ước');
+  ok(TT.bond.holds(TT.rel.get(p, o)), 'đã hôn ước thì không bốc hộp tỏ tình cũ');
+  // hôn ước: ở gần thì Tình nảy nhanh; ở xa thì người kia tự tìm tới
+  o.place = p.place; o.travel = null; o.cross = null; o.region = p.region; const l0 = d.love; stubP(false, () => TT.bond.yearly(p)); ok(d.love >= l0 + D.BOND.hon.near - 0.001, 'ở gần: Tình tăng ' + (d.love - l0));
+  const pl2 = TT.map.placesOf(p.region).find(x => x.id !== p.place); o.place = pl2.id; o.travel = null; w.pending = null; const l1 = d.love; stubP(true, () => TT.bond.yearly(p)); ok(o.travel && o.travel.to === p.place, 'ở xa: người kia lên đường tìm bạn'); ok(d.love - l1 <= D.BOND.hon.far + 0.001); o.travel = null; o.place = p.place; w.pending = null;
+  // hôn ước làm nảy lễ khi Tình đủ
+  d.love = 60; w.months += 3; TT.bond.tick(p); ok(w.pending && w.pending.evId === 'bond_ket', 'hôn ước đủ tình thì tới lễ kết'); w.pending = null;
+  // từ hôn
+  ok(TT.bond.breakup(p, o, 'bạn từ hôn')); eq(d.t, 'cu');
+  // hết hạn
+  const q = npcFor(p, 'nu', 24); TT.bond.betroth(p, q, 'tong'); const dq = TT.bond.get(p, q); w.months += 40; TT.bond.tick(p); eq(dq.t, 'cu', 'quá hạn thì tự hủy'); ok(p.log.some(l => /quá hạn/.test(l.t)));
+  // không ép NPC, không ép khi đã có đạo lữ, không có thế lực thì không
+  const npcSt = TT.rng.getState(); stubP(true, () => TT.bond.yearly(a)); eq(TT.rng.getState(), npcSt); w.pending = null;
+  const r = npcFor(p, 'nu', 26); TT.bond.shift(p, r, { love: 70 }); TT.bond.advance(p, r, 'to', { force: true }); TT.bond.advance(p, r, 'ket', { force: true }); w.pending = null;
+  stubP(true, () => TT.bond.yearly(p)); ok(!w.pending || w.pending.evId !== 'bond_hon_uoc', 'đã có đạo lữ thì không bị ép hôn ước');
+  p.parents = []; TT.bond.breakup(p, r, 'thử'); w.pending = null; stubP(true, () => TT.bond.yearly(p)); ok(!w.pending || w.pending.evId !== 'bond_hon_uoc', 'không gia tộc, không tông thì không ai ép');
+});
+
+test('Quan hệ và đạo lữ (9B): fx bond và điều kiện mo/khi theo bond trong story (tuyến mẫu dl_mau: gặp, tỏ tình, kết; NPC từ chối rẽ nhánh)', () => {
+  const arc = D.STORY.arcById.dl_mau; ok(arc, 'có tuyến mẫu'); eq(TT.story.lint().length, 0, TT.story.lint().join(' | '));
+  const run = (accept) => onlyArcs([arc], () => {
+    const p = bondSetup(909 + (accept ? 0 : 1)), w = TT.world, T = TT.story;
+    const drive = (key, step) => { for (let i = 0; i < 8 && !(w.pending && w.pending.type === 'story'); i++) { w.months += step || 1; T.tick(p); } ok(w.pending && w.pending.type === 'story', 'ra hộp truyện cho ' + key); const d = w.pending; ok(d.choices.some(c => c.key === key && !c.disabled), key + ' chọn được'); w.pending = null; T.choose(p, d, key); };
+    T.tick(p); eq(T.stOf(p, 'dl_mau'), null, 'chưa có cờ thì không mở');
+    p.flags.dl_mau = 1; T.tick(p); const st = T.stOf(p, 'dl_mau'); ok(st && st.vai.nguoi, 'mở tuyến, bốc người có thể nảy tình'); const o = w.chars[st.vai.nguoi]; ok(TT.family.eligible(p, o));
+    drive('lai_gan'); const d = TT.bond.get(p, o); ok(d.love >= 20 && d.trust >= 12 && d.st === 'men', 'fx bond: thanh và giai đoạn mến'); eq(st.st, 'c2');
+    // chặng 2 đòi Tình ≥ 25 và đã mến: đủ Tình thì tới
+    for (let i = 0; i < 6; i++) { w.months++; T.tick(p); } ok(!w.pending, 'Tình 20 chưa đủ 25: chặng tỏ tình chưa mở'); d.love = 30;
+    stubP(accept, () => drive('ngo_loi', 3));
+    if (!accept) { eq(st.ket, 'tu_choi', 'bị từ chối rẽ sang kết cục từ chối'); ok(d.ref === 1 && d.st !== 'to'); return { p, o, d }; }
+    eq(d.st, 'to'); eq(st.st, 'c3'); d.love = 45;
+    stubP(true, () => drive('ket_dao_lu', 2));
+    eq(st.ket, 'ben'); eq(TT.rel.get(p, o).k, 'dao_lu'); eq(d.t, 'dao_lu'); eq(d.st, 'ket'); ok(p.story.done.indexOf('dl_mau') >= 0);
+    return { p, o, d };
+  });
+  run(true); run(false);
+  // điều kiện bond ở mo: chỉ mở khi có người thỏa; vai pick bond lấy đúng người đó; khi.bond theo vai
+  const t = { id: 't_bond', n: 'Thử bond', loai: 'tp', mo: { bond: { st: 'ben', love: 50 } }, vai: { x: { pick: 'bond' } }, dau: 'c1',
+    chang: { c1: { t: 'Thử', d: 'Với {x}.', khi: { bond: { vai: 'x', trust: 30 } }, han: 12, mac: 'a', lc: [
+      { key: 'a', label: 'a', kind: 'safe', fx: { bond: { vai: 'x', debt: 20, type: 'an' } }, toi: 'ket:k' }, { key: 'b', label: 'b', kind: 'safe', toi: 'ket:k' }] } },
+    ket: { k: { t: 'k', kv: 0, log: 'xong' } } };
+  eq(TT.story.lint([t]).length, 0, TT.story.lint([t]).join('|'));
+  D.STORY.arcById.t_bond = t;
+  try {
+    onlyArcs([t], () => {
+      const p = bondSetup(911), a = npcFor(p), b = npcFor(p, 'nu', 26), w = TT.world, T = TT.story;
+      TT.rel.add(p, a, 60); TT.bond.shift(p, a, { love: 40, trust: 40 }); TT.bond.advance(p, a, 'to', { force: true }); TT.bond.advance(p, a, 'ket', { force: true });
+      TT.rel.add(p, b, 60); TT.bond.shift(p, b, { love: 90 }); TT.bond.get(p, b).st = 'ben'; TT.bond.get(p, b).trust = 10;
+      TT.bond.get(p, a).love = 49; T.tick(p); ok(!T.stOf(p, 't_bond') || b.id === T.stOf(p, 't_bond').vai.x, 'mo.bond: có người khác thỏa thì vẫn mở theo người đó');
+      const st = T.stOf(p, 't_bond'); ok(st, 'mo.bond mở khi có ai đó đạt'); eq(st.vai.x, b.id, 'pick bond lấy đúng người thân nhất thỏa'); 
+      for (let i = 0; i < 4; i++) { w.months++; T.tick(p); } ok(!w.pending, 'khi.bond: Tin chưa đủ thì chưa ra hộp');
+      TT.bond.get(p, b).trust = 40; w.months += 2; T.tick(p); ok(w.pending && w.pending.type === 'story', 'đủ Tin thì ra hộp'); const dd = w.pending; w.pending = null; T.choose(p, dd, 'a');
+      const db = TT.bond.get(p, b); eq(db.debt, 20); eq(db.t, 'an', 'fx.bond.type'); eq(st.ket, 'k');
+    });
+  } finally { delete D.STORY.arcById.t_bond; }
+  // lint bắt lỗi dữ liệu bond
+  const bad = JSON.parse(JSON.stringify([arc]));
+  bad[0].chang.c1.lc[0].fx.bond.st = 'xyz'; bad[0].chang.c1.lc[1].fx.bond.type = 'zz'; delete bad[0].chang.c2.lc[0].toi_tu;
+  bad[0].chang.c3.lc[0].fx.bond.vai = 'ai_do'; bad[0].chang.c2.khi.bond = { st: 'men' }; bad[0].chang.c3.khi.bond.love = 'nhieu';
+  bad[0].chang.c2.lc[1].fx = { bond: { vai: 'nguoi', st: 'ket' } }; bad[0].chang.c2.lc[1].tre = [{ sau: [2, 4], fx: { bond: { vai: 'nguoi', st: 'to' } }, log: 'x' }];
+  const e2 = TT.story.lint(bad).join(' | ');
+  ['bond.st không hợp lệ: xyz', 'bond.type không hợp lệ: zz', 'cần toi_tu', 'bond trỏ vai không có: ai_do', '.bond cần vai', 'bond.love không phải số', 'cần người kia đồng ý'].forEach(k => ok(e2.indexOf(k) >= 0, 'bắt được: ' + k + ' trong ' + e2));
+});
+
+test('Quan hệ và đạo lữ (9B): lưu/tải giữ d; bản lưu cũ (không có d) chuyển lại một lần; công tắc tắt thì như cũ', () => {
+  const p = bondSetup(912), a = npcFor(p), w = TT.world; TT.rel.add(p, a, 60); TT.bond.shift(p, a, { love: 70, trust: 50, debt: 30 }); TT.bond.advance(p, a, 'to', { force: true }); TT.bond.advance(p, a, 'ket', { force: true });
+  const key = TT.rel.get(p, a); const json = JSON.stringify(key.d), pid = p.id, aid = a.id;
+  const txt = TT.save.snapshot(); TT.life.createWorld(913); TT.save.restore(txt);
+  const q = TT.world.chars[pid], b = TT.world.chars[aid]; eq(JSON.stringify(TT.rel.get(q, b).d), json, 'd giữ nguyên sau khi tải'); ok(/^Đạo lữ/.test(TT.bond.label(q, b)));
+  // bản cũ: bỏ d, rel.k và love còn
+  const r = TT.rel.get(q, b); r.love = 66; delete r.d; TT.bond.tick(q); eq(r.d.t, 'dao_lu'); eq(r.d.love, 66, 'love cũ chuyển vào d.love'); eq(r.d.st, 'ben');
+  // công tắc tắt
+  withBond(false, () => {
+    const s0 = TT.rng.getState(), rj = JSON.stringify(TT.world.rel);
+    eq(TT.bond.get(q, b), null); eq(TT.bond.bars(q, b), null); eq(TT.bond.shift(q, b, { love: 5 }), null); eq(TT.bond.ensure(q, b), null); eq(TT.bond.dual(q, b), null); eq(TT.bond.advance(q, b, 'to').ok, false); eq(TT.bond.find(q, {}), null);
+    eq(TT.bond.label(q, b), TT.rel.label(q, b), 'nhãn như cũ'); eq(TT.bond.loveRec(r), 66, 'đọc Tình cũ'); ok(!TT.bond.dualFull(q) && !TT.bond.owns(q, b) && !TT.bond.holds(r));
+    TT.bond.tick(q); TT.bond.yearly(q); eq(TT.rng.getState(), s0, 'tắt thì không rng'); eq(JSON.stringify(TT.world.rel), rj, 'tắt thì không ghi');
+    const c3 = npcFor(q, 'nu', 24); TT.rel.add(q, c3, 60); TT.family.pair(q, c3); const rc = TT.rel.get(q, c3); eq(rc.love, 100); ok(!rc.d, 'pair kiểu cũ: love 100, không d');
+    TT.bond.addLoveRec(rc, -30); eq(rc.love, 70);
+    const old = npcFor(q, 'nu', 70); eq(TT.family.attract(q, old), 0, 'tắt thì còn giới hạn chênh tuổi 30');
+    q.flags.dl_mau = 1; onlyArcs([D.STORY.arcById.dl_mau], () => { TT.story.tick(q); ok(TT.story.stOf(q, 'dl_mau'), 'mo.flag vẫn mở'); const st = TT.story.stOf(q, 'dl_mau'); TT.story.applyFx(q, st, { bond: { vai: 'nguoi', love: 50, st: 'ket' } }, 'x'); if (st.vai.nguoi) ok(!TT.rel.get(q, w.chars[st.vai.nguoi]) || !TT.rel.get(q, w.chars[st.vai.nguoi]).d, 'fx.bond bị bỏ qua khi tắt'); });
+  });
+  // bật: bỏ giới hạn chênh tuổi cho cặp của người chơi, NPC với NPC vẫn giữ
+  const old = npcFor(q, 'nu', 70), n1 = npcFor(q, 'nam', 22); ok(TT.family.attract(q, old) > 0, 'bật thì cặp của người chơi bỏ giới hạn chênh tuổi'); eq(TT.family.attract(n1, old), 0, 'NPC với NPC vẫn giữ giới hạn');
 });
 
 runNext();

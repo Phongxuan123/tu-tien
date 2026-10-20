@@ -125,7 +125,7 @@
       return life.die(c, 'thân thể kiệt quệ' + (p ? ' tại ' + p.n : '') + ', gục xuống và không dậy nữa');
     }
     if (!c.travel && !c.cross) {
-      if (c.kind === 'player') TT.story.tick(c); // truyện (8B): chỉ người chơi; hộp truyện được ưu tiên hơn sự kiện lẻ cùng tháng
+      if (c.kind === 'player') { TT.bond.tick(c); TT.story.tick(c); } // quan hệ có chiều sâu (9B) rồi truyện (8B): chỉ người chơi; hộp truyện được ưu tiên hơn sự kiện lẻ cùng tháng
       TT.events.monthly(c);
       if (!c.alive) return;
       TT.ai.considerMove(c);

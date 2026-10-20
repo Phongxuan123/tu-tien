@@ -104,7 +104,7 @@
       // Tình cảm yêu đương chỉ nảy nở giữa những cặp có thể (đủ tuổi, không ruột thịt, còn tự do).
       if (TT.family.eligible(a, b)) {
         const gain = out.love != null ? out.love : { luan_dao: 2, tang_qua: 3, hop_tac: 3, chuyen: 1, cai_va: -5, tranh: -3 }[int.id] || 0;
-        res.r.love = rng.clamp((res.r.love || 0) + gain * TT.family.attract(a, b), 0, 100);
+        TT.bond.addLoveRec(res.r, gain * TT.family.attract(a, b));
       }
       const pl = a.kind === 'player' ? a : (b.kind === 'player' ? b : null);
       // NPC tự tìm người chơi chỉ được ghi vào nhật ký khi có điều đáng chú ý, để nhật ký không bị tràn.
@@ -150,7 +150,7 @@
       if (!pl && rec.love >= 60 && !rec.k && !rec.nl && TT.family.eligible(a, b) && rng.P(0.5)) { TT.family.pair(a, b); return; }
       if (!pl || w.pending || other.tier === 'phu' && other.realm === 0) return;
       const ev = (id, p, extra) => { if (rng.P(p)) TT.events.fire(pl, D.eventById[id], Object.assign({ otherId: other.id }, extra || {})); };
-      if (rec.love >= 60 && !rec.k && !rec.nl && TT.family.eligible(pl, other)) ev('rel_to_tinh', 0.6, { initiator: a === pl ? 1 : 0 });
+      if (TT.bond.loveRec(rec) >= 60 && !rec.k && !rec.nl && !TT.bond.holds(rec) && TT.family.eligible(pl, other)) ev('rel_to_tinh', 0.6, { initiator: a === pl ? 1 : 0 });
       else if (rec.v >= 60 && !rec.k && !rec.nk) ev('rel_ket_nghia', 0.3);
       else if ((r.int.id === 'cai_va' || r.int.id === 'tranh') && rec.v <= -20) ev('rel_xung_dot', 0.4);
       else if (rec.n <= 1 && other.tier === 'core') ev('rel_gap_nguoi', 0.12);
