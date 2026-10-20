@@ -155,3 +155,15 @@ Dùng chung: "Repo: Phongxuan123/tu-tien. Gắn repo, clone nhánh `main`. Trả
 - **Chưa làm (để chặng sau)**: hiển thị trang bị trên người (vật phẩm), hạc, kiếm quang bay ngang trời, vẽ lại sự kiện (T-B cắt); công trình đặc trưng theo cls/tông (T-C); cls chưa có bố cục vẫn dùng khối cũ tĩnh (thành, mỏ, bến, chợ, linh mạch, cổng ải); thời tiết theo dữ liệu vùng (T-D); Kenney không còn dùng trong cảnh nhưng chưa xóa tài nguyên (T-D).
 - **Đo** (Chromium headless): **~1,0–1,4 ms mỗi khung** (p95 1,5; tối đa 25–72 ms ở khung dựng lại lớp tĩnh), dựng lại lớp tĩnh **9–31 ms**, không tải ảnh. Kiểm thử `node tools/run-tests.js`: 138 đạt, 0 lỗi; `node tools/baseline.js --check`: trùng khít 40 hạt giống. Cửa sổ `mirror` vẽ đủ 480×144; ba cỡ dock và điện thoại chạy không lỗi. Ảnh chụp ở `demo-canh-anh/T-A/`.
 - **Cần người chơi thử**: nhân vật ngự kiếm khi đi đường từ Trúc Cơ; tỉ lệ nhà so với nhân vật (nhà 2x còn hơi lùn); độ đẹp từng địa hình.
+
+## 12. T-Cd đã làm (2026-10-20)
+- **Địa hình**: 9 địa hình đủ khóa. Các khóa tùy chọn còn thiếu (`rock`, `rockK`, `sky`, `skyK`, `cloud`, `cloudK`, `water`, `fallCol`) điền `null` hoặc `0`, đúng với kiểm tra truthy trong `scene.js`, nên hình không đổi.
+- **Dữ liệu mới trong `js/ui/scene/data.js`** (không vẽ module mới):
+  - `SECT`: 9 tông (`reg` vùng, `prio`, `feat` công trình đặc trưng, `acc` lớp nhấn, `tint` pha bảng màu, `roof`, `lamp`). Bốn tông ưu tiên 1: Kim Phong Môn, Bách Thảo Môn, Âm Hồn Giáo, Thủy Nguyệt Cung.
+  - `WEATHER`: 18 thời tiết vùng khớp `regions.js` (`sky`, `k`, `fall`, `dens`, `wind`, `flash`, `col`, `aur`).
+  - `SHRINE`: 9 nơi thờ khớp `faiths.js` (`noi` trùng `noiTho`; chỉ tả dáng kiến trúc, không vẽ hình thần).
+  - `LAYOUT`: bố cục cho 15 loại nơi (13 `cls` trong `places.js`, thêm `road`, `void`). Số liệu lấy từ `townLayout`, `sectLayout`, `ruinLayout`, `legacy.struct` (nhân 2 cho cảnh cũ 240x72).
+  - `MOD`: danh mục module. `ok` là đã có trong mã; `todo` là T-C dựng.
+- **Kiểm thử**: 6 bài "Dữ liệu cảnh" trong `tests.html` (đủ khóa, id có thật, module `ok` có trong mã, mốc `on`/`top` đúng). `tests.html` nạp thêm các tệp cảnh, không nạp `scene.js`.
+- **Đo**: `node tools/run-tests.js "Dữ liệu cảnh"`: 6 đạt. Toàn bộ: 175 đạt, 2 lỗi có sẵn trên nhánh gốc (không do chặng này): "Nhịp quyết định" và "Sửa lõi (8B2)". `node tools/baseline.js --check`: trùng khít 40 hạt giống.
+- **Chưa làm (T-C, T-D)**: mã cảnh chưa đọc `SECT`, `WEATHER`, `SHRINE`, `LAYOUT`. Các mục `todo` là công trình, nơi thờ và module còn viết tay trong hàm bố cục cũ. Bảng màu tông áp qua `tint` ở T-C.

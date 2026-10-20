@@ -16,6 +16,10 @@ body{font-family:Consolas,monospace;background:#14110f;color:#e8dfd0;padding:16p
 <script src="js/ui/icons.js"></script>
 <script src="js/ui/bldart.js"></script>
 <script src="js/data/natevents.js"></script>
+<!-- dữ liệu cảnh (không nạp scene.js): để kiểm tra js/ui/scene/data.js và các module khai báo trong MOD -->
+<script src="js/ui/scene/core.js"></script><script src="js/ui/scene/data.js"></script><script src="js/ui/scene/sky.js"></script><script src="js/ui/scene/land.js"></script>
+<script src="js/ui/scene/cloud.js"></script><script src="js/ui/scene/arch.js"></script><script src="js/ui/scene/fg.js"></script><script src="js/ui/scene/fx.js"></script>
+<script src="js/ui/scene/actor.js"></script><script src="js/ui/scene/events.js"></script><script src="js/ui/scene/legacy.js"></script>
 <script>
 const out = document.getElementById('out');
 let pass = 0, failN = 0;
@@ -4543,6 +4547,94 @@ test('Kết nghĩa (9K): công tắc D.BOND.mem tắt thì không ký ức, khô
   p.dgCool = 0; p.hp = S.hpMax(p); TT.dungeon.enter(p, p.place, 'bi_canh'); w.pending = null; ok(!p.dungeon.ally, 'tắt thì không có bạn đi cùng'); TT.dungeon.finish(p, 'rut');
 }));
 
+
+// ---------- dữ liệu cảnh (T-Cd): đủ khóa, giá trị đúng kiểu, id có thật ----------
+const SC_HEX = /^#[0-9a-f]{6}$/i, SC_NUM01 = v => typeof v === 'number' && v >= 0 && v <= 1, SC_NULL_HEX = v => v === null || SC_HEX.test(v);
+const SC_FALL = ['rain', 'snow', 'sand', 'ash', 'spark', 'qi', 'mist', 'leaf', 'petal', 'none'];
+const SC_ROOF = ['curved', 'steep', 'dome', 'tiered', 'wood', 'flat'], SC_WALL = ['wood', 'stone', 'white'], SC_PLAN = ['hall', 'courtyard', 'open', 'stone'];
+const SC_TOWER = ['bell', 'minaret', 'pagoda', 'none'], SC_GATE = ['tam_quan', 'torii', 'arch', 'none'], SC_TREE = ['pine', 'banyan', 'ginkgo', 'none'];
+const scFn = n => TT.ui.sc[n] || (TT.ui.sc.fx && TT.ui.sc.fx[n]);
+test('Dữ liệu cảnh: 9 địa hình đủ khóa, id là vùng có thật, khóa tùy chọn là null hoặc đúng kiểu', () => {
+  const S = TT.ui.sc.data, T = S.TERRAIN, regs = TT.data.REGIONS.map(r => r.id);
+  eq(Object.keys(T).length, 9, 'số địa hình');
+  regs.forEach(id => ok(T[id], 'thiếu địa hình ' + id));
+  const NEED = ['id', 'n', 'name', 'seed', 'seaY', 'sea', 'mistK', 'far', 'mid', 'cap', 'flt', 'near', 'ground', 'gcol', 'tree', 'fx', 'rock', 'rockK', 'sky', 'skyK', 'cloud', 'cloudK', 'water', 'fallCol'];
+  Object.keys(T).forEach(k => {
+    const t = T[k];
+    ok(regs.indexOf(k) >= 0, k + ' không phải vùng thật');
+    eq(t.id, k, k + ': id lệch khóa');
+    NEED.forEach(x => ok(Object.prototype.hasOwnProperty.call(t, x), k + ' thiếu ' + x));
+    ok(SC_NULL_HEX(t.rock) && SC_NULL_HEX(t.sky) && SC_NULL_HEX(t.cloud) && SC_NULL_HEX(t.fallCol), k + ': màu không phải hex hoặc null');
+    ok(t.rockK === 0 || SC_NUM01(t.rockK), k + ': rockK'); ok(t.skyK === 0 || SC_NUM01(t.skyK), k + ': skyK'); ok(t.cloudK === 0 || SC_NUM01(t.cloudK), k + ': cloudK');
+    ok(t.water === null || typeof t.water === 'number', k + ': water');
+    ok(t.far.st.length > 0 && t.mid.st.length > 0 && t.flt.length > 0, k + ': thiếu tháp hoặc đỉnh lơ lửng');
+  });
+});
+test('Dữ liệu cảnh: 5 pha, mỗi pha đủ 25 màu hex và 9 số', () => {
+  const sc = TT.ui.sc;
+  ['day', 'dusk', 'night', 'cave', 'void'].forEach(p => {
+    ok(sc.data.PHASES[p], 'thiếu pha ' + p);
+    sc.KEYS.forEach(k => ok(SC_HEX.test(sc.data.PHASES[p][k]), p + '.' + k + ' không phải hex'));
+    sc.NUMS.forEach(k => ok(typeof sc.data.PHASES[p][k] === 'number', p + '.' + k + ' không phải số'));
+  });
+});
+test('Dữ liệu cảnh: chín tông khớp id và vùng thật, đủ công trình, lớp nhấn, bảng màu, ưu tiên (bốn tông ưu tiên 1)', () => {
+  const S = TT.ui.sc.data, sects = Object.keys(TT.data.SECTS), regs = TT.data.REGIONS.map(r => r.id);
+  eq(Object.keys(S.SECT).sort().join(), sects.slice().sort().join(), 'phải đủ chín tông, không thừa');
+  const prio1 = [];
+  sects.forEach(k => {
+    const e = S.SECT[k];
+    ok(regs.indexOf(e.reg) >= 0, k + ': vùng không thật');
+    ok(e.prio === 1 || e.prio === 2, k + ': ưu tiên');
+    if (e.prio === 1) prio1.push(k);
+    ok(Array.isArray(e.feat) && e.feat.length >= 1, k + ': thiếu công trình');
+    e.feat.forEach(f => ok(S.MOD[f], k + ': công trình ' + f + ' chưa khai báo trong MOD'));
+    ok(typeof e.acc === 'string' && e.acc.length > 0, k + ': thiếu lớp nhấn');
+    ok(SC_HEX.test(e.tint.c) && SC_NUM01(e.tint.k), k + ': bảng màu pha');
+    ok(SC_HEX.test(e.roof) && SC_HEX.test(e.lamp), k + ': màu ngói hoặc đèn');
+  });
+  eq(prio1.slice().sort().join(), ['dh_thuy_nguyet', 'nl_bach_thao', 'ts_kim_phong', 'vt_am_hon'].join(), 'bốn tông ưu tiên 1');
+});
+test('Dữ liệu cảnh: 18 thời tiết vùng khớp regions.js, đủ khóa, giá trị trong khoảng', () => {
+  const W = TT.ui.sc.data.WEATHER, ids = [];
+  TT.data.REGIONS.forEach(r => (r.weather || []).forEach(w => ids.push(w.id)));
+  eq(Object.keys(W).sort().join(), ids.slice().sort().join(), 'thời tiết phải khớp regions.js');
+  Object.keys(W).forEach(id => {
+    const w = W[id];
+    ok(SC_NULL_HEX(w.sky) && SC_NULL_HEX(w.col), id + ': màu');
+    ok(SC_FALL.indexOf(w.fall) >= 0, id + ': loại hạt ' + w.fall);
+    ok(SC_NUM01(w.k) && SC_NUM01(w.dens) && SC_NUM01(w.wind), id + ': k, dens, wind');
+    ok(typeof w.flash === 'number' && w.flash >= 0, id + ': flash');
+    ok(w.aur === 0 || w.aur === 1, id + ': aur');
+  });
+});
+test('Dữ liệu cảnh: chín nơi thờ khớp chín tín ngưỡng thật, tên nơi thờ khớp faiths.js, dáng kiến trúc đủ khóa', () => {
+  const S = TT.ui.sc.data.SHRINE, F = TT.data.FAITHS;
+  eq(Object.keys(S).sort().join(), F.map(f => f.id).sort().join(), 'phải đủ chín tín ngưỡng thật');
+  F.forEach(f => {
+    const s = S[f.id];
+    eq(s.noi, f.noiTho, f.id + ': tên nơi thờ');
+    ok(SC_PLAN.indexOf(s.plan) >= 0 && SC_ROOF.indexOf(s.roof) >= 0 && SC_WALL.indexOf(s.wall) >= 0, f.id + ': mặt bằng, mái, tường');
+    ok(SC_TOWER.indexOf(s.tower) >= 0 && SC_GATE.indexOf(s.gate) >= 0 && SC_TREE.indexOf(s.tree) >= 0, f.id + ': tháp, cổng, cây');
+  });
+});
+test('Dữ liệu cảnh: mỗi loại nơi có bố cục; module "ok" có thật trong mã; mốc on/top trỏ đúng id trong bố cục', () => {
+  const S = TT.ui.sc.data, M = S.MOD;
+  const cls = new Set(Object.values(TT.data.PLACE_TYPES).map(x => x.cls)); cls.add('road'); cls.add('void');
+  cls.forEach(c => ok(Array.isArray(S.LAYOUT[c]), 'thiếu bố cục cho loại nơi ' + c));
+  Object.keys(S.LAYOUT).forEach(c => ok(cls.has(c), 'bố cục ' + c + ' không phải loại nơi thật'));
+  Object.keys(S.LAYOUT).forEach(c => {
+    const list = S.LAYOUT[c], ids = list.map(it => it.id).filter(Boolean);
+    list.forEach(it => {
+      ok(Object.prototype.hasOwnProperty.call(M, it.m), c + ': module ' + it.m + ' chưa khai báo trong MOD');
+      if (M[it.m] === 'ok') ok(typeof scFn(it.m) === 'function', c + ': module ' + it.m + ' khai báo ok nhưng không có trong mã');
+      if (it.on) ok(ids.indexOf(it.on) >= 0, c + ': mốc on ' + it.on + ' không có');
+      if (it.top) ok(ids.indexOf(it.top) >= 0, c + ': mốc top ' + it.top + ' không có');
+    });
+  });
+  eq(Object.keys(S.LAYOUT).length, cls.size, 'mỗi loại nơi đúng một bố cục');
+  Object.keys(M).forEach(k => { if (M[k] === 'ok') ok(typeof scFn(k) === 'function', 'MOD ' + k + ' khai báo ok nhưng không có trong mã'); });
+});
 
 runNext();
 </script>
