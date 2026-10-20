@@ -3553,6 +3553,35 @@ test('Dữ liệu tuổi thơ (8A2): needBan khớp khe {ban}, ban chỉ ở s�
   ok(count('kv') <= 3, 'kv ' + count('kv') + ' lựa chọn');
 });
 
+// ---------------- Dữ liệu xuất thân (9A-d) ----------------
+test('Dữ liệu xuất thân (9A-d): đủ 8, tổng trọng số 100, id không trùng, trường đủ, items và place_types có thật', () => {
+  const O = TT.data.ORIGINS2, IDS = ['p1', 'p2', 'p3', 'p5', 't1', 't3', 't6', 't10'];
+  eq(O.length, 8, 'đủ 8 xuất thân'); eq(JSON.stringify(O.map(o => o.id).sort()), JSON.stringify(IDS.slice().sort()), 'đúng 8 id');
+  eq(O.reduce((s, o) => s + o.w, 0), 100, 'tổng trọng số 100');
+  O.forEach(o => {
+    ok(o.n && o.d && o.gom, o.id + ': thiếu n, d hoặc gom');
+    eq(o.d.split(/[.!?](?:\s|$)/).map(s => s.trim()).filter(Boolean).length, 2, o.id + ': d phải 2 câu');
+    ok(o.start && typeof o.start.gold === 'number', o.id + ': start.gold');
+    Object.keys(o.start).forEach(k => ok(['gold', 'luck', 'daoTam', 'atk', 'nl', 'items'].indexOf(k) >= 0, o.id + ': start khóa lạ ' + k));
+    (o.start.items || []).forEach(i => ok(TT.data.ITEMS[i], o.id + ': item không có ' + i));
+    ok(o.cha_me && typeof o.cha_me.co === 'boolean' && typeof o.cha_me.tu === 'boolean', o.id + ': cha_me');
+    eq(o.cha_me.co, o.id !== 'p5', o.id + ': chỉ cô nhi không còn cha mẹ');
+    ok(Object.keys(o.ax).length >= 1 && Object.keys(o.ax).every(k => CHILD_AXES.indexOf(k) >= 0 && Number.isInteger(o.ax[k]) && o.ax[k] !== 0 && Math.abs(o.ax[k]) <= 2), o.id + ': ax');
+    ok(o.place_types.length >= 1 && o.place_types.every(t => TT.data.PLACE_TYPES[t]), o.id + ': place_types');
+    ok(o.bi_mat === undefined || ['t1', 't10'].indexOf(o.id) >= 0, o.id + ': bi_mat chỉ t1, t10');
+  });
+  ok(TT.data.ORIGINS2.find(o => o.id === 't10').bi_mat, 't10 có bi_mat');
+});
+test('Dữ liệu xuất thân (9A-d): mỗi xuất thân có 3 sự kiện tuổi thơ riêng; p5, t3, t10 đủ ba hồi', () => {
+  const ev = TT.data.CHILDHOOD.ev, ids = TT.data.ORIGINS2.map(o => o.id);
+  ev.filter(e => e.origin).forEach(e => ok(Array.isArray(e.origin) && e.origin.length >= 1 && e.origin.every(i => ids.indexOf(i) >= 0), e.id + ': origin lạ'));
+  ids.forEach(id => {
+    const mine = ev.filter(e => e.origin && e.origin.indexOf(id) >= 0);
+    eq(mine.length, 3, id + ': ' + mine.length + ' sự kiện');
+    if (['p5', 't3', 't10'].indexOf(id) >= 0) eq(JSON.stringify(mine.map(e => e.hoi).sort()), '[1,2,3]', id + ': mỗi hồi một sự kiện');
+  });
+});
+
 // ---------------- Tuổi thơ (8A3) ----------------
 test('Tuổi thơ (8A3): số sự kiện mỗi hồi theo p2/p3 (đo 2.000 lần bốc), không lặp, không gọi rng, đọc thuần', () => {
   const C = TT.data.CHILDHOOD, H = TT.childhood; TT.life.createWorld(81); const p = TT.player();
