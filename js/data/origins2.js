@@ -1,4 +1,4 @@
-// Xuất thân v2 (Q 8.1 đến 8.4; 9A-d): tám xuất thân đầu, tổng trọng số 100. Thuần dữ liệu; hệ thống bốc và áp dụng ở chặng 9A.
+// Xuất thân v2 (Q 8.1 đến 8.4; 9A-d): tám xuất thân đầu, tổng trọng số 100. Hệ thống bốc, áp và dựng cha mẹ ở js/systems/origin.js (9A).
 // Mỗi xuất thân: id, n (tên), w (trọng số), d (2 câu), start { gold, luck?, daoTam?, atk?, nl?, items?: [id ở items.js] },
 //   gom (gánh nặng, 1 câu), cha_me { co: còn cha mẹ, tu: cha mẹ có tu hành }, ax (nghiêng tính cách lúc sinh, ±1 đến ±2),
 //   bi_mat? (chỉ t1, t10), place_types (loại địa điểm ở places.js hợp với nơi sinh).
@@ -83,6 +83,7 @@
       place_types: ['thon_tran', 'tan_tich', 'cho_den']
     }
   ];
+  D.ORIGINS2.on = true; // công tắc 9A: false thì người chơi giữ xuất thân cũ ở regions.js và không dựng cha mẹ
   D.ORIGINS2_BY_ID = {};
   D.ORIGINS2.forEach(o => { D.ORIGINS2_BY_ID[o.id] = o; });
 })();

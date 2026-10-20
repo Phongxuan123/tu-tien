@@ -32,7 +32,7 @@ function inPage(seed, years, dao, nhay) {
   TT.kv.note = function (c, d) { if (c === p) { if (d > 0) kv.earned += d; else kv.spent -= d; } return note.apply(this, arguments); };
   const nat = () => Object.assign({}, TT.nature.get(p)), lab = () => TT.nature.summary(p);
   const o = {
-    name: p.name, gender: p.gender, origin: p.origin, region: TT.map.region(p.region).n, born: p.birthMonth,
+    parents0: TT.origin.parentsText(p), burden0: TT.origin.burden(p), name: p.name, gender: p.gender, origin: p.origin, region: TT.map.region(p.region).n, born: p.birthMonth,
     tuchat: p.tuchat.total + ' (' + p.tuchat.attrs.map(a => a.n + ' ' + a.p).join(', ') + ')',
     traits: p.traitIds.map(id => TT.data.traitById[id].n),
     nat0: p.child ? Object.assign({}, p.child.nat0) : nat(), nat1: nat(), lab1: lab(), kv0: TT.kv.pts(p),
@@ -108,6 +108,7 @@ async function batch() {
   const L = [];
   L.push('=== Một đời mô phỏng, hạt giống ' + SEED + ' (Tự động, đạo ' + DAO + ', tối đa ' + YEARS + ' năm' + (NHAY ? '; nhảy tới ' + NHAY + ' ở tháng đầu bằng TT.story.jump' : '') + ') ===');
   L.push(o.name + ' · ' + (o.gender === 'nu' ? 'nữ' : 'nam') + ' · ' + o.origin + ' · vùng ' + o.region);
+  if (o.parents0) L.push('Cha mẹ lúc sinh: ' + o.parents0 + ' Gánh nặng: ' + o.burden0);
   L.push('Tư chất ' + o.tuchat + ' · Tiên thiên: ' + (o.traits.length ? o.traits.join(', ') : 'không có'));
   L.push('Tính cách lúc sinh : ' + nv(o.nat0));
   L.push('Sau tuổi thơ       : ' + nv(o.nat1) + ' → ' + o.lab1);

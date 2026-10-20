@@ -323,6 +323,7 @@ test('Quyết định đột phá và đầu thai xuất hiện và giải quy�
 function freshPlayer(seed, opts) {
   TT.life.createWorld(seed || 3);
   const p = TT.player();
+  p.inv = {}; // đồ khởi đầu của xuất thân (9A) không thuộc về các bài kiểm thử cũ
   Object.assign(p, { realm: 2, gold: 500, hp: 100, xp: 0, direction: 'can_bang', pathAsked: true }, opts || {});
   p.hp = S.hpMax(p);
   TT.world.pending = null; TT.world.settings.auto = 'can_bang';
@@ -332,6 +333,7 @@ function freshPlayer(seed, opts) {
 // Nhân vật giống người chơi nhưng rẻ (không dựng lại thế giới), dùng cho các vòng lặp lớn.
 function mkChar(opts) {
   const c = TT.createChar({ kind: 'player', age: 20 });
+  c.inv = {}; // đồ khởi đầu của xuất thân (9A) không thuộc về các bài kiểm thử cũ
   Object.assign(c, { realm: 2, gold: 500, direction: 'can_bang' }, opts || {});
   c.hp = S.hpMax(c);
   return c;
@@ -3836,7 +3838,7 @@ test('Truyện và vòng quay (8B): lưu/tải giữa chặng và giữa vòng q
   TT.decisions.resolve(1); eq(TT.world.pending.rerolls, 1, 'quay lại được sau khi tải'); eq(TT.kv.pts(r), k0 - 3);
   TT.decisions.resolve(0); ok(!TT.world.pending); ok(r.story.arcs.bb_a3.ket, 'xong sau khi tải'); eq(TT.VERSION, 13, 'không đổi TT.VERSION');
   // kết cục cộng khí vận đúng một lần (addOnce)
-  const kk = TT.kv.pts(r); T.go(r, D.STORY.arcById.bb_a3, 'ket:sang'); ok(TT.kv.pts(r) === kk, 'cộng một lần mỗi tuyến (cờ kv_arc_)');
+  T.go(r, D.STORY.arcById.bb_a3, 'ket:sang'); const kk = TT.kv.pts(r); T.go(r, D.STORY.arcById.bb_a3, 'ket:sang'); ok(TT.kv.pts(r) === kk, 'cộng một lần mỗi tuyến (cờ kv_arc_)'); // lần đầu có thể cộng nếu kết cục thật của bài (quay bằng rng) không có khí vận
   // bản lưu tuyến vẫn đọc được qua tab (rows/sig)
   ok(T.rows(r).length >= 1 && T.sig(r).length > 0);
 });
@@ -3939,6 +3941,147 @@ test('Sửa lõi (8B2): nhật ký gom năm trống và tin đồn lặp thành 
   D.STORY.logGom.on = false;
   try { const q = storyWorld(241); for (let m = 0; m < 12 * 20; m++) { if (TT.world.pending) TT.decisions.resolveDefault(); if ((TT.world.months - q.birthMonth) % 12 >= 9 && TT.age(q) >= 14) { q.focus = 'work'; q.sect = null; q.yGold = 0; q.yXp = 0; } TT.life.stepWorld(); } ok(q.log.every(l => !/yên ả|nghe lại/.test(l.t)), 'tắt gom thì không có dòng gom'); } finally { D.STORY.logGom.on = true; }
 });
+// ---------------- Xuất thân (9A) ----------------
+function forceOrigin(id, fn) { const o = TT.origin.roll; TT.origin.roll = () => D.ORIGINS2_BY_ID[id]; try { return fn(); } finally { TT.origin.roll = o; } }
+function withOrigins(onv, fn) { const was = D.ORIGINS2.on; D.ORIGINS2.on = onv; try { return fn(); } finally { D.ORIGINS2.on = was; } }
+
+test('Xuất thân (9A): tỉ lệ bốc gần trọng số (2.000 lần, băm), xác định theo (hạt, id, muối), không gọi rng', () => {
+  const s0 = TT.rng.getState(), cnt = {}, N = 2000;
+  for (let i = 0; i < N; i++) { const o = TT.origin.roll(7, 3, i); cnt[o.id] = (cnt[o.id] || 0) + 1; }
+  eq(TT.rng.getState(), s0, 'bốc không gọi rng');
+  D.ORIGINS2.forEach(o => { const f = (cnt[o.id] || 0) / N * 100; ok(Math.abs(f - o.w) <= Math.max(3, o.w * 0.3), o.id + ': tỉ lệ ' + f.toFixed(1) + ' so với trọng số ' + o.w); });
+  eq(TT.origin.roll(7, 3, 5).id, TT.origin.roll(7, 3, 5).id, 'cùng đầu vào cùng kết quả');
+  ok(new Set([0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11].map(i => TT.origin.roll(7, 3, i).id)).size >= 3, 'đổi muối thì đổi xuất thân');
+});
+
+test('Xuất thân (9A): start áp đúng (vàng, may mắn, công, linh lực, đạo tâm, đồ), ax vào tính cách, bí mật ghi cờ, địa điểm theo place_types', () => {
+  const C = D.CHILDHOOD, was = C.on, axBefore = {}; C.on = false; // tách khỏi cộng dồn của tuổi thơ
+  try {
+    D.ORIGINS2.forEach(o => {
+      const off = withOrigins(false, () => { TT.life.createWorld(61); return TT.player(); });
+      const reg0 = TT.map.region(off.region), old = reg0.origins.find(x => x.name === off.origin), a0 = off.baseAtk, n0 = off.baseNl, l0 = off.baseLuck, d0 = off.daoTam, nat0 = Object.assign({}, TT.nature.get(off));
+      const ap = TT.origin.apply; TT.origin.apply = function (c) { axBefore[o.id] = Object.assign({}, c.nature); return ap.apply(this, arguments); };
+      let p; try { p = forceOrigin(o.id, () => { TT.life.createWorld(61); return TT.player(); }); } finally { TT.origin.apply = ap; }
+      eq(p.origin2, o.id); eq(p.origin, o.n, 'c.origin là chữ hiển thị'); eq(p.gold, o.start.gold, o.id + ' vàng');
+      eq(p.baseAtk - a0, o.start.atk || 0, o.id + ' công'); eq(p.baseNl - n0, o.start.nl || 0, o.id + ' linh lực');
+      eq(p.baseLuck - l0, (o.start.luck || 0) - old.luck, o.id + ' may mắn'); eq(p.daoTam - d0, o.start.daoTam || 0, o.id + ' đạo tâm');
+      (o.start.items || []).forEach(i => ok(p.inv[i] >= 1, o.id + ' đồ ' + i));
+      eq(!!p.flags.biMat, !!o.bi_mat, o.id + ' cờ bí mật'); if (o.bi_mat) eq(TT.origin.secret(p), o.bi_mat);
+      const M = D.NATURE.max, nat = TT.nature.get(p), b = axBefore[o.id];
+      Object.keys(nat).forEach(k => eq(nat[k], Math.max(-M, Math.min(M, b[k] + (o.ax[k] || 0))), o.id + ' ax ' + k));
+      const pl = TT.map.place(p.place), has = TT.map.placesOf(p.region).some(x => o.place_types.indexOf(x.type) >= 0);
+      ok(!has || o.place_types.indexOf(pl.type) >= 0, o.id + ': nơi sinh ' + pl.type + ' phải thuộc ' + o.place_types.join('/'));
+    });
+  } finally { C.on = was; }
+});
+
+test('Xuất thân (9A): cô nhi không có cha mẹ; xuất thân khác có 1-2 cha mẹ là NPC thật, huyết thống, tuổi 30-50, tu theo cha_me.tu', () => {
+  const orphan = forceOrigin('p5', () => { TT.life.createWorld(62); return TT.player(); });
+  eq(orphan.parents.length, 0, 'cô nhi không cha mẹ'); eq(TT.origin.parentsText(orphan), 'Bạn không có cha mẹ bên cạnh.');
+  const n0 = Object.keys(TT.world.chars).length;
+  D.ORIGINS2.filter(o => o.cha_me.co).forEach(o => {
+    const p = forceOrigin(o.id, () => { TT.life.createWorld(63); return TT.player(); }), w = TT.world;
+    ok(p.parents.length >= 1 && p.parents.length <= 2, o.id + ': số cha mẹ ' + p.parents.length);
+    p.parents.forEach(id => {
+      const q = w.chars[id]; ok(q && q.kind === 'npc' && q.tier === 'core' && q.alive, 'NPC lõi còn sống');
+      ok(TT.age(q) >= 30 && TT.age(q) <= 50, o.id + ': tuổi ' + TT.age(q));
+      eq(q.region, p.region); eq(q.place, p.place);
+      eq(TT.rel.get(p, q).k, 'huyet', 'quan hệ huyết thống'); ok(TT.rel.v(p, q) >= 60, 'thiện cảm cao');
+      ok(q.children.indexOf(p.id) >= 0, 'cha mẹ có con là người chơi'); ok(TT.family.isKin(p, q), 'isKin');
+      eq(q.realm >= 1, o.cha_me.tu, o.id + ': tu hành ' + q.realm);
+      if (q.gender === 'nam') eq(TT.surnameOf(q.name), TT.surnameOf(p.name), 'cha cùng họ');
+    });
+    if (p.parents.length === 2) { const a = w.chars[p.parents[0]], b = w.chars[p.parents[1]]; ok(a.gender !== b.gender, 'cha và mẹ khác giới'); eq(TT.rel.get(a, b).k, 'dao_lu'); }
+    ok(TT.origin.parentsText(p).indexOf(w.chars[p.parents[0]].name) >= 0, 'chữ cha mẹ có tên');
+    ok(TT.family.partners(p).length === 0, 'cha mẹ không phải đạo lữ của người chơi');
+  });
+});
+
+test('Xuất thân (9A): cha mẹ sống tiếp trong thế giới (già, mất), hàm đọc không gọi rng và không ghi dữ liệu', () => {
+  const p = forceOrigin('p1', () => { TT.life.createWorld(64); return TT.player(); }), w = TT.world, ids = p.parents.slice(), a0 = ids.map(id => w.chars[id].birthMonth);
+  const snap = JSON.stringify(w), s0 = TT.rng.getState();
+  const o = TT.origin; o.get(p); o.burden(p); o.secret(p); o.parents(p); o.parentsText(p); o.placeFor(o.get(p), p.region, p.id, 1); TT.childhood.plan(p);
+  eq(TT.rng.getState(), s0, 'đọc không gọi rng'); eq(JSON.stringify(w), snap, 'đọc không ghi dữ liệu');
+  const q = w.chars[ids[0]]; TT.life.die(q, 'thử nghiệm');
+  ok(!q.alive, 'cha mẹ có thể chết'); ok(o.parents(p).some(x => !x.alive), 'đọc thấy đã mất'); ok(o.parentsText(p).indexOf('(đã mất)') >= 0);
+  ids.forEach((id, i) => eq(w.chars[id].birthMonth, a0[i]));
+  TT.life.simulate(12 * 15, true);
+  ok(ids.every(id => !w.chars[id] || w.chars[id].deathMonth != null || w.chars[id].alive), 'cha mẹ được mô phỏng như NPC khác');
+  const live = ids.map(id => w.chars[id]).filter(c => c && c.alive); live.forEach(c => ok(TT.age(c) >= 40, 'cha mẹ già đi cùng thế giới'));
+});
+
+test('Xuất thân (9A): tuổi thơ bốc sự kiện theo xuất thân (chỉ của mình, trọng số ×2), nhân vật không xuất thân v2 không bốc', () => {
+  const K = D.CHILDHOOD, mkc = (o, i) => ({ id: 5, birthMonth: -i * 7, name: 'Thử ' + i, origin2: o, parents: [], relIds: {} }), N = 1500;
+  D.ORIGINS2.forEach(o => {
+    const seen = {}, first1 = {};
+    for (let i = 0; i < N; i++) {
+      const pl = TT.childhood.plan(mkc(o.id, i));
+      pl.forEach(h => h.evs.forEach(e => { const ev = K.ev.find(x => x.id === e.id); if (ev.origin) { ok(ev.origin.indexOf(o.id) >= 0, o.id + ' bốc nhầm ' + ev.id); seen[ev.id] = (seen[ev.id] || 0) + 1; } }));
+      const e1 = pl[0].evs[0].id; first1[e1] = (first1[e1] || 0) + 1;
+    }
+    const mine = K.ev.filter(e => e.origin && e.origin.indexOf(o.id) >= 0);
+    mine.forEach(e => ok(seen[e.id] > 0, o.id + ': sự kiện ' + e.id + ' chưa bao giờ bốc'));
+    // trọng số ×2: sự kiện đầu của hồi 1 (không có bạn nên bỏ needBan)
+    const m1 = mine.find(e => e.hoi === 1), pool = K.ev.filter(e => e.hoi === 1 && !e.needBan && (!e.origin || e.origin.indexOf(o.id) >= 0)), tot = pool.reduce((a, e) => a + (e.origin ? e.w * 2 : e.w), 0);
+    const exp = m1.w * 2 / tot, got = (first1[m1.id] || 0) / N; ok(Math.abs(got - exp) < 0.04, o.id + ': ' + m1.id + ' tỉ lệ ' + got.toFixed(3) + ' mong ' + exp.toFixed(3));
+  });
+  for (let i = 0; i < 300; i++) TT.childhood.plan(mkc(undefined, i)).forEach(h => h.evs.forEach(e => ok(!K.ev.find(x => x.id === e.id).origin, 'không xuất thân v2 thì không bốc sự kiện riêng')));
+  const w = forceOrigin('t10', () => { TT.life.createWorld(65); return TT.player(); }); ok(w.childLog.length >= 3, 'tuổi thơ chạy');
+});
+
+test('Xuất thân (9A): A4 đến A6 mở đúng điều kiện (cảnh giới hoặc tuổi) và nhảy chặng ra hộp truyện, với mọi xuất thân', () => {
+  D.ORIGINS2.forEach((o, k) => {
+    const p = forceOrigin(o.id, () => storyWorld(70 + k)), T = TT.story, w = TT.world;
+    T.tick(p); clearPending();
+    ['bb_a1', 'bb_a2', 'bb_a3'].forEach(id => { p.realm = 2; T.tick(p); clearPending(); T.go(p, D.STORY.arcById[id], 'ket:' + Object.keys(D.STORY.arcById[id].ket)[0]); });
+    p.realm = 2; p.birthMonth = w.months - 12 * 30; T.tick(p); ok(p.story.arcs.bb_a4, o.id + ': A4 mở ở Trúc Cơ'); clearPending();
+    T.go(p, D.STORY.arcById.bb_a4, 'ket:danh'); p.realm = 2; T.tick(p); ok(!p.story.arcs.bb_a5, 'A5 chưa mở ở Trúc Cơ khi 30 tuổi'); clearPending();
+    p.birthMonth = w.months - 12 * 76; p.realm = 2; T.tick(p); ok(p.story.arcs.bb_a5, o.id + ': A5 mở ở 75 tuổi'); clearPending();
+    T.go(p, D.STORY.arcById.bb_a5, 'ket:lap_nghiep'); p.realm = 4; p.birthMonth = w.months - 12 * 80; T.tick(p); ok(!p.story.arcs.bb_a6, 'A6 chưa mở ở Nguyên Anh 80 tuổi'); clearPending();
+    p.realm = 5; T.tick(p); ok(p.story.arcs.bb_a6, o.id + ': A6 mở ở Hóa Thần'); clearPending();
+    ['bb_a4', 'bb_a5', 'bb_a6'].forEach(id => ['c1', 'c2'].forEach(ch => { clearPending(); ok(T.jump(id, ch), id + ':' + ch + ' nhảy được'); eq(w.pending.type, 'story', id + ':' + ch + ' ra hộp truyện'); }));
+    clearPending();
+  });
+  // mở theo tuổi
+  const q = storyWorld(75), T = TT.story, w = TT.world; T.tick(q); clearPending();
+  ['bb_a1', 'bb_a2', 'bb_a3'].forEach(id => { q.realm = 2; T.tick(q); clearPending(); T.go(q, D.STORY.arcById[id], 'ket:' + Object.keys(D.STORY.arcById[id].ket)[0]); });
+  q.realm = 1; q.birthMonth = w.months - 12 * 56; T.tick(q); ok(q.story.arcs.bb_a4, 'A4 mở ở 55 tuổi dù chưa Trúc Cơ');
+});
+
+test('Xuất thân (9A): lưu/tải giữ xuất thân và cha mẹ; bản lưu cũ (không có c.origin2) không vỡ', () => {
+  const p = forceOrigin('t1', () => { TT.life.createWorld(66); return TT.player(); }), w = TT.world;
+  TT.life.simulate(12 * 3, true);
+  const txt = TT.save.snapshot(), fp = fingerprint(), par = p.parents.slice(), ori = p.origin2;
+  TT.life.createWorld(67); TT.save.restore(txt);
+  const q = TT.player(); eq(q.origin2, ori); eq(JSON.stringify(q.parents), JSON.stringify(par)); eq(fingerprint(), fp); ok(q.flags.biMat === 't1', 'cờ bí mật còn'); ok(TT.origin.parentsText(q).length > 5);
+  // bản lưu cũ: bỏ origin2, cờ và cha mẹ
+  delete q.origin2; delete q.flags.biMat; q.parents = [];
+  eq(TT.origin.get(q), null); eq(TT.origin.parentsText(q), ''); eq(TT.origin.burden(q), ''); eq(TT.origin.secret(q), ''); eq(TT.origin.parents(q).length, 0);
+  eq(TT.origin.spawnParents(q).length, 0, 'không dựng cha mẹ muộn cho bản cũ');
+  TT.childhood.plan(q).forEach(h => h.evs.forEach(e => ok(!D.CHILDHOOD.ev.find(x => x.id === e.id).origin, 'bản cũ không bốc sự kiện riêng')));
+  TT.life.simulate(12 * 5, true); ok(TT.player().alive || TT.player().deathMonth != null);
+});
+
+test('Xuất thân (9A): công tắc tắt thì như cũ (xuất thân cũ, không cha mẹ, không cờ), chỉ bật mới rút thêm rng và thêm NPC cha mẹ', () => {
+  const off = withOrigins(false, () => { TT.life.createWorld(68); const p = TT.player(); return { p, rng: TT.rng.getState(), n: Object.keys(TT.world.chars).length, o: p.origin, parents: p.parents.length, region: p.region, place: p.place }; });
+  eq(off.p.origin2, undefined); eq(off.parents, 0); ok(!off.p.flags.biMat);
+  ok(TT.map.region(off.region).origins.some(x => x.name === off.o), 'xuất thân cũ ở regions.js');
+  ok(/^Bạn được sinh ra là /.test(off.p.log.find(l => /sinh ra/.test(l.t)).t), 'nhật ký kiểu cũ');
+  TT.life.createWorld(68); const p = TT.player(), np = p.parents.length;
+  eq(p.region, off.region, 'cùng vùng sinh'); ok(np >= 1 || p.origin2 === 'p5', 'bật thì có cha mẹ (trừ cô nhi)');
+  eq(Object.keys(TT.world.chars).length, off.n + np, 'bật chỉ thêm đúng các NPC cha mẹ');
+  ok(/^Bạn sinh ra trong hoàn cảnh «/.test(p.log.find(l => /sinh ra/.test(l.t)).t), 'nhật ký mới');
+  if (np) ok(TT.rng.getState() !== off.rng, 'bật thì rút thêm rng (sau mọi lần rút cũ)');
+  TT.life.createWorld(69); const q = TT.player(); ok(q.origin2, 'bật mặc định'); eq(q.origin, D.ORIGINS2_BY_ID[q.origin2].n);
+});
+
+test('Xuất thân (9A): đầu thai bốc xuất thân mới và dựng cha mẹ mới; NPC giữ xuất thân cũ', () => {
+  TT.life.createWorld(71); const w = TT.world, p0 = TT.player(), seen = {};
+  for (let i = 0; i < 12; i++) { const p = TT.player(); seen[p.origin2] = 1; if (p.alive) TT.life.die(p, 'thử'); w.pending = null; TT.life.reincarnate({ boost: true }); const q = TT.player(); ok(q.id !== p.id && q.origin2 && q.origin === D.ORIGINS2_BY_ID[q.origin2].n, 'kiếp mới có xuất thân'); eq(q.parents.length > 0 || !D.ORIGINS2_BY_ID[q.origin2].cha_me.co, true); }
+  ok(Object.keys(seen).length >= 2, 'qua nhiều kiếp ra nhiều xuất thân: ' + Object.keys(seen).join());
+  const npc = Object.values(w.chars).find(c => c.kind === 'npc' && c.parents.length === 0 && c.tier === 'core'); ok(npc && !npc.origin2, 'NPC không có xuất thân v2');
+});
+
 runNext();
 </script>
 </body>
