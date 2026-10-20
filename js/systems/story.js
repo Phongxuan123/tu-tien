@@ -81,7 +81,17 @@
 
   // ---------- lựa chọn ----------
   // Trạng thái của một lựa chọn (đọc thuần): { disabled, why, fit, trai, hop, giaText }.
-  function check(c, st, lc) {
+  // Trục lệch nhiều nhất so với hướng của lc.ax: { v: số điểm ngược chiều (≥ 0), why }.
+  function oppose(c, lc) {
+    let best = { v: 0, why: '' };
+    Object.keys(lc.ax || {}).forEach(k => {
+      const d = lc.ax[k], val = TT.nature.get(c, k), o = -Math.sign(d) * Math.round(val);
+      if (d && o > best.v) { const a = D.NATURE.axes.find(x => x.id === k); best = { v: o, why: a.n + ' ' + (val > 0 ? '+' : '') + Math.round(val) + ', lựa chọn này nghiêng về ' + (d > 0 ? a.hi : a.lo).toLowerCase() }; }
+    });
+    return best;
+  }
+
+  function check(c, st, lc, mac) {
     const o = { disabled: false, why: '', fit: TT.nature.affinity(c, lc), giaText: '' };
     const g = lc.gate;
     if (g) {
@@ -97,7 +107,11 @@
       if (a.kv) { parts.push(a.kv + ' khí vận'); if (!o.disabled && !TT.kv.can(c, a.kv)) { o.disabled = true; o.why = 'Cần ' + a.kv + ' điểm khí vận (bạn có ' + TT.kv.pts(c) + ').'; } }
       o.giaText = 'Giá: ' + parts.join(', ');
     }
-    o.hop = o.fit >= K().fit.hop; o.trai = o.fit < K().fit.trai;
+    // Khoảng cách tính cách: điểm trục ngược chiều hướng lựa chọn. Đủ xa thì khóa (trừ lựa chọn mặc định `mac`, để luôn còn đường đi).
+    const dist = oppose(c, lc);
+    o.dist = dist.v;
+    if (!o.disabled && dist.v >= K().khoaAt && lc.key !== mac) { o.disabled = true; o.why = 'Quá trái bản tính (' + dist.why + '): bạn không thể làm vậy.'; }
+    o.hop = o.fit >= K().fit.hop; o.trai = dist.v >= K().traiAt;
     return o;
   }
 
@@ -105,7 +119,7 @@
   function build(c, arc, chId) {
     const ch = arc.chang[chId], st = stOf(c, arc.id);
     const choices = ch.lc.map(lc => {
-      const k = check(c, st, lc);
+      const k = check(c, st, lc, ch.mac);
       let hint = lc.wheel ? 'Chọn thế này sẽ có vòng quay.' : '';
       if (k.giaText) hint = (hint ? hint + ' ' : '') + k.giaText + '.';
       if (k.trai && !k.disabled) hint = (hint ? hint + ' ' : '') + 'Trái tính (giá: ' + K().trai.daoTam + ' đạo tâm).';
@@ -192,7 +206,7 @@
     const st = stOf(c, arc.id), ch = arc.chang[chId];
     if (!st || st.st !== chId || !ch) return false;
     const lc = ch.lc.find(x => x.key === key) || ch.lc[0];
-    const k = check(c, st, lc);
+    const k = check(c, st, lc, ch.mac);
     // phí
     const g = lc.gia;
     if (g) {
@@ -218,7 +232,7 @@
     AXES,
     on, ensure, fmt, go, applyFx: fxApply,
     arcOf, stOf,
-    check: (c, arcId, lcKey, chId) => { const arc = arcOf(arcId), st = stOf(c, arcId), ch = arc.chang[chId || (st && st.st)]; return check(c, st, ch.lc.find(x => x.key === lcKey)); },
+    check: (c, arcId, lcKey, chId) => { const arc = arcOf(arcId), st = stOf(c, arcId), ch = arc.chang[chId || (st && st.st)]; return check(c, st, ch.lc.find(x => x.key === lcKey), ch.mac); },
     get: c => c.story || EMPTY,
 
     tick(c) { if (on(c)) tick(c); },

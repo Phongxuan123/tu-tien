@@ -3683,16 +3683,16 @@ test('Truyện và vòng quay (8B): chặng quá hạn tự đi theo mac (ghi b�
 test('Truyện và vòng quay (8B): gate (khóa mềm có lý do), gia (phí, thiếu thì khóa), phí trái tính, ax đổi tính cách', () => {
   const p = storyWorld(94), T = TT.story; clearPending(); T.jump('bb_a3', 'c1');
   let d = TT.world.pending; eq(d.type, 'story'); eq(d.choices.length, 3);
-  p.nature.daoduc = -8; clearPending(); T.jump('bb_a3', 'c1'); d = TT.world.pending;
+  p.nature = { tinh: 0, xuthe: 0, daoduc: -8, tudung: 0 }; clearPending(); T.jump('bb_a3', 'c1'); d = TT.world.pending;
   const tha = d.choices.find(x => x.key === 'tha'), giet = d.choices.find(x => x.key === 'giet');
   ok(tha.disabled && /cứng như đá/.test(tha.why), 'Đạo đức −8 thì "Tha" bị khóa kèm lý do'); ok(!giet.disabled);
-  p.nature.daoduc = 8; clearPending(); T.jump('bb_a3', 'c1'); d = TT.world.pending;
+  p.nature = { tinh: 0, xuthe: 0, daoduc: 8, tudung: 0 }; clearPending(); T.jump('bb_a3', 'c1'); d = TT.world.pending;
   ok(d.choices.find(x => x.key === 'giet').disabled && /nhân hậu quá/.test(d.choices.find(x => x.key === 'giet').why), 'Đạo đức +8 thì "Ra tay" bị khóa'); ok(!d.choices.find(x => x.key === 'tha').disabled);
   ok(d.choices.find(x => x.key === 'tha').hop && !d.choices.find(x => x.key === 'tha').trai, 'chấm hợp tính');
   ok(d.choices.find(x => x.key === 'ne').trai || d.choices.find(x => x.key === 'giet').trai, 'có chấm trái tính');
   eq(d.def, d.choices.findIndex(x => x.key === 'tha'), 'mặc định theo độ hợp tính cách');
   // gia: thiếu vàng thì khóa, đủ thì trừ đúng
-  p.nature.daoduc = 0; p.gold = 3; clearPending(); T.jump('bb_a1', 'c1'); d = TT.world.pending;
+  p.nature = { tinh: 0, xuthe: 0, daoduc: 0, tudung: 0 }; p.gold = 3; clearPending(); T.jump('bb_a1', 'c1'); d = TT.world.pending;
   const tong = d.choices.find(x => x.key === 'xin_tong'); ok(tong.disabled && /vàng/.test(tong.why), 'thiếu vàng thì khóa: ' + tong.why);
   p.gold = 50; clearPending(); T.jump('bb_a1', 'c1'); d = TT.world.pending; ok(!d.choices.find(x => x.key === 'xin_tong').disabled);
   const x0 = p.xp; TT.decisions.resolve(d.choices.findIndex(x => x.key === 'xin_tong')); eq(p.gold, 40, 'trừ đúng 10 vàng'); ok(p.flags.a1_tong); ok(p.xp > x0, 'xp tăng'); eq(p.story.arcs.bb_a1.st, 'c2');
@@ -3704,6 +3704,23 @@ test('Truyện và vòng quay (8B): gate (khóa mềm có lý do), gia (phí, th
   ok(p.daoTam <= 50 - 3 - (bo.trai ? D.STORY.trai.daoTam : 0) + 0.001, 'đạo tâm giảm theo fx (và phí trái tính nếu có): ' + p.daoTam);
 });
 
+test('Truyện và vòng quay (8B): khóa theo khoảng cách tính cách (3 điểm trái ý thì trái tính, 5 điểm thì không chọn được), lựa chọn mặc định không bị khóa', () => {
+  const p = storyWorld(107), T = TT.story, K = D.STORY; eq(K.traiAt, 3); eq(K.khoaAt, 5);
+  const at = v => { p.nature = { tinh: 0, xuthe: 0, daoduc: v, tudung: 0 }; clearPending(); p.gold = 100; T.jump('bb_a3', 'c1'); return TT.world.pending.choices.find(x => x.key === 'tha'); }; // tha: ax daoduc +2 (gate min −6)
+  let c = at(-2); ok(!c.disabled && !c.trai, 'lệch 2: chọn được, chưa trái tính');
+  c = at(-3); ok(!c.disabled && c.trai, 'lệch 3: trái tính (mất đạo tâm) nhưng chọn được');
+  c = at(-4); ok(!c.disabled && c.trai, 'lệch 4: còn chọn được');
+  c = at(-5); ok(c.disabled && /Quá trái bản tính/.test(c.why) && /Đạo đức -5/.test(c.why), 'lệch 5: khóa, ghi lý do: ' + c.why);
+  c = at(8); ok(!c.disabled && !c.trai && c.hop, 'đúng hướng thì không khóa');
+  eq(T.check(p, 'bb_a3', 'tha', 'c1').disabled, false);
+  // lựa chọn mặc định (mac) không bao giờ bị khóa theo khoảng cách
+  p.nature = { tinh: 10, xuthe: 0, daoduc: 0, tudung: 0 }; clearPending(); T.jump('bb_a3', 'c1'); const ne = TT.world.pending.choices.find(x => x.key === 'ne'); // ne: ax tinh +1, tudung −1; mac = ne
+  p.nature = { tinh: -10, xuthe: 0, daoduc: 0, tudung: 10 }; clearPending(); T.jump('bb_a3', 'c1'); ok(!TT.world.pending.choices.find(x => x.key === 'ne').disabled, 'mac không khóa dù trái hết cỡ'); eq(D.STORY.arcById.bb_a3.chang.c1.mac, 'ne');
+  // trục không nằm trong ax thì không tính
+  p.nature = { tinh: 0, xuthe: -10, daoduc: 4, tudung: 0 }; clearPending(); T.jump('bb_a3', 'c1'); ok(!TT.world.pending.choices.find(x => x.key === 'tha').disabled);
+  // máy không chọn lựa chọn bị khóa
+  p.nature = { tinh: 0, xuthe: 0, daoduc: -5, tudung: 0 }; clearPending(); T.jump('bb_a3', 'c1'); const d = TT.world.pending; ok(!d.choices[d.def].disabled, 'mặc định không phải lựa chọn bị khóa');
+});
 test('Truyện và vòng quay (8B): hậu quả trễ chín đúng khoảng, vai lấy NPC có sẵn trước khi dựng mới', () => {
   const p = storyWorld(95), T = TT.story, w = TT.world; clearPending();
   p.nature.daoduc = 3; T.jump('bb_a3', 'c1'); const st = p.story.arcs.bb_a3, vid = st.vai.dich; ok(vid, 'có vai dich'); const dich = w.chars[vid]; ok(dich && dich.kind === 'npc', 'vai là NPC thật');
@@ -3742,7 +3759,7 @@ test('Truyện và vòng quay (8B): vòng quay: tổng 100, một yếu tố, đ
 test('Truyện và vòng quay (8B): quay, quay lại (1 lần, tốn khí vận), chặn vùng cao nhất và khi thiếu điểm, +1 khí vận ở vùng cao nhất', () => {
   const p = storyWorld(99), T = TT.story, W = TT.wheel, w = TT.world; p.nature = { tinh: 0, xuthe: 0, daoduc: 0, tudung: 0 };
   const gia = D.STORY.arcById.bb_a3.chang.c2.lc[0].wheel.gia;
-  const start = () => { clearPending(); delete p.story; T.jump('bb_a3', 'c2'); const c2 = TT.world.pending; eq(c2.choices.length, 2); TT.decisions.resolve(c2.choices.findIndex(x => x.key === 'doi_mat')); eq(w.pending.type, 'wheel'); eq(w.pending.st, 'wait'); eq(w.pending.mod, W.factor(p, D.STORY.arcById.bb_a3.chang.c2.lc[0].wheel, p.story.arcs.bb_a3).pts, 'điểm yếu tố khớp trục'); };
+  const start = () => { clearPending(); delete p.story; T.jump('bb_a3', 'c2'); eq(w.pending.choices.length, 2); clearPending(); p.story.arcs.bb_a3.w = 'doi_mat'; W.begin(p, 'bb_a3', 'c2', 'doi_mat'); eq(w.pending.type, 'wheel'); eq(w.pending.st, 'wait'); eq(w.pending.mod, W.factor(p, D.STORY.arcById.bb_a3.chang.c2.lc[0].wheel, p.story.arcs.bb_a3).pts, 'điểm yếu tố khớp trục'); };
   // 1. số thấp → vùng 0, quay lại được, tốn đúng giá; vòng sau số cao → vùng cao nhất, không +1 vì đã quay lại
   p.kvPts = 10; start(); withRoll(10, () => TT.decisions.resolve(0)); let d = w.pending; eq(d.st, 'done'); eq(d.roll, 10); eq(d.num, 10 + d.mod); eq(d.zone, 0); ok(!d.choices[1].disabled, 'vùng thấp: quay lại được');
   ok(/Quay lại sẽ tốn 3 trong 10/.test(d.text), 'ghi rõ giá: ' + d.text);
