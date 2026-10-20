@@ -17,12 +17,15 @@
     return () => { a = (a + 0x6D2B79F5) | 0; let t = Math.imul(a ^ (a >>> 15), 1 | a); t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t; return ((t ^ (t >>> 14)) >>> 0) / 4294967296; };
   }
   const evById = id => C().ev.find(e => e.id === id);
+  // Sự kiện theo xuất thân (9A): không có origin là sự kiện chung; có origin thì chỉ bốc khi trùng c.origin2 (không có xuất thân v2 thì không bốc), trọng số ×2.
+  const mine = (e, c) => !e.origin || (!!c.origin2 && e.origin.indexOf(c.origin2) >= 0);
+  const wOf = e => (e.origin ? e.w * 2 : e.w);
   const sgn = v => (v < 0 ? -1 : 1);
 
-  // Bạn thuở nhỏ (TT.social.childhood): NPC còn sống có thiện cảm ≥ 20 với người chơi; chọn theo băm, đọc thuần.
+  // Bạn thuở nhỏ (TT.social.childhood): NPC còn sống (không phải cha mẹ, 9A) có thiện cảm ≥ 20 với người chơi; chọn theo băm, đọc thuần.
   function friends(c) {
     const w = TT.world; if (!w || !c.relIds) return [];
-    return Object.keys(c.relIds).map(Number).sort((a, b) => a - b).filter(id => { const o = w.chars[id]; return o && o.kind === 'npc' && o.alive && TT.rel.v(c, o) >= 20; });
+    return Object.keys(c.relIds).map(Number).sort((a, b) => a - b).filter(id => { const o = w.chars[id]; return o && o.kind === 'npc' && o.alive && (c.parents || []).indexOf(id) < 0 && TT.rel.v(c, o) >= 20; });
   }
 
   const ch = TT.childhood = {
@@ -38,10 +41,10 @@
         const u2 = r(), u3 = r(); // luôn rút đủ hai số để các hồi sau không lệch
         const n = 1 + (u2 < K.p2 ? 1 + (u3 < K.p3 ? 1 : 0) : 0), evs = [];
         for (let k = 0; k < n; k++) {
-          const cand = K.ev.filter(e => e.hoi === hoi && !used[e.id] && (!e.needBan || ban));
+          const cand = K.ev.filter(e => e.hoi === hoi && !used[e.id] && (!e.needBan || ban) && mine(e, c));
           if (!cand.length) break;
-          const tot = cand.reduce((a, e) => a + e.w, 0); let x = r() * tot, pick = cand[cand.length - 1];
-          for (const e of cand) { x -= e.w; if (x < 0) { pick = e; break; } }
+          const tot = cand.reduce((a, e) => a + wOf(e), 0); let x = r() * tot, pick = cand[cand.length - 1];
+          for (const e of cand) { x -= wOf(e); if (x < 0) { pick = e; break; } }
           used[pick.id] = 1; evs.push({ id: pick.id, ban: pick.needBan ? ban : 0 });
         }
         out.push({ hoi, evs });
@@ -119,6 +122,7 @@
       Object.keys(x.ax || {}).forEach(a => TT.nature.shift(c, a, x.ax[a], 'tuổi thơ', 'free'));
       const got = {};
       Object.keys(x.fx || {}).forEach(k => { const g = ch.fx(c, k, x.fx[k], ban); if (g) got[k] = g; });
+      if (ban) { const bo = TT.world.chars[ban]; if (bo && bo.alive) { const me = TT.bond.remember(c, bo, 'ban_nho', 'Cùng ' + bo.name + ' lớn lên (' + ev.t + ')', 1); if (me) me.a = ev.hoi * 4 + 1; } } // 9K: bạn thuở nhỏ
       c.childLog = c.childLog || [];
       c.childLog.push({ hoi: ev.hoi, id: ev.id, t: ev.t, label: x.label, r: x.r, fx: got });
       if (c.child && !c.child.done) c.child.i++;

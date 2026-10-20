@@ -9,7 +9,7 @@ const vm = require('vm');
 const root = path.join(__dirname, '..');
 const ctx = {}; ctx.window = ctx; vm.createContext(ctx);
 const load = f => vm.runInContext(fs.readFileSync(path.join(root, f), 'utf8'), ctx, { filename: f });
-load('js/data/nature.js'); load('js/data/story.js');
+load('js/data/nature.js'); load('js/data/story.js'); load('js/data/bonds.js');
 const dir = path.join(root, 'js/data/stories');
 fs.readdirSync(dir).filter(f => /\.js$/.test(f)).sort().forEach(f => load('js/data/stories/' + f));
 load('js/systems/story.js');

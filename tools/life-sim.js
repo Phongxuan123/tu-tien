@@ -23,6 +23,8 @@ function inPage(seed, years, dao, nhay) {
   const all = [], boxes = { story: 0, wheel: 0, other: 0 }, lg = TT.log, rq = TT.decisions.request;
   TT.log = function (c, text) { if (c && c.kind === 'player' && !TT.quiet && all.length < 20000) all.push({ m: TT.world.months, t: text, b: c.birthMonth }); return lg.apply(this, arguments); };
   TT.decisions.request = function (d) { boxes[d.type === 'story' || d.type === 'wheel' ? d.type : 'other']++; return rq.apply(this, arguments); };
+  if (window.__memOff) TT.data.BOND.mem = false; // --mem=off: đo khi chưa có ký ức chung (9K)
+  if (window.__gomOff) TT.data.STORY.logGom.on = false; // --gom=off: đo nhật ký khi chưa gom (8B2)
   TT.life.createWorld(seed);
   const p = TT.player(); TT.world.settings = TT.world.settings || {}; TT.world.settings.auto = 'tu_dong';
   if (dao !== 'auto') { TT.path.set(p, dao, 'life-sim'); p.pathAsked = true; }
@@ -31,7 +33,7 @@ function inPage(seed, years, dao, nhay) {
   TT.kv.note = function (c, d) { if (c === p) { if (d > 0) kv.earned += d; else kv.spent -= d; } return note.apply(this, arguments); };
   const nat = () => Object.assign({}, TT.nature.get(p)), lab = () => TT.nature.summary(p);
   const o = {
-    name: p.name, gender: p.gender, origin: p.origin, region: TT.map.region(p.region).n, born: p.birthMonth,
+    parents0: TT.origin.parentsText(p), burden0: TT.origin.burden(p), name: p.name, gender: p.gender, origin: p.origin, region: TT.map.region(p.region).n, born: p.birthMonth,
     tuchat: p.tuchat.total + ' (' + p.tuchat.attrs.map(a => a.n + ' ' + a.p).join(', ') + ')',
     traits: p.traitIds.map(id => TT.data.traitById[id].n),
     nat0: p.child ? Object.assign({}, p.child.nat0) : nat(), nat1: nat(), lab1: lab(), kv0: TT.kv.pts(p),
@@ -48,6 +50,10 @@ function inPage(seed, years, dao, nhay) {
   o.log = all.filter(e => e.b === p.birthMonth).map(e => ({ age: Math.floor((e.m - e.b) / 12), t: e.t }));
   TT.log = lg; TT.decisions.request = rq;
   o.fx = p.childFx || {};
+  // 9K: ký ức chung của các cặp thân (kể cả người đã mất) và kết nghĩa
+  o.pairs = TT.rel.list(p).filter(x => x.r.d && x.r.d.mem && x.r.d.mem.length).map(x => ({ name: x.c ? x.c.name : '?', alive: !!(x.c && x.c.alive), t: x.r.d.t, ks: x.r.d.mem.map(e => '[' + e.a + ' tuổi' + (e.h ? ', hoạn nạn' : '') + '] ' + e.t) }));
+  o.memTotal = o.pairs.reduce((n, q) => n + q.ks.length, 0);
+  o.sworn = TT.rel.list(p).filter(x => x.r.k === 'ket_nghia').map(x => x.c ? x.c.name + (x.c.alive ? '' : ' (đã mất)') : '?');
   return o;
 }
 
@@ -97,6 +103,8 @@ async function batch() {
   const page = await browser.newPage();
   const errs = []; page.on('pageerror', e => errs.push(String(e)));
   await page.goto(pathToFileURL(path.join(__dirname, '..', 'sim.html')).href);
+  if (arg('gom') === 'off') await page.evaluate('window.__gomOff = true');
+  if (arg('mem') === 'off') await page.evaluate('window.__memOff = true');
   const o = await page.evaluate(`(${inPage.toString()})(${SEED}, ${YEARS}, '${DAO}', '${NHAY}')`);
   await browser.close();
   if (errs.length) { console.error(errs.join('\n')); process.exit(2); }
@@ -106,6 +114,7 @@ async function batch() {
   const L = [];
   L.push('=== Một đời mô phỏng, hạt giống ' + SEED + ' (Tự động, đạo ' + DAO + ', tối đa ' + YEARS + ' năm' + (NHAY ? '; nhảy tới ' + NHAY + ' ở tháng đầu bằng TT.story.jump' : '') + ') ===');
   L.push(o.name + ' · ' + (o.gender === 'nu' ? 'nữ' : 'nam') + ' · ' + o.origin + ' · vùng ' + o.region);
+  if (o.parents0) L.push('Cha mẹ lúc sinh: ' + o.parents0 + ' Gánh nặng: ' + o.burden0);
   L.push('Tư chất ' + o.tuchat + ' · Tiên thiên: ' + (o.traits.length ? o.traits.join(', ') : 'không có'));
   L.push('Tính cách lúc sinh : ' + nv(o.nat0));
   L.push('Sau tuổi thơ       : ' + nv(o.nat1) + ' → ' + o.lab1);
@@ -122,9 +131,14 @@ async function batch() {
   o.stories.forEach(s => { L.push(s.n + ' (' + (s.state === 'xong' ? 'xong: ' + s.ket : 'đang đi: ' + s.cur) + ')'); s.log.forEach(t => L.push('  • ' + t)); });
   if (o.due) L.push('Hậu quả còn chờ: ' + o.due + ' (có điều gì đó đang tới)');
   L.push('');
+  L.push('--- Kỷ niệm các cặp thân (9K) ---');
+  L.push('Tổng ký ức: ' + o.memTotal + ' · Kết nghĩa: ' + (o.sworn.length ? o.sworn.join(', ') : 'không có'));
+  o.pairs.forEach(q => { L.push(q.name + (q.alive ? '' : ' (đã mất)') + ' · loại ' + q.t + ':'); q.ks.forEach(t => L.push('  ' + t)); });
+  L.push('');
   L.push('--- Nhật ký ---');
   o.log.forEach(e => L.push('[' + String(e.age).padStart(3) + ' tuổi] ' + e.t));
   const dir = path.join(__dirname, 'life-sim'); fs.mkdirSync(dir, { recursive: true });
   const f = path.join(dir, SEED + '.txt'); fs.writeFileSync(f, L.join('\n') + '\n');
+  console.log('Ký ức: ' + o.memTotal + ', cặp: ' + o.pairs.length + ', kết nghĩa: ' + o.sworn.length);
   console.log('Đã ghi ' + f + ' (' + o.log.length + ' dòng nhật ký, ' + o.boxes.story + ' hộp truyện, ' + o.boxes.wheel + ' hộp vòng quay).');
 })().catch(e => { console.error(e); process.exit(2); });
