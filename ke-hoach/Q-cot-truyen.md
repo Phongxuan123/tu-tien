@@ -1043,6 +1043,8 @@ Xem bảng 1.2. Thêm các chi tiết đã chốt sau khi bạn chỉnh: thang t
 
 - **(Lượt 5, 2026-10-19)** Chặng 8B: tuyến mẫu là xương sống A mốc A1 đến A3 (có 1 vòng quay, ít nhất 2 hậu quả trễ); bộ máy tối thiểu (nhân quả tạm dùng `nghiep`, `rep`; chặng ghép hoãn); vai lấy NPC có sẵn trước; hộp chặng dùng lại hộp quyết định, mục "Truyện của đời bạn" trong tab Nhiệm vụ (câu 5 mục 20.2 chốt: gộp vào Nhiệm vụ). Chi tiết và định dạng dữ liệu tuyến ở Z "Đặc tả 8B".
 
+- **(Lượt 6, 2026-10-20)** Tiến độ cảnh giới chậm là cố ý; **60 đến 70% nội dung từng dự tính từ Trúc Cơ hạ xuống Luyện Khí trung kỳ** (giữ T13, T14 và chuyện rất lớn ở Trúc Cơ+); mốc xương sống mở theo cảnh giới hoặc tuổi; chống trôi tính cách (quán tính dải cực 0,3, việc thường ngày ×0,5, Tự động chọn ngẫu nhiên theo trọng số hợp tính); lọc nhật ký. Theo ngân sách còn lại, thứ tự: 8B2 → 9A → 9B (gộp R1) → 9C → gói nội dung → 8C (Z mục 7b).
+
 ### 20.2 Câu hỏi còn mở (mỗi câu có mặc định, bạn chỉ cần sửa chỗ muốn khác)
 **Giọng và nhịp truyện**
 1. **Giọng truyện**: nghiêm túc tiên hiệp hay pha hài đời thường như các sự kiện cũ? *(mặc định: pha, nghiêm khi chuyện lớn)*

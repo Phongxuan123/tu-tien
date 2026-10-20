@@ -250,3 +250,19 @@ NHIỆM VỤ: đúng "Đặc tả 8B".
 Quy tắc: không đổi TT.VERSION, trường mới khởi tạo muộn; công tắc D.STORY.on = false thì `node tools/baseline.js --check` trùng khít (cờ --story=off). Bật thì đo 40 hạt giống trước/sau và nhịp quyết định (bài "Nhịp quyết định" phải vẫn < 6 lần/phút). Kiểm thử "Truyện và vòng quay (8B)": story-lint sạch, mở tuyến đúng điều kiện, hạn tự tiến theo mac, hậu quả trễ chín đúng khoảng, gate và gia, vai lấy NPC có sẵn, vòng quay (tổng 100, một yếu tố, điểm trong [−10, +15], quay lại 1 lần, trừ khí vận, chặn vùng cao nhất và khi thiếu điểm, +1 khi vùng cao nhất), lưu/tải giữa chặng và giữa vòng quay, công tắc. Playwright: hộp chặng, vòng quay, tab Nhiệm vụ trên máy tính và điện thoại.
 Cuối: ghi "8B đã làm" vào Z, Q mục 22; KE-HOACH.md; push theo CLAUDE.md. Báo ngắn gọn, kèm đường dẫn 3 tệp life-sim mẫu để tôi đọc.
 ```
+
+## 8B2. Sonnet: sửa lõi sau khi đọc life-sim (cần 8B)
+
+```
+Repo: Phongxuan123/tu-tien. Gắn repo, clone nhánh `main` (trả lời tiếng Việt, ngắn gọn, xưng "mình", gọi tôi là "bạn"). Đọc CLAUDE.md. Làm trên nhánh `add-game-project` (tạo lại từ origin/main nếu PR Đợt 8 đã merge; nếu chưa merge thì checkout origin/add-game-project). TIẾT KIỆM: chỉ đọc đúng phần ghi dưới đây, chạy kiểm thử lọc theo từ khóa, chạy đầy đủ một lần cuối, Playwright tối đa 1 ảnh.
+
+Đọc: Z mục "Đợt 8" phần "8B2" (bản chốt) và "8B đã làm"; js/data/story.js; js/data/stories/bb_a.js; js/systems/story.js (phần mở tuyến và kiểm điều kiện mo/khi); js/systems/nature.js (shift, quán tính, affinity); js/systems/events.js chooseIndex (dòng ~120-145); js/systems/stats.js 95-105 (sơ/trung/hậu kỳ); nơi ghi dòng tổng kết năm và tin đồn (grep "Tuổi ' +" và "Tin đồn").
+
+NHIỆM VỤ (đúng "8B2"):
+1. Điều kiện `stage` (0 sơ, 1 trung, 2 hậu kỳ) và `tuoi` cho mo/khi, ghép "cảnh giới HOẶC tuổi" (mo: { hoac: [ {realm, stage}, {age} ] } hoặc dạng tương đương gọn); cập nhật story-lint. Sửa bb_a: A2 Luyện Khí hoặc 18 tuổi; A3 Luyện Khí trung kỳ hoặc 35 tuổi; thêm d_pham cho chặng cần chữ khác khi còn phàm nhân. Ghi quy ước "60 đến 70% nội dung hạ xuống Luyện Khí trung kỳ" vào chú thích đầu js/data/story.js làm hướng dẫn viết tuyến.
+2. Chống trôi: quán tính dải cực 0,3; dịch trục từ sự kiện thường ngày (không phải chặng truyện, không phải tuổi thơ) nhân 0,5; chooseIndex của người chơi ở chế độ Tự động/Cân bằng chọn ngẫu nhiên theo trọng số affinity (quy tắc nếu-thì vẫn đè). Hệ số để trong D.NATURE.
+3. Lọc nhật ký: gom dòng tổng kết năm không có gì (+0) và tin đồn lặp (cùng loại, cùng nơi trong 3 năm) thành một dòng cuối năm.
+
+Kiểm: `node tools/story-lint.js` sạch; `node tools/baseline.js --check` trùng khít (baseline không bước người chơi); bài kiểm thử mới "Sửa lõi (8B2)": điều kiện hoặc-tuổi, stage, quán tính 0,3, Tự động không luôn chọn hợp nhất (đo 500 lần), lọc nhật ký; bài 8A/8B cũ vẫn đạt (sửa bài nếu chỉ do hệ số đổi, ghi rõ). Chạy lại `node tools/life-sim.js` cho 101, 102, 103: không đời nào có cả bốn trục ở dải cực, A1 đến A3 đều xảy ra trong 40 năm đầu; dòng nhật ký giảm rõ. Chạy đầy đủ run-tests một lần cuối.
+Cuối: ghi "8B2 đã làm" vào Z (kèm số dòng nhật ký trước/sau, tính cách cuối 3 đời), Q mục 22; push theo CLAUDE.md. Báo ngắn gọn.
+```

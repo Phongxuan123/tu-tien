@@ -209,7 +209,13 @@
 - **Cổng chơi thử 6:** đọc 3 bản `life-sim` + chơi 15 phút: tính cách đổi theo lựa chọn, vòng quay, tuyến mẫu, tiên thiên mới.
 
 ### Đợt 9. Một đời đầy đủ (gọn lại 2026-10-19)
-- [ ] **9A** 8 xuất thân đầu (17 sau) + sự kiện tuổi thơ theo xuất thân (thêm vào khung 8A2/8A3) + xương sống A (6 mốc).
+- [ ] **8B2** (Sonnet, nhỏ) **Sửa lõi sau khi đọc life-sim** (chốt 2026-10-20, lượt 6):
+  - *Hạ cảnh giới nội dung*: tiến độ cảnh giới chậm là **cố ý** (không đổi). Thêm điều kiện `stage` (sơ/trung/hậu kỳ, `D.STAGE_NAMES`) cho `mo` và `khi` của tuyến; **60 đến 70% nội dung từng dự tính "từ Trúc Cơ" hạ xuống "Luyện Khí trung kỳ"**; 30 đến 40% còn lại (T13, T14 đã chốt từ Trúc Cơ, A4 trở lên, chuyện rất lớn) giữ. Áp ngay cho A3 (Luyện Khí trung kỳ) và cho mọi dữ liệu tuyến viết sau này (ghi vào hướng dẫn viết tuyến).
+  - *Mốc xương sống theo giai đoạn đời*: mốc mở khi tới cảnh giới **hoặc** tới tuổi, cái nào trước (A2 Luyện Khí hoặc 18; A3 Luyện Khí trung kỳ hoặc 35; A4 Trúc Cơ hoặc 55; A5 tuổi 75; A6 khi thọ còn 10%); chặng có chữ khác nhau cho phàm nhân và tu sĩ khi cần (trường `d_pham`).
+  - *Chống trôi tính cách*: quán tính dải cực 0,3 (thay 0,6); dịch trục của sự kiện thường ngày nhân 0,5; chế độ Tự động chọn **ngẫu nhiên theo trọng số độ hợp tính** (không luôn lấy lựa chọn hợp nhất), bốc bằng `rng` như cách chọn mặc định cũ.
+  - *Lọc nhật ký*: gom dòng tổng kết năm "+0" và tin đồn lặp (cùng loại, cùng nơi trong 3 năm) thành một dòng cuối năm.
+  - *Đo*: 3 tệp life-sim mới (101, 102, 103) không còn đời nào cuối đều cực một trục; mỗi đời có A1 đến A3 trong 40 năm đầu.
+- [ ] **9A** 8 xuất thân đầu (17 sau) + sự kiện tuổi thơ theo xuất thân (thêm vào khung 8A2/8A3) + xương sống A mốc A4 đến A6.
 - [ ] **9B** R2 đạo lữ lõi (khoảng 12 chặng: gặp, mến, tỏ tình, kết, thử thách, chia ly/vĩnh biệt).
 - [ ] **9C** R3 con cái lõi (khoảng 12 chặng, 5 quyết định mỗi con) + thừa kế + **màn kết đời / bia mộ** (Q 21.1#1).
 - **Cổng chơi thử 7:** một đời đầy đủ từ sinh đến chết/kế thừa.
@@ -283,6 +289,27 @@
 | 9 | 12 | Bản cuối: cân bằng, di động, hiệu năng |
 
 ---
+
+## 7b. Kế hoạch theo ngân sách (chốt hướng 2026-10-20: còn khoảng 30 đô)
+**Mục tiêu:** một đời đầy đủ chơi được và hay (xuất thân, tuổi thơ, xương sống A trọn 6 mốc, đạo lữ, con cái, kế thừa, màn kết đời) + một gói nội dung đầu. **Không** làm hết kế hoạch gốc (khoảng 63 lượt). Chi phí mỗi phiên là ước lượng thô, giữ khoảng 5 đô dự phòng.
+
+| # | Phiên | Model | Việc | Ước |
+|---|---|---|---|---|
+| 1 | 8B2 | Sonnet | sửa lõi sau life-sim (mục Đợt 8) | 2 |
+| 2 | 9A-d | Haiku | dữ liệu 8 xuất thân, tuổi thơ theo xuất thân, chữ mốc A4 đến A6 | 1 |
+| 3 | 9A | Sonnet | hệ xuất thân, nối A4 đến A6 | 3 |
+| 4 | 9B | Sonnet | R1 lõi (gộp 8D) + cơ chế đạo lữ | 3 |
+| 5 | 9B-d | Haiku | khoảng 12 chặng đạo lữ | 1 |
+| 6 | 9C | Sonnet | con cái, thừa kế, màn kết đời | 3 |
+| 7 | 9C-d | Haiku | khoảng 12 chặng con cái, chữ bia mộ | 1 |
+| 8 | N1 đến N3 | Haiku | 3 gói nội dung tuyến (mỗi gói 3 đến 4 tuyến thân phận hoặc thế giới, viết đúng định dạng dữ liệu tuyến của 8B, chạy `story-lint`) | 4 |
+| 9 | 8C | Sonnet | tiên thiên v2 bản gọn (tùy, nếu còn tiền) | 2,5 |
+| 10 | Hoàn thiện | Sonnet | cân bằng nhịp, sửa lỗi chơi thử, kiểm thử đầy đủ | 2,5 |
+| | **Cộng** | | | **khoảng 23** |
+
+**Cắt hoặc để vô thời hạn:** Đợt 10 (F5, S9); xương sống B đến E; R4 dây duyên; Q9 AI; S10, S11; phần lớn mục 24 (chỉ lấy vài tuyến vào gói N); tuyến V hình ảnh (assets).
+**Cách tiết kiệm (mọi phiên):** mỗi chặng một phiên mới (không kéo dài phiên); prompt ghi sẵn file và dòng cần đọc; chạy kiểm thử lọc theo từ khóa, chạy đầy đủ một lần cuối; Playwright chỉ chụp 1 đến 2 ảnh cần thiết; không dùng Opus; phiên thiết kế kết thúc sau khi viết xong prompt.
+**Chơi thử:** đọc `life-sim` sau mỗi chặng Sonnet; chơi thật ở sau 9C (Cổng 7).
 
 ## 8. Ước lượng tổng và thứ tự ưu tiên khi thiếu thời gian
 Đơn vị "lượt" là một đợt làm việc liên tục có kiểm thử.
