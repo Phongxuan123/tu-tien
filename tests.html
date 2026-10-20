@@ -4357,6 +4357,193 @@ test('Quan hệ và đạo lữ (9B): lưu/tải giữ d; bản lưu cũ (không
   const old = npcFor(q, 'nu', 70), n1 = npcFor(q, 'nam', 22); ok(TT.family.attract(q, old) > 0, 'bật thì cặp của người chơi bỏ giới hạn chênh tuổi'); eq(TT.family.attract(n1, old), 0, 'NPC với NPC vẫn giữ giới hạn');
 });
 
+// ---------------- Kết nghĩa qua trải nghiệm chung (9K) ----------------
+function knSetup(seed, n) {
+  const p = bondSetup(seed), os = [];
+  for (let i = 0; i < (n || 1); i++) { const o = npcFor(p, i % 2 ? 'nam' : 'nu', 25 + i); o.realm = 2; o.hp = S.hpMax(o); TT.rel.add(p, o, 55); os.push(o); }
+  return { p, o: os[0], os };
+}
+function knMore(p, v, gender) { const o = npcFor(p, gender || 'nu', 26); o.realm = 2; o.hp = S.hpMax(o); TT.rel.add(p, o, v || 55); return o; }
+function runChoice(id, key, c, ctx) { return D.eventById[id].choices.find(x => x.key === key).run(c, ctx); }
+function withMem(onv, fn) { const was = D.BOND.mem; D.BOND.mem = onv; try { return fn(); } finally { D.BOND.mem = was; } }
+
+test('Kết nghĩa (9K): ký ức sinh ở các điểm móc (nhờ giúp, nghe giảng, luận đạo, bí cảnh, đánh nhau, nhiệm vụ, thế sự, bạn thuở nhỏ), có tên nơi', () => {
+  const { p, o, os } = knSetup(931, 3), w = TT.world; const seen = {};
+  const kinds = () => { const m = TT.bond.mems(p, o); m.forEach(e => { seen[e.k] = 1; }); return m; };
+  runChoice('rel_nho_giup', 'giup', p, { otherId: o.id, amt: 20 }); ok(kinds().some(e => e.k === 'nho'), 'nhờ giúp');
+  w.months += 12; runChoice('opp_cao_nhan', 'nghe', p, {}); ok(TT.rel.list(p).some(x => x.c && TT.bond.mems(p, x.c).some(e => e.k === 'giang')), 'nghe giảng');
+  w.months += 12; runChoice('opp_luan_dao', 'du', p, {}); kinds();
+  TT.rel.list(p).forEach(x => { if (x.c) TT.bond.mems(p, x.c).forEach(e => { seen[e.k] = 1; }); });
+  // bí cảnh có bạn đi cùng + đánh nhau: ép xác suất
+  w.months += 12; TT.bond.shift(p, o, { trust: 40, love: 20 });
+  p.dgCool = 0; p.hp = S.hpMax(p);
+  stubP(true, () => { TT.dungeon.enter(p, p.place, 'bi_canh'); }); w.pending = null;
+  ok(p.dungeon && p.dungeon.ally, 'bạn thân cùng nơi đi cùng'); const al = TT.world.chars[p.dungeon.ally.id];
+  const res = { win: false, fled: false }; p.hp = 5; stubP(true, () => TT.bond.assist(p, res, null, 'Yêu thú')); ok(res.win && res.assisted, 'xoay trận'); ok(TT.bond.mems(p, al).some(e => e.k === 'danh' && e.h), 'đánh nhau là hoạn nạn');
+  TT.dungeon.finish(p, 'rut'); ok(TT.bond.mems(p, al).some(e => e.k === 'bi_canh'), 'bí cảnh'); os.forEach(x => TT.bond.mems(p, x).forEach(e => { seen[e.k] = 1; }));
+  // nhiệm vụ: người giao là NPC
+  const q = { id: 99, tier: 'm', state: 'on', text: 'Mang thư cho làng', giver: { t: 'npc', id: o.id, name: o.name }, rew: { rel: 3 }, rank: 1, d: 'x', byAge: 99 };
+  p.quests = (p.quests || []).concat([q]); w.months += 12; try { TT.quests.settle(p, q, 'done'); } catch (e) { throw new Error('settle: ' + e.message); }
+  ok(TT.bond.mems(p, o).some(e => e.k === 'nhiem_vu'), 'nhiệm vụ');
+  // thế sự: hạn hán ở vùng
+  TT.fac.S().shocks.push({ kind: 'han', region: p.region, until: w.months + 24 }); w.months += 12;
+  stubP(true, () => TT.bond.memYearly(p)); ok(TT.rel.list(p).some(x => x.c && TT.bond.mems(p, x.c).some(e => e.k === 'the_gioi')), 'thế sự ở vùng');
+  // bạn thuở nhỏ
+  const f = npcFor(p, 'nam', 20); TT.rel.add(p, f, 30); p.child = { done: false, i: 0, steps: [], nat0: {}, gold0: 0, ban: f.id };
+  const cev = D.CHILDHOOD.ev.find(e => e.needBan); TT.childhood.apply(p, cev, 0, f.id); ok(TT.bond.mems(p, f).some(e => e.k === 'ban_nho'), 'bạn thuở nhỏ');
+  os.concat([f]).forEach(x => TT.bond.mems(p, x).forEach(e => { seen[e.k] = 1; }));
+  const types = Object.keys(seen); ok(types.length >= 6, 'loại ký ức: ' + types.join(','));
+  os.concat([f]).forEach(x => TT.bond.mems(p, x).forEach(e => { ok(e.t && e.t.length < 120 && /\S/.test(e.t) && e.a >= 0, 'chữ ngắn: ' + e.t); }));
+  ok(TT.bond.mems(p, o).every(e => /\sở\s|[A-ZÀ-Ỵa-zà-ỵ]/.test(e.t)), 'có chữ');
+});
+
+test('Kết nghĩa (9K): trần 8 ký ức, giữ hoạn nạn, chặn ghi trùng, cộng Tin/Kính, đọc không rng', () => {
+  const { p, o } = knSetup(932), w = TT.world;
+  const d0 = TT.bond.ensure(p, o), t0 = d0.trust, r0 = d0.respect;
+  eq(TT.bond.remember(p, o, 'khong_co', 'x'), null, 'loại lạ');
+  const e1 = TT.bond.remember(p, o, 'cuu', 'Cứu nhau khỏi hang', 2); ok(e1 && e1.h === 1 && e1.w === 2, 'hoạn nạn');
+  ok(d0.trust > t0 + 9 && d0.respect > r0 + 7, 'cộng Tin/Kính theo nặng');
+  eq(TT.bond.remember(p, o, 'cuu', 'trùng'), null, 'chặn ghi trùng loại trong khoảng gap');
+  for (let i = 0; i < 12; i++) { w.months += 30; TT.bond.remember(p, o, i % 2 ? 'nho' : 'bi_canh', 'Việc số ' + i); }
+  eq(d0.mem.length, 8, 'trần 8'); ok(d0.mem.some(e => e.k === 'cuu' && e.h), 'hoạn nạn cũ nhất vẫn còn dù đầy');
+  for (let i = 0; i < 12; i++) { w.months += 30; TT.bond.remember(p, o, 'danh', 'Trận số ' + i, 1); TT.bond.remember(p, o, 'cuu', 'Cứu số ' + i); }
+  eq(d0.mem.length, 8); ok(d0.mem.every(e => e.h), 'toàn hoạn nạn thì bỏ hoạn nạn cũ nhất');
+  const s0 = TT.rng.getState(), snap = JSON.stringify(TT.world.rel);
+  TT.bond.mems(p, o); TT.bond.hardships(p, o); TT.bond.recall(p, o, 2); TT.bond.canSwear(p, o); TT.bond.brothers(p); TT.bond.allyBonus(p, o); TT.bond.asked(p, o);
+  eq(TT.rng.getState(), s0, 'đọc không rng'); eq(JSON.stringify(TT.world.rel), snap, 'đọc không ghi');
+  const x = npcFor(p, 'nu'); eq(TT.bond.remember(p, x, 'nho', 'chưa quen'), null, 'chưa quen thì không có ký ức'); const n2 = npcFor(p, 'nu'), n3 = npcFor(p, 'nam'); eq(TT.bond.remember(n2, n3, 'nho', 'NPC với NPC'), null);
+});
+
+test('Kết nghĩa (9K): đồng hành giúp đúng biên (+5 đến +10%), chia lợi phẩm, chết thay, ghi ký ức; rủ đi cùng là lệnh ưu tiên thấp', () => {
+  const { p, o } = knSetup(933), w = TT.world, A = D.BOND.kn.ally;
+  TT.bond.shift(p, o, { trust: 50, love: 30 });
+  const b = TT.bond.allyBonus(p, o); ok(b >= A.bonus[0] - 1e-9 && b <= A.bonus[1] + 1e-9, 'biên ' + b);
+  // đo tỉ lệ lật trận thua
+  let flip = 0; const N = 6000, save = p.hp;
+  for (let i = 0; i < N; i++) { const res = { win: false, fled: false }; p.hp = 20; o.hp = 100; w.months += 6; const dg = p.dungeon; TT.bond.assist(p, res, o, 'Quái'); if (res.win) flip++; }
+  const rate = flip / N; ok(rate > A.bonus[0] - 0.02 && rate < A.bonus[1] + 0.02, 'tỉ lệ lật ' + rate);
+  // thắng thì không bị đổi
+  const rw = { win: true, fled: false }; TT.bond.assist(p, rw, o, 'Quái'); ok(rw.win);
+  // chết thay
+  o.alive = true; p.hp = 0; const rs = { win: false, fled: false }; const P0 = TT.rng.P;
+  TT.rng.P = x => false; TT.bond.assist(p, { win: false }, o, 'q'); TT.rng.P = P0;
+  let n = 0; TT.rng.P = function (x) { n++; return n === 2; }; TT.bond.assist(p, rs, o, 'Hổ yêu'); TT.rng.P = P0;
+  ok(rs.saved && p.hp === 1 && !o.alive, 'bạn chết thay'); ok(TT.bond.mems(p, o).some(e => e.k === 'cuu' && e.h && e.w === 3), 'ký ức cứu mạng');
+  // chia lợi phẩm
+  const q = npcFor(p, 'nu'); q.realm = 2; TT.rel.add(p, q, 60); p.dgCool = 0; p.hp = S.hpMax(p);
+  stubP(true, () => TT.dungeon.enter(p, p.place, 'bi_canh')); w.pending = null; ok(p.dungeon.ally, 'đi cùng');
+  p.dungeon.loot = { gold: 100, xp: 50, items: {} }; const g0 = q.gold; const bf = p.dungeon.ally.id; TT.dungeon.finish(p, 'xong');
+  ok(TT.world.chars[bf].gold >= g0 + 20, 'bạn nhận 20% vàng'); 
+  // rủ đi cùng: lệnh, dedupe, tối đa 2, hết hạn
+  const a1 = npcFor(p, 'nam'), a2 = npcFor(p, 'nu'), a3 = npcFor(p, 'nam'); [a1, a2, a3].forEach(x => { x.realm = 1; TT.rel.add(p, x, 60); });
+  p.intents = []; ok(TT.bond.invite(p, a1).ok); ok(TT.bond.invite(p, a1).same, 'gộp lệnh trùng'); ok(TT.bond.invite(p, a2).ok); ok(!TT.bond.invite(p, a3).ok, 'tối đa 2'); eq(p.intents.length, 2);
+  ok(TT.bond.asked(p, a1), 'đã hẹn'); ok(!TT.bond.invite(p, npcFor(p, 'nu')).ok, 'chưa thân không rủ được');
+  const bf2 = TT.world.chars; a1.place = p.place; a2.place = 'khac'; const sv = TT.rng.P;
+  // đã hẹn thì tỉ lệ đi cùng cao (pAsk) và lệnh được dùng
+  let yes = 0; for (let i = 0; i < 400; i++) { p.intents = [{ loai: 'ru', dich: a1.id, tu: w.months, han: w.months + 6 }]; if (TT.bond.ally(p, {})) yes++; } ok(yes / 400 > 0.7, 'tỉ lệ đi cùng khi được rủ ' + yes / 400);
+  p.intents = [{ loai: 'ru', dich: a1.id, tu: w.months, han: w.months + 3 }]; w.months += 4; TT.bond.memTick(p); eq(p.intents.length, 0, 'hết hạn thì bỏ');
+});
+
+test('Kết nghĩa (9K): kết nghĩa không bật khi thiếu ký ức hoặc thiếu hoạn nạn, bật khi đủ; chữ nhắc lại ký ức; nhánh từ chối giữ nguyên', () => {
+  const { p, o } = knSetup(934), w = TT.world; TT.bond.ensure(p, o); const r = TT.rel.get(p, o); r.v = 80;
+  ok(!TT.bond.canSwear(p, o), 'không ký ức');
+  w.months += 12; TT.bond.remember(p, o, 'cuu', 'Cứu nhau trong hang'); w.months += 12; TT.bond.remember(p, o, 'nho', 'Mượn vàng');
+  ok(!TT.bond.canSwear(p, o), 'mới 2 ký ức');
+  w.months += 12; TT.bond.remember(p, o, 'giang', 'Cùng nghe giảng'); ok(TT.bond.canSwear(p, o), '3 ký ức, 1 hoạn nạn thì đủ');
+  const q = knMore(p, 80); const d = TT.bond.ensure(p, q);
+  ['bi_canh', 'nho', 'giang', 'nhiem_vu'].forEach(k => { w.months += 12; TT.bond.remember(p, q, k, 'Việc ' + k); });
+  ok(d.mem.length >= 3 && !TT.bond.canSwear(p, q), 'đủ ký ức nhưng không hoạn nạn thì chưa');
+  const z0 = knMore(p, 30); TT.bond.ensure(p, z0); ['cuu', 'nho', 'giang'].forEach(k => { w.months += 12; TT.bond.remember(p, z0, k, 'v' + k); }); ok(!TT.bond.canSwear(p, z0), 'thiện cảm thấp thì chưa');
+  // chữ nhắc 1-2 ký ức
+  const txt = D.eventById.rel_ket_nghia.text(p, { otherId: o.id }); ok(/Cứu nhau trong hang/.test(txt) && txt.split('«').length <= 3, 'nhắc ký ức: ' + txt);
+  const txt0 = D.eventById.rel_ket_nghia.text(p, { otherId: q.id }); ok(/«/.test(txt0));
+  // từ chối: nk; đồng ý: thành kết nghĩa + ký ức lời thề
+  runChoice('rel_ket_nghia', 'tu', p, { otherId: q.id }); eq(TT.rel.get(p, q).nk, 1);
+  runChoice('rel_ket_nghia', 'ket', p, { otherId: o.id }); eq(TT.rel.get(p, o).k, 'ket_nghia'); eq(TT.bond.get(p, o).t, 'ket_nghia'); ok(TT.bond.mems(p, o).some(e => e.k === 'the'), 'ký ức lời thề');
+  // kích hoạt từ social.after: thiếu ký ức thì không ngỏ lời, đủ thì có
+  const z = knMore(p, 70); TT.bond.ensure(p, z); const rec = TT.rel.get(p, z); const fake = { res: { r: rec }, int: { id: 'chuyen' } };
+  w.pending = null; stubP(true, () => TT.social.after(p, z, fake)); ok(!(w.pending && w.pending.evId === 'rel_ket_nghia'), 'thiếu ký ức: không ngỏ lời');
+  ['cuu', 'nho', 'giang'].forEach(k => { w.months += 12; TT.bond.remember(p, z, k, 'v' + k); }); rec.v = 70;
+  w.pending = null; stubP(true, () => TT.social.after(p, z, fake)); ok(w.pending && w.pending.evId === 'rel_ket_nghia', 'đủ ký ức thì ngỏ lời');
+  // tự nảy theo tháng (không cần giao du)
+  const y = knMore(p, 70); TT.bond.ensure(p, y); ['cuu', 'nho', 'giang'].forEach(k => { w.months += 12; TT.bond.remember(p, y, k, 'v' + k); }); TT.rel.get(p, y).v = 70; w.pending = null;
+  p.travel = null; p.cross = null; p.dungeon = null; stubP(true, () => TT.bond.memTick(p)); ok(w.pending && w.pending.evId === 'rel_ket_nghia', 'memTick ngỏ lời');
+  // tắt công tắc: về ngưỡng thiện cảm 60 cũ
+  withMem(false, () => { const u = knMore(p, 70); TT.bond.ensure(p, u); const rr = TT.rel.get(p, u); w.pending = null; stubP(true, () => TT.social.after(p, u, { res: { r: rr }, int: { id: 'chuyen' } })); ok(w.pending && w.pending.evId === 'rel_ket_nghia', 'tắt thì như cũ'); });
+});
+
+test('Kết nghĩa (9K): sau kết nghĩa: huynh đệ tự đến giúp, liên lụy thù, tặng đồ, ký ức cuối khi chết', () => {
+  const { p, o } = knSetup(939), w = TT.world, B = D.BOND.kn.bro;
+  TT.rel.get(p, o).v = 80; TT.bond.ensure(p, o); TT.rel.setKind(p, o, 'ket_nghia'); TT.bond.setType(p, o, 'ket_nghia');
+  ok(TT.bond.brothers(p).indexOf(o) >= 0 && TT.bond.brothers(p, { region: 1 }).indexOf(o) >= 0);
+  const foe = npcFor(p, 'nam', 40); foe.realm = 3; TT.rel.add(p, foe, -80); TT.social.makeEnemy(foe, p, 'thử'); foe.place = 'xa_cho_khac';
+  // tự đến giúp: kẻ thù tìm đến, bạn ra tay
+  o.place = 'noi_khac_cung_vung'; stubP(true, () => { const h = TT.bond.duelHelper(p, foe); ok(h && h.a === o && h.bro === 1, 'huynh đệ tự đến dù khác nơi'); });
+  o.hp = S.hpMax(o); const res = { win: false, fled: false }; let hit = 0; const P0 = TT.rng.P; TT.rng.P = () => (hit++ === 0); TT.bond.assist(p, res, o, foe.name, B.helpBonus[0]); TT.rng.P = P0; ok(res.win, 'huynh đệ xoay trận');
+  // tặng đồ khi thiếu: bạn nghèo, huynh đệ giàu
+  o.place = p.place; p.gold = 0; o.gold = 5000;
+  const w0 = TT.ls.wealth(p); stubP(true, () => { TT.bond.memYearly(p); }); ok(TT.ls.wealth(p) > w0 || TT.bond.mems(p, o).some(e => e.k === 'nho') || p.inv.hoi_xuan_dan, 'tặng đồ');
+  // liên lụy thù
+  o.realm = 1; foe.realm = 3; foe.region = o.region; stubP(true, () => TT.bond.memYearly(p));
+  ok(TT.bond.mems(p, o).some(e => e.k === 'luy') || !o.alive, 'liên lụy thù ghi ký ức');
+  // chết: ký ức cuối + nhật ký
+  const q = knSetup(940); TT.rel.get(q.p, q.o).v = 80; TT.bond.ensure(q.p, q.o); TT.rel.setKind(q.p, q.o, 'ket_nghia'); TT.bond.setType(q.p, q.o, 'ket_nghia'); q.p.relIds = q.p.relIds || {}; q.p.relIds[q.o.id] = 1;
+  TT.bond.remember(q.p, q.o, 'cuu', 'Cứu nhau trong hang'); TT.world.playerId = q.p.id;
+  const n0 = q.p.log ? q.p.log.length : 0; TT.life.dieNow(q.o, 'bệnh nặng');
+  ok(TT.bond.mems(q.p, q.o).some(e => e.k === 'mat'), 'ký ức cuối'); ok(TT.bond.get(q.p, q.o).farewell === 1);
+  ok((q.p.log || []).slice(n0).some(l => /Huynh đệ/.test(l.t || l.text || JSON.stringify(l)) && /Cứu nhau trong hang/.test(JSON.stringify(l))), 'nhật ký nhắc ký ức');
+});
+
+test('Kết nghĩa (9K): ba sự kiện mới (Huynh đệ gặp nạn, Lợi và nghĩa, Tái ngộ), hậu quả trễ, khóa mềm theo Đạo đức', () => {
+  const mk = seed => { const x = knSetup(seed); TT.rel.get(x.p, x.o).v = 80; TT.bond.ensure(x.p, x.o); TT.rel.setKind(x.p, x.o, 'ket_nghia'); TT.bond.setType(x.p, x.o, 'ket_nghia'); return x; };
+  ['bond_nan', 'bond_loi_nghia', 'bond_tai_ngo'].forEach(id => { ok(D.eventById[id] && D.eventById[id].choices.length >= 3, id); });
+  // Huynh đệ gặp nạn
+  let { p, o } = mk(941);
+  ['benh', 'vay', 'no'].forEach(v => { const t = D.eventById.bond_nan.text(p, { otherId: o.id, v }); ok(t.indexOf(o.name) >= 0 && t.length > 40, v); });
+  stubP(true, () => runChoice('bond_nan', 'di', p, { otherId: o.id, v: 'benh' })); ok(TT.bond.mems(p, o).some(e => e.k === 'cuu' && e.h && e.w === 3), 'đi cứu: ký ức cứu mạng');
+  ({ p, o } = mk(942)); const t0 = TT.bond.get(p, o).trust; stubP(false, () => runChoice('bond_nan', 'bo', p, { otherId: o.id, v: 'vay' }));
+  const d = TT.bond.get(p, o); ok(d.trust < t0 - 5 && d.late && d.late.m > TT.world.months + 17, 'bỏ rơi: Tin giảm và hẹn hậu quả trễ');
+  TT.world.months = d.late.m; TT.bond.memTick(p); eq(d.t, 'ban', 'hậu quả trễ: tình huynh đệ nguội'); ok(!d.late);
+  ({ p, o } = mk(943)); stubP(true, () => runChoice('bond_nan', 'bo', p, { otherId: o.id, v: 'no' })); ok(!o.alive, 'bỏ rơi có thể làm huynh đệ chết'); const dd = TT.bond.get(p, o); TT.world.months = dd.late.m; const dt = p.daoTam; TT.bond.memTick(p); ok(p.daoTam < dt, 'hối hận muộn'); 
+  // Lợi và nghĩa: khóa mềm theo Đạo đức
+  ({ p, o } = mk(944)); p.nature = { tinh: 0, xuthe: 0, daoduc: 8, tudung: 0 };
+  const ch = D.eventById.bond_loi_nghia.choices; ok(ch.find(x => x.key === 'loi').disabled(p, { otherId: o.id }), 'Đạo đức cao thì khóa lựa chọn bán tin'); p.nature.daoduc = 0; ok(!ch.find(x => x.key === 'loi').disabled(p, { otherId: o.id }), 'trung dung thì mở');
+  ok(D.eventById.bond_loi_nghia.text(p, { otherId: o.id }).indexOf(o.name) >= 0);
+  const g0 = p.gold; stubP(true, () => runChoice('bond_loi_nghia', 'loi', p, { otherId: o.id })); ok(TT.bond.get(p, o).t === 'ban' && TT.bond.get(p, o).trust === 0, 'bán tin: đứt nghĩa'); ok(TT.ls.wealth(p) > 0);
+  ({ p, o } = mk(945)); runChoice('bond_loi_nghia', 'nghia', p, { otherId: o.id }); ok(TT.bond.mems(p, o).some(e => e.k === 'nghia'), 'giữ lời thề'); eq(TT.bond.get(p, o).t, 'ket_nghia');
+  ({ p, o } = mk(946)); stubP(true, () => runChoice('bond_loi_nghia', 'muu', p, { otherId: o.id })); ok(TT.bond.mems(p, o).some(e => e.k === 'nghia'), 'dò mưu thành công');
+  // Tái ngộ sau ≥ 10 năm
+  ({ p, o } = mk(947)); TT.bond.remember(p, o, 'cuu', 'Cứu nhau trong hang'); TT.world.months += 5; TT.bond.remember(p, o, 'nho', 'Mượn vàng'); const dm = TT.bond.get(p, o); TT.bond.shift(p, o, { trust: 50 });
+  TT.world.pending = null; o.place = 'xa'; TT.world.months += 119; TT.bond.memTick(p); ok(!(TT.world.pending && TT.world.pending.evId === 'bond_tai_ngo'), 'chưa đủ 10 năm / chưa gặp');
+  o.place = p.place; TT.world.months += 12; TT.world.pending = null; TT.bond.memTick(p); ok(TT.world.pending && TT.world.pending.evId === 'bond_tai_ngo', 'gặp lại sau 10 năm thì tái ngộ'); ok(/10|11/.test(TT.world.pending.text) && /Cứu nhau/.test(TT.world.pending.text), 'chữ nhắc ký ức: ' + TT.world.pending.text);
+  TT.world.pending = null; runChoice('bond_tai_ngo', 'ruou', p, { otherId: o.id, yrs: 11 }); ok(TT.bond.mems(p, o).some(e => e.k === 'tai_ngo'));
+  // Tái ngộ không nổ ở cặp ít ký ức
+  const z = knSetup(948); TT.bond.ensure(z.p, z.o); TT.bond.remember(z.p, z.o, 'nho', 'Một lần'); TT.world.months += 200; TT.world.pending = null; TT.bond.memTick(z.p); ok(!(TT.world.pending && TT.world.pending.evId === 'bond_tai_ngo'), 'cần ≥ 2 ký ức');
+});
+
+test('Kết nghĩa (9K): lưu/tải giữ ký ức, lời hẹn và bạn đồng hành; bản lưu cũ không có mem không vỡ', () => {
+  const { p, o } = knSetup(949), w = TT.world; TT.bond.remember(p, o, 'cuu', 'Cứu nhau trong hang', 2); w.months += 12; TT.bond.remember(p, o, 'nho', 'Mượn vàng');
+  p.intents = [{ loai: 'ru', dich: o.id, tu: w.months, han: w.months + 6 }];
+  p.dgCool = 0; p.hp = S.hpMax(p); stubP(true, () => TT.dungeon.enter(p, p.place, 'bi_canh')); w.pending = null; const al = p.dungeon && p.dungeon.ally;
+  const json = JSON.stringify(TT.bond.get(p, o).mem), pid = p.id, oid = o.id, intents = JSON.stringify(p.intents);
+  const txt = TT.save.snapshot(); TT.life.createWorld(950); TT.save.restore(txt);
+  const q = TT.world.chars[pid], b = TT.world.chars[oid]; eq(JSON.stringify(TT.bond.get(q, b).mem), json, 'ký ức giữ nguyên'); eq(JSON.stringify(q.intents), intents, 'lời hẹn giữ nguyên');
+  if (al) eq(q.dungeon.ally.id, al.id, 'bạn đồng hành giữ nguyên');
+  delete TT.bond.get(q, b).mem; TT.bond.tick(q); TT.bond.yearly(q); eq(TT.bond.mems(q, b).length, 0, 'bản cũ không mem'); TT.bond.remember(q, b, 'nho', 'Mới'); eq(TT.bond.mems(q, b).length, 1);
+});
+
+test('Kết nghĩa (9K): công tắc D.BOND.mem tắt thì không ký ức, không đồng hành, không rng, như 9B', () => withMem(false, () => {
+  const { p, o } = knSetup(951), w = TT.world; TT.bond.ensure(p, o);
+  const s0 = TT.rng.getState(), snap = JSON.stringify(w.rel);
+  eq(TT.bond.remember(p, o, 'cuu', 'x'), null); eq(TT.bond.shared(p, 'giang', 'x', 2), 0); eq(TT.bond.ally(p), null); eq(TT.bond.pickAlly(p), null); eq(TT.bond.duelHelper(p, o), null); eq(TT.bond.invite(p, o).ok, false);
+  const res = { win: false }; TT.bond.assist(p, res, o, 'q'); ok(!res.win, 'không giúp'); eq(TT.bond.canSwear(p, o), false); eq(TT.bond.endAlly(p, { ally: { id: o.id } }, 'xong'), '');
+  TT.bond.memTick(p); TT.bond.memYearly(p); TT.bond.farewell(p, o, 'x');
+  eq(TT.rng.getState(), s0, 'tắt thì không rng'); eq(JSON.stringify(w.rel), snap, 'tắt thì không ghi');
+  runChoice('rel_nho_giup', 'giup', p, { otherId: o.id, amt: 10 }); eq(TT.bond.mems(p, o).length, 0, 'sự kiện cũ chạy mà không ghi ký ức');
+  p.dgCool = 0; p.hp = S.hpMax(p); TT.dungeon.enter(p, p.place, 'bi_canh'); w.pending = null; ok(!p.dungeon.ally, 'tắt thì không có bạn đi cùng'); TT.dungeon.finish(p, 'rut');
+}));
+
+
 runNext();
 </script>
 </body>

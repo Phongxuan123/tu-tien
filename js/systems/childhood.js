@@ -122,6 +122,7 @@
       Object.keys(x.ax || {}).forEach(a => TT.nature.shift(c, a, x.ax[a], 'tuổi thơ', 'free'));
       const got = {};
       Object.keys(x.fx || {}).forEach(k => { const g = ch.fx(c, k, x.fx[k], ban); if (g) got[k] = g; });
+      if (ban) { const bo = TT.world.chars[ban]; if (bo && bo.alive) { const me = TT.bond.remember(c, bo, 'ban_nho', 'Cùng ' + bo.name + ' lớn lên (' + ev.t + ')', 1); if (me) me.a = ev.hoi * 4 + 1; } } // 9K: bạn thuở nhỏ
       c.childLog = c.childLog || [];
       c.childLog.push({ hoi: ev.hoi, id: ev.id, t: ev.t, label: x.label, r: x.r, fx: got });
       if (c.child && !c.child.done) c.child.i++;

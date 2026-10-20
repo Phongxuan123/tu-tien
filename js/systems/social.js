@@ -151,7 +151,7 @@
       if (!pl || w.pending || other.tier === 'phu' && other.realm === 0) return;
       const ev = (id, p, extra) => { if (rng.P(p)) TT.events.fire(pl, D.eventById[id], Object.assign({ otherId: other.id }, extra || {})); };
       if (TT.bond.loveRec(rec) >= 60 && !rec.k && !rec.nl && !TT.bond.holds(rec) && TT.family.eligible(pl, other)) ev('rel_to_tinh', 0.6, { initiator: a === pl ? 1 : 0 });
-      else if (rec.v >= 60 && !rec.k && !rec.nk) ev('rel_ket_nghia', 0.3);
+      else if ((TT.bond.memOn() ? TT.bond.canSwear(pl, other) : rec.v >= 60) && !rec.k && !rec.nk) ev('rel_ket_nghia', 0.3); // 9K: kết nghĩa cần ký ức chung và hoạn nạn
       else if ((r.int.id === 'cai_va' || r.int.id === 'tranh') && rec.v <= -20) ev('rel_xung_dot', 0.4);
       else if (rec.n <= 1 && other.tier === 'core') ev('rel_gap_nguoi', 0.12);
       else if (rec.v >= 15 && rec.v < 70 && TT.ls.wealth(other) < TT.ls.wealth(pl) * 0.5) ev('rel_nho_giup', 0.08, { amt: rng.RI(15, 40) * (1 + pl.realm) });

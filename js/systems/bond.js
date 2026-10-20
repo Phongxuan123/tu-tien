@@ -297,6 +297,7 @@
     // ---------- mỗi tháng (người chơi) ----------
     tick(c) {
       if (!K().on || c.kind !== 'player') return;
+      if (bond.memTick) bond.memTick(c); // 9K: lời hẹn, tái ngộ, kết nghĩa tự nảy (xem bondmem.js)
       const w = TT.world, now = w.months;
       let nd = countD(c);
       rel.list(c).forEach(x => {
@@ -326,6 +327,7 @@
     // ---------- mỗi năm (người chơi) ----------
     yearly(c) {
       if (!K().on || c.kind !== 'player') return;
+      if (bond.memYearly) bond.memYearly(c); // 9K: thế sự, huynh đệ (xem bondmem.js)
       const w = TT.world, now = w.months, B = K();
       bond.partners(c).forEach(x => {
         const o = x.c, r = x.r, d = r.d || bond.ensure(c, o);

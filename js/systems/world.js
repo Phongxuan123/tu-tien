@@ -60,6 +60,7 @@
       if (r && (r.v >= 40 || (r.k && r.k !== 'thu'))) {
         TT.log(pl, TT.rel.label(pl, c) + ' ' + c.name + ' đã qua đời (' + cause + ').', 'bad');
         TT.ev.dao(pl, r.k === 'ket_nghia' || r.v >= 70 ? -3 : -1);
+        TT.bond.farewell(pl, c, cause); // 9K: huynh đệ mất thì thêm ký ức cuối
       }
     }
     if (c.kind === 'player') {

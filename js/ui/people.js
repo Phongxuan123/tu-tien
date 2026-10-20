@@ -114,7 +114,7 @@
     if (!o || !p) { box.style.display = 'none'; cardKey = ''; return; }
     const near = o.alive && !o.travel && !o.cross && !p.travel && !p.cross && o.region === p.region && o.place === p.place;
     const r = TT.rel.get(p, o);
-    const key = [o.id, o.alive, near, r ? Math.round(r.v) + r.k : '', p.manualMonth === TT.world.months, TT.ls.wealth(p) >= 30, o.travel ? 1 : 0, o.place, ui.bondKey(p, o)].join('|');
+    const key = [o.id, o.alive, near, r ? Math.round(r.v) + r.k : '', p.manualMonth === TT.world.months, TT.ls.wealth(p) >= 30, o.travel ? 1 : 0, o.place, ui.bondKey(p, o), TT.bond.asked(p, o) ? 1 : 0].join('|');
     if (key === cardKey) return;
     cardKey = key;
     box.style.display = 'block';
@@ -142,6 +142,10 @@
     const why = TT.family.canRecruit(p, o);
     if (o.tier === 'core' && !why && TT.age(o) <= TT.age(p) - 10) {
       row.appendChild(h('button', { disabled: near ? null : 'disabled', onclick: () => { TT.family.recruit(TT.player(), o); ui.markDirty(); } }, 'Nhận đồ đệ'));
+    }
+    if (TT.bond.memOn() && o.tier === 'core' && o.realm >= 1 && (r ? r.v : 0) >= D.BOND.kn.ally.minV) {
+      const asked = TT.bond.asked(p, o);
+      row.appendChild(h('button', { title: 'Hẹn rủ người này đi cùng chuyến sau (lệnh ưu tiên thấp, hạn ' + D.BOND.kn.ally.askHan + ' tháng)', disabled: asked ? 'disabled' : null, onclick: () => { const q = TT.bond.invite(TT.player(), o); if (!q.ok) TT.log(TT.player(), q.why, 'age'); ui.markDirty(); } }, asked ? 'Đã hẹn đi cùng' : 'Rủ đi cùng'));
     }
     box.appendChild(row);
     if (o.master === p.id) box.appendChild(h('div', { class: 'small good-txt' }, 'Là đồ đệ của bạn.'));

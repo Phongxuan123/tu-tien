@@ -64,6 +64,7 @@
         nodes: dungeon.generate(kind, c), i: 0, loot: { gold: 0, xp: 0, items: {} }, startHp: Math.round(c.hp)
       };
       TT.log(c, tpl.intro + ' (' + c.dungeon.name + ', ' + c.dungeon.nodes.length + ' chặng)', 'big');
+      TT.bond.pickAlly(c); // 9K: bạn thân cùng nơi có thể đi cùng
       dungeon.present(c);
       return c.dungeon;
     },
@@ -115,6 +116,7 @@
     finish(c, how) {
       const dg = c.dungeon;
       if (!dg) return;
+      const allyNote = TT.bond.endAlly(c, dg, how); // 9K: chia chiến lợi phẩm cho bạn đồng hành (trước khi tính thu hoạch)
       const keep = how === 'bai' ? 0.5 : how === 'chay' ? 0.7 : 1, l = dg.loot;
       c.dungeon = null; c.dgCool = TT.world.months + 12;
       const gold = Math.round(l.gold * keep), xp = l.xp * keep;
@@ -134,6 +136,7 @@
       else if (how === 'chay') price = TT.loss.defeat(c, { sev: rng.P(0.3) ? 1 : 0, items: rng.P(0.4) ? 1 : 0 });
       const head = { xong: 'Bạn thông quan ' + dg.name + '!', rut: 'Bạn rút lui khỏi ' + dg.name + ' đúng lúc.', chay: 'Bạn bỏ chạy khỏi ' + dg.name + ' với những gì còn giữ được.', bai: 'Bạn bại trận và tháo chạy khỏi ' + dg.name + ', mất nửa thu hoạch.' }[how];
       if (how === 'chay') parts.push('rơi mất 30% thu hoạch khi chạy');
+      if (allyNote) parts.push(allyNote);
       TT.log(c, head + ' Thu hoạch: ' + (parts.length ? parts.join('; ') : 'tay trắng') + '.', how === 'xong' ? 'big' : how === 'bai' ? 'bad' : 'good');
       if (how === 'xong') { TT.report.mark(c, 'clear', 'Thông quan ' + dg.name); TT.rep.add(c, 'danh', 6 + c.realm * 3); c.tcd += 1; TT.log(c, 'Thiên cơ điểm +1.', 'good'); c.clears = (c.clears || 0) + 1; }
       else if (dg.i >= 2) TT.rep.add(c, 'danh', 2);

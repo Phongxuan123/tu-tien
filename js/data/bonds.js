@@ -51,7 +51,35 @@
     // near/far: Tình tăng mỗi năm của cặp hôn ước khi ở gần/xa nhau (người kia tự tìm tới); leLove: Tình đủ để làm lễ kết đạo lữ.
     hon: { p: 0.008, minAge: 18, maxAge: 45, han: 36, near: 14, far: 1, leLove: 40, seek: 0.5 },
     // Thử thách chung (R 5.3): xác suất mỗi năm cho đạo lữ chính ở bên nhau.
-    thuThach: { p: 0.12 }
+    thuThach: { p: 0.12 },
+    // ---- 9K: kết nghĩa qua trải nghiệm chung. mem = công tắc ký ức/đồng hành (false: như 9B, baseline --mem=off phải trùng khít).
+    mem: true,
+    kn: {
+      cap: 8,           // tối đa ký ức mỗi cặp; đầy thì bỏ ký ức thường cũ nhất trước, giữ hoạn nạn (hn)
+      minV: 15,         // thiện cảm tối thiểu để một người có thể thành ký ức chung
+      // loại ký ức: n (nhãn), trust/respect (cộng khi ghi, nhân với "nặng"), hn (hoạn nạn), gap (tháng, chặn ghi trùng loại)
+      types: {
+        bi_canh: { n: 'Bí cảnh', trust: 4, respect: 3, hn: 0, gap: 6 },
+        danh: { n: 'Đánh nhau', trust: 3, respect: 4, hn: 1, gap: 3 },
+        cuu: { n: 'Cứu giúp', trust: 5, respect: 4, hn: 1, gap: 3 },
+        nho: { n: 'Nhờ giúp', trust: 5, respect: 1, hn: 0, gap: 6 },
+        nhiem_vu: { n: 'Nhiệm vụ', trust: 3, respect: 2, hn: 0, gap: 6 },
+        the_gioi: { n: 'Thế sự', trust: 3, respect: 2, hn: 1, gap: 36 },
+        ban_nho: { n: 'Thuở nhỏ', trust: 4, respect: 0, hn: 0, gap: 12 },
+        giang: { n: 'Cùng nghe', trust: 2, respect: 1, hn: 0, gap: 12 },
+        nghia: { n: 'Giữ lời thề', trust: 6, respect: 6, hn: 0, gap: 6 },
+        the: { n: 'Lời thề', trust: 8, respect: 6, hn: 0, gap: 0 },
+        tai_ngo: { n: 'Tái ngộ', trust: 4, respect: 3, hn: 0, gap: 12 },
+        luy: { n: 'Gánh thay', trust: 4, respect: 3, hn: 1, gap: 12 },
+        mat: { n: 'Lần cuối', trust: 0, respect: 0, hn: 1, gap: 0 }
+      },
+      swear: { n: 3, hn: 1, v: 40, p: 0.12, cool: 12 },     // kết nghĩa: ≥ n ký ức chung, ≥ hn hoạn nạn, thiện cảm ≥ v; p: xác suất mỗi tháng nếu đủ
+      // đồng hành: bạn thân cùng nơi (thiện cảm ≥ minV) đi cùng
+      ally: { minV: 40, p: 0.3, pBro: 0.55, pAsk: 0.85, bonus: [0.05, 0.10], share: 0.2, hurt: 0.15, hurtHp: 0.3, die: 0.25, askHan: 6, ru: 24 },
+      // sau kết nghĩa
+      bro: { help: 0.6, helpBonus: [0.1, 0.16], luy: 0.04, luyDie: 0.15, gift: 0.35, giftGap: 36, nan: 0.06, loi: 0.035, loiGap: 120, world: 0.15 },
+      taiNgo: { years: 10, v: 30 }
+    }
   };
   D.BOND.rank = {}; D.BOND.stages.forEach((s, i) => { D.BOND.rank[s.id] = i; });
   D.BOND.stageById = {}; D.BOND.stages.forEach(s => { D.BOND.stageById[s.id] = s; });
