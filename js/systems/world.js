@@ -170,7 +170,23 @@
         if (c.focus === 'seek') parts.push('rong ruổi tìm cơ duyên');
         if (c.focus === 'travel') parts.push('trên đường di chuyển');
         if (c.focus === 'cross') parts.push('trên đường vượt vùng, tu vi +' + Math.round(c.yXp));
-        TT.log(c, 'Tuổi ' + age + ': ' + parts.join(', ') + '.', 'age');
+        const G = D.STORY && D.STORY.logGom, rep = c.qRumor || [];
+        c.qRumor = null;
+        const empty = !parts.length || parts.every(p => /\+0$/.test(p));
+        if (G && G.on && empty && !rep.length) {
+          c.qYear = c.qYear ? { from: c.qYear.from, n: c.qYear.n + 1 } : { from: age, n: 1 }; // năm trống: dồn lại, ghi một dòng khi chuỗi năm trống kết thúc
+        } else {
+          if (G && G.on && c.qYear) {
+            TT.log(c, c.qYear.n > 1 ? 'Tuổi ' + c.qYear.from + ' đến ' + (age - 1) + ': ' + c.qYear.n + ' năm trôi qua yên ả, không có gì đáng kể.' : 'Tuổi ' + c.qYear.from + ': một năm trôi qua yên ả, không có gì đáng kể.', 'age');
+            c.qYear = null;
+          }
+          let line = 'Tuổi ' + age + ': ' + (G && G.on && empty ? 'một năm yên ả' : parts.join(', '));
+          if (rep.length) {
+            const uniq = rep.filter((x, i) => rep.indexOf(x) === i);
+            line += '; nghe lại ' + rep.length + ' tin đồn cũ (' + uniq.join(', ') + ')';
+          }
+          TT.log(c, line + '.', 'age');
+        }
       }
       if (c.kind === 'player') {
         TT.report.close(c);

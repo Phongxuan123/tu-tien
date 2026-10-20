@@ -23,6 +23,7 @@ function inPage(seed, years, dao, nhay) {
   const all = [], boxes = { story: 0, wheel: 0, other: 0 }, lg = TT.log, rq = TT.decisions.request;
   TT.log = function (c, text) { if (c && c.kind === 'player' && !TT.quiet && all.length < 20000) all.push({ m: TT.world.months, t: text, b: c.birthMonth }); return lg.apply(this, arguments); };
   TT.decisions.request = function (d) { boxes[d.type === 'story' || d.type === 'wheel' ? d.type : 'other']++; return rq.apply(this, arguments); };
+  if (window.__gomOff) TT.data.STORY.logGom.on = false; // --gom=off: đo nhật ký khi chưa gom (8B2)
   TT.life.createWorld(seed);
   const p = TT.player(); TT.world.settings = TT.world.settings || {}; TT.world.settings.auto = 'tu_dong';
   if (dao !== 'auto') { TT.path.set(p, dao, 'life-sim'); p.pathAsked = true; }
@@ -97,6 +98,7 @@ async function batch() {
   const page = await browser.newPage();
   const errs = []; page.on('pageerror', e => errs.push(String(e)));
   await page.goto(pathToFileURL(path.join(__dirname, '..', 'sim.html')).href);
+  if (arg('gom') === 'off') await page.evaluate('window.__gomOff = true');
   const o = await page.evaluate(`(${inPage.toString()})(${SEED}, ${YEARS}, '${DAO}', '${NHAY}')`);
   await browser.close();
   if (errs.length) { console.error(errs.join('\n')); process.exit(2); }

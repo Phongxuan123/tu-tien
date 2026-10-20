@@ -47,13 +47,14 @@
 
   D.STORY.reg({
     id: 'bb_a2', n: 'Ngưỡng cửa', loai: 'bb',
-    mo: { sau: 'bb_a1', realm: 1 },
+    mo: { sau: 'bb_a1', hoac: [{ realm: 1 }, { age: 18 }] }, // Luyện Khí hoặc 18 tuổi, cái nào trước
     vai: { ban: { pick: 'gan', dung_moi: true } },
     dau: 'c1',
     chang: {
       c1: {
         t: 'Hai ngả',
         d: 'Luồng linh khí đầu tiên chạm vào kinh mạch: bạn hiểu mình vừa bước qua một ngưỡng không quay lại. Cũng ngày ấy tin quê báo về, ruộng mất mùa, nhà cần người làm. {ban} lại nói ở phương xa có người nhắc tới một cơ duyên, ai tới trước thì được.',
+        d_pham: 'Mười tám tuổi, bạn vẫn chưa cảm được chút linh khí nào, mà cũng không nỡ bỏ ý định tu hành. Cũng dạo ấy tin quê báo về, ruộng mất mùa, nhà cần người làm. {ban} lại nói ở phương xa có người nhắc tới một cơ duyên, ai tới trước thì được. Đi hay ở, bạn phải chọn.',
         khi: { sau: 1 }, han: 18, mac: 'o_lai',
         lc: [
           { key: 'o_lai', label: 'Về quê giúp nhà qua mùa này', kind: 'help', ax: { daoduc: 2 },
@@ -87,14 +88,15 @@
 
   D.STORY.reg({
     id: 'bb_a3', n: 'Nền móng', loai: 'bb',
-    mo: { sau: 'bb_a2', realm: 2 },
+    mo: { sau: 'bb_a2', hoac: [{ realm: 1, stage: 1 }, { age: 35 }] }, // Luyện Khí trung kỳ hoặc 35 tuổi, cái nào trước
     vai: { dich: { pick: 'dong_ky', dung_moi: true } },
     dau: 'c1',
     chang: {
       c1: {
         t: 'Kẻ xin tha',
-        d: 'Trúc Cơ thành rồi, đạo tâm bạn mới bắt đầu bị thử. Trên đường về, bạn gặp {dich}, người đồng kỳ từng tranh với bạn một món cơ duyên, nay nằm bên đường thương nặng. Hắn thở dốc, bảo hắn sai rồi, xin bạn tha. Chỉ cần một nhát, mối họa này chấm dứt. Nhưng kẻ trước mặt bạn thật sự đang hối.',
-        khi: { realm: 2, sau: 1 }, han: 18, mac: 'ne',
+        d: 'Tu vi đã có nền, đạo tâm bạn mới bắt đầu bị thử. Trên đường về, bạn gặp {dich}, người đồng kỳ từng tranh với bạn một món cơ duyên, nay nằm bên đường thương nặng. Hắn thở dốc, bảo hắn sai rồi, xin bạn tha. Chỉ cần một nhát, mối họa này chấm dứt. Nhưng kẻ trước mặt bạn thật sự đang hối.',
+        d_pham: 'Ba mươi lăm tuổi, bạn vẫn là người thường, nhưng đạo tâm bắt đầu bị thử. Trên đường về, bạn gặp {dich}, người từng tranh với bạn một món cơ duyên, nay nằm bên đường thương nặng. Hắn thở dốc, bảo hắn sai rồi, xin bạn tha. Chỉ cần một nhát, mối họa này chấm dứt. Nhưng kẻ trước mặt bạn thật sự đang hối.',
+        khi: { sau: 1 }, han: 18, mac: 'ne',
         lc: [
           { key: 'tha', label: 'Tha cho {dich}', kind: 'help', ax: { daoduc: 2 },
             gate: { truc: 'daoduc', min: -6, why: 'Lòng bạn cứng như đá, nhìn hắn chỉ thấy mối họa chưa dứt. Bạn không tha nổi.' },
@@ -112,7 +114,7 @@
       },
       c2: {
         t: 'Tâm ma',
-        d: 'Đêm nào bạn cũng thấy lại cảnh ấy. Tâm ma không hung dữ, nó chỉ khẽ hỏi: nếu đã khác đi thì bạn còn là bạn không? Trúc Cơ không giải được câu này thì đạo tâm sẽ mòn dần, không cần ai ra tay.',
+        d: 'Đêm nào bạn cũng thấy lại cảnh ấy. Tâm ma không hung dữ, nó chỉ khẽ hỏi: nếu đã khác đi thì bạn còn là bạn không? Nền móng không giải được câu này thì đạo tâm sẽ mòn dần, không cần ai ra tay.',
         khi: { sau: 3 }, han: 24, mac: 'tranh',
         lc: [
           { key: 'doi_mat', label: 'Ngồi xuống đối mặt với nó', kind: 'risk', ax: { tudung: 1 }, fx: {},

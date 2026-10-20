@@ -121,7 +121,7 @@
     shiftKind(c, kind, why, big) {
       if (!on(c)) return;
       const m = N().kindAx[kind]; if (!m) return;
-      Object.keys(m).forEach(k => nat.shift(c, k, m[k], why || kind, big));
+      Object.keys(m).forEach(k => nat.shift(c, k, m[k] * N().dailyMul, why || kind, big));
     },
 
     // Độ hợp tính cách của một lựa chọn { kind, ax? }: 1 là trung tính; hợp thì lên đến 1 + aff, trái thì xuống 1 / (1 + aff).

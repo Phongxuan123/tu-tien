@@ -26,7 +26,9 @@
 
   function condOk(c, k) {
     if (!k) return true;
+    if (k.hoac && !k.hoac.some(x => condOk(c, x))) return false; // hoặc: một trong các nhánh đủ là được (ví dụ cảnh giới hoặc tuổi)
     if (k.realm != null && c.realm < k.realm) return false;
+    if (k.stage != null && k.realm != null && c.realm === k.realm && TT.stats.stage(c) < k.stage) return false; // giai đoạn chỉ tính trong đúng cảnh giới `realm`
     if (k.age != null && TT.age(c) < k.age) return false;
     if (k.flag && !c.flags[k.flag]) return false;
     if (k.sau && typeof k.sau === 'string') { const s = stOf(c, k.sau); if (!s || !s.ket) return false; }
@@ -127,7 +129,7 @@
     });
     let def = -1, bv = -Infinity;
     choices.forEach((x, i) => { if (!x.disabled && x.fit > bv + 1e-9) { bv = x.fit; def = i; } });
-    return { type: 'story', charId: c.id, tier: 2, timeout: K().timeout, arc: arc.id, ch: chId, title: fmt(c, st, ch.t), text: fmt(c, st, ch.d), choices, def: def < 0 ? 0 : def };
+    return { type: 'story', charId: c.id, tier: 2, timeout: K().timeout, arc: arc.id, ch: chId, title: fmt(c, st, ch.t), text: fmt(c, st, c.realm === 0 && ch.d_pham ? ch.d_pham : ch.d), choices, def: def < 0 ? 0 : def };
   }
 
   function note(c, st, text) { st.log = st.log || []; st.log.push(text); if (st.log.length > 20) st.log.shift(); }
@@ -180,7 +182,7 @@
       const ch = arc.chang[st.st]; if (!ch) return;
       const k = ch.khi || {};
       if (st.w) { if (!w.pending) wheelAgain(c, arc, st); return; } // đang chờ vòng quay mà hộp bị mất: dựng lại
-      if (!condOk(c, { realm: k.realm, age: k.age })) return;
+      if (!condOk(c, { realm: k.realm, stage: k.stage, age: k.age, hoac: k.hoac })) return;
       if (st.ready == null) st.ready = st.since + (k.sau || 0);
       if (now < st.ready) return;
       if (now - st.ready > ch.han) { // quá hạn: tự đi theo mặc định
@@ -279,7 +281,15 @@
         if (!str(arc.n)) E('thiếu tên n');
         if (P.loai.indexOf(arc.loai) < 0) E('loai không hợp lệ: ' + arc.loai);
         const mo = arc.mo || {};
-        Object.keys(mo).forEach(k => { if (['realm', 'age', 'flag', 'sau'].indexOf(k) < 0) E('mo có khóa lạ: ' + k); });
+        const condLint = (k, where, add) => {
+          Object.keys(k).forEach(x => { if (['realm', 'stage', 'age', 'hoac'].concat(add).indexOf(x) < 0) E(where + ' có khóa lạ: ' + x); else if (x !== 'hoac' && !(where === 'mo' && (x === 'flag' || x === 'sau')) && !num(k[x])) E(where + '.' + x + ' không phải số'); });
+          if (k.stage != null && k.realm == null) E(where + ': stage cần đi kèm realm');
+          if (k.stage != null && !(k.stage >= 0 && k.stage <= 2)) E(where + '.stage phải 0, 1 hoặc 2');
+          if (k.hoac !== undefined) {
+            if (!Array.isArray(k.hoac) || k.hoac.length < 2) E(where + '.hoac cần mảng từ 2 nhánh'); else k.hoac.forEach((x, i) => { if (!x || typeof x !== 'object' || !Object.keys(x).length) E(where + '.hoac[' + i + '] rỗng'); else condLint(x, where + '.hoac[' + i + ']', []); });
+          }
+        };
+        condLint(mo, 'mo', ['flag', 'sau']);
         if (mo.sau && !ids[mo.sau]) E('mo.sau trỏ tuyến không có: ' + mo.sau);
         if (!Object.keys(mo).length) E('mo rỗng (tuyến sẽ mở ngay khi sinh)');
         const vai = arc.vai || {};
@@ -313,8 +323,8 @@
           if (!str(c0.t)) e('thiếu t'); else slotsOk(c0.t, W);
           if (!str(c0.d)) e('thiếu d'); else slotsOk(c0.d, W);
           if (!reach[id]) e('chặng không tới được từ dau');
-          const khi = c0.khi || {};
-          Object.keys(khi).forEach(k => { if (['realm', 'age', 'sau'].indexOf(k) < 0) e('khi có khóa lạ: ' + k); else if (!num(khi[k])) e('khi.' + k + ' không phải số'); });
+          if (c0.d_pham !== undefined) { if (!str(c0.d_pham)) e('d_pham phải là chữ'); else slotsOk(c0.d_pham, W + '/d_pham'); }
+          condLint(c0.khi || {}, W + '/khi', ['sau']);
           if (!(num(c0.han) && c0.han > 0)) e('han phải là số tháng > 0');
           const lcs = c0.lc || [];
           if (lcs.length < 2 || lcs.length > 4) e('cần 2 đến 4 lựa chọn, có ' + lcs.length);
