@@ -96,14 +96,14 @@
       k *= 1 - 0.04 * Math.min(c.realm, 5);
       if (TT.age(c) > 60) k *= 0.85;
       d *= k;
-      const yr = Math.floor(w.months / 12);
+      const yr = Math.floor(w.months / 12), free = big === 'free'; // 'free': tuổi thơ (8A3), không tính trần năm và không ghi nhật ký đổi dải từng lần
       if (!c.natureYr || c.natureYr.y !== yr) c.natureYr = { y: yr };
       const cap = big ? K.bigCap : K.yearCap, used = c.natureYr[ax] || 0;
-      d = Math.max(-cap, Math.min(cap, used + d)) - used;
+      if (!free) d = Math.max(-cap, Math.min(cap, used + d)) - used;
       const nv = Math.max(-K.max, Math.min(K.max, cur + d));
       d = nv - cur;
       if (Math.abs(d) < 0.01) return 0;
-      c.natureYr[ax] = used + d;
+      if (!free) c.natureYr[ax] = used + d;
       const b0 = bandIdx(cur);
       n[ax] = r2(nv);
       const b1 = bandIdx(n[ax]);
@@ -111,7 +111,7 @@
       c.natureLog.push({ m: w.months, ax, d: r2(d), why: why || '' });
       if (c.natureLog.length > K.logCap) c.natureLog.splice(0, c.natureLog.length - K.logCap);
       c.personality = legacyLabel(n);
-      if (b1 !== b0) {
+      if (b1 !== b0 && !free) {
         const a = axisOf(ax);
         TT.log(c, 'Tính cách đổi: ' + a.n + ' của ' + (d > 0 ? a.up : a.down) + ', nay là "' + a.bands[b1] + '".', 'age');
       }

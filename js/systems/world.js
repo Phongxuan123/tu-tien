@@ -429,6 +429,8 @@
     TT.fac.welcome(c);
     TT.news('Một người mới ra đời ở ' + reg.n + ': ' + c.name + ' (bạn).', 'good', [c.id]);
     TT.bus.emit('reincarnate', { id: c.id, kind: 'new', first: !prev });
+    // Tuổi thơ (8A3): hộp Đời mới đang mở thì hộp tuổi thơ chạy sau khi xác nhận; không thì chạy tự động (Tự động, kiểm thử).
+    if (!(TT.ui && TT.ui.newLife && TT.ui.newLife.isOpen())) TT.childhood.auto(c);
     return c;
   };
 

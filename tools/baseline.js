@@ -11,6 +11,7 @@
 //             --totalwar=off (tắt S6b chiến tranh tổng: phải trùng khít đường cơ sở trước S6b; --set=totalwar.open.chance=0.05 chỉnh D.TOTALWAR).
 //             --intersect=off (tắt S8 liên tông: phải trùng khít đường cơ sở trước S8; D.INTERSECT.on = false).
 //             --nature=off (tắt 8A tính cách bốn trục và khí vận v2 của người chơi: phải trùng khít đường cơ sở trước 8A; D.NATURE.on = false).
+//             --childhood=off (tắt 8A3 tuổi thơ của người chơi: phải trùng khít đường cơ sở trước 8A3; D.CHILDHOOD.on = false).
 //             In thêm: số đại chiến liên tông (không tính vào chiến tranh thường), số đại chiến mỗi thế giới, số lần mở, cách nhau tối thiểu (chỉ tiêu: không quá một lần trong 150 năm), kết cục.
 //             Không ghi --seeds thì dùng danh sách trong seeds.json (nếu có).
 const fs = require('fs');
@@ -35,11 +36,12 @@ const TW_OFF = arg('totalwar') === 'off';
 const COURT_OFF = arg('court') === 'off';
 const INTER_OFF = arg('intersect') === 'off';
 const NATURE_OFF = arg('nature') === 'off';
+const CHILD_OFF = arg('childhood') === 'off';
 const SET = arg('set') ? arg('set').split(',').map(x => x.split('=')) : []; // ví dụ --set=power.kVan=0,van.base=50: chỉnh D.NATION để đo thử
 
 // Chạy trong trang: trả về { hash, chiến tranh, diệt vong, đổi chủ, ... } cho một hạt giống.
-function inPage(seed, years, natOff, sectOff, faithOff, set, ecoOff, hqOff, armyOff, twOff, courtOff, interOff, natureOff) {
-  TT.data.NATURE.on = !natureOff;
+function inPage(seed, years, natOff, sectOff, faithOff, set, ecoOff, hqOff, armyOff, twOff, courtOff, interOff, natureOff, childOff) {
+  TT.data.NATURE.on = !natureOff; TT.data.CHILDHOOD.on = !childOff;
   TT.data.NATION.on = !natOff; TT.data.ARMY.on = !armyOff; TT.data.SECT_MOD.on = !sectOff; TT.data.FAITH.on = !faithOff; TT.data.ECO.sx = !ecoOff; TT.data.ECO.hq = !hqOff; TT.data.TOTALWAR.on = !twOff; TT.data.COURT.on = !courtOff; TT.data.INTERSECT.on = !interOff;
   const ROOT = { sect: 'SECT_MOD', faith: 'FAITH', army: 'ARMY', totalwar: 'TOTALWAR', court: 'COURT', intersect: 'INTERSECT' };
   set.forEach(kv => { const p = kv[0].split('.'), root = TT.data[ROOT[p[0]] || 'NATION']; if (ROOT[p[0]]) p.shift(); let o = root; for (let i = 0; i < p.length - 1; i++) o = o[p[i]]; o[p[p.length - 1]] = +kv[1]; });
@@ -101,7 +103,7 @@ function inPage(seed, years, natOff, sectOff, faithOff, set, ecoOff, hqOff, army
   const errs = []; page.on('pageerror', e => errs.push(String(e)));
   await page.goto(pathToFileURL(path.join(__dirname, '..', 'sim.html')).href);
   const out = [];
-  for (const s of SEEDS) out.push(await page.evaluate(`(${inPage.toString()})(${s}, ${YEARS}, ${NATION_OFF}, ${SECT_OFF}, ${FAITH_OFF}, ${JSON.stringify(SET)}, ${ECO_OFF}, ${HQ_OFF}, ${ARMY_OFF}, ${TW_OFF}, ${COURT_OFF}, ${INTER_OFF}, ${NATURE_OFF})`));
+  for (const s of SEEDS) out.push(await page.evaluate(`(${inPage.toString()})(${s}, ${YEARS}, ${NATION_OFF}, ${SECT_OFF}, ${FAITH_OFF}, ${JSON.stringify(SET)}, ${ECO_OFF}, ${HQ_OFF}, ${ARMY_OFF}, ${TW_OFF}, ${COURT_OFF}, ${INTER_OFF}, ${NATURE_OFF}, ${CHILD_OFF})`));
   await browser.close();
   if (errs.length) { console.error(errs.join('\n')); process.exit(2); }
   const stable = o => ({ seed: o.seed, rel: o.rel, list: o.list, chron: o.chron, pacts: o.pacts, wars: o.wars, destroyed: o.destroyed, rulers: o.rulers, chronLen: o.chronLen, relPairs: o.relPairs });

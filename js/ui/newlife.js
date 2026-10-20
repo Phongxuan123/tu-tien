@@ -45,6 +45,7 @@
     TT.nature.set(c, v);
     TT.log(c, 'Tính cách lúc sinh: ' + TT.nature.summary(c) + '.', 'age');
     close(); TT.save.write(); ui.resetCaches(); ui.markDirty();
+    ui.childhood.start(); // tuổi thơ ba hồi (8A3); tắt công tắc thì không làm gì
   }
 
   function row(c, a, v) {
@@ -94,6 +95,7 @@
       TT.time.hold = true;
       render();
     },
+    reroll: () => { rerolls = Math.max(rerolls, 1); reroll(); }, // dùng cho "Đầu thai lại" ở hộp Tổng kết tuổi thơ
     close
   };
 

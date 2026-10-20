@@ -431,7 +431,7 @@ test('Tầng quyết định: tầng 2 đếm ngược rồi chọn mặc địn
 });
 
 test('Quy tắc nếu-thì: ép hành động theo sinh lực/vàng/bình cảnh và chọn lựa chọn sự kiện', () => {
-  const p = freshPlayer(21, { realm: 1, direction: 'phieu_luu' });
+  D.CHILDHOOD.on = false; const p = freshPlayer(21, { realm: 1, direction: 'phieu_luu' }); D.CHILDHOOD.on = true; // tuổi thơ (8A3) đổi tính cách: bài này đo quy tắc, không đo tuổi thơ
   p.rules = TT.rules.defaults();
   p.hp = S.hpMax(p) * 0.2;
   for (let i = 0; i < 30; i++) eq(TT.ai.choose(p), 'rest', 'sinh lực thấp phải nghỉ');
@@ -3395,7 +3395,7 @@ test('Tính cách và khí vận (8A): độ hợp tính cách (affinity) và ch
 });
 
 test('Tính cách và khí vận (8A): khí vận kvPts = baseKv đã rút, không rút thêm, không trần, S.kv thụ động tối đa 20, tiêu giảm vận thụ động', () => {
-  const K = TT.kv;
+  const K = TT.kv; D.CHILDHOOD.on = false; // tuổi thơ (8A3) có thể cộng/trừ khí vận: bài này đo lần rút lúc sinh
   D.NATURE.on = true; TT.life.createWorld(71); const sOn = TT.rng.getState(), p = TT.player();
   ok(Number.isInteger(p.kvPts) && p.kvPts === p.baseKv - (p.ring ? 30 : 0) + (p.ring ? 2 : 0), 'kvPts lấy từ baseKv: ' + p.kvPts + ' / ' + p.baseKv);
   ok(p.kvPts >= 0 && p.kvPts <= 12, 'trong 0..10 (cộng 2 nếu có nhẫn)');
@@ -3406,7 +3406,7 @@ test('Tính cách và khí vận (8A): khí vận kvPts = baseKv đã rút, khô
     D.NATURE.on = false; TT.life.createWorld(s); const o = TT.player(); const bk = o.baseKv - (o.ring ? 30 : 0); D.NATURE.on = true;
     TT.life.createWorld(s); const n = TT.player(); eq(n.kvPts - (n.ring ? 2 : 0), bk, 'hạt ' + s);
   }
-  TT.life.createWorld(72); const q = TT.player(); q.ring = false; q.kvPts = 5; q.traitIds = [];
+  D.CHILDHOOD.on = true; TT.life.createWorld(72); const q = TT.player(); q.ring = false; q.kvPts = 5; q.traitIds = [];
   K.add(q, 40, 'thử'); eq(q.kvPts, 45, 'không trần');
   eq(S.kv(q), 20 + S.mod(q, 'kv'), 'S.kv thụ động tối đa 20');
   q.kvPts = 7; eq(S.kv(q), 7 + S.mod(q, 'kv'));
@@ -3550,6 +3550,92 @@ test('Dữ liệu tuổi thơ (8A2): needBan khớp khe {ban}, ban chỉ ở s�
   const count = k => ev.reduce((s, e) => s + e.ch.filter(c => c.fx[k] !== undefined).length, 0);
   ok(count('tuchat') <= 3, 'tuchat ' + count('tuchat') + ' lựa chọn');
   ok(count('kv') <= 3, 'kv ' + count('kv') + ' lựa chọn');
+});
+
+// ---------------- Tuổi thơ (8A3) ----------------
+test('Tuổi thơ (8A3): số sự kiện mỗi hồi theo p2/p3 (đo 2.000 lần bốc), không lặp, không gọi rng, đọc thuần', () => {
+  const C = TT.data.CHILDHOOD, H = TT.childhood; TT.life.createWorld(81); const p = TT.player();
+  const s0 = TT.rng.getState(), snap = JSON.stringify([p.baseAtk, p.gold, p.childFx, p.child, TT.world.rel]);
+  let tot = 0, n2 = 0, n3 = 0, minN = 9, maxN = 0;
+  for (let i = 0; i < 2000; i++) {
+    const fake = { id: 5000 + i, birthMonth: -i * 7, name: 'Thử ' + i, relIds: {} }, pl = H.plan(fake), seen = {};
+    eq(pl.length, 3, 'ba hồi');
+    pl.forEach(h => {
+      ok(h.evs.length >= 1 && h.evs.length <= 3, 'mỗi hồi 1 đến 3: ' + h.evs.length); tot += h.evs.length; if (h.evs.length >= 2) n2++; if (h.evs.length === 3) n3++;
+      h.evs.forEach(e => { const ev = C.ev.find(x => x.id === e.id); eq(ev.hoi, h.hoi, 'đúng hồi'); ok(!seen[e.id], 'không lặp ' + e.id); seen[e.id] = 1; ok(!ev.needBan, 'không có bạn thì không bốc sự kiện cần bạn'); });
+    });
+    eq(JSON.stringify(H.plan(fake)), JSON.stringify(pl), 'cùng đầu vào, cùng danh sách (băm)');
+  }
+  const avg = tot / 6000, r2 = n2 / 6000, r3 = n3 / 6000;
+  ok(Math.abs(avg - (1 + C.p2 + C.p2 * C.p3)) < 0.06, 'trung bình mỗi hồi ' + avg.toFixed(3) + ' (kỳ vọng ' + (1 + C.p2 + C.p2 * C.p3) + ')');
+  ok(Math.abs(r2 - C.p2) < 0.04 && Math.abs(r3 - C.p2 * C.p3) < 0.04, 'tỉ lệ có sự kiện 2: ' + r2.toFixed(3) + ', sự kiện 3: ' + r3.toFixed(3));
+  eq(TT.rng.getState(), s0, 'plan không gọi rng'); eq(JSON.stringify([p.baseAtk, p.gold, p.childFx, p.child, TT.world.rel]), snap, 'plan không ghi dữ liệu');
+  // có bạn thì sự kiện cần bạn chỉ trỏ đúng bạn đó
+  const fr = Object.values(TT.world.chars).find(c => c.kind === 'npc' && c.alive), me = { id: 6000, birthMonth: 3, name: 'Thử', relIds: {} };
+  TT.rel.ensure(me, fr).v = 30; me.relIds[fr.id] = 1; let sawBan = 0;
+  for (let i = 0; i < 300; i++) { me.birthMonth = i; H.plan(me).forEach(h => h.evs.forEach(e => { if (e.ban) { eq(e.ban, fr.id); sawBan++; } })); }
+  ok(sawBan > 0, 'có sự kiện cần bạn khi có bạn');
+});
+
+test('Tuổi thơ (8A3): apply kẹp theo trần cộng dồn, ax qua nature.shift không tính trần năm', () => {
+  const H = TT.childhood, C = TT.data.CHILDHOOD; TT.life.createWorld(82); const p = TT.player();
+  if (!p.child) H.auto(p);
+  // làm lại sạch để đo trần
+  TT.life.createWorld(83); const q = TT.player(); const g0 = q.gold; q.child = null; q.childFx = {}; q.childLog = []; H.begin(q);
+  const a0 = q.baseAtk, n0 = q.baseNl, hp0 = q.trainHp, dt0 = q.daoTam, lk0 = q.baseLuck, t0 = q.tuchat.total, ax0 = q.nature.tinh, steps = q.child.steps.length;
+  const ev = { id: 'x', hoi: 1, t: 'x', d: 'x', ch: [{ key: 'a', label: 'a', kind: 'risk', ax: { tinh: -3 }, fx: { atk: 5, nl: 5 }, r: 'r' }] };
+  for (let i = 0; i < 6; i++) H.apply(q, ev, 'a', 0);
+  eq(q.baseAtk, a0 + C.cap.atk, 'atk kẹp +6'); eq(q.baseNl, n0 + C.cap.nl, 'nl kẹp +6'); eq(q.childFx.atk, C.cap.atk);
+  ok(q.nature.tinh < ax0 - 3.5, 'ax không tính trần ±3 mỗi năm: ' + ax0 + ' → ' + q.nature.tinh);
+  const ev2 = { id: 'y', hoi: 1, t: 'y', d: 'y', ch: [{ key: 'a', label: 'a', kind: 'safe', ax: {}, fx: { hp: 99, luck: 9, daoTam: 99, tuchat: 5, kv: 4, gold: 999 }, r: 'r' }, { key: 'b', label: 'b', kind: 'safe', ax: {}, fx: { luck: -9, daoTam: -99, atk: -99, gold: -999 }, r: 'r' }] };
+  H.apply(q, ev2, 'a', 0);
+  eq(q.trainHp - hp0, C.cap.hp, 'hp +30'); eq(q.baseLuck - lk0, C.cap.luck, 'luck +3'); eq(q.daoTam - dt0, C.cap.daoTam, 'daoTam +10'); eq(q.tuchat.total - t0, C.cap.tuchat, 'tuchat +1');
+  eq(q.tuchat.attrs.reduce((a, x) => a + x.p, 0), q.tuchat.total, 'tổng tư chất khớp các hệ'); eq(q.childFx.kv, C.cap.kv, 'kv +1'); eq(q.gold, g0 * 2, 'vàng cộng tối đa bằng vàng xuất thân'); 
+  H.apply(q, ev2, 'b', 0);
+  ok(q.childFx.luck >= -C.cap.luck && q.childFx.luck <= C.cap.luck, 'luck trong ±3');
+  ok(q.childFx.daoTam >= -C.cap.daoTam && q.childFx.atk >= -C.cap.atk, 'trần âm'); ok(q.gold >= 0, 'vàng không âm'); ok(q.hp === TT.stats.hpMax(q), 'đầy máu');
+  // tật: tối đa 1
+  const ev3 = { id: 'z', hoi: 1, t: 'z', d: 'z', ch: [{ key: 'a', label: 'a', kind: 'safe', ax: {}, fx: { bad: 'the_nhuoc' }, r: 'r' }, { key: 'b', label: 'b', kind: 'safe', ax: {}, fx: { bad: 'be_quan' }, r: 'r' }] };
+  const bads = TT.data.TRAITS.filter(t => !t.g).map(t => t.id); ev3.ch[1].fx.bad = bads.find(x => x !== 'the_nhuoc') || 'the_nhuoc';
+  H.apply(q, ev3, 'a', 0); H.apply(q, ev3, 'b', 0); eq(q.childFx.bad, 1, 'tối đa một tật'); ok(q.traitIds.indexOf('the_nhuoc') >= 0);
+  eq(q.child.i, 10, 'mỗi lần áp nhích một bước (6 + 1 + 1 + 2)'); ok(steps > 0);
+});
+
+test('Tuổi thơ (8A3): auto chọn theo affinity, ghi nhật ký, lưu/tải, bước dở dang', () => {
+  const H = TT.childhood; TT.life.createWorld(84); const p = TT.player();
+  ok(p.child && p.child.done, 'createWorld (không giao diện) chạy auto xong'); ok(p.childLog.length >= 3, 'có nhật ký ' + p.childLog.length);
+  const logs = p.log.filter(l => /Tuổi thơ/.test(l.t || l.text || JSON.stringify(l))); ok(logs.length >= 3, 'nhật ký tóm tắt ba hồi + chỉ số');
+  // chọn theo affinity: với tính cách cực, pick là lựa chọn hợp nhất
+  p.nature = { tinh: 10, xuthe: 0, daoduc: 10, tudung: 0 };
+  const ev = { ch: [{ key: 'a', kind: 'risk', ax: { daoduc: -3 } }, { key: 'b', kind: 'help', ax: { daoduc: 3 } }, { key: 'c', kind: 'safe', ax: { tinh: -3 } }] };
+  eq(H.pick(p, ev), 1, 'hợp nhất = giúp (daoduc +3)'); p.nature.daoduc = -10; eq(H.pick(p, ev), 0, 'đổi tính thì đổi lựa chọn');
+  TT.data.CHILDHOOD.ev.forEach(e => { const i = H.pick(p, e); ok(i >= 0 && i < e.ch.length); });
+  // tóm tắt thuần
+  const s0 = TT.rng.getState(), sm = H.summary(p); eq(TT.rng.getState(), s0); ok(sm.hoi.length === 3 && Array.isArray(sm.stats) && Array.isArray(sm.nature));
+  // lưu / tải
+  const txt = TT.save.snapshot(), fx = JSON.stringify(p.childFx), lg = JSON.stringify(p.childLog), ch = JSON.stringify(p.child);
+  TT.life.createWorld(85); TT.save.restore(txt); const r = TT.player();
+  eq(JSON.stringify(r.childFx), fx); eq(JSON.stringify(r.childLog), lg); eq(JSON.stringify(r.child), ch); eq(TT.VERSION, 13, 'không đổi TT.VERSION');
+  // bước dở dang: begin rồi apply từng bước bằng tay
+  TT.life.createWorld(86); const q = TT.player(); q.child = null; q.childFx = {}; q.childLog = []; H.begin(q);
+  ok(H.pending(q), 'đang dở'); let n = 0, s; while ((s = H.current(q))) { H.apply(q, s.ev, 0, s.ban); n++; }
+  eq(n, q.child.steps.length); const L0 = q.log.length; H.finish(q); ok(!H.pending(q)); const L1 = q.log.length; ok(L1 > L0, 'finish ghi nhật ký'); H.finish(q); eq(q.log.length, L1, 'finish lần hai không ghi lại');
+});
+
+test('Tuổi thơ (8A3): công tắc tắt thì không có gì; bật thì người chơi mạnh hơn chút; rng không lệch', () => {
+  const C = TT.data.CHILDHOOD; C.on = false;
+  try {
+    TT.life.createWorld(87); const p = TT.player();
+    eq(p.child, undefined, 'không có c.child'); eq(p.childFx, undefined); eq(TT.childhood.auto(p), null); eq(TT.childhood.begin(p), null);
+    ok(!p.log.some(l => /Tuổi thơ/.test(JSON.stringify(l))), 'không ghi nhật ký');
+    var off = TT.rng.getState(), a = p.baseAtk;
+  } finally { C.on = true; }
+  TT.life.createWorld(87); const q = TT.player();
+  eq(TT.rng.getState(), off, 'bật hay tắt, trạng thái rng sau khi sinh bằng nhau');
+  ok(q.child && q.child.done && q.childLog.length >= 3, 'bật thì có tuổi thơ');
+  ['atk', 'nl', 'luck', 'daoTam', 'hp'].forEach(k => { const v = q.childFx[k] || 0, cap = C.cap[k]; ok(v >= -cap && v <= cap, k + ' trong trần: ' + v); });
+  // NPC không có tuổi thơ
+  const npc = Object.values(TT.world.chars).find(c => c.kind === 'npc'); eq(npc.child, undefined); eq(TT.childhood.auto(npc), null);
 });
 runNext();
 </script>

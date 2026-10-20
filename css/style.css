@@ -440,6 +440,12 @@ body.has-modal{overflow:hidden}
 .nl-v{display:flex;flex-direction:column;line-height:1.2}
 .nl-btn{display:flex;gap:4px}
 .nl-btn button{min-width:30px}
+.ch-text{margin:10px 0;line-height:1.5}
+.ch-opts{display:flex;flex-direction:column;gap:8px;margin-top:10px}
+.ch-opt{display:flex;align-items:center;gap:10px;text-align:left;padding:10px 12px;min-height:44px}
+.ch-dot{color:#5a6a7e;flex:none}.ch-dot.on{color:var(--green)}
+.ch-fit{margin-left:auto;color:var(--green)}
+.ch-hoi{margin:6px 0}
 .nl-budget{margin-top:8px}
 .nl-foot{display:flex;gap:10px;justify-content:flex-end;margin-top:14px;position:sticky;bottom:-16px;padding:10px 0 2px;background:var(--panel)}
 .pn-row{grid-template-columns:78px 1fr 120px;cursor:pointer}
