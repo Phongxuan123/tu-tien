@@ -97,7 +97,7 @@ Giữ cách chạy của `ui.bld.draw` (hover, bấm, phân trang) ở chặng �
 |---|---|---|---|
 | **T-A** | Sonnet | tách module, `W/H` = 480×144, `rAF` 30 khung + khóa dựng lại + đo khung; trời, núi, mây, thác, sương, 5 pha, 9 địa hình, chuyển pha mượt; nhà, người nhà, quái cũ vẽ lên nền mới (phóng theo tỉ lệ); **gộp phần cơ bản của T-B: nhân vật 2x + di chuyển (đi; bay và ngự kiếm từ Trúc Cơ)** | nền tu tiên mới, nhân vật mới biết đi, bay, ngự kiếm |
 | ~~T-B~~ | | **(cắt 2026-10-20)** phần còn lại để sau: vẽ lại nhân vật đẹp hơn (biến thể kid, elder, wound, aura), hạt linh khí, hạc, kiếm quang, sự kiện đột phá, thiên kiếp, phi thăng (giữ hiệu ứng cũ của `scene.js` cho các sự kiện này) | |
-| **T-Cd** | Haiku | dữ liệu: thông số 9 địa hình, bảng `cls`, 9 tông (bảng 4.3), thời tiết vùng, nơi thờ (chỉ dữ liệu theo định dạng T-A/T-B đã đặt) | (chưa thấy) |
+| **T-Cd** | Haiku | dữ liệu: thông số 9 địa hình, bảng `cls`, 9 tông (bảng 4.3), thời tiết vùng, nơi thờ (chỉ dữ liệu theo định dạng T-A đã đặt) | (chưa thấy) |
 | **T-C** | Sonnet | module công trình đặc trưng theo `cls`, 4 tông ưu tiên 1 (+ ưu tiên 2 nếu kịp), nơi thờ; phố công trình bấm được trên nền mới, `mirror` | mỗi nơi có hình riêng |
 | **T-D** | Sonnet | thời tiết vùng, chiến sự, bí cảnh, `cave`, `void`; dọn mã cũ, bỏ Kenney nếu không còn dùng, `CREDITS.md`, đo hiệu năng | đủ tình huống, gọn |
 
@@ -139,7 +139,7 @@ Dùng chung: "Repo: Phongxuan123/tu-tien. Gắn repo, clone nhánh `main`. Trả
 
 **T-B:** cắt (xem mục 5); làm sau nếu còn ngân sách.
 
-**T-Cd (Haiku):** [dùng chung] + "Đọc T mục 4.3 (bảng cls và bảng chín tông), 'T-A đã làm', 'T-B đã làm' (định dạng dữ liệu cảnh); js/data/sects.js (id tông), js/data/regions.js (id thời tiết), js/data/faiths.js (nơi thờ); S mục 3 (viết tôn trọng). Chỉ viết DỮ LIỆU vào tệp dữ liệu cảnh mà T-A/T-B đã đặt: thông số đủ 9 địa hình, mỗi cls một bố cục (danh sách module và vị trí), 9 tông (công trình đặc trưng, lớp nhấn, bảng màu, ưu tiên), mỗi thời tiết vùng một bộ (lớp phủ, hạt, gió, chớp), 9 nơi thờ (dáng kiến trúc). Thêm bài kiểm thử cú pháp dữ liệu (đủ khóa, id có thật). Không vẽ module mới."
+**T-Cd (Haiku):** [dùng chung] + "Đọc T mục 4.3 (bảng cls và bảng chín tông), 'T-A đã làm' (định dạng dữ liệu cảnh); js/data/sects.js (id tông), js/data/regions.js (id thời tiết), js/data/faiths.js (nơi thờ); S mục 3 (viết tôn trọng). Chỉ viết DỮ LIỆU vào tệp dữ liệu cảnh mà T-A đã đặt: thông số đủ 9 địa hình, mỗi cls một bố cục (danh sách module và vị trí), 9 tông (công trình đặc trưng, lớp nhấn, bảng màu, ưu tiên), mỗi thời tiết vùng một bộ (lớp phủ, hạt, gió, chớp), 9 nơi thờ (dáng kiến trúc). Thêm bài kiểm thử cú pháp dữ liệu (đủ khóa, id có thật). Không vẽ module mới."
 
 **T-C (Sonnet):** [dùng chung] + "Đọc T mục 4.3, 4.4, 8, các mục 'đã làm'; demo-tongmon.html (đại kiếm, kiếm trủng, đan đỉnh, vườn dược); js/ui/scene/arch.js; js/ui/bldart.js và ui.bld.draw. Làm T-C: module kiến trúc dùng chung (mái cong, điện, tháp, cổng, bậc đá, đèn lồng) và công trình đặc trưng cho 4 tông ưu tiên 1 (Kim Phong Môn, Bách Thảo Môn, Âm Hồn Giáo, Thủy Nguyệt Cung), 5 tông còn lại nếu kịp; bố cục theo cls; nơi thờ theo dáng kiến trúc; phố công trình bấm được (hover, bấm, phân trang) vẽ lên nền mới, mirror trong cửa sổ. Chụp: 4 tông ưu tiên 1."
 
