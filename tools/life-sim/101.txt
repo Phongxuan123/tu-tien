@@ -4,9 +4,9 @@ Cha mẹ lúc sinh: cha Lâm Dương. Gánh nặng: Nhà còn nợ chủ hàng h
 Tư chất 54 (Thủy 2, Kim 9, Mộc 16, Hỏa 27) · Tiên thiên: Mệnh cô tinh, Thiên sinh đạo thể
 Tính cách lúc sinh : Tính tình -2, Xử thế +4, Đạo đức +5, Tu dưỡng +2
 Sau tuổi thơ       : Tính tình -3, Xử thế +6, Đạo đức +7, Tu dưỡng +6 → Nhân hậu, khéo léo
-Cuối cuộc          : Tính tình -1.8, Xử thế +7.7, Đạo đức +10, Tu dưỡng +7.8 → Nhân hậu, khắc kỷ
-Khí vận: đầu 5, kiếm +2, tiêu −0, cuối 7
-Còn sống sau 80 năm, 92 tuổi, cảnh giới Luyện Khí. Hộp quyết định: truyện 10, vòng quay 2, khác 14.
+Cuối cuộc          : Tính tình -2.8, Xử thế +8.1, Đạo đức +10, Tu dưỡng +9.2 → Nhân hậu, khắc kỷ
+Khí vận: đầu 5, kiếm +3, tiêu −0, cuối 8
+Còn sống sau 80 năm, 92 tuổi, cảnh giới Luyện Khí. Hộp quyết định: truyện 19, vòng quay 2, khác 29.
 
 --- Tuổi thơ ---
 Hồi 1 (0 đến 3 tuổi):
@@ -22,21 +22,36 @@ Mầm xanh (xong: Có người đỡ lưng)
   • Người dẫn đường: Xin theo Giang Tuấn học đạo
   • Đêm đầu tiên nản lòng: Sáng ra chạy sang nhà Giang Tuấn xin lời khuyên
   • Có người đỡ lưng
+Duyên gặp nơi chợ đêm (xong: Duyên chưa đủ)
+  • Chợ đêm: Bước lại hỏi Tống Thiên Dương đang tìm gì
+  • Quen dần: Hỏi thăm chuyện nhà Tống Thiên Dương
+  • Đêm rằm: Giữ trong lòng, để đêm trôi qua
+  • Duyên chưa đủ
 Ngưỡng cửa (xong: Còn một sợi dây)
   • Hai ngả: Về quê giúp nhà qua mùa này
-  • Cái giá của lựa chọn: Viết một lá thư gửi Cung Nguyệt Dao
+  • Cái giá của lựa chọn: Viết một lá thư gửi Tống Thiên Dương
   • Còn một sợi dây
 Nền móng (xong: Qua được, mang sẹo)
   • Kẻ xin tha: Tha cho Giang Hiên
   • Tâm ma: Ngồi xuống đối mặt với nó
-  • Vòng quay 26: Vượt qua nhưng mang sẹo
+  • Vòng quay 41: Vượt qua nhưng mang sẹo
   • Qua được, mang sẹo
 Vị thế (xong: Nợ đã sạch)
   • Cơn sóng đổi thế cuộc: Đóng cửa đứng ngoài cuộc
   • Khi khói tan: Dốc vàng gỡ oán, trả ơn cho xong
   • Nợ đã sạch
+Hôn ước bị ép (xong: Lễ đã thành)
+  • Lệnh từ trên: Nhận đính ước, đi tới ngày lễ
+  • Ngày lễ đã định: Lễ giản dị, chỉ hai người và một nén hương
+  • Lễ đã thành
+Ở bên nhau (xong: Hai lối đi riêng)
+  • Căn nhà nhỏ: Cùng dọn về, chia việc nhà
+  • Hai lối tu: Nói thẳng: bạn muốn đi xa hơn
+  • Kẻ thứ ba: Tin người bạn đời, không để tâm Tống Thiên Dương
+  • Chênh thọ: Nói lời chia tay, không cần thử
+  • Hai lối đi riêng
 Đạo quả (xong: Trao lại cho đời sau)
-  • Người xin học: Dựng một mái nhà cho người đến sau
+  • Người xin học: Từ chối, giữ lối độc hành
   • Bạn cũ trở lại: Giao lại những gì mình có cho đời sau
   • Trao lại cho đời sau
 
@@ -69,295 +84,422 @@ Vị thế (xong: Nợ đã sạch)
 [ 15 tuổi] Tin đồn: Cao nhân tại Bách Thảo Môn sẽ tới giảng đạo sau khoảng 1.1 năm.
 [ 15 tuổi] Cung Nguyệt Dao cãi nhau với bạn một trận ở Miếu Nam Lâm (phụ).
 [ 16 tuổi] Bị thương ở Miếu Nam Lâm (phụ), sinh lực -12.
+[ 16 tuổi] [Duyên gặp nơi chợ đêm] Chợ đêm: Bước lại hỏi Tống Thiên Dương đang tìm gì.
 [ 16 tuổi] Tuổi 16: rong ruổi tìm cơ duyên.
-[ 16 tuổi] Tin đồn: Luận đạo tại Cổ Thụ Vương sắp có đại hội luận đạo sau khoảng 1.4 năm.
+[ 16 tuổi] Bị thương ở Miếu Nam Lâm (phụ), sinh lực -10.
+[ 16 tuổi] [Duyên gặp nơi chợ đêm] Quen dần: Hỏi thăm chuyện nhà Tống Thiên Dương.
+[ 16 tuổi] Tính cách đổi: Tu dưỡng của bạn đã khắc kỷ hơn, nay là "Khắc kỷ chuyên tâm".
+[ 16 tuổi] [Duyên gặp nơi chợ đêm] Đêm rằm: Giữ trong lòng, để đêm trôi qua.
+[ 16 tuổi] [Duyên gặp nơi chợ đêm] Bạn và Tống Thiên Dương rồi đi hai ngả. Có những người chỉ gặp nhau trong một đêm chợ.
+[ 16 tuổi] Tin đồn: Yêu Thú Chiến Trường sắp mở cửa sau khoảng 1.4 năm.
 [ 16 tuổi] Thiên Cơ Báo số 1 vừa phát hành (bốn năm từ năm 1 tới năm 5).
-[ 17 tuổi] Tuổi 17: rong ruổi tìm cơ duyên.
+[ 17 tuổi] Tuổi 17: tu vi +1.
 [ 18 tuổi] Tuổi 18: tu vi +2.
 [ 18 tuổi] [Ngưỡng cửa] Hai ngả: Về quê giúp nhà qua mùa này.
-[ 18 tuổi] Bạn trò chuyện cùng Cung Nguyệt Dao ở Miếu Nam Lâm (phụ).
-[ 18 tuổi] [Ngưỡng cửa] Cái giá của lựa chọn: Viết một lá thư gửi Cung Nguyệt Dao.
+[ 18 tuổi] Bị thương ở Miếu Nam Lâm (phụ), sinh lực -15.
+[ 18 tuổi] [Ngưỡng cửa] Cái giá của lựa chọn: Viết một lá thư gửi Tống Thiên Dương.
 [ 18 tuổi] [Ngưỡng cửa] Thư gửi đi, chưa chắc có thư về, nhưng sợi dây với người quen cũ chưa đứt hẳn.
-[ 19 tuổi] Bị thương ở Miếu Nam Lâm (phụ), sinh lực -16.
 [ 19 tuổi] Tuổi 19: tu vi +1.
-[ 19 tuổi] Tin đồn: Cao nhân tại Bách Thảo Môn sẽ tới giảng đạo sau khoảng 0.8 năm.
-[ 19 tuổi] Tin đồn: Cao nhân tại Thanh Diệp Thành sẽ tới giảng đạo sau khoảng 1.5 năm.
-[ 20 tuổi] Tuổi 20: tu vi +1.
+[ 20 tuổi] Tuổi 20: luyện nghề.
 [ 20 tuổi] Nhận nhiệm vụ dài: Đột phá lên Luyện Khí (trước 40 tuổi).
 [ 20 tuổi] Thiên Đạo ban đại nguyện: Đột phá lên Luyện Khí (trước 40 tuổi).
-[ 20 tuổi] Bạn quyết định tới Thanh Diệp Thành để dự: Cao nhân ở Thanh Diệp Thành.
-[ 20 tuổi] Bạn lên đường từ Miếu Nam Lâm (phụ) tới Thanh Lang Doanh (đích: Thanh Diệp Thành), mất 1 tháng.
-[ 20 tuổi] Bạn đã tới Thanh Lang Doanh.
-[ 20 tuổi] Bạn lên đường từ Thanh Lang Doanh tới Mãng Lâm Thôn (đích: Thanh Diệp Thành), mất 2 tháng.
 [ 20 tuổi] Tin đồn: Tuyển đệ tử tại Bách Thảo Môn sắp mở kỳ tuyển đệ tử sau khoảng 1.5 năm.
-[ 20 tuổi] Bạn đã tới Mãng Lâm Thôn.
-[ 20 tuổi] Bạn lên đường từ Mãng Lâm Thôn tới Thanh Diệp Thành, mất 1 tháng.
-[ 20 tuổi] Bạn đã tới Thanh Diệp Thành.
-[ 20 tuổi] [Cao nhân giảng đạo] Bạn đứng xa nghe lỏm được vài câu. Tu vi tăng chút ít.
-[ 20 tuổi] Lâm Dương trò chuyện cùng bạn ở Thanh Diệp Thành. Quan hệ với Lâm Dương giờ là: Ruột thịt.
+[ 20 tuổi] Bạn trò chuyện cùng Cung Nguyệt Dao ở Miếu Nam Lâm (phụ).
 [ 20 tuổi] Thiên Cơ Báo số 2 vừa phát hành (bốn năm từ năm 5 tới năm 9).
-[ 21 tuổi] Tuổi 21: tu vi +2.
-[ 21 tuổi] Bạn lên đường từ Thanh Diệp Thành tới Mãng Lâm Thôn (đích: Miếu Nam Lâm (phụ)), mất 1 tháng.
-[ 21 tuổi] Bạn đã tới Mãng Lâm Thôn.
-[ 21 tuổi] Bạn lên đường từ Mãng Lâm Thôn tới Thanh Lang Doanh (đích: Miếu Nam Lâm (phụ)), mất 2 tháng.
-[ 21 tuổi] Bạn đã tới Thanh Lang Doanh.
-[ 21 tuổi] Bạn lên đường từ Thanh Lang Doanh tới Miếu Nam Lâm (phụ), mất 1 tháng.
-[ 21 tuổi] Bạn đã tới Miếu Nam Lâm (phụ).
-[ 22 tuổi] Tuổi 22: tu vi +1.
-[ 22 tuổi] [Hôn ước] Bạn cúi đầu nhận lời. Hôn ước được định, hạn ba năm; tình cảm hai người còn phải nảy nở theo thời gian.
-[ 22 tuổi] Đến mùa gặt, bạn chợt nhớ cánh đồng năm cũ và thấy lòng ấm lại. Việc đáng làm thì ít khi làm uổng.
-[ 22 tuổi] Bị thương ở Miếu Nam Lâm (phụ), sinh lực -11.
-[ 22 tuổi] Tin đồn: Luận đạo tại Bách Thảo Môn sắp có đại hội luận đạo sau khoảng 1.9 năm.
+[ 21 tuổi] Tuổi 21: tu vi +1.
+[ 22 tuổi] Tuổi 22: tu vi +2.
 [ 23 tuổi] Tuổi 23: tu vi +2.
+[ 23 tuổi] Bị thương ở Miếu Nam Lâm (phụ), sinh lực -21.
+[ 23 tuổi] Linh thảo sắp hết hạn (còn 3 tháng), nên dùng hoặc bán sớm.
+[ 23 tuổi] Cung Nguyệt Dao trò chuyện cùng bạn ở Miếu Nam Lâm (phụ). Quan hệ với Cung Nguyệt Dao giờ là: Quen biết.
+[ 23 tuổi] 1 Linh thảo đã hết hạn và hỏng.
 [ 24 tuổi] Tuổi 24: tu vi +2.
 [ 24 tuổi] Tuổi 24: Thiên cơ điểm +1 (mười hai năm một vòng).
-[ 24 tuổi] Tin đồn: Đấu giá tại Dược Vương Hội sắp tổ chức phiên đấu giá sau khoảng 0.6 năm.
 [ 24 tuổi] Thiên Cơ Báo số 3 vừa phát hành (bốn năm từ năm 9 tới năm 13).
 [ 25 tuổi] Tuổi 25: tu vi +1.
-[ 25 tuổi] Bị thương ở Nhà nguyện Nam Lâm, sinh lực -16.
-[ 25 tuổi] Hôn ước giữa bạn và Cung Nguyệt Dao đã quá hạn, hai bên coi như không còn ràng buộc.
-[ 25 tuổi] Bị thương ở Nhà nguyện Nam Lâm, sinh lực -18.
-[ 25 tuổi] Bị thương ở Nhà nguyện Nam Lâm, sinh lực -11.
-[ 26 tuổi] Tuổi 26: tu vi +1.
-[ 26 tuổi] Tình cờ gặp một cơ duyên (cơ duyên 1).
-[ 27 tuổi] Tuổi 27: tu vi +1.
-[ 27 tuổi] Cung Nguyệt Dao trò chuyện cùng bạn ở Nhà nguyện Nam Lâm. Quan hệ với Cung Nguyệt Dao giờ là: Bạn bè.
-[ 27 tuổi] Nhận nhiệm vụ trung: Tích lũy tu vi thêm 11% nhu cầu của Phàm nhân (trước 34 tuổi).
-[ 28 tuổi] Tuổi 28: rong ruổi tìm cơ duyên.
+[ 26 tuổi] Đến mùa gặt, bạn chợt nhớ cánh đồng năm cũ và thấy lòng ấm lại. Việc đáng làm thì ít khi làm uổng.
+[ 26 tuổi] Tuổi 26: tu vi +2.
+[ 27 tuổi] Tuổi 27: tu vi +2.
+[ 27 tuổi] Nhận nhiệm vụ trung: Tích lũy tu vi thêm 26% nhu cầu của Phàm nhân (trước 37 tuổi).
+[ 27 tuổi] Nhận nhiệm vụ ngắn: Tích lũy tu vi thêm 4% nhu cầu của Phàm nhân (trước 31 tuổi).
+[ 28 tuổi] Tuổi 28: tu vi +2.
+[ 28 tuổi] Tình cờ gặp một cơ duyên (cơ duyên 1).
 [ 28 tuổi] Thiên Cơ Báo số 4 vừa phát hành (bốn năm từ năm 13 tới năm 17).
 [ 29 tuổi] Tuổi 29: tu vi +2.
-[ 30 tuổi] Tuổi 30: tu vi +2.
+[ 29 tuổi] Hoàn thành nhiệm vụ: Tích lũy tu vi thêm 4% nhu cầu của Phàm nhân.
+[ 29 tuổi] Tin đồn: Luận đạo tại Thanh Diệp Thành sắp có đại hội luận đạo sau khoảng 1.6 năm.
+[ 30 tuổi] Tuổi 30: tu vi +1.
+[ 31 tuổi] Bị thương ở Nhà nguyện Nam Lâm, sinh lực -19.
 [ 31 tuổi] Tuổi 31: tu vi +2.
-[ 31 tuổi] Hoàn thành nhiệm vụ: Tích lũy tu vi thêm 11% nhu cầu của Phàm nhân.
-[ 31 tuổi] Tin đồn: Tuyển đệ tử tại Bách Thảo Môn sắp mở kỳ tuyển đệ tử sau khoảng 1.5 năm.
-[ 32 tuổi] Tuổi 32: thân thể cường tráng hơn.
+[ 32 tuổi] Tuổi 32: tu vi +1.
+[ 32 tuổi] Tin đồn: Tuyển đệ tử tại Bách Thảo Môn sắp mở kỳ tuyển đệ tử sau khoảng 0.9 năm.
 [ 32 tuổi] Thiên Cơ Báo số 5 vừa phát hành (bốn năm từ năm 17 tới năm 21).
 [ 33 tuổi] Tuổi 33: tu vi +2.
-[ 33 tuổi] Tin đồn: Đấu giá tại Dược Vương Hội sắp tổ chức phiên đấu giá sau khoảng 0.5 năm.
 [ 34 tuổi] Tuổi 34: tu vi +2.
-[ 34 tuổi] Cung Nguyệt Dao trò chuyện cùng bạn ở Nhà nguyện Nam Lâm. Quan hệ với Cung Nguyệt Dao giờ là: Tri kỷ.
-[ 34 tuổi] [Kết nghĩa] Hai người cắt máu ăn thề. Cung Nguyệt Dao từ nay là huynh đệ kết nghĩa của bạn, đạo tâm bạn vững thêm.
+[ 34 tuổi] Hoàn thành nhiệm vụ: Tích lũy tu vi thêm 26% nhu cầu của Phàm nhân.
 [ 35 tuổi] Tuổi 35: tu vi +1.
 [ 35 tuổi] [Nền móng] Kẻ xin tha: Tha cho Giang Hiên.
-[ 35 tuổi] Tính cách đổi: Tu dưỡng của bạn đã khắc kỷ hơn, nay là "Khắc kỷ chuyên tâm".
 [ 35 tuổi] [Nền móng] Tâm ma: Ngồi xuống đối mặt với nó.
-[ 35 tuổi] Vòng quay: 26 → vùng "Vượt qua nhưng mang sẹo" (yếu tố Tu dưỡng +6.9, bạn khắc kỷ chuyên tâm, +10).
+[ 35 tuổi] Vòng quay: 41 → vùng "Vượt qua nhưng mang sẹo" (yếu tố Tu dưỡng +8.2, bạn khắc kỷ chuyên tâm, +12).
 [ 35 tuổi] [Nền móng] Vượt qua nhưng mang sẹo.
 [ 35 tuổi] [Nền móng] Bạn đứng dậy khi trời hửng. Vết sẹo trong lòng vẫn còn, nhưng giờ bạn biết chỗ nào dễ đau và đừng giẫm vào đó.
 [ 35 tuổi] Khí vận +1 (truyện Nền móng).
-[ 36 tuổi] Tuổi 36: vàng +1.
+[ 35 tuổi] Bạn đi thu thập Linh thảo để luyện nghề.
+[ 36 tuổi] Tuổi 36: tu vi +1.
 [ 36 tuổi] Tuổi 36: Thiên cơ điểm +1 (mười hai năm một vòng).
 [ 36 tuổi] Bạn bắt đầu đột phá lên Luyện Khí...
-[ 36 tuổi] Bạn dùng Thiên cơ điểm để đổi lại. Thiên cơ xoay chuyển...
-[ 36 tuổi] Đột phá thành công! Bạn đã đạt cảnh giới Luyện Khí.
-[ 36 tuổi] Thiên cơ điểm +1.
-[ 36 tuổi] Thọ nguyên tăng lên 130 tuổi.
-[ 36 tuổi] Ngã rẽ: bạn vẫn kiên định với đạo khổ tu (đã đi 24 năm).
+[ 36 tuổi] Đột phá thất bại! Tu vi hao tổn, sinh lực -35.
+[ 36 tuổi] Linh thảo sắp hết hạn (còn 3 tháng), nên dùng hoặc bán sớm.
+[ 36 tuổi] 1 Linh thảo đã hết hạn và hỏng.
+[ 36 tuổi] Bạn tâm sự cùng Cung Nguyệt Dao dưới trăng, hai bên thấy gần nhau hơn ở Nhà nguyện Nam Lâm. Quan hệ với Cung Nguyệt Dao giờ là: Bạn bè.
 [ 36 tuổi] Thiên Cơ Báo số 6 vừa phát hành (bốn năm từ năm 21 tới năm 25).
-[ 37 tuổi] Tuổi 37: tu vi +3.
-[ 37 tuổi] Hoàn thành nhiệm vụ: Đột phá lên Luyện Khí.
+[ 37 tuổi] Tuổi 37: tu vi +2.
+[ 37 tuổi] Nhiệm vụ cấp bách: Đột phá lên Luyện Khí.
+[ 37 tuổi] [Từ hôn] Cả sảnh cười ồ lên, nhưng uất khí hóa thành động lực. Tu vi tăng.
+[ 37 tuổi] Tình cờ gặp một cơ duyên (cơ duyên 2).
+[ 37 tuổi] Ngã rẽ: bạn vẫn kiên định với đạo khổ tu (đã đi 25 năm).
 [ 38 tuổi] Tuổi 38: tu vi +3.
-[ 38 tuổi] Bạn lĩnh ngộ tâm pháp Tĩnh Tâm Chú (tốn 5 đạo điểm).
-[ 38 tuổi] Bạn trò chuyện cùng Cung Nguyệt Dao ở Nhà nguyện Nam Lâm.
-[ 38 tuổi] Tình cờ gặp một cơ duyên (cơ duyên 2).
-[ 39 tuổi] Tuổi 39: tu vi +3.
-[ 39 tuổi] Bạn tâm sự cùng Cung Nguyệt Dao dưới trăng, hai bên thấy gần nhau hơn ở Nhà nguyện Nam Lâm.
-[ 39 tuổi] Bị thương ở Nhà nguyện Nam Lâm, sinh lực -8.
-[ 40 tuổi] Tuổi 40: thân thể cường tráng hơn.
-[ 40 tuổi] Cung Nguyệt Dao cãi nhau với bạn một trận ở Nhà nguyện Nam Lâm.
+[ 39 tuổi] Tuổi 39: tu vi +2.
+[ 39 tuổi] Bạn trò chuyện cùng Cung Nguyệt Dao ở Nhà nguyện Nam Lâm.
+[ 39 tuổi] Nhận nhiệm vụ dài: Tích lũy thêm 4 linh thạch tài sản (đạt 8.7 linh thạch) (trước 68 tuổi).
+[ 40 tuổi] Tuổi 40: tu vi +1.
+[ 40 tuổi] Thương tích nhẹ: sinh lực tối đa -10%, tu luyện chậm 15% trong 8 tháng (nghỉ ngơi lành nhanh gấp đôi).
+[ 40 tuổi] Nhiệm vụ thất bại: Đột phá lên Luyện Khí.
+[ 40 tuổi] Giang Hiên tìm tới, đặt xuống một túi nhỏ: "Mạng này ta nhớ." Hắn không nói thêm gì, mà bạn biết lời ấy là thật.
 [ 40 tuổi] Thiên Cơ Báo số 7 vừa phát hành (bốn năm từ năm 25 tới năm 29).
-[ 41 tuổi] Tuổi 41: vàng +2.
-[ 41 tuổi] Rong ruổi tìm kiếm, bạn gặp được một cơ duyên (cơ duyên 3).
-[ 41 tuổi] Giang Hiên tìm tới, đặt xuống một túi nhỏ: "Mạng này ta nhớ." Hắn không nói thêm gì, mà bạn biết lời ấy là thật.
-[ 42 tuổi] Tuổi 42: thân thể cường tráng hơn.
-[ 42 tuổi] Nhận nhiệm vụ trung: Tích lũy tu vi thêm 13% nhu cầu của Luyện Khí (trước 53 tuổi).
-[ 42 tuổi] Nhận nhiệm vụ dài: Thông quan thêm một bí cảnh (trước 82 tuổi).
-[ 43 tuổi] Tuổi 43: tu vi +4.
-[ 43 tuổi] Cung Nguyệt Dao tặng bạn 30 vàng ở Nhà nguyện Nam Lâm.
-[ 44 tuổi] Tuổi 44: tu vi +5.
+[ 41 tuổi] Tuổi 41: tu vi +1.
+[ 41 tuổi] Hoàn thành nhiệm vụ: Tích lũy thêm 4 linh thạch tài sản (đạt 8.7 linh thạch).
+[ 41 tuổi] Tin đồn: Tuyển đệ tử tại Bách Thảo Môn sắp mở kỳ tuyển đệ tử sau khoảng 1.6 năm.
+[ 42 tuổi] Tuổi 42: tu vi +1.
+[ 42 tuổi] Bạn lĩnh ngộ tâm pháp Tĩnh Tâm Chú (tốn 5 đạo điểm).
+[ 42 tuổi] Bạn quyết định tới Bách Thảo Môn để dự: Tuyển đệ tử ở Bách Thảo Môn.
+[ 42 tuổi] Bạn lên đường từ Nhà nguyện Nam Lâm tới Thanh Lang Doanh (đích: Bách Thảo Môn), mất 1 tháng.
+[ 42 tuổi] Bạn đã tới Thanh Lang Doanh.
+[ 42 tuổi] Bạn lên đường từ Thanh Lang Doanh tới Mãng Lâm Thôn (đích: Bách Thảo Môn), mất 2 tháng.
+[ 42 tuổi] Bạn đã tới Mãng Lâm Thôn.
+[ 42 tuổi] Bạn lên đường từ Mãng Lâm Thôn tới Thanh Diệp Thành (đích: Bách Thảo Môn), mất 1 tháng.
+[ 42 tuổi] Bạn đã tới Thanh Diệp Thành.
+[ 42 tuổi] Bạn lên đường từ Thanh Diệp Thành tới Bách Thảo Môn, mất 2 tháng.
+[ 42 tuổi] Bạn đã tới Bách Thảo Môn.
+[ 42 tuổi] Bạn được Bách Thảo Môn nhận làm ngoại môn đệ tử. Từ nay có chỗ dựa, có nhiệm vụ và có thể đổi cống hiến lấy vật phẩm.
+[ 42 tuổi] Thử luyện nhập môn: bạn làm xuất sắc, chưởng môn để mắt tới. Cống hiến khởi điểm +40.
+[ 42 tuổi] [Mùa tuyển đệ tử] Bạn bái nhập Bách Thảo Môn làm ngoại môn đệ tử.
+[ 43 tuổi] Tuổi 43: tu vi +1.
+[ 43 tuổi] Bạn nhận việc tông môn: Truy bắt kẻ phản đồ (6 tháng).
+[ 43 tuổi] Bổng lộc hằng năm của Bách Thảo Môn: 8 vàng.
+[ 43 tuổi] Bạn bắt đầu đột phá lên Luyện Khí, Giang Hiên hộ pháp bên cạnh...
+[ 43 tuổi] Đột phá thành công! Bạn đã đạt cảnh giới Luyện Khí.
+[ 43 tuổi] Thiên cơ điểm +1.
+[ 43 tuổi] Giang Hiên hộ pháp trọn vẹn, ơn này bạn ghi nhớ.
+[ 43 tuổi] Thọ nguyên tăng lên 130 tuổi.
+[ 43 tuổi] Bạn hiến 1 Linh thảo cho kho Bách Thảo Môn. Cống hiến +2.
+[ 43 tuổi] Bị thương ở Bách Thảo Môn, sinh lực -11.
+[ 44 tuổi] Tuổi 44: tu vi +4.
+[ 44 tuổi] Bổng lộc hằng năm của Bách Thảo Môn: 1 linh thạch.
+[ 44 tuổi] Bạn trò chuyện cùng Khúc Dương ở Bách Thảo Môn.
+[ 44 tuổi] Tin đồn: Luận đạo tại Bách Thảo Môn sắp có đại hội luận đạo sau khoảng 1.6 năm.
 [ 44 tuổi] Thiên Cơ Báo số 8 vừa phát hành (bốn năm từ năm 29 tới năm 33).
-[ 45 tuổi] Tuổi 45: tu vi +3.
-[ 45 tuổi] Nhận nhiệm vụ dài: Đột phá lên Trúc Cơ (trước 89 tuổi).
-[ 45 tuổi] Thiên Đạo ban đại nguyện: Đột phá lên Trúc Cơ (trước 89 tuổi).
-[ 46 tuổi] Tuổi 46: tu vi +3.
-[ 47 tuổi] Tuổi 47: tu vi +3.
-[ 48 tuổi] Tuổi 48: tu vi +4.
+[ 45 tuổi] Tuổi 45: làm nhiệm vụ tông môn, cống hiến +3.
+[ 45 tuổi] Bổng lộc hằng năm của Bách Thảo Môn: 1 linh thạch.
+[ 45 tuổi] Tin đồn: Yêu Thú Chiến Trường sắp mở cửa sau khoảng 1.7 năm.
+[ 45 tuổi] [Đại hội luận đạo] Bạn bị hỏi đến cứng họng. Đạo tâm dao động, nhưng cũng quen thêm vài người.
+[ 46 tuổi] Bạn cùng Khúc Dương luận đạo suốt đêm, cả hai đều có thu hoạch ở Bách Thảo Môn. Quan hệ với Khúc Dương giờ là: Quen biết.
+[ 46 tuổi] Tuổi 46: giao du bạn bè.
+[ 46 tuổi] Bổng lộc hằng năm của Bách Thảo Môn: 1 linh thạch.
+[ 46 tuổi] Tin đồn: Cao nhân tại Bách Thảo Môn sẽ tới giảng đạo sau khoảng 1.2 năm.
+[ 47 tuổi] Giang Hiên tặng bạn 14 vàng ở Bách Thảo Môn. Quan hệ với Giang Hiên giờ là: Bạn bè.
+[ 47 tuổi] Tuổi 47: tu vi +4.
+[ 47 tuổi] Bổng lộc hằng năm của Bách Thảo Môn: 1 linh thạch.
+[ 47 tuổi] [Cao nhân giảng đạo] Bạn nghe giảng trọn ba ngày, ngộ ra nhiều điều. Tu vi tăng, đạo tâm vững hơn.
+[ 48 tuổi] Việc tông "Truy bắt kẻ phản đồ" thất bại. Sinh lực -20. Chỉ ghi được 6 cống hiến công sức.
+[ 48 tuổi] Tuổi 48: làm nhiệm vụ tông môn, cống hiến +2.
+[ 48 tuổi] Bạn nhận việc tông môn: Tra cứu tung tích một truyền thừa (5 tháng).
 [ 48 tuổi] Tuổi 48: Thiên cơ điểm +1 (mười hai năm một vòng).
-[ 48 tuổi] Tin đồn: Đấu giá tại Thanh Diệp Thành sắp tổ chức phiên đấu giá sau khoảng 0.9 năm.
+[ 48 tuổi] Bổng lộc hằng năm của Bách Thảo Môn: 1 linh thạch.
+[ 48 tuổi] Nhận nhiệm vụ dài: Đột phá lên Trúc Cơ (trước 80 tuổi).
+[ 48 tuổi] Thiên Đạo ban đại nguyện: Đột phá lên Trúc Cơ (trước 80 tuổi).
+[ 48 tuổi] Ngụy Yên Liên cãi nhau với bạn một trận ở Bách Thảo Môn. Quan hệ với Ngụy Yên Liên giờ là: Xa lạ.
 [ 48 tuổi] Thiên Cơ Báo số 9 vừa phát hành (bốn năm từ năm 33 tới năm 37).
-[ 49 tuổi] Tuổi 49: tu vi +6.
-[ 49 tuổi] Bị thương ở Nhà nguyện Nam Lâm, sinh lực -20.
+[ 49 tuổi] Tuổi 49: làm nhiệm vụ tông môn, cống hiến +1.
+[ 49 tuổi] Bổng lộc hằng năm của Bách Thảo Môn: 1 linh thạch.
+[ 49 tuổi] Giang Thanh Lam trò chuyện cùng bạn ở Bách Thảo Môn. Quan hệ với Giang Thanh Lam giờ là: Quen biết.
 [ 49 tuổi] Ruột thịt Lâm Dương đã qua đời (thọ nguyên cạn kiệt).
 [ 50 tuổi] Tuổi 50: tu vi +4.
-[ 51 tuổi] Tuổi 51: rong ruổi tìm cơ duyên.
-[ 51 tuổi] Hoàn thành nhiệm vụ: Tích lũy tu vi thêm 13% nhu cầu của Luyện Khí.
-[ 52 tuổi] Tuổi 52: tu vi +4; nghe lại 1 tin đồn cũ (Đấu giá ở Thanh Diệp Thành).
-[ 52 tuổi] Tin đồn: Tuyển đệ tử tại Bách Thảo Môn sắp mở kỳ tuyển đệ tử sau khoảng 1.2 năm.
+[ 50 tuổi] Bổng lộc hằng năm của Bách Thảo Môn: 1 linh thạch.
+[ 50 tuổi] Bị thương ở Bách Thảo Môn, sinh lực -14.
+[ 51 tuổi] Tuổi 51: luyện nghề.
+[ 51 tuổi] Bổng lộc hằng năm của Bách Thảo Môn: 1 linh thạch.
+[ 51 tuổi] Tin đồn: Đấu giá tại Thanh Diệp Thành sắp tổ chức phiên đấu giá sau khoảng 0.8 năm.
+[ 51 tuổi] Nhận nhiệm vụ trung: Tích lũy thêm 5 linh thạch tài sản (đạt 21.5 linh thạch) (trước 61 tuổi).
+[ 52 tuổi] Tuổi 52: tu vi +3.
+[ 52 tuổi] Bổng lộc hằng năm của Bách Thảo Môn: 1 linh thạch.
+[ 52 tuổi] Giang Hiên tranh chấp với bạn rồi động thủ thử sức, thua ở Bách Thảo Môn.
+[ 52 tuổi] Bạn cùng Ngụy Yên Liên luận đạo suốt đêm, cả hai đều có thu hoạch ở Bách Thảo Môn. Quan hệ với Ngụy Yên Liên giờ là: Quen biết.
 [ 52 tuổi] Thiên Cơ Báo số 10 vừa phát hành (bốn năm từ năm 37 tới năm 41).
-[ 53 tuổi] Tuổi 53: tu vi +4.
-[ 53 tuổi] Bị thương ở Nhà nguyện Nam Lâm, sinh lực -18.
-[ 54 tuổi] Tuổi 54: tu vi +4.
-[ 55 tuổi] Tuổi 55: vàng +1.
-[ 55 tuổi] Tính cách đổi: Tính tình của bạn đã bớt nóng nảy, nay là "Trung dung".
+[ 53 tuổi] Bị thương ở Bách Thảo Môn, sinh lực -11.
+[ 53 tuổi] Tuổi 53: tu vi +6.
+[ 53 tuổi] Bổng lộc hằng năm của Bách Thảo Môn: 1 linh thạch.
+[ 53 tuổi] Hoàn thành việc tông: Tra cứu tung tích một truyền thừa. Cống hiến +26, thưởng 2 linh thạch, tu vi tăng.
+[ 53 tuổi] Tin đồn: Cao nhân tại Thanh Diệp Thành sẽ tới giảng đạo sau khoảng 0.8 năm.
+[ 54 tuổi] Tuổi 54: tu vi +14.
+[ 54 tuổi] Bạn nhận việc tông môn: Truy bắt kẻ phản đồ (5 tháng).
+[ 54 tuổi] Bổng lộc hằng năm của Bách Thảo Môn: 1 linh thạch.
+[ 54 tuổi] Hoàn thành nhiệm vụ: Tích lũy thêm 5 linh thạch tài sản (đạt 21.5 linh thạch).
+[ 54 tuổi] Giang Hiên cãi nhau với bạn một trận ở Bách Thảo Môn.
+[ 54 tuổi] Giang Thanh Lam trò chuyện cùng bạn ở Bách Thảo Môn. Quan hệ với Giang Thanh Lam giờ là: Quen biết.
+[ 55 tuổi] Tuổi 55: tu vi +3.
+[ 55 tuổi] Bổng lộc hằng năm của Bách Thảo Môn: 1 linh thạch.
+[ 55 tuổi] Tin đồn: Đấu giá tại Dược Vương Hội sắp tổ chức phiên đấu giá sau khoảng 1.3 năm.
 [ 55 tuổi] [Vị thế] Cơn sóng đổi thế cuộc: Đóng cửa đứng ngoài cuộc.
-[ 55 tuổi] Rong ruổi tìm kiếm, bạn gặp được một cơ duyên (cơ duyên 4).
 [ 55 tuổi] [Vị thế] Khi khói tan: Dốc vàng gỡ oán, trả ơn cho xong.
 [ 55 tuổi] [Vị thế] Bạn trả xong những gì phải trả. Nhẹ túi hơn, nhưng đêm ngủ cũng yên hơn nhiều.
-[ 56 tuổi] Tuổi 56: tu vi +4.
+[ 55 tuổi] Ngụy Yên Liên tranh chấp với bạn rồi động thủ thử sức, thắng ở Bách Thảo Môn.
+[ 55 tuổi] Quy tắc nếu-thì: sinh lực dưới 30%, bạn nghỉ ngơi dưỡng sức.
+[ 56 tuổi] Tuổi 56: dưỡng sức.
+[ 56 tuổi] Bổng lộc hằng năm của Bách Thảo Môn: 1 linh thạch.
+[ 56 tuổi] Tin đồn: Mê Vụ Lâm sắp mở cửa sau khoảng 2.2 năm.
 [ 56 tuổi] Thiên Cơ Báo số 11 vừa phát hành (bốn năm từ năm 41 tới năm 45).
-[ 57 tuổi] Tuổi 57: tu vi +4.
-[ 57 tuổi] Tin đồn: Luận đạo tại Thanh Diệp Thành sắp có đại hội luận đạo sau khoảng 0.9 năm.
-[ 57 tuổi] Tin đồn: Mê Vụ Lâm sắp mở cửa sau khoảng 1.6 năm.
-[ 57 tuổi] Nhận nhiệm vụ ngắn: Tích lũy tu vi thêm 3% nhu cầu của Luyện Khí (trước 63 tuổi).
-[ 57 tuổi] Nhận nhiệm vụ trung: Thông quan thêm một bí cảnh (trước 72 tuổi).
+[ 57 tuổi] Tuổi 57: tu vi +1.
+[ 57 tuổi] Bổng lộc hằng năm của Bách Thảo Môn: 1 linh thạch.
+[ 57 tuổi] Bạn đi thu thập Linh thảo để luyện nghề.
 [ 58 tuổi] Tuổi 58: tu vi +4.
-[ 59 tuổi] Tuổi 59: thân thể cường tráng hơn.
-[ 59 tuổi] Cung Nguyệt Dao tặng bạn 14 vàng ở Nhà nguyện Nam Lâm.
+[ 58 tuổi] Bổng lộc hằng năm của Bách Thảo Môn: 1 linh thạch.
+[ 58 tuổi] Bị thương ở Bách Thảo Môn, sinh lực -12.
+[ 58 tuổi] Bạn hiến 1 Linh thảo cho kho Bách Thảo Môn. Cống hiến +2.
+[ 59 tuổi] Tuổi 59: tu vi +4.
+[ 59 tuổi] Bổng lộc hằng năm của Bách Thảo Môn: 1 linh thạch.
 [ 59 tuổi] Mùa đói tới, có người nói bạn từng làm ngơ lúc cả vùng cần một bàn tay. Bạn nghe được, không biện bạch.
-[ 60 tuổi] Tuổi 60: thân thể cường tráng hơn.
+[ 60 tuổi] Tuổi 60: tu vi +4.
 [ 60 tuổi] Tuổi 60: Thiên cơ điểm +1 (mười hai năm một vòng).
+[ 60 tuổi] Bổng lộc hằng năm của Bách Thảo Môn: 1 linh thạch.
+[ 60 tuổi] Giang Hiên trò chuyện cùng bạn ở Bách Thảo Môn. Quan hệ với Giang Hiên giờ là: Bạn bè.
+[ 60 tuổi] Giang Hiên nhận lời tỏ tình của bạn. Hai người đã là của nhau trong lòng.
+[ 60 tuổi] [Duyên tình] Hai người trao nhau lời thề dưới trăng. Chuyện lễ nghĩa để sau, nhưng từ đây Giang Hiên là người thương của bạn.
+[ 60 tuổi] Bạn và Giang Hiên kết làm đạo lữ, nguyện cùng nhau trên đường tu hành.
+[ 60 tuổi] [Lễ kết đạo lữ] Đèn hoa treo khắp nơi, bạn bè xa gần tới chung vui. Giang Hiên từ nay là đạo lữ của bạn, tiếng tăm bạn cũng vang xa thêm một chút.
+[ 60 tuổi] [Hôn ước bị ép] Lệnh từ trên: Nhận đính ước, đi tới ngày lễ.
+[ 60 tuổi] Ngã rẽ: bạn vẫn kiên định với đạo khổ tu (đã đi 47 năm).
+[ 60 tuổi] [Hôn ước bị ép] Ngày lễ đã định: Lễ giản dị, chỉ hai người và một nén hương.
+[ 60 tuổi] [Hôn ước bị ép] Ngày lễ không quá lớn cũng không quá nhỏ. Bạn và Giang Hiên bước vào đời nhau bằng một ngày cả hai đều không hối.
+[ 60 tuổi] Khí vận +1 (truyện Hôn ước bị ép).
+[ 60 tuổi] [Ở bên nhau] Căn nhà nhỏ: Cùng dọn về, chia việc nhà.
+[ 60 tuổi] Giang Thanh Lam trò chuyện cùng bạn ở Bách Thảo Môn. Quan hệ với Giang Thanh Lam giờ là: Quen biết.
 [ 60 tuổi] Thiên Cơ Báo số 12 vừa phát hành (bốn năm từ năm 45 tới năm 49).
-[ 61 tuổi] Tuổi 61: vàng +1.
-[ 61 tuổi] Hoàn thành nhiệm vụ: Tích lũy tu vi thêm 3% nhu cầu của Luyện Khí.
-[ 61 tuổi] Ngã rẽ: bạn đổi sang đạo phiêu lưu.
-[ 61 tuổi] Ngã rẽ: bạn vẫn kiên định với đạo phiêu lưu (đã đi 0 năm).
+[ 61 tuổi] Tuổi 61: tu vi +5.
+[ 61 tuổi] Bổng lộc hằng năm của Bách Thảo Môn: 1 linh thạch.
+[ 61 tuổi] Tin đồn: Cao nhân tại Cổ Thụ Vương sẽ tới giảng đạo sau khoảng 1 năm.
+[ 61 tuổi] [Ở bên nhau] Hai lối tu: Nói thẳng: bạn muốn đi xa hơn.
+[ 61 tuổi] Rong ruổi tìm kiếm, bạn gặp được một cơ duyên (cơ duyên 3).
+[ 61 tuổi] Một nhà giàu thuê bạn trông kho nửa tháng. Việc làm thuê: bạn nhận 20 vàng.
 [ 62 tuổi] Tuổi 62: tu vi +4.
-[ 62 tuổi] Bạn trò chuyện cùng Cung Nguyệt Dao ở Nhà nguyện Nam Lâm.
-[ 62 tuổi] Rong ruổi tìm kiếm, bạn gặp được một cơ duyên (cơ duyên 5).
-[ 63 tuổi] Rong ruổi tìm kiếm, bạn gặp được một cơ duyên (cơ duyên 6).
-[ 63 tuổi] Tuổi 63: rong ruổi tìm cơ duyên.
-[ 64 tuổi] Rong ruổi tìm kiếm, bạn gặp được một cơ duyên (cơ duyên 7).
-[ 64 tuổi] Tuổi 64: rong ruổi tìm cơ duyên.
-[ 64 tuổi] Rong ruổi tìm kiếm, bạn gặp được một cơ duyên (cơ duyên 8).
-[ 64 tuổi] Bạn tặng Cung Nguyệt Dao 30 vàng ở Nhà nguyện Nam Lâm.
-[ 64 tuổi] Rong ruổi tìm kiếm, bạn gặp được một cơ duyên (cơ duyên 9).
+[ 62 tuổi] Bổng lộc hằng năm của Bách Thảo Môn: 1 linh thạch.
+[ 62 tuổi] [Ở bên nhau] Kẻ thứ ba: Tin người bạn đời, không để tâm Tống Thiên Dương.
+[ 62 tuổi] [Ở bên nhau] Chênh thọ: Nói lời chia tay, không cần thử.
+[ 62 tuổi] [Ở bên nhau] Giang Hiên thu xếp hành trang, không khóc, cũng không quay đầu. Cây hòe trong sân vẫn xanh như mọi năm.
+[ 63 tuổi] Tuổi 63: tu vi +4.
+[ 63 tuổi] Bổng lộc hằng năm của Bách Thảo Môn: 1 linh thạch.
+[ 63 tuổi] Bạn hiến 1 Linh thảo cho kho Bách Thảo Môn. Cống hiến +2.
+[ 63 tuổi] Bạn hiến 1 Linh thảo cho kho Bách Thảo Môn. Cống hiến +2.
+[ 64 tuổi] Tuổi 64: tu vi +4.
+[ 64 tuổi] Bổng lộc hằng năm của Bách Thảo Môn: 1 linh thạch.
 [ 64 tuổi] Thiên Cơ Báo số 13 vừa phát hành (bốn năm từ năm 49 tới năm 53).
-[ 65 tuổi] Tuổi 65: thân thể cường tráng hơn.
-[ 66 tuổi] Tuổi 66: rong ruổi tìm cơ duyên.
-[ 66 tuổi] Rong ruổi tìm kiếm, bạn gặp được một cơ duyên (cơ duyên 10).
-[ 66 tuổi] Tình cờ gặp một cơ duyên (cơ duyên 11).
-[ 67 tuổi] Tuổi 67: rong ruổi tìm cơ duyên.
-[ 67 tuổi] Bị thương ở Nhà nguyện Nam Lâm, sinh lực -12.
-[ 67 tuổi] Rong ruổi tìm kiếm, bạn gặp được một cơ duyên (cơ duyên 12).
-[ 67 tuổi] Bạn tặng Cung Nguyệt Dao 22 vàng ở Nhà nguyện Nam Lâm.
-[ 67 tuổi] Bạn cùng Cung Nguyệt Dao luận đạo suốt đêm, cả hai đều có thu hoạch ở Nhà nguyện Nam Lâm.
-[ 67 tuổi] Bạn cãi nhau với Cung Nguyệt Dao một trận ở Nhà nguyện Nam Lâm.
-[ 67 tuổi] [Đạo quán hoang] Hương cháy hết, không có gì xảy ra. Lòng bạn nhẹ đi đôi chút.
-[ 68 tuổi] Bạn trò chuyện cùng Cung Nguyệt Dao ở Nhà nguyện Nam Lâm.
-[ 68 tuổi] Tuổi 68: giao du bạn bè.
-[ 68 tuổi] Nhiệm vụ cấp bách: Thông quan thêm một bí cảnh.
-[ 68 tuổi] Bạn trò chuyện cùng Cung Nguyệt Dao ở Nhà nguyện Nam Lâm.
-[ 68 tuổi] Bạn cùng Cung Nguyệt Dao đi làm một vụ nhỏ, mỗi người chia 48 vàng ở Nhà nguyện Nam Lâm.
-[ 68 tuổi] Cung Nguyệt Dao tranh chấp với bạn rồi động thủ thử sức, thắng ở Nhà nguyện Nam Lâm.
-[ 68 tuổi] Quy tắc nếu-thì: sinh lực dưới 30%, bạn nghỉ ngơi dưỡng sức.
-[ 68 tuổi] Tin đồn: Luận đạo tại Cổ Thụ Vương sắp có đại hội luận đạo sau khoảng 1.1 năm.
+[ 65 tuổi] [Kết nghĩa] Hai người cắt máu ăn thề. Giang Hiên từ nay là huynh đệ kết nghĩa của bạn, đạo tâm bạn vững thêm.
+[ 65 tuổi] Tuổi 65: tu vi +5.
+[ 65 tuổi] Bổng lộc hằng năm của Bách Thảo Môn: 1 linh thạch.
+[ 65 tuổi] Giang Hiên cãi nhau với bạn một trận ở Bách Thảo Môn.
+[ 65 tuổi] Giang Thanh Lam tặng bạn 12 vàng ở Bách Thảo Môn.
+[ 65 tuổi] Giang Thanh Lam trò chuyện cùng bạn ở Bách Thảo Môn. Quan hệ với Giang Thanh Lam giờ là: Bạn bè.
+[ 66 tuổi] Tuổi 66: tu vi +4.
+[ 66 tuổi] Bổng lộc hằng năm của Bách Thảo Môn: 1 linh thạch.
+[ 66 tuổi] Hoàn thành việc tông: Truy bắt kẻ phản đồ. Cống hiến +41, thưởng 2.5 linh thạch, danh vọng +2.
+[ 66 tuổi] Nhận nhiệm vụ trung: Tích lũy tu vi thêm 5% nhu cầu của Luyện Khí (trước 78 tuổi).
+[ 67 tuổi] Tuổi 67: tu vi +4.
+[ 67 tuổi] Bạn nhận việc tông môn: Tra cứu tung tích một truyền thừa (5 tháng).
+[ 67 tuổi] Bổng lộc hằng năm của Bách Thảo Môn: 1 linh thạch.
+[ 67 tuổi] Bạn được thăng làm Nội môn đệ tử của Bách Thảo Môn!
+[ 67 tuổi] Từ nội môn, bạn được chọn một trong bốn đường của tông (xem tab Tông môn).
+[ 67 tuổi] Giang Nghi (Trúc Cơ sơ kỳ) nhận bạn làm đồ đệ nội môn, chỉ dạy thêm. Tu luyện nhanh thêm 3%.
+[ 67 tuổi] Giang Thanh Lam tặng bạn 10 vàng ở Bách Thảo Môn.
+[ 67 tuổi] Chiến tranh tổng Đại loạn Cửu Châu nổ ra ngay nơi bạn đứng.
+[ 67 tuổi] [Chiến loạn lan tới] Bạn lánh vào một ngôi làng hẻo lánh cho tới khi chiến sự lắng xuống. Tâm tĩnh hơn, nhưng lỡ mất nhiều cơ hội.
+[ 68 tuổi] Tuổi 68: tu vi +4.
+[ 68 tuổi] Bạn theo đường Dược và luyện của Bách Thảo Môn.
+[ 68 tuổi] Bổng lộc hằng năm của Bách Thảo Môn: 2.6 linh thạch.
+[ 68 tuổi] [Nhờ giúp đỡ] Bạn nói mình cũng chẳng dư dả. Ánh mắt Giang Thanh Lam thoáng buồn.
 [ 68 tuổi] Thiên Cơ Báo số 14 vừa phát hành (bốn năm từ năm 53 tới năm 57).
-[ 69 tuổi] Tình cờ gặp một cơ duyên (cơ duyên 13).
-[ 69 tuổi] Tuổi 69: dưỡng sức.
-[ 69 tuổi] Nhiệm vụ cấp bách: Thông quan thêm một bí cảnh.
-[ 69 tuổi] Tin đồn: Cao nhân tại Thanh Diệp Thành sẽ tới giảng đạo sau khoảng 1.4 năm.
-[ 69 tuổi] Bạn trò chuyện cùng Cung Nguyệt Dao ở Nhà nguyện Nam Lâm.
-[ 69 tuổi] Rong ruổi tìm kiếm, bạn gặp được một cơ duyên (cơ duyên 14).
-[ 70 tuổi] Tuổi 70: rong ruổi tìm cơ duyên.
-[ 70 tuổi] Rong ruổi tìm kiếm, bạn gặp được một cơ duyên (cơ duyên 15).
-[ 71 tuổi] Tuổi 71: thân thể cường tráng hơn.
-[ 72 tuổi] Rong ruổi tìm kiếm, bạn gặp được một cơ duyên (cơ duyên 16).
-[ 72 tuổi] Tuổi 72: rong ruổi tìm cơ duyên.
+[ 69 tuổi] Tuổi 69: tu vi +5.
+[ 69 tuổi] Bổng lộc hằng năm của Bách Thảo Môn: 2.6 linh thạch.
+[ 69 tuổi] Bạn trò chuyện cùng Giang Hiên ở Bách Thảo Môn.
+[ 69 tuổi] Giang Thanh Lam tặng bạn 8 vàng ở Bách Thảo Môn.
+[ 69 tuổi] [Kết nghĩa] Hai người cắt máu ăn thề. Giang Thanh Lam từ nay là huynh đệ kết nghĩa của bạn, đạo tâm bạn vững thêm.
+[ 70 tuổi] Tuổi 70: tu vi +4.
+[ 70 tuổi] Bổng lộc hằng năm của Bách Thảo Môn: 2.6 linh thạch.
+[ 70 tuổi] Hoàn thành nhiệm vụ: Tích lũy tu vi thêm 5% nhu cầu của Luyện Khí.
+[ 70 tuổi] Nhiệm vụ cấp bách: Đột phá lên Trúc Cơ.
+[ 70 tuổi] Tin đồn: Luận đạo tại Cổ Thụ Vương sắp có đại hội luận đạo sau khoảng 1.8 năm.
+[ 71 tuổi] Tuổi 71: tu vi +5.
+[ 71 tuổi] Bổng lộc hằng năm của Bách Thảo Môn: 2.6 linh thạch.
+[ 71 tuổi] Thương tích nhẹ: sinh lực tối đa -10%, tu luyện chậm 15% trong 8 tháng (nghỉ ngơi lành nhanh gấp đôi).
+[ 71 tuổi] Cái giá của thất bại: mất 1 Khoáng thạch, thương tích nhẹ.
+[ 71 tuổi] [Chiến loạn lan tới] Đoàn bị cướp giữa đường. Bạn liều mạng bảo vệ nhưng sinh lực -25 và mất công không. Cái giá: mất 1 Khoáng thạch, thương tích nhẹ.
+[ 71 tuổi] [Đại bỉ tông môn] Bạn đứng hạng 2/2 đại bỉ nội môn. Cống hiến +98, danh vọng tăng.
+[ 72 tuổi] Tuổi 72: tu vi +5.
 [ 72 tuổi] Tuổi 72: Thiên cơ điểm +1 (mười hai năm một vòng).
-[ 72 tuổi] Nhiệm vụ thất bại: Thông quan thêm một bí cảnh.
-[ 72 tuổi] Rong ruổi tìm kiếm, bạn gặp được một cơ duyên (cơ duyên 17).
-[ 72 tuổi] Rong ruổi tìm kiếm, bạn gặp được một cơ duyên (cơ duyên 18).
-[ 72 tuổi] Gia hạn thêm 12 năm cho nhiệm vụ: Thông quan thêm một bí cảnh.
+[ 72 tuổi] Bổng lộc hằng năm của Bách Thảo Môn: 2.6 linh thạch.
+[ 72 tuổi] Bạn trò chuyện cùng Giang Thanh Lam ở Bách Thảo Môn.
 [ 72 tuổi] Thiên Cơ Báo số 15 vừa phát hành (bốn năm từ năm 57 tới năm 61).
-[ 73 tuổi] Tuổi 73: thân thể cường tráng hơn.
-[ 74 tuổi] Tuổi 74: tu vi +1.
-[ 75 tuổi] Tuổi 75: rong ruổi tìm cơ duyên.
-[ 75 tuổi] Nhiệm vụ cấp bách: Đột phá lên Trúc Cơ.
-[ 75 tuổi] [Đạo quả] Người xin học: Dựng một mái nhà cho người đến sau.
-[ 75 tuổi] Rong ruổi tìm kiếm, bạn gặp được một cơ duyên (cơ duyên 19).
+[ 73 tuổi] Tuổi 73: tu vi +4.
+[ 73 tuổi] Bổng lộc hằng năm của Bách Thảo Môn: 2.6 linh thạch.
+[ 74 tuổi] Tuổi 74: tu vi +5.
+[ 74 tuổi] Bổng lộc hằng năm của Bách Thảo Môn: 2.6 linh thạch.
+[ 74 tuổi] Bị thương ở Bách Thảo Môn, sinh lực -18.
+[ 74 tuổi] Bạn tặng Giang Hiên 16 vàng ở Bách Thảo Môn.
+[ 74 tuổi] [Chiến loạn lan tới] Chuyến hộ tống êm xuôi nhưng đầy hồi hộp. Bạn nhận 5 linh thạch tiền công, giá cao vì ai cũng sợ.
+[ 75 tuổi] Tuổi 75: tu vi +5.
+[ 75 tuổi] Bổng lộc hằng năm của Bách Thảo Môn: 2.6 linh thạch.
+[ 75 tuổi] Chọn trái bản tính, bạn dằn vặt một hồi: đạo tâm -1.
+[ 75 tuổi] [Đạo quả] Người xin học: Từ chối, giữ lối độc hành.
+[ 75 tuổi] Bạn cùng Khúc Dương luận đạo suốt đêm, cả hai đều có thu hoạch ở Bách Thảo Môn.
 [ 75 tuổi] [Đạo quả] Bạn cũ trở lại: Giao lại những gì mình có cho đời sau.
 [ 75 tuổi] [Đạo quả] Bạn đặt hết vào tay người đến sau, không giữ gì cho mình. Nhẹ đến lạ, như vừa trút được chiếc gánh đã mang nhiều năm.
 [ 75 tuổi] Khí vận +1 (truyện Đạo quả).
-[ 75 tuổi] Bạn trò chuyện cùng Cung Nguyệt Dao ở Nhà nguyện Nam Lâm.
-[ 76 tuổi] Tuổi 76: tu vi +2.
+[ 76 tuổi] Tuổi 76: tu vi +5.
+[ 76 tuổi] Bổng lộc hằng năm của Bách Thảo Môn: 2.6 linh thạch.
+[ 76 tuổi] [Đại bỉ tông môn] Bạn đứng hạng 2/2 đại bỉ nội môn. Cống hiến +98, danh vọng tăng.
 [ 76 tuổi] Thiên Cơ Báo số 16 vừa phát hành (bốn năm từ năm 61 tới năm 65).
-[ 77 tuổi] Tuổi 77: thân thể cường tráng hơn.
-[ 77 tuổi] Nhiệm vụ cấp bách: Thông quan thêm một bí cảnh.
-[ 78 tuổi] Tuổi 78: vàng +2.
-[ 79 tuổi] Tuổi 79: luyện nghề.
-[ 79 tuổi] Rong ruổi tìm kiếm, bạn gặp được một cơ duyên (cơ duyên 20).
-[ 79 tuổi] Rong ruổi tìm kiếm, bạn gặp được một cơ duyên (cơ duyên 21).
-[ 80 tuổi] Tuổi 80: tu vi +1.
-[ 80 tuổi] Bạn cùng Cung Nguyệt Dao luận đạo suốt đêm, cả hai đều có thu hoạch ở Nhà nguyện Nam Lâm.
-[ 80 tuổi] Tin đồn: Tuyển đệ tử tại Bách Thảo Môn sắp mở kỳ tuyển đệ tử sau khoảng 1.7 năm.
-[ 80 tuổi] Rong ruổi tìm kiếm, bạn gặp được một cơ duyên (cơ duyên 22).
-[ 80 tuổi] Rong ruổi tìm kiếm, bạn gặp được một cơ duyên (cơ duyên 23).
+[ 77 tuổi] Tuổi 77: dưỡng sức.
+[ 77 tuổi] Bổng lộc hằng năm của Bách Thảo Môn: 2.6 linh thạch.
+[ 77 tuổi] Rong ruổi tìm kiếm, bạn gặp được một cơ duyên (cơ duyên 4).
+[ 78 tuổi] Tuổi 78: tu vi +5.
+[ 78 tuổi] Bổng lộc hằng năm của Bách Thảo Môn: 2.6 linh thạch.
+[ 79 tuổi] Tuổi 79: tu vi +4.
+[ 79 tuổi] Bổng lộc hằng năm của Bách Thảo Môn: 2.6 linh thạch.
+[ 79 tuổi] Bạn tặng Giang Hiên 22 vàng ở Bách Thảo Môn.
+[ 79 tuổi] Giang Thanh Lam tặng bạn 10 vàng ở Bách Thảo Môn.
+[ 79 tuổi] Ngụy Yên Liên cãi nhau với bạn một trận ở Bách Thảo Môn.
+[ 79 tuổi] Đại loạn Cửu Châu khép lại: phe Bách Thảo Môn thắng.
+[ 80 tuổi] Tuổi 80: tu vi +4.
+[ 80 tuổi] Bổng lộc hằng năm của Bách Thảo Môn: 2.6 linh thạch.
+[ 80 tuổi] Thương tích nhẹ: sinh lực tối đa -10%, tu luyện chậm 15% trong 8 tháng (nghỉ ngơi lành nhanh gấp đôi).
+[ 80 tuổi] Nhiệm vụ thất bại: Đột phá lên Trúc Cơ.
+[ 80 tuổi] Bạn hiến 1 Linh thảo cho kho Bách Thảo Môn. Cống hiến +2.
+[ 80 tuổi] Ngụy Yên Liên tranh chấp với bạn rồi động thủ thử sức, thắng ở Bách Thảo Môn.
+[ 80 tuổi] Quy tắc nếu-thì: sinh lực dưới 30%, bạn nghỉ ngơi dưỡng sức.
 [ 80 tuổi] Thiên Cơ Báo số 17 vừa phát hành (bốn năm từ năm 65 tới năm 69).
-[ 81 tuổi] Tuổi 81: rong ruổi tìm cơ duyên.
-[ 81 tuổi] Tin đồn: Mê Vụ Lâm sắp mở cửa sau khoảng 1.8 năm.
-[ 81 tuổi] Rong ruổi tìm kiếm, bạn gặp được một cơ duyên (cơ duyên 24).
-[ 81 tuổi] Mái nhà bạn dựng có người ghé nghỉ rồi để lại chút bạc tạ ơn. Bạn không đòi, và đó là điều lạ nhất.
-[ 82 tuổi] Tuổi 82: vàng +2.
-[ 82 tuổi] Rong ruổi tìm kiếm, bạn gặp được một cơ duyên (cơ duyên 25).
-[ 82 tuổi] Bị thương ở Nhà nguyện Nam Lâm, sinh lực -14.
-[ 83 tuổi] Bị thương ở Nhà nguyện Nam Lâm, sinh lực -10.
+[ 81 tuổi] Tuổi 81: dưỡng sức.
+[ 81 tuổi] Bổng lộc hằng năm của Bách Thảo Môn: 2.6 linh thạch.
+[ 81 tuổi] Nhận nhiệm vụ dài: Đột phá lên Trúc Cơ (trước 104 tuổi).
+[ 81 tuổi] Nhận nhiệm vụ trung: Tích lũy thêm 21 linh thạch tài sản (đạt 93.1 linh thạch) (trước 96 tuổi).
+[ 81 tuổi] [Đại bỉ tông môn] Bạn ngồi xem các sư huynh đấu, học lỏm được vài chiêu.
+[ 82 tuổi] Tuổi 82: tu vi +4.
+[ 82 tuổi] Bổng lộc hằng năm của Bách Thảo Môn: 2.6 linh thạch.
+[ 82 tuổi] Tin đồn: Mê Vụ Lâm sắp mở cửa sau khoảng 1.3 năm.
+[ 82 tuổi] Bị thương ở Bách Thảo Môn, sinh lực -22.
+[ 82 tuổi] Quy tắc nếu-thì: sinh lực dưới 30%, bạn nghỉ ngơi dưỡng sức.
 [ 83 tuổi] Tuổi 83: tu vi +3.
-[ 83 tuổi] Tin đồn: Đấu giá tại Thanh Diệp Thành sắp tổ chức phiên đấu giá sau khoảng 0.7 năm.
-[ 83 tuổi] Bạn cùng Cung Nguyệt Dao đi làm một vụ nhỏ, mỗi người chia 24 vàng ở Nhà nguyện Nam Lâm.
-[ 83 tuổi] Rong ruổi tìm kiếm, bạn gặp được một cơ duyên (cơ duyên 26).
-[ 83 tuổi] Tin đồn: Tuyển đệ tử tại Bách Thảo Môn sắp mở kỳ tuyển đệ tử sau khoảng 0.8 năm.
-[ 84 tuổi] Tuổi 84: rong ruổi tìm cơ duyên.
+[ 83 tuổi] Bổng lộc hằng năm của Bách Thảo Môn: 2.6 linh thạch.
+[ 83 tuổi] Giang Hiên cãi nhau với bạn một trận ở Bách Thảo Môn.
+[ 84 tuổi] Tuổi 84: tu vi +5.
 [ 84 tuổi] Tuổi 84: Thiên cơ điểm +1 (mười hai năm một vòng).
-[ 84 tuổi] Tin đồn: Luận đạo tại Cổ Thụ Vương sắp có đại hội luận đạo sau khoảng 1.2 năm.
-[ 84 tuổi] Bạn trò chuyện cùng Cung Nguyệt Dao ở Nhà nguyện Nam Lâm.
+[ 84 tuổi] Bổng lộc hằng năm của Bách Thảo Môn: 2.6 linh thạch.
+[ 84 tuổi] Tin đồn: Đấu giá tại Thanh Diệp Thành sắp tổ chức phiên đấu giá sau khoảng 0.5 năm.
 [ 84 tuổi] Thiên Cơ Báo số 18 vừa phát hành (bốn năm từ năm 69 tới năm 73).
-[ 85 tuổi] Tuổi 85: rong ruổi tìm cơ duyên.
-[ 85 tuổi] Bạn trò chuyện cùng Cung Nguyệt Dao ở Nhà nguyện Nam Lâm.
-[ 85 tuổi] Tin đồn: Luận đạo tại Thanh Diệp Thành sắp có đại hội luận đạo sau khoảng 1.3 năm.
-[ 85 tuổi] Cung Nguyệt Dao tặng bạn 22 vàng ở Nhà nguyện Nam Lâm.
-[ 86 tuổi] Tuổi 86: rong ruổi tìm cơ duyên.
-[ 86 tuổi] Ngã rẽ: bạn đổi sang đạo giao du.
-[ 86 tuổi] Ngã rẽ: bạn vẫn kiên định với đạo giao du (đã đi 0 năm).
-[ 87 tuổi] Tuổi 87: tu vi +2.
-[ 87 tuổi] Bạn trò chuyện cùng Cung Nguyệt Dao ở Nhà nguyện Nam Lâm.
-[ 87 tuổi] Bạn trò chuyện cùng Cung Nguyệt Dao ở Nhà nguyện Nam Lâm.
-[ 87 tuổi] Bạn cùng Cung Nguyệt Dao luận đạo suốt đêm, cả hai đều có thu hoạch ở Nhà nguyện Nam Lâm.
-[ 87 tuổi] Tin đồn: Yêu Thú Chiến Trường sắp mở cửa sau khoảng 1.3 năm.
-[ 87 tuổi] Gia hạn thêm 12 năm cho nhiệm vụ: Thông quan thêm một bí cảnh.
-[ 87 tuổi] Nhận nhiệm vụ trung: Tích lũy thêm 5 linh thạch tài sản (đạt 27.7 linh thạch) (trước 102 tuổi).
-[ 88 tuổi] Tuổi 88: rong ruổi tìm cơ duyên.
-[ 88 tuổi] Nhiệm vụ cấp bách: Thông quan thêm một bí cảnh.
-[ 88 tuổi] Bạn cùng Cung Nguyệt Dao luận đạo suốt đêm, cả hai đều có thu hoạch ở Nhà nguyện Nam Lâm.
-[ 88 tuổi] Bạn tặng Cung Nguyệt Dao 16 vàng ở Nhà nguyện Nam Lâm.
-[ 88 tuổi] Bạn tặng Cung Nguyệt Dao 28 vàng ở Nhà nguyện Nam Lâm.
+[ 85 tuổi] Tuổi 85: tu vi +5.
+[ 85 tuổi] Bổng lộc hằng năm của Bách Thảo Môn: 2.6 linh thạch.
+[ 85 tuổi] Tin đồn: Đấu giá tại Dược Vương Hội sắp tổ chức phiên đấu giá sau khoảng 1.1 năm.
+[ 85 tuổi] Ngã rẽ: bạn đổi sang đạo luyện nghề.
+[ 85 tuổi] Bạn chọn nghề chính: Dược sư (Học đồ).
+[ 86 tuổi] Luyện đan đạt cấp 1!
+[ 86 tuổi] Tuổi 86: luyện nghề.
+[ 86 tuổi] Bổng lộc hằng năm của Bách Thảo Môn: 2.6 linh thạch.
+[ 86 tuổi] Bạn tặng Giang Thanh Lam 24 vàng ở Bách Thảo Môn.
+[ 86 tuổi] [Đại bỉ tông môn] Bạn đứng hạng 2/2 đại bỉ nội môn. Cống hiến +98, danh vọng tăng.
+[ 87 tuổi] Tuổi 87: tu vi +1.
+[ 87 tuổi] Bổng lộc hằng năm của Bách Thảo Môn: 2.6 linh thạch.
+[ 87 tuổi] Bạn đi thu thập Linh thảo để luyện nghề.
+[ 87 tuổi] Tin đồn: Cao nhân tại Bách Thảo Môn sẽ tới giảng đạo sau khoảng 0.9 năm.
+[ 87 tuổi] Luyện đan thành công: Hồi Xuân Đan.
+[ 87 tuổi] Tin đồn: Yêu Thú Chiến Trường sắp mở cửa sau khoảng 2.1 năm.
+[ 87 tuổi] Bạn đi thu thập Linh thảo để luyện nghề.
+[ 88 tuổi] Tuổi 88: luyện nghề.
+[ 88 tuổi] Bổng lộc hằng năm của Bách Thảo Môn: 2.6 linh thạch.
+[ 88 tuổi] Nhận nhiệm vụ dài: Ghé thêm 10 địa điểm mới ở Nam Lâm (trước 122 tuổi).
+[ 88 tuổi] Thiên Đạo ban đại nguyện: Ghé thêm 10 địa điểm mới ở Nam Lâm (trước 122 tuổi).
+[ 88 tuổi] Hoàn thành việc tông: Tra cứu tung tích một truyền thừa. Cống hiến +26, thưởng 2 linh thạch, tu vi tăng.
+[ 88 tuổi] Bị thương ở Bách Thảo Môn, sinh lực -12.
+[ 88 tuổi] Bạn lên đường từ Bách Thảo Môn tới Thanh Diệp Thành (đích: Nam Lâm Quan), mất 2 tháng.
+[ 88 tuổi] Bạn đã tới Thanh Diệp Thành.
+[ 88 tuổi] Bạn lên đường từ Thanh Diệp Thành tới Nam Lâm Quan, mất 2 tháng.
+[ 88 tuổi] Bạn đã tới Nam Lâm Quan.
+[ 88 tuổi] Bạn lên đường từ Nam Lâm Quan tới Thanh Diệp Thành, mất 2 tháng.
+[ 88 tuổi] Linh thảo sắp hết hạn (còn 3 tháng), nên dùng hoặc bán sớm.
+[ 88 tuổi] Hồi Xuân Đan sắp hết hạn (còn 3 tháng), nên dùng hoặc bán sớm.
+[ 88 tuổi] Bạn đã tới Thanh Diệp Thành.
+[ 88 tuổi] Bạn bán 2 Hồi Xuân Đan ở dan, được 1 linh thạch.
+[ 88 tuổi] Thấy Hồi Xuân Đan sắp hỏng, bạn tự bán bớt.
+[ 88 tuổi] Bạn bán 1 Linh thảo ở cho, được 1 vàng.
+[ 88 tuổi] Thấy Linh thảo sắp hỏng, bạn tự bán bớt.
+[ 88 tuổi] Bạn mua Linh thảo ở cho, giá 6 vàng.
+[ 88 tuổi] Bạn mua Linh thảo ở cho, giá 6 vàng.
+[ 88 tuổi] Mua bán ở chợ, bạn chuyện trò với Trình Hy và thân thêm một chút.
+[ 88 tuổi] Bạn mua Linh thảo ở cho, giá 6 vàng.
+[ 88 tuổi] Luyện đan thành công: Hồi Xuân Đan x2.
+[ 88 tuổi] Luyện đan đạt cấp 2!
+[ 88 tuổi] Liễu Khê tặng bạn 7 vàng ở Thanh Diệp Thành.
 [ 88 tuổi] Thiên Cơ Báo số 19 vừa phát hành (bốn năm từ năm 73 tới năm 77).
-[ 89 tuổi] Tuổi 89: tu vi +2.
-[ 89 tuổi] Thương tích nhẹ: sinh lực tối đa -10%, tu luyện chậm 15% trong 8 tháng (nghỉ ngơi lành nhanh gấp đôi).
-[ 89 tuổi] Nhiệm vụ thất bại: Đột phá lên Trúc Cơ.
-[ 89 tuổi] Bạn cùng Cung Nguyệt Dao đi làm một vụ nhỏ, mỗi người chia 20 vàng ở Nhà nguyện Nam Lâm.
-[ 89 tuổi] Bạn trò chuyện cùng Cung Nguyệt Dao ở Nhà nguyện Nam Lâm.
-[ 89 tuổi] Bạn tặng Cung Nguyệt Dao 16 vàng ở Nhà nguyện Nam Lâm.
-[ 89 tuổi] Bạn cùng Cung Nguyệt Dao luận đạo suốt đêm, cả hai đều có thu hoạch ở Nhà nguyện Nam Lâm.
-[ 89 tuổi] Bạn cùng Cung Nguyệt Dao luận đạo suốt đêm, cả hai đều có thu hoạch ở Nhà nguyện Nam Lâm.
-[ 89 tuổi] Bạn cùng Cung Nguyệt Dao luận đạo suốt đêm, cả hai đều có thu hoạch ở Nhà nguyện Nam Lâm.
-[ 89 tuổi] Bạn tranh chấp với Cung Nguyệt Dao rồi động thủ thử sức, thắng ở Nhà nguyện Nam Lâm.
-[ 89 tuổi] Bạn cùng Cung Nguyệt Dao luận đạo suốt đêm, cả hai đều có thu hoạch ở Nhà nguyện Nam Lâm.
-[ 90 tuổi] Tuổi 90: thân thể cường tráng hơn.
-[ 90 tuổi] Bạn trò chuyện cùng Cung Nguyệt Dao ở Nhà nguyện Nam Lâm.
-[ 90 tuổi] Bạn cùng Cung Nguyệt Dao đi làm một vụ nhỏ, mỗi người chia 24 vàng ở Nhà nguyện Nam Lâm.
-[ 90 tuổi] Bạn trò chuyện cùng Cung Nguyệt Dao ở Nhà nguyện Nam Lâm.
-[ 90 tuổi] Bạn trò chuyện cùng Cung Nguyệt Dao ở Nhà nguyện Nam Lâm.
-[ 91 tuổi] Bạn trò chuyện cùng Cung Nguyệt Dao ở Nhà nguyện Nam Lâm.
-[ 91 tuổi] Tuổi 91: giao du bạn bè.
-[ 91 tuổi] Hoàn thành nhiệm vụ: Tích lũy thêm 5 linh thạch tài sản (đạt 27.7 linh thạch).
-[ 91 tuổi] Bạn trò chuyện cùng Cung Nguyệt Dao ở Nhà nguyện Nam Lâm.
-[ 91 tuổi] Bạn trò chuyện cùng Cung Nguyệt Dao ở Nhà nguyện Nam Lâm.
-[ 91 tuổi] Bạn tặng Cung Nguyệt Dao 20 vàng ở Nhà nguyện Nam Lâm.
-[ 91 tuổi] Bạn trò chuyện cùng Cung Nguyệt Dao ở Nhà nguyện Nam Lâm.
-[ 92 tuổi] Bạn tặng Cung Nguyệt Dao 24 vàng ở Nhà nguyện Nam Lâm.
-[ 92 tuổi] Tuổi 92: giao du bạn bè.
-[ 92 tuổi] Bạn trò chuyện cùng Cung Nguyệt Dao ở Nhà nguyện Nam Lâm.
-[ 92 tuổi] Bạn tranh chấp với Cung Nguyệt Dao rồi động thủ thử sức, thua ở Nhà nguyện Nam Lâm.
-[ 92 tuổi] Quy tắc nếu-thì: sinh lực dưới 30%, bạn nghỉ ngơi dưỡng sức.
-[ 92 tuổi] Tin đồn: Tuyển đệ tử tại Bách Thảo Môn sắp mở kỳ tuyển đệ tử sau khoảng 0.6 năm.
+[ 89 tuổi] Tuổi 89: làm nhiệm vụ tông môn, cống hiến +47.
+[ 89 tuổi] Bạn nhận việc tông môn: Phụ lò luyện đan (4 tháng).
+[ 89 tuổi] Bạn mua Bí kíp: Ngũ Hành Dung Hòa Quyết ở thu, giá 28.2 linh thạch.
+[ 89 tuổi] Bạn học được công pháp Ngũ Hành Dung Hòa Quyết (trung phẩm). Đặt làm công pháp chính.
+[ 89 tuổi] Bạn mua Phá Cảnh Đan ở dan, giá 4.4 linh thạch.
+[ 89 tuổi] Bổng lộc hằng năm của Bách Thảo Môn: 2.6 linh thạch.
+[ 89 tuổi] Bạn mua Linh thảo ở cho, giá 6 vàng.
+[ 89 tuổi] Bạn mua Linh thảo ở cho, giá 6 vàng.
+[ 89 tuổi] Bạn mua Linh thảo ở hoi, giá 6 vàng.
+[ 89 tuổi] Luyện đan thành công: Hồi Xuân Đan.
+[ 89 tuổi] Bạn mua Linh thảo ở hoi, giá 6 vàng.
+[ 89 tuổi] Bạn mua Linh thảo ở hoi, giá 6 vàng.
+[ 89 tuổi] Bạn mua Linh thảo ở hoi, giá 6 vàng.
+[ 89 tuổi] Bạn mua Linh thảo ở hoi, giá 6 vàng.
+[ 89 tuổi] Bạn mua Linh thảo ở hoi, giá 6 vàng.
+[ 89 tuổi] Bạn mua Linh thảo ở hoi, giá 6 vàng.
+[ 89 tuổi] Bạn mua Linh thảo ở hoi, giá 6 vàng.
+[ 89 tuổi] Bạn mua Linh thảo ở hoi, giá 6 vàng.
+[ 89 tuổi] Bạn mua Linh thảo ở hoi, giá 6 vàng.
+[ 89 tuổi] Bạn mua Linh thảo ở hoi, giá 6 vàng.
+[ 89 tuổi] Bạn bán 1 Hồi Xuân Đan ở dan, được 1.1 linh thạch.
+[ 89 tuổi] Bạn lên đường từ Thanh Diệp Thành tới Dược Vương Hội, mất 1 tháng.
+[ 89 tuổi] Bạn đã tới Dược Vương Hội.
+[ 89 tuổi] Bạn trò chuyện cùng Thẩm Mặc Hà ở Dược Vương Hội.
+[ 89 tuổi] Bạn lên đường từ Dược Vương Hội tới Thanh Diệp Thành (đích: Linh Dược Cốc), mất 1 tháng.
+[ 89 tuổi] Bạn đã tới Thanh Diệp Thành.
+[ 89 tuổi] Bạn lên đường từ Thanh Diệp Thành tới Bách Thảo Môn (đích: Linh Dược Cốc), mất 2 tháng.
+[ 90 tuổi] Bạn đã tới Bách Thảo Môn.
+[ 90 tuổi] Bạn lên đường từ Bách Thảo Môn tới Linh Dược Cốc, mất 2 tháng.
+[ 90 tuổi] Tuổi 90: trên đường di chuyển.
+[ 90 tuổi] Bổng lộc hằng năm của Bách Thảo Môn: 2.6 linh thạch.
+[ 90 tuổi] Bạn đã tới Linh Dược Cốc.
+[ 90 tuổi] Bạn bán 1 Phá Cảnh Đan ở cho, được 7 vàng.
+[ 90 tuổi] Thấy Phá Cảnh Đan sắp hỏng, bạn tự bán bớt.
+[ 90 tuổi] Bạn lên đường từ Linh Dược Cốc tới Cổ Thụ Vương (đích: Mê Vụ Lâm), mất 2 tháng.
+[ 90 tuổi] Bạn đã tới Cổ Thụ Vương.
+[ 90 tuổi] Bạn lên đường từ Cổ Thụ Vương tới Mê Vụ Lâm, mất 3 tháng.
+[ 90 tuổi] Hồi Xuân Đan sắp hết hạn (còn 3 tháng), nên dùng hoặc bán sớm.
+[ 90 tuổi] Bạn đã tới Mê Vụ Lâm.
+[ 90 tuổi] Tin đồn: Yêu Thú Chiến Trường sắp mở cửa sau khoảng 2.1 năm.
+[ 90 tuổi] 3 Hồi Xuân Đan đã hết hạn và hỏng.
+[ 91 tuổi] Tuổi 91: rong ruổi tìm cơ duyên.
+[ 91 tuổi] Bổng lộc hằng năm của Bách Thảo Môn: 2.6 linh thạch.
+[ 91 tuổi] Tin đồn: Đấu giá tại Thanh Diệp Thành sắp tổ chức phiên đấu giá sau khoảng 1.3 năm.
+[ 91 tuổi] Bạn đi thu thập Linh thảo để luyện nghề.
+[ 91 tuổi] Bị thương ở Mê Vụ Lâm, sinh lực -16.
+[ 91 tuổi] [Đại bỉ tông môn] Bạn ngồi xem các sư huynh đấu, học lỏm được vài chiêu.
+[ 92 tuổi] Tuổi 92: luyện nghề.
+[ 92 tuổi] Bổng lộc hằng năm của Bách Thảo Môn: 2.6 linh thạch.
+[ 92 tuổi] Nhiệm vụ cấp bách: Tích lũy thêm 21 linh thạch tài sản (đạt 93.1 linh thạch).
+[ 92 tuổi] Việc tông "Phụ lò luyện đan" thất bại. Chỉ ghi được 8 cống hiến công sức.
+[ 92 tuổi] Tình cờ gặp một cơ duyên (cơ duyên 5).
+[ 92 tuổi] Bạn lên đường từ Mê Vụ Lâm tới Cổ Thụ Vương (đích: Yêu Thú Chiến Trường), mất 3 tháng.
+[ 92 tuổi] Bạn đã tới Cổ Thụ Vương.
+[ 92 tuổi] Bạn lên đường từ Cổ Thụ Vương tới Linh Dược Cốc (đích: Yêu Thú Chiến Trường), mất 2 tháng.
 [ 92 tuổi] Thiên Cơ Báo số 20 vừa phát hành (bốn năm từ năm 77 tới năm 81).

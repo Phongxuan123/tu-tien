@@ -259,6 +259,14 @@
   - *Chỉnh sau phản hồi (ra đạo lữ khó)*: cặp có thể nảy tình ở cùng nơi được cộng Tình mỗi năm (`D.BOND.rom`: +7, +3 nếu hợp tính) và Tình nhận từ giao du nhân 1,6 (`D.BOND.loveMul`, chỉ cặp của người chơi). Dò 24 đời 60 năm: đạo giao du 21/24 có đạo lữ, đạo tu luyện (mặc định) 4/24; chỉ tiêu R 10.1 (60% chủ động, 35% Tự động) cần đo lại bằng story-sim khi có chặng 9B-d.
   - *Chưa làm / lưu ý*: kháng tâm ma và ngộ của song tu (chỉ có tu vi, đạo tâm, đạo điểm, Tình); xác suất con 10% → 1% theo cảnh giới (thuộc 9C, hiện giữ 1,8% mỗi buổi); lễ không cộng thiện cảm tông/gia tộc, Ơn của khách dự; không có tình đơn phương, tình địch, ghen theo giai đoạn; Quan hệ NPC với NPC giữ cũ; gộp tab Nhân duyên để sau; nút hành động (tặng quà, mời đi chơi, tỏ tình) và lệnh ưu tiên thấp chưa làm.
   - Người chơi nên thử: chọn Thủ công, giao du một NPC cùng nơi, xem hộp tỏ tình, hộp lễ, ba thanh ở tab Gia đình/Quan hệ; thử chờ vài năm xem nỗi buồn tuổi thọ và rạn nứt; tần suất hôn ước (khoảng 0,17 lần mỗi đời) có phiền không.
+- [x] **9B-d** (Haiku) chặng chữ đạo lữ: `js/data/stories/dao_lu.js`, 4 tuyến (dl_gap, dl_hon, dl_ben, dl_tan), 12 chặng. **9B-d đã làm (2026-10-20):**
+  - *Phủ hành trình*: gặp, mến, tỏ tình (vòng quay rel; NPC có thể từ chối đáp lời), hôn ước bị ép (nhận, khéo từ chối, bỏ trốn; NPC có thể từ chối đính ước hoặc lễ), lễ kết (giản dị, tông chứng, hoãn), ở bên (căn nhà, hai lối tu, kẻ thứ ba, chênh thọ với vòng quay nature), rạn nứt (hòa hoặc chia tay), tang (giữ di vật, dựng miếu, theo người mất).
+  - *Nhịp mở*: 8 trên 12 chặng mở theo tháng hoặc tuổi, không cần cảnh giới; 4 chặng chuyện lớn mở từ Trúc Cơ hoặc đến tuổi (`hoac`) để không kẹt. Hôn ước mở với bất kỳ người nào đã đạt `to` (không nhất thiết người của tuyến gặp đầu).
+  - *Khóa mềm theo tính cách*: 4 lựa chọn (tudung, xuthe, daoduc, tinh). Hậu quả trễ: 4.
+  - *Kiểm*: `story-lint` sạch (11 tuyến, 27 chặng); `run-tests` lọc "đạo lữ" 13 đạt, "9B" 10 đạt, "Truyện" 11 đạt, 0 lỗi.
+  - *Life-sim 101 đến 103*: 101 đi qua hôn ước, lễ kết và ở bên rồi chia lối; 102 tới rạn nứt và tang; 103 dừng ở chặng gặp đầu đời. Không lộ khe `{...}`.
+  - *Sửa sau life-sim*: chặng đòi Tình ≥ 30 bị kẹt cả đời (đổi sang điều kiện tháng); chặng cảnh giới lớn kẹt nếu không đạt Trúc Cơ (thêm nhánh tuổi).
+  - *Chưa làm*: chỉ tiêu R 10.1 (60% kết đạo lữ) **chưa đo** bằng `story-sim`; chưa chạy `baseline --check` vì dữ liệu tuyến không đổi cân bằng thế giới.
 - [ ] **9C** R3 con cái lõi (khoảng 12 chặng, 5 quyết định mỗi con) + thừa kế + **màn kết đời / bia mộ** (Q 21.1#1).
 - **Cổng chơi thử 7:** một đời đầy đủ từ sinh đến chết/kế thừa.
 - **Hoãn sang Đợt 11 trở đi (chốt 2026-10-19, không làm nghèo lõi):** xương sống B đến E (Q4); xuất thân 9 đến 17; cấy/chuyển tiên thiên (đi cùng T13, T14); NPC bốn trục; R4 dây duyên và giấc mơ đẩy duyên (tạm dùng nhân vật định mệnh đơn giản của Q2); chặng ghép và loại trừ (Q 13.2); bốn tuyến mẫu còn lại; Q9 AI.

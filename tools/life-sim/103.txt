@@ -4,9 +4,9 @@ Cha mẹ lúc sinh: cha Giang Bác, mẹ Tạ Yên Doanh. Gánh nặng: Cha mẹ
 Tư chất 127 (Hỏa 77, Thủy 50) · Tiên thiên: Thiên cơ ghét bỏ, Vụng về, Thể nhược
 Tính cách lúc sinh : Tính tình +5, Xử thế +4, Đạo đức 0, Tu dưỡng +3
 Sau tuổi thơ       : Tính tình +4, Xử thế +6.9, Đạo đức +3, Tu dưỡng +7.9 → Khắc kỷ, khéo léo
-Cuối cuộc          : Tính tình +5.8, Xử thế +8.2, Đạo đức +8, Tu dưỡng +9.3 → Khắc kỷ, khéo léo
-Khí vận: đầu 4, kiếm +2, tiêu −0, cuối 6
-Mất sau 57.3 năm, 70 tuổi, cảnh giới Phàm nhân (thọ nguyên cạn kiệt). Hộp quyết định: truyện 8, vòng quay 2, khác 15.
+Cuối cuộc          : Tính tình +6.7, Xử thế +8.7, Đạo đức +8.5, Tu dưỡng +9.8 → Khắc kỷ, khéo léo
+Khí vận: đầu 4, kiếm +3, tiêu −0, cuối 7
+Còn sống sau 80 năm, 92 tuổi, cảnh giới Luyện Khí. Hộp quyết định: truyện 12, vòng quay 2, khác 23.
 
 --- Tuổi thơ ---
 Hồi 1 (0 đến 3 tuổi):
@@ -24,19 +24,27 @@ Mầm xanh (xong: Bước chân đầu vững)
   • Người dẫn đường: Xin theo Giang Bác học đạo
   • Đêm đầu tiên nản lòng: Cắn răng ngồi tiếp tới sáng
   • Bước chân đầu vững
+Duyên gặp nơi chợ đêm (xong: Duyên chưa đủ)
+  • Chợ đêm: Bước lại hỏi Tống Trạch Lạc đang tìm gì
+  • Quen dần: Giữ khoảng cách cho khỏi vướng víu
+  • Duyên chưa đủ
 Ngưỡng cửa (xong: Đứng vững trên ngưỡng cửa)
   • Hai ngả: Về quê giúp nhà qua mùa này
   • Cái giá của lựa chọn: Ghi nhớ trong lòng rồi tu tiếp
   • Đứng vững trên ngưỡng cửa
 Nền móng (xong: Tâm sáng như gương)
-  • Kẻ xin tha: Tha cho Tiêu Hiên
+  • Kẻ xin tha: Tha cho Tống Trạch Lạc
   • Tâm ma: Ngồi xuống đối mặt với nó
-  • Vòng quay 100: Tâm sáng như gương
+  • Vòng quay 71: Tâm sáng như gương
   • Tâm sáng như gương
 Vị thế (xong: Có tên trong chuyện cũ)
   • Cơn sóng đổi thế cuộc: Đóng cửa đứng ngoài cuộc
   • Khi khói tan: Nhận lấy tiếng tăm người ta gán cho
   • Có tên trong chuyện cũ
+Đạo quả (xong: Một cơ nghiệp nhỏ)
+  • Người xin học: Từ chối, giữ lối độc hành
+  • Bạn cũ trở lại: Cùng Mộ Dung Nguyệt Liên gây dựng nghiệp chung
+  • Một cơ nghiệp nhỏ
 
 --- Nhật ký ---
 [ 12 tuổi] Bạn sinh ra trong hoàn cảnh «Nông hộ» tại Độc Thủy Tộc Doanh (Độc Thủy tộc), vùng Vụ Trạch.
@@ -66,359 +74,460 @@ Vị thế (xong: Có tên trong chuyện cũ)
 [ 15 tuổi] Tuổi 15: tu vi +2.
 [ 15 tuổi] Tin đồn: Rừng Chết sắp mở cửa sau khoảng 1.4 năm.
 [ 15 tuổi] Chiến loạn bùng lên ở Vụ Trạch: Kim Phong Môn đánh Âm Hồn Giáo.
+[ 16 tuổi] [Duyên gặp nơi chợ đêm] Chợ đêm: Bước lại hỏi Tống Trạch Lạc đang tìm gì.
 [ 16 tuổi] Tuổi 16: tu vi +1.
-[ 16 tuổi] Bị thương ở Miếu Vụ Trạch, sinh lực -21.
-[ 16 tuổi] Quy tắc nếu-thì: sinh lực dưới 30%, bạn nghỉ ngơi dưỡng sức.
+[ 16 tuổi] [Duyên gặp nơi chợ đêm] Quen dần: Giữ khoảng cách cho khỏi vướng víu.
+[ 16 tuổi] [Duyên gặp nơi chợ đêm] Bạn và Tống Trạch Lạc rồi đi hai ngả. Có những người chỉ gặp nhau trong một đêm chợ.
 [ 16 tuổi] Thiên Cơ Báo số 1 vừa phát hành (bốn năm từ năm 1 tới năm 5).
-[ 17 tuổi] Tuổi 17: dưỡng sức.
-[ 17 tuổi] Bị thương ở Miếu Vụ Trạch, sinh lực -15.
-[ 18 tuổi] Quy tắc nếu-thì: sinh lực dưới 30%, bạn nghỉ ngơi dưỡng sức.
-[ 18 tuổi] Tuổi 18: dưỡng sức.
+[ 18 tuổi] Tuổi 17: một năm trôi qua yên ả, không có gì đáng kể.
+[ 18 tuổi] Tuổi 18: tu vi +1.
 [ 18 tuổi] [Ngưỡng cửa] Hai ngả: Về quê giúp nhà qua mùa này.
+[ 18 tuổi] Bị thương ở Miếu Vụ Trạch, sinh lực -8.
+[ 18 tuổi] Quy tắc nếu-thì: sinh lực dưới 30%, bạn nghỉ ngơi dưỡng sức.
 [ 18 tuổi] [Ngưỡng cửa] Cái giá của lựa chọn: Ghi nhớ trong lòng rồi tu tiếp.
 [ 18 tuổi] [Ngưỡng cửa] Bạn bước hẳn vào con đường tu hành, mang theo một chuyện nhà không nói ra. Có những thứ chỉ cất được, không bỏ được.
-[ 19 tuổi] Bạn muốn giao du nhưng nơi này vắng vẻ, chẳng gặp ai.
-[ 19 tuổi] Tuổi 19: giao du bạn bè.
-[ 19 tuổi] Bị thương ở Miếu Vụ Trạch, sinh lực -20.
-[ 19 tuổi] Quy tắc nếu-thì: sinh lực dưới 30%, bạn nghỉ ngơi dưỡng sức.
-[ 20 tuổi] Tuổi 20: dưỡng sức.
+[ 19 tuổi] Tuổi 19: tu vi +1.
+[ 19 tuổi] [Thầy tướng xem số] Thầy tướng phán: khí vận của bạn là -16, vận may là -8.
+[ 20 tuổi] Tuổi 20: tu vi +1.
 [ 20 tuổi] Nhận nhiệm vụ dài: Đột phá lên Luyện Khí (trước 38 tuổi).
 [ 20 tuổi] Thiên Đạo ban đại nguyện: Đột phá lên Luyện Khí (trước 38 tuổi).
+[ 20 tuổi] Quy tắc nếu-thì: sinh lực dưới 30%, bạn nghỉ ngơi dưỡng sức.
 [ 20 tuổi] Thiên Cơ Báo số 2 vừa phát hành (bốn năm từ năm 5 tới năm 9).
-[ 21 tuổi] Bị thương ở Miếu Vụ Trạch, sinh lực -9.
+[ 20 tuổi] Tin đồn: Quỷ Mộ Đầm sắp mở cửa sau khoảng 2 năm.
+[ 21 tuổi] Tuổi 21: dưỡng sức.
+[ 21 tuổi] Bị thương ở Miếu Vụ Trạch, sinh lực -20.
 [ 21 tuổi] Quy tắc nếu-thì: sinh lực dưới 30%, bạn nghỉ ngơi dưỡng sức.
-[ 21 tuổi] Bị thương ở Miếu Vụ Trạch, sinh lực -11.
-[ 21 tuổi] Quy tắc nếu-thì: sinh lực dưới 30%, bạn nghỉ ngơi dưỡng sức.
-[ 22 tuổi] Tuổi 21: một năm trôi qua yên ả, không có gì đáng kể.
 [ 22 tuổi] Tuổi 22: dưỡng sức.
-[ 22 tuổi] Ruột thịt Tạ Yên Doanh đã qua đời (không qua khỏi sự kiện "Bệnh tật").
+[ 22 tuổi] Bị thương ở Miếu Vụ Trạch, sinh lực -21.
 [ 22 tuổi] Quy tắc nếu-thì: sinh lực dưới 30%, bạn nghỉ ngơi dưỡng sức.
-[ 23 tuổi] Tuổi 23: tu vi +1.
-[ 23 tuổi] Tin đồn: Luận đạo tại Vụ Thành sắp có đại hội luận đạo sau khoảng 1.8 năm.
-[ 23 tuổi] Tin đồn: Cổ Miếu Ma sắp mở cửa sau khoảng 2.5 năm.
-[ 23 tuổi] Quy tắc nếu-thì: sinh lực dưới 30%, bạn nghỉ ngơi dưỡng sức.
-[ 23 tuổi] Quy tắc nếu-thì: sinh lực dưới 30%, bạn nghỉ ngơi dưỡng sức.
-[ 24 tuổi] Tuổi 24: dưỡng sức.
+[ 23 tuổi] Tuổi 23: dưỡng sức.
+[ 23 tuổi] Đến mùa gặt, bạn chợt nhớ cánh đồng năm cũ và thấy lòng ấm lại. Việc đáng làm thì ít khi làm uổng.
+[ 24 tuổi] Tuổi 24: tu vi +1.
 [ 24 tuổi] Tuổi 24: Thiên cơ điểm +1 (mười hai năm một vòng).
-[ 24 tuổi] Đến mùa gặt, bạn chợt nhớ cánh đồng năm cũ và thấy lòng ấm lại. Việc đáng làm thì ít khi làm uổng.
+[ 24 tuổi] Bị thương ở Miếu Vụ Trạch, sinh lực -20.
+[ 24 tuổi] Quy tắc nếu-thì: sinh lực dưới 30%, bạn nghỉ ngơi dưỡng sức.
 [ 24 tuổi] Thiên Cơ Báo số 3 vừa phát hành (bốn năm từ năm 9 tới năm 13).
-[ 25 tuổi] Tuổi 25: tu vi +2.
 [ 25 tuổi] Quy tắc nếu-thì: sinh lực dưới 30%, bạn nghỉ ngơi dưỡng sức.
+[ 25 tuổi] Bị thương ở Miếu Vụ Trạch, sinh lực -16.
+[ 25 tuổi] Quy tắc nếu-thì: sinh lực dưới 30%, bạn nghỉ ngơi dưỡng sức.
+[ 26 tuổi] Bị thương ở Miếu Vụ Trạch, sinh lực -16.
 [ 26 tuổi] Quy tắc nếu-thì: sinh lực dưới 30%, bạn nghỉ ngơi dưỡng sức.
-[ 26 tuổi] Tuổi 26: dưỡng sức.
-[ 26 tuổi] Bị thương ở Miếu Vụ Trạch, sinh lực -21.
-[ 26 tuổi] Quy tắc nếu-thì: sinh lực dưới 30%, bạn nghỉ ngơi dưỡng sức.
-[ 26 tuổi] Tin đồn: Tuyển đệ tử tại Âm Hồn Giáo sắp mở kỳ tuyển đệ tử sau khoảng 2 năm.
+[ 26 tuổi] Tin đồn: Đấu giá tại Vụ Thành sắp tổ chức phiên đấu giá sau khoảng 1.4 năm.
+[ 26 tuổi] Tin đồn: Tuyển đệ tử tại Âm Hồn Giáo sắp mở kỳ tuyển đệ tử sau khoảng 1.8 năm.
+[ 27 tuổi] Tuổi 25 đến 26: 2 năm trôi qua yên ả, không có gì đáng kể.
 [ 27 tuổi] Tuổi 27: dưỡng sức.
-[ 27 tuổi] Tình cờ gặp một cơ duyên (cơ duyên 1).
-[ 27 tuổi] Nhận nhiệm vụ trung: Tích lũy tu vi thêm 13% nhu cầu của Phàm nhân (trước 35 tuổi).
-[ 27 tuổi] Nhận nhiệm vụ dài: Ghé thêm 3 địa điểm mới ở Vụ Trạch (trước 52 tuổi).
-[ 27 tuổi] Bạn lên đường từ Miếu Vụ Trạch tới Cọc Thôn (đích: Vụ Thành), mất 1 tháng.
-[ 28 tuổi] Bạn đã tới Cọc Thôn.
-[ 28 tuổi] Bạn lên đường từ Cọc Thôn tới Vụ Thành, mất 1 tháng.
-[ 28 tuổi] Tuổi 28: trên đường di chuyển.
-[ 28 tuổi] Bạn đã tới Vụ Thành.
-[ 28 tuổi] Tin đồn: Quỷ Mộ Đầm sắp mở cửa sau khoảng 1.4 năm.
-[ 28 tuổi] Bạn lên đường từ Vụ Thành tới Cọc Thôn, mất 1 tháng.
-[ 28 tuổi] Bạn đã tới Cọc Thôn.
-[ 28 tuổi] Bạn lên đường từ Cọc Thôn tới Độc Thủy Tộc Doanh (đích: Am Vụ Trạch), mất 2 tháng.
+[ 27 tuổi] Nhận nhiệm vụ trung: Tích lũy tu vi thêm 10% nhu cầu của Phàm nhân (trước 33 tuổi).
+[ 27 tuổi] Nhận nhiệm vụ dài: Đột phá lên Luyện Khí (trước 53 tuổi).
+[ 28 tuổi] Tuổi 28: dưỡng sức.
+[ 28 tuổi] Bị thương ở Miếu Vụ Trạch, sinh lực -21.
+[ 28 tuổi] Quy tắc nếu-thì: sinh lực dưới 30%, bạn nghỉ ngơi dưỡng sức.
 [ 28 tuổi] Thiên Cơ Báo số 4 vừa phát hành (bốn năm từ năm 13 tới năm 17).
-[ 28 tuổi] Bạn đã tới Độc Thủy Tộc Doanh.
-[ 28 tuổi] Bạn lên đường từ Độc Thủy Tộc Doanh tới Am Vụ Trạch, mất 1 tháng.
-[ 29 tuổi] Bạn đã tới Am Vụ Trạch.
-[ 29 tuổi] Tuổi 29: trên đường di chuyển.
-[ 29 tuổi] Hoàn thành nhiệm vụ: Ghé thêm 3 địa điểm mới ở Vụ Trạch.
-[ 29 tuổi] Quy tắc nếu-thì: sinh lực dưới 30%, bạn nghỉ ngơi dưỡng sức.
-[ 30 tuổi] Tuổi 30: dưỡng sức.
-[ 30 tuổi] [Chiếc nhẫn kỳ lạ] Bạn vứt nhẫn đi. Cẩn tắc vô áy náy.
+[ 29 tuổi] Tuổi 29: dưỡng sức.
+[ 29 tuổi] Bạn muốn giao du nhưng nơi này vắng vẻ, chẳng gặp ai.
+[ 30 tuổi] Tuổi 30: tu vi +1.
 [ 30 tuổi] Quy tắc nếu-thì: sinh lực dưới 30%, bạn nghỉ ngơi dưỡng sức.
-[ 31 tuổi] Bị thương ở Am Vụ Trạch, sinh lực -17.
 [ 31 tuổi] Tuổi 31: dưỡng sức.
-[ 31 tuổi] Quy tắc nếu-thì: sinh lực dưới 30%, bạn nghỉ ngơi dưỡng sức.
-[ 31 tuổi] Quy tắc nếu-thì: sinh lực dưới 30%, bạn nghỉ ngơi dưỡng sức.
-[ 31 tuổi] Bị thương ở Am Vụ Trạch, sinh lực -13.
-[ 32 tuổi] Quy tắc nếu-thì: sinh lực dưới 30%, bạn nghỉ ngơi dưỡng sức.
 [ 32 tuổi] Tuổi 32: dưỡng sức.
-[ 32 tuổi] Thiên Cơ Báo số 5 vừa phát hành (bốn năm từ năm 17 tới năm 21).
+[ 32 tuổi] Ruột thịt Tạ Yên Doanh đã qua đời (thọ nguyên cạn kiệt).
+[ 32 tuổi] Tin đồn: Tuyển đệ tử tại Âm Hồn Giáo sắp mở kỳ tuyển đệ tử sau khoảng 1.9 năm.
+[ 32 tuổi] [Chiếc nhẫn kỳ lạ] Bạn vứt nhẫn đi. Cẩn tắc vô áy náy.
+[ 32 tuổi] Bị thương ở Miếu Vụ Trạch, sinh lực -22.
 [ 32 tuổi] Quy tắc nếu-thì: sinh lực dưới 30%, bạn nghỉ ngơi dưỡng sức.
+[ 32 tuổi] Thiên Cơ Báo số 5 vừa phát hành (bốn năm từ năm 17 tới năm 21).
+[ 33 tuổi] Tuổi 33: dưỡng sức.
+[ 33 tuổi] Hoàn thành nhiệm vụ: Tích lũy tu vi thêm 10% nhu cầu của Phàm nhân.
 [ 33 tuổi] Nhiệm vụ cấp bách: Đột phá lên Luyện Khí.
-[ 33 tuổi] Quy tắc nếu-thì: sinh lực dưới 30%, bạn nghỉ ngơi dưỡng sức.
-[ 33 tuổi] Quy tắc nếu-thì: sinh lực dưới 30%, bạn nghỉ ngơi dưỡng sức.
-[ 34 tuổi] Tuổi 33: một năm trôi qua yên ả, không có gì đáng kể.
-[ 34 tuổi] Tuổi 34: dưỡng sức.
-[ 34 tuổi] Bị thương ở Miếu Vụ Trạch, sinh lực -16.
-[ 35 tuổi] Quy tắc nếu-thì: sinh lực dưới 30%, bạn nghỉ ngơi dưỡng sức.
-[ 35 tuổi] Tuổi 35: dưỡng sức.
-[ 35 tuổi] Hoàn thành nhiệm vụ: Tích lũy tu vi thêm 13% nhu cầu của Phàm nhân.
+[ 35 tuổi] Tuổi 34: một năm trôi qua yên ả, không có gì đáng kể.
+[ 35 tuổi] Tuổi 35: tu vi +2.
 [ 35 tuổi] Tính cách đổi: Đạo đức của lòng bạn đã nhân hậu hơn, nay là "Nhân hậu trọng nghĩa".
-[ 35 tuổi] [Nền móng] Kẻ xin tha: Tha cho Tiêu Hiên.
+[ 35 tuổi] [Nền móng] Kẻ xin tha: Tha cho Tống Trạch Lạc.
 [ 35 tuổi] [Nền móng] Tâm ma: Ngồi xuống đối mặt với nó.
-[ 35 tuổi] Vòng quay: 100 → vùng "Tâm sáng như gương" (yếu tố Tu dưỡng +9, bạn khắc kỷ chuyên tâm, +14).
+[ 35 tuổi] Vòng quay: 71 → vùng "Tâm sáng như gương" (yếu tố Tu dưỡng +9.3, bạn khắc kỷ chuyên tâm, +14).
 [ 35 tuổi] Khí vận +1 (vòng quay vùng cao nhất).
 [ 35 tuổi] [Nền móng] Tâm sáng như gương.
 [ 35 tuổi] [Nền móng] Bạn nhìn thẳng vào nó và nó lui đi. Từ nay nền móng của bạn vững hơn nhiều người cùng cảnh giới.
 [ 35 tuổi] Khí vận +1 (truyện Nền móng).
+[ 35 tuổi] Bạn muốn giao du nhưng nơi này vắng vẻ, chẳng gặp ai.
+[ 36 tuổi] Tuổi 36: dưỡng sức.
 [ 36 tuổi] Tuổi 36: Thiên cơ điểm +1 (mười hai năm một vòng).
-[ 36 tuổi] Bị thương ở Miếu Vụ Trạch, sinh lực -9.
+[ 36 tuổi] Bị thương ở Am Vụ Trạch, sinh lực -15.
 [ 36 tuổi] Quy tắc nếu-thì: sinh lực dưới 30%, bạn nghỉ ngơi dưỡng sức.
 [ 36 tuổi] Thiên Cơ Báo số 6 vừa phát hành (bốn năm từ năm 21 tới năm 25).
-[ 37 tuổi] Tuổi 36: một năm trôi qua yên ả, không có gì đáng kể.
-[ 37 tuổi] Tuổi 37: tu vi +1.
-[ 37 tuổi] Ngã rẽ: bạn đổi sang đạo giao du.
-[ 37 tuổi] Ngã rẽ: bạn vẫn kiên định với đạo giao du (đã đi 0 năm).
-[ 37 tuổi] Bạn trò chuyện cùng Tiêu Hiên ở Miếu Vụ Trạch.
-[ 38 tuổi] Tiêu Hiên trò chuyện cùng bạn ở Miếu Vụ Trạch. Quan hệ với Tiêu Hiên giờ là: Bạn bè.
-[ 38 tuổi] Tuổi 38: luyện nghề.
+[ 37 tuổi] Tuổi 37: dưỡng sức.
+[ 37 tuổi] Bị thương ở Am Vụ Trạch, sinh lực -22.
+[ 37 tuổi] Quy tắc nếu-thì: sinh lực dưới 30%, bạn nghỉ ngơi dưỡng sức.
+[ 37 tuổi] Ngã rẽ: bạn đổi sang đạo luyện nghề.
+[ 37 tuổi] Bạn chọn nghề chính: Dược sư (Học đồ).
+[ 38 tuổi] Tuổi 38: dưỡng sức.
 [ 38 tuổi] Thương tích nhẹ: sinh lực tối đa -10%, tu luyện chậm 15% trong 8 tháng (nghỉ ngơi lành nhanh gấp đôi).
 [ 38 tuổi] Nhiệm vụ thất bại: Đột phá lên Luyện Khí.
-[ 38 tuổi] Bạn trò chuyện cùng Tiêu Hiên ở Miếu Vụ Trạch.
-[ 38 tuổi] Bạn trò chuyện cùng Tiêu Hiên ở Miếu Vụ Trạch.
-[ 38 tuổi] Bạn trò chuyện cùng Tiêu Hiên ở Miếu Vụ Trạch.
-[ 38 tuổi] Bạn trò chuyện cùng Tiêu Hiên ở Miếu Vụ Trạch.
-[ 38 tuổi] Bạn trò chuyện cùng Tiêu Hiên ở Miếu Vụ Trạch.
-[ 38 tuổi] [Kết nghĩa] Hai người cắt máu ăn thề. Tiêu Hiên từ nay là huynh đệ kết nghĩa của bạn, đạo tâm bạn vững thêm.
-[ 38 tuổi] Bạn trò chuyện cùng Tiêu Hiên ở Miếu Vụ Trạch.
-[ 38 tuổi] Bạn trò chuyện cùng Tiêu Hiên ở Miếu Vụ Trạch.
-[ 38 tuổi] Bạn trò chuyện cùng Tiêu Hiên ở Miếu Vụ Trạch.
-[ 38 tuổi] Quy tắc nếu-thì: sinh lực dưới 30%, bạn nghỉ ngơi dưỡng sức.
-[ 39 tuổi] Bạn trò chuyện cùng Tiêu Hiên ở Miếu Vụ Trạch.
-[ 39 tuổi] Tuổi 39: giao du bạn bè.
-[ 39 tuổi] Bạn trò chuyện cùng Tiêu Hiên ở Miếu Vụ Trạch.
-[ 39 tuổi] Bạn trò chuyện cùng Tiêu Hiên ở Miếu Vụ Trạch.
-[ 39 tuổi] Bạn trò chuyện cùng Tiêu Hiên ở Miếu Vụ Trạch.
-[ 39 tuổi] Nhận nhiệm vụ dài: Ghé thêm 4 địa điểm mới ở Vụ Trạch (trước 55 tuổi).
-[ 39 tuổi] Nhận nhiệm vụ trung: Tích lũy tu vi thêm 21% nhu cầu của Phàm nhân (trước 49 tuổi).
-[ 39 tuổi] Bạn trò chuyện cùng Tiêu Hiên ở Miếu Vụ Trạch.
-[ 40 tuổi] Bạn trò chuyện cùng Tiêu Hiên ở Miếu Vụ Trạch.
-[ 40 tuổi] Bạn lên đường từ Miếu Vụ Trạch tới Độc Thủy Tộc Doanh (đích: Từ đường lớn Vụ Trạch), mất 1 tháng.
-[ 40 tuổi] Tuổi 40: giao du bạn bè.
-[ 40 tuổi] Bạn đã tới Độc Thủy Tộc Doanh.
-[ 40 tuổi] Bạn lên đường từ Độc Thủy Tộc Doanh tới Cọc Thôn (đích: Từ đường lớn Vụ Trạch), mất 2 tháng.
-[ 40 tuổi] Bạn đã tới Cọc Thôn.
-[ 40 tuổi] Bạn lên đường từ Cọc Thôn tới Vụ Thành (đích: Từ đường lớn Vụ Trạch), mất 1 tháng.
-[ 40 tuổi] Bạn đã tới Vụ Thành.
-[ 40 tuổi] Bạn lên đường từ Vụ Thành tới Từ đường lớn Vụ Trạch, mất 1 tháng.
-[ 40 tuổi] Bạn đã tới Từ đường lớn Vụ Trạch.
-[ 40 tuổi] Bạn cãi nhau với Giang Mặc Hy một trận ở Từ đường lớn Vụ Trạch.
-[ 40 tuổi] Bạn lên đường từ Từ đường lớn Vụ Trạch tới Vụ Thành (đích: Vụ Trạch Quan), mất 1 tháng.
-[ 40 tuổi] Bạn đã tới Vụ Thành.
-[ 40 tuổi] Bạn lên đường từ Vụ Thành tới Vụ Trạch Quan, mất 3 tháng.
+[ 38 tuổi] Tin đồn: Cao nhân tại Âm Hồn Giáo sẽ tới giảng đạo sau khoảng 1.1 năm.
+[ 38 tuổi] Bạn muốn giao du nhưng nơi này vắng vẻ, chẳng gặp ai.
+[ 40 tuổi] Tuổi 39: một năm trôi qua yên ả, không có gì đáng kể.
+[ 40 tuổi] Tuổi 40: thân thể cường tráng hơn.
+[ 40 tuổi] Tin đồn: Tuyển đệ tử tại Âm Hồn Giáo sắp mở kỳ tuyển đệ tử sau khoảng 1.8 năm.
+[ 40 tuổi] Tin đồn: Cao nhân tại Sương Mù Cốc sẽ tới giảng đạo sau khoảng 0.7 năm.
+[ 40 tuổi] Luyện đan đạt cấp 1!
+[ 40 tuổi] Tống Trạch Lạc tìm tới, đặt xuống một túi nhỏ: "Mạng này ta nhớ." Hắn không nói thêm gì, mà bạn biết lời ấy là thật.
 [ 40 tuổi] Thiên Cơ Báo số 7 vừa phát hành (bốn năm từ năm 25 tới năm 29).
-[ 41 tuổi] Bạn đã tới Vụ Trạch Quan.
-[ 41 tuổi] Tuổi 41: trên đường di chuyển.
+[ 40 tuổi] Luyện đan thành công: Hồi Xuân Đan.
+[ 40 tuổi] Bạn uống Hồi Xuân Đan, sinh lực hồi 42.
+[ 41 tuổi] Tuổi 41: tu vi +1.
 [ 41 tuổi] Ruột thịt Giang Bác đã qua đời (thọ nguyên cạn kiệt).
-[ 41 tuổi] Kết nghĩa Tiêu Hiên đã qua đời (không qua khỏi sự kiện "Bệnh tật").
-[ 41 tuổi] Bạn trò chuyện cùng Hạ Thanh Vi ở Vụ Trạch Quan.
-[ 41 tuổi] Tin đồn: Rừng Chết sắp mở cửa sau khoảng 1.2 năm.
-[ 41 tuổi] Hạ Thanh Vi tặng bạn 40 vàng ở Vụ Trạch Quan. Quan hệ với Hạ Thanh Vi giờ là: Quen biết.
-[ 41 tuổi] Tin đồn: Cổ Miếu Ma sắp mở cửa sau khoảng 2.2 năm.
-[ 41 tuổi] Bạn trò chuyện cùng Hạ Thanh Vi ở Vụ Trạch Quan.
-[ 41 tuổi] Bị thương ở Vụ Trạch Quan, sinh lực -22.
-[ 42 tuổi] Quy tắc nếu-thì: sinh lực dưới 30%, bạn nghỉ ngơi dưỡng sức.
-[ 42 tuổi] Tuổi 42: dưỡng sức.
-[ 42 tuổi] Bạn lên đường từ Vụ Trạch Quan tới Vụ Thành (đích: Âm Hồn Giáo), mất 3 tháng.
-[ 42 tuổi] Bạn đã tới Vụ Thành.
-[ 42 tuổi] Bạn lên đường từ Vụ Thành tới Âm Hồn Giáo, mất 2 tháng.
-[ 42 tuổi] Bạn đã tới Âm Hồn Giáo.
-[ 42 tuổi] Bạn quyết định tới Cổ Miếu Ma để dự: Cổ Miếu Ma.
-[ 42 tuổi] Bạn lên đường từ Âm Hồn Giáo tới Vụ Thành (đích: Cổ Miếu Ma), mất 2 tháng.
-[ 42 tuổi] Bạn đã tới Vụ Thành.
-[ 42 tuổi] Bạn lên đường từ Vụ Thành tới Hắc Thị Trạch (đích: Cổ Miếu Ma), mất 1 tháng.
-[ 43 tuổi] Bạn đã tới Hắc Thị Trạch.
-[ 43 tuổi] Bạn lên đường từ Hắc Thị Trạch tới Cổ Miếu Ma, mất 2 tháng.
-[ 43 tuổi] Tuổi 43: trên đường di chuyển.
-[ 43 tuổi] Bạn đã tới Cổ Miếu Ma.
-[ 43 tuổi] Tiêu Hiên tìm tới, đặt xuống một túi nhỏ: "Mạng này ta nhớ." Hắn không nói thêm gì, mà bạn biết lời ấy là thật.
-[ 43 tuổi] Tình cờ gặp một cơ duyên (cơ duyên 2).
-[ 43 tuổi] [Bí cảnh mở cửa] Bạn đứng ngoài nhìn người ta ra vào, không dám liều.
-[ 44 tuổi] Tuổi 44: dưỡng sức.
-[ 44 tuổi] Hoàn thành nhiệm vụ: Ghé thêm 4 địa điểm mới ở Vụ Trạch.
-[ 44 tuổi] Bị thương ở Cổ Miếu Ma, sinh lực -13.
-[ 44 tuổi] Quy tắc nếu-thì: sinh lực dưới 30%, bạn nghỉ ngơi dưỡng sức.
-[ 44 tuổi] Bạn lên đường từ Cổ Miếu Ma tới Hắc Thị Trạch (đích: Vụ Thành), mất 2 tháng.
-[ 44 tuổi] Bạn đã tới Hắc Thị Trạch.
-[ 44 tuổi] Bạn lên đường từ Hắc Thị Trạch tới Vụ Thành, mất 1 tháng.
-[ 44 tuổi] Bạn đã tới Vụ Thành.
+[ 41 tuổi] Bạn muốn giao du nhưng nơi này vắng vẻ, chẳng gặp ai.
+[ 41 tuổi] Bạn muốn giao du nhưng nơi này vắng vẻ, chẳng gặp ai.
+[ 42 tuổi] Tuổi 42: luyện nghề.
+[ 42 tuổi] Linh thảo sắp hết hạn (còn 3 tháng), nên dùng hoặc bán sớm.
+[ 42 tuổi] 1 Linh thảo đã hết hạn và hỏng.
+[ 42 tuổi] Tin đồn: Cao nhân tại Vụ Thành sẽ tới giảng đạo sau khoảng 0.6 năm.
+[ 42 tuổi] Nhận nhiệm vụ ngắn: Tích lũy tu vi thêm 6% nhu cầu của Phàm nhân (trước 45 tuổi).
+[ 42 tuổi] Nhận nhiệm vụ trung: Đột phá lên Luyện Khí (trước 52 tuổi).
+[ 42 tuổi] Bạn đi thu thập Linh thảo để luyện nghề.
+[ 42 tuổi] Bị thương ở Am Vụ Trạch, sinh lực -13.
+[ 43 tuổi] Bạn đi thu thập Linh thảo để luyện nghề.
+[ 43 tuổi] Tuổi 43: luyện nghề.
+[ 43 tuổi] Linh thảo sắp hết hạn (còn 3 tháng), nên dùng hoặc bán sớm.
+[ 43 tuổi] Luyện đan đạt cấp 2!
+[ 43 tuổi] Luyện đan đã chạm trần cấp 2. Cần thành viên tông môn chuyên nghề hoặc tâm đắc và cảnh giới cao hơn để tiến thêm.
+[ 44 tuổi] Tuổi 44: luyện nghề.
+[ 44 tuổi] Bạn uống Hồi Xuân Đan, sinh lực hồi 43.
+[ 44 tuổi] Chiến loạn bùng lên ở Vụ Trạch: Kim Phong Môn đánh Âm Hồn Giáo.
 [ 44 tuổi] Thiên Cơ Báo số 8 vừa phát hành (bốn năm từ năm 29 tới năm 33).
-[ 45 tuổi] Tuổi 45: dưỡng sức.
-[ 45 tuổi] Bạn lĩnh ngộ tâm pháp Tĩnh Tâm Chú (tốn 5 đạo điểm).
-[ 45 tuổi] Bạn trò chuyện cùng Tạ Nhiên ở Vụ Thành.
-[ 45 tuổi] Bạn trò chuyện cùng Khúc Sơn ở Vụ Thành.
-[ 46 tuổi] Bạn tặng Mộ Dung Trạch Sơn 5 vàng ở Vụ Thành.
-[ 46 tuổi] Tuổi 46: giao du bạn bè.
-[ 46 tuổi] Nhiệm vụ cấp bách: Tích lũy tu vi thêm 21% nhu cầu của Phàm nhân.
-[ 46 tuổi] Nhận nhiệm vụ dài: Đột phá lên Luyện Khí (trước 61 tuổi).
-[ 46 tuổi] Thiên Đạo ban đại nguyện: Đột phá lên Luyện Khí (trước 61 tuổi).
-[ 46 tuổi] Bạn tặng Khúc Sơn 15 vàng ở Vụ Thành. Quan hệ với Khúc Sơn giờ là: Quen biết.
-[ 46 tuổi] Bạn trò chuyện cùng Tạ Nhiên ở Vụ Thành.
-[ 46 tuổi] Âu Dương Lam tặng bạn 10 vàng ở Vụ Thành.
-[ 46 tuổi] Bạn tặng Tạ Nhiên 8 vàng ở Vụ Thành. Quan hệ với Tạ Nhiên giờ là: Quen biết.
-[ 46 tuổi] Bạn trò chuyện cùng Âu Dương Lam ở Vụ Thành.
-[ 46 tuổi] Bạn trò chuyện cùng Âu Dương Lam ở Vụ Thành. Quan hệ với Âu Dương Lam giờ là: Quen biết.
-[ 46 tuổi] Bạn trò chuyện cùng Tạ Nhiên ở Vụ Thành.
-[ 47 tuổi] Bạn cãi nhau với Tạ Nhiên một trận ở Vụ Thành.
-[ 47 tuổi] Tuổi 47: giao du bạn bè.
-[ 47 tuổi] Tạ Nhiên cãi nhau với bạn một trận ở Vụ Thành. Quan hệ với Tạ Nhiên giờ là: Xa lạ.
-[ 47 tuổi] Bạn trò chuyện cùng Âu Dương Lam ở Vụ Thành.
-[ 47 tuổi] Bạn trò chuyện cùng Khúc Sơn ở Vụ Thành.
-[ 47 tuổi] Bạn trò chuyện cùng Khúc Sơn ở Vụ Thành.
-[ 47 tuổi] Bạn trò chuyện cùng Âu Dương Lam ở Vụ Thành.
-[ 47 tuổi] [Cao nhân chỉ điểm] Lời chỉ điểm khiến bạn sáng ra nhiều điều. Tu vi tăng, vận may tăng.
-[ 48 tuổi] Bạn cãi nhau với Âu Dương Lam một trận ở Vụ Thành.
-[ 48 tuổi] Tuổi 48: giao du bạn bè.
+[ 45 tuổi] Tuổi 45: luyện nghề.
+[ 45 tuổi] Nhiệm vụ thất bại: Tích lũy tu vi thêm 6% nhu cầu của Phàm nhân.
+[ 45 tuổi] Bạn đi thu thập Linh thảo để luyện nghề.
+[ 45 tuổi] Bị thương ở Am Vụ Trạch, sinh lực -20.
+[ 45 tuổi] Bạn trò chuyện cùng Tiêu Hiên ở Am Vụ Trạch.
+[ 45 tuổi] Bị thương ở Am Vụ Trạch, sinh lực -17.
+[ 45 tuổi] Quy tắc nếu-thì: sinh lực dưới 30%, bạn nghỉ ngơi dưỡng sức.
+[ 45 tuổi] Linh thảo sắp hết hạn (còn 3 tháng), nên dùng hoặc bán sớm.
+[ 46 tuổi] Tuổi 46: dưỡng sức.
+[ 46 tuổi] Nhận nhiệm vụ dài: Ghé thêm 5 địa điểm mới ở Vụ Trạch (trước 61 tuổi).
+[ 46 tuổi] Thiên Đạo ban đại nguyện: Ghé thêm 5 địa điểm mới ở Vụ Trạch (trước 61 tuổi).
+[ 46 tuổi] Bạn lên đường từ Am Vụ Trạch tới Cọc Thôn (đích: Vụ Thành), mất 1 tháng.
+[ 46 tuổi] Bạn đã tới Cọc Thôn.
+[ 46 tuổi] Bạn lên đường từ Cọc Thôn tới Vụ Thành, mất 1 tháng.
+[ 46 tuổi] 2 Linh thảo đã hết hạn và hỏng.
+[ 46 tuổi] Bạn đã tới Vụ Thành.
+[ 46 tuổi] Bạn lên đường từ Vụ Thành tới Cọc Thôn, mất 1 tháng.
+[ 46 tuổi] Bạn đã tới Cọc Thôn.
+[ 46 tuổi] Bạn lên đường từ Cọc Thôn tới Độc Thủy Tộc Doanh (đích: Miếu Vụ Trạch), mất 2 tháng.
+[ 46 tuổi] Bạn đã tới Độc Thủy Tộc Doanh.
+[ 46 tuổi] Bạn lên đường từ Độc Thủy Tộc Doanh tới Miếu Vụ Trạch, mất 1 tháng.
+[ 47 tuổi] Bạn đã tới Miếu Vụ Trạch.
+[ 47 tuổi] Tuổi 47: trên đường di chuyển.
+[ 47 tuổi] [Từ hôn] Bạn nhận 10 vàng đền bù và rời đi, nhẹ nhõm bất ngờ.
+[ 48 tuổi] Tuổi 48: thân thể cường tráng hơn.
 [ 48 tuổi] Tuổi 48: Thiên cơ điểm +1 (mười hai năm một vòng).
-[ 48 tuổi] Bạn tặng Tạ Nhiên 8 vàng ở Vụ Thành. Quan hệ với Tạ Nhiên giờ là: Quen biết.
-[ 48 tuổi] Bị thương ở Vụ Thành, sinh lực -12.
-[ 48 tuổi] Quy tắc nếu-thì: sinh lực dưới 30%, bạn nghỉ ngơi dưỡng sức.
-[ 48 tuổi] Bị thương ở Vụ Thành, sinh lực -10.
-[ 48 tuổi] Quy tắc nếu-thì: sinh lực dưới 30%, bạn nghỉ ngơi dưỡng sức.
+[ 48 tuổi] Bạn trò chuyện cùng Tống Trạch Lạc ở Miếu Vụ Trạch.
+[ 48 tuổi] Bạn lên đường từ Miếu Vụ Trạch tới Độc Thủy Tộc Doanh (đích: Vụ Trạch Quan), mất 1 tháng.
+[ 48 tuổi] Bạn đã tới Độc Thủy Tộc Doanh.
+[ 48 tuổi] Bạn lên đường từ Độc Thủy Tộc Doanh tới Cọc Thôn (đích: Vụ Trạch Quan), mất 2 tháng.
+[ 48 tuổi] Bạn đã tới Cọc Thôn.
+[ 48 tuổi] Bạn lên đường từ Cọc Thôn tới Vụ Thành (đích: Vụ Trạch Quan), mất 1 tháng.
+[ 48 tuổi] Bạn đã tới Vụ Thành.
+[ 48 tuổi] Bạn lên đường từ Vụ Thành tới Vụ Trạch Quan, mất 3 tháng.
 [ 48 tuổi] Thiên Cơ Báo số 9 vừa phát hành (bốn năm từ năm 33 tới năm 37).
-[ 49 tuổi] Tuổi 49: dưỡng sức.
-[ 49 tuổi] Nhiệm vụ thất bại: Tích lũy tu vi thêm 21% nhu cầu của Phàm nhân.
-[ 49 tuổi] Bạn mua Linh thảo ở hoi, giá 6 vàng.
-[ 49 tuổi] Bạn mua Linh thảo ở hoi, giá 6 vàng.
-[ 49 tuổi] Bạn mua Linh thảo ở hoi, giá 6 vàng.
-[ 49 tuổi] Bạn trò chuyện cùng Mộ Dung Trạch Sơn ở Vụ Thành. Quan hệ với Mộ Dung Trạch Sơn giờ là: Quen biết.
-[ 49 tuổi] Bạn trò chuyện cùng Tạ Nhiên ở Vụ Thành.
-[ 49 tuổi] Bạn trò chuyện cùng Khúc Sơn ở Vụ Thành.
+[ 48 tuổi] Bạn đã tới Vụ Trạch Quan.
+[ 48 tuổi] Bạn lên đường từ Vụ Trạch Quan tới Vụ Thành (đích: Từ đường lớn Vụ Trạch), mất 3 tháng.
+[ 49 tuổi] Tuổi 49: trên đường di chuyển.
+[ 49 tuổi] Nhiệm vụ cấp bách: Đột phá lên Luyện Khí.
+[ 49 tuổi] Bạn đã tới Vụ Thành.
+[ 49 tuổi] Bạn lên đường từ Vụ Thành tới Từ đường lớn Vụ Trạch, mất 1 tháng.
+[ 49 tuổi] Bạn đã tới Từ đường lớn Vụ Trạch.
+[ 49 tuổi] Quy tắc nếu-thì: sinh lực dưới 30%, bạn nghỉ ngơi dưỡng sức.
+[ 49 tuổi] Bạn lên đường từ Từ đường lớn Vụ Trạch tới Vụ Thành (đích: Âm Hồn Giáo), mất 1 tháng.
+[ 49 tuổi] Bạn đã tới Vụ Thành.
+[ 49 tuổi] Bạn lên đường từ Vụ Thành tới Âm Hồn Giáo, mất 2 tháng.
+[ 49 tuổi] Bạn đã tới Âm Hồn Giáo.
 [ 50 tuổi] Tuổi 50: rong ruổi tìm cơ duyên.
-[ 50 tuổi] Bạn trò chuyện cùng Tạ Nhiên ở Vụ Thành.
-[ 50 tuổi] Bạn cãi nhau với Mộ Dung Trạch Sơn một trận ở Vụ Thành. Quan hệ với Mộ Dung Trạch Sơn giờ là: Xa lạ.
-[ 50 tuổi] Bạn trò chuyện cùng Âu Dương Lam ở Vụ Thành. Quan hệ với Âu Dương Lam giờ là: Bạn bè.
-[ 50 tuổi] Quy tắc nếu-thì: sinh lực dưới 30%, bạn nghỉ ngơi dưỡng sức.
-[ 50 tuổi] Bạn trò chuyện cùng Mộ Dung Trạch Sơn ở Vụ Thành.
-[ 51 tuổi] Quy tắc nếu-thì: sinh lực dưới 30%, bạn nghỉ ngơi dưỡng sức.
-[ 51 tuổi] Tuổi 51: dưỡng sức.
-[ 51 tuổi] Bạn trò chuyện cùng Tạ Nhiên ở Vụ Thành.
-[ 51 tuổi] Bạn trò chuyện cùng Âu Dương Lam ở Vụ Thành.
-[ 51 tuổi] Bạn trò chuyện cùng Âu Dương Lam ở Vụ Thành.
-[ 51 tuổi] Bạn trò chuyện cùng Mộ Dung Trạch Sơn ở Vụ Thành. Quan hệ với Mộ Dung Trạch Sơn giờ là: Quen biết.
-[ 51 tuổi] Nhận nhiệm vụ trung: Ghé thêm 2 địa điểm mới ở Vụ Trạch (trước 58 tuổi).
-[ 51 tuổi] Bạn trò chuyện cùng Khúc Sơn ở Vụ Thành.
-[ 51 tuổi] Bạn trò chuyện cùng Tạ Nhiên ở Vụ Thành.
-[ 52 tuổi] Tuổi 52: dưỡng sức.
-[ 52 tuổi] Bạn trò chuyện cùng Tạ Nhiên ở Vụ Thành.
-[ 52 tuổi] Bạn tâm sự cùng Âu Dương Lam dưới trăng, hai bên thấy gần nhau hơn ở Vụ Thành.
-[ 52 tuổi] Bạn trò chuyện cùng Âu Dương Lam ở Vụ Thành.
-[ 52 tuổi] Tin đồn: Cổ Miếu Ma sắp mở cửa sau khoảng 1.7 năm.
-[ 52 tuổi] Bạn bán 1 Linh thảo ở cho, được 1 vàng.
-[ 52 tuổi] Thấy Linh thảo sắp hỏng, bạn tự bán bớt.
-[ 52 tuổi] Bạn quyết định tới Cổ Miếu Ma để dự: Cổ Miếu Ma.
-[ 52 tuổi] Bạn lên đường từ Vụ Thành tới Hắc Thị Trạch (đích: Cổ Miếu Ma), mất 1 tháng.
-[ 52 tuổi] Bạn đã tới Hắc Thị Trạch.
-[ 52 tuổi] Bạn lên đường từ Hắc Thị Trạch tới Cổ Miếu Ma, mất 2 tháng.
-[ 52 tuổi] Bạn đã tới Cổ Miếu Ma.
+[ 50 tuổi] Hoàn thành nhiệm vụ: Ghé thêm 5 địa điểm mới ở Vụ Trạch.
+[ 50 tuổi] Bạn bắt đầu đột phá lên Luyện Khí...
+[ 50 tuổi] Đột phá thành công! Bạn đã đạt cảnh giới Luyện Khí.
+[ 50 tuổi] Thiên cơ điểm +1.
+[ 50 tuổi] Thọ nguyên tăng lên 130 tuổi.
+[ 50 tuổi] Ngã rẽ: bạn đổi sang đạo khổ tu.
+[ 50 tuổi] Ngã rẽ: bạn vẫn kiên định với đạo khổ tu (đã đi 25 năm).
+[ 50 tuổi] Bạn lên đường từ Âm Hồn Giáo tới Vụ Thành, mất 2 tháng.
+[ 50 tuổi] Bạn đã tới Vụ Thành.
+[ 51 tuổi] Tuổi 51: tu vi +3.
+[ 51 tuổi] Bạn lĩnh ngộ tâm pháp Tĩnh Tâm Chú (tốn 5 đạo điểm).
+[ 51 tuổi] Hoàn thành nhiệm vụ: Đột phá lên Luyện Khí.
+[ 51 tuổi] Hoàn thành nhiệm vụ: Đột phá lên Luyện Khí.
+[ 52 tuổi] Tuổi 52: tu vi +3.
+[ 52 tuổi] Bạn cùng Mộ Dung Trạch Sơn đi làm một vụ nhỏ, mỗi người chia 32 vàng ở Vụ Thành.
+[ 52 tuổi] Tin đồn: Luận đạo tại Vụ Thành sắp có đại hội luận đạo sau khoảng 0.8 năm.
+[ 52 tuổi] Tin đồn: Rừng Chết sắp mở cửa sau khoảng 1.8 năm.
+[ 52 tuổi] Bị thương ở Vụ Thành, sinh lực -20.
 [ 52 tuổi] Thiên Cơ Báo số 10 vừa phát hành (bốn năm từ năm 37 tới năm 41).
-[ 52 tuổi] Bạn trò chuyện cùng Liễu Mặc Hy ở Cổ Miếu Ma.
-[ 53 tuổi] Tuổi 53: dưỡng sức.
-[ 53 tuổi] Bạn trò chuyện cùng Liễu Mặc Hy ở Cổ Miếu Ma.
-[ 53 tuổi] Bạn trò chuyện cùng Liễu Mặc Hy ở Cổ Miếu Ma.
-[ 53 tuổi] Bạn trò chuyện cùng Liễu Mặc Hy ở Cổ Miếu Ma.
-[ 53 tuổi] Bạn trò chuyện cùng Liễu Mặc Hy ở Cổ Miếu Ma.
-[ 53 tuổi] Bị thương ở Cổ Miếu Ma, sinh lực -22.
-[ 53 tuổi] Quy tắc nếu-thì: sinh lực dưới 30%, bạn nghỉ ngơi dưỡng sức.
-[ 54 tuổi] Tuổi 54: dưỡng sức.
-[ 54 tuổi] [Bí cảnh mở cửa] Bạn đứng ngoài nhìn người ta ra vào, không dám liều.
-[ 54 tuổi] Bị thương ở Cổ Miếu Ma, sinh lực -15.
-[ 55 tuổi] Tuổi 55: dưỡng sức.
+[ 52 tuổi] Âu Dương Lam tặng bạn 6 vàng ở Vụ Thành.
+[ 52 tuổi] [Đại hội luận đạo] Bạn ngồi dưới lắng nghe, lượm lặt được ít điều hay.
+[ 53 tuổi] Tuổi 53: tu vi +6.
+[ 53 tuổi] Bạn mua Hồi Xuân Đan ở hoi, giá 4.2 linh thạch.
+[ 53 tuổi] Âu Dương Lam cãi nhau với bạn một trận ở Vụ Thành.
+[ 53 tuổi] Bạn tặng Âu Dương Lam 30 vàng ở Vụ Thành.
+[ 53 tuổi] Bạn cùng Khúc Sơn đi làm một vụ nhỏ, mỗi người chia 40 vàng ở Vụ Thành.
+[ 54 tuổi] Tuổi 54: tu vi +4.
+[ 54 tuổi] Bạn bán 1 Hồi Xuân Đan ở dan, được 8 vàng.
+[ 54 tuổi] Thấy Hồi Xuân Đan sắp hỏng, bạn tự bán bớt.
+[ 55 tuổi] Tuổi 55: tu vi +5.
+[ 55 tuổi] Bạn tặng Mộ Dung Trạch Sơn 28 vàng ở Vụ Thành.
 [ 55 tuổi] [Vị thế] Cơn sóng đổi thế cuộc: Đóng cửa đứng ngoài cuộc.
+[ 55 tuổi] Bạn trò chuyện cùng Mộ Dung Trạch Sơn ở Vụ Thành.
 [ 55 tuổi] [Vị thế] Khi khói tan: Nhận lấy tiếng tăm người ta gán cho.
 [ 55 tuổi] [Vị thế] Tên bạn được truyền miệng, lúc khen lúc chê. Bạn hiểu rằng danh tiếng không phải của mình, nó chỉ là bóng của mình trên lời người khác.
-[ 55 tuổi] Bị thương ở Cổ Miếu Ma, sinh lực -10.
+[ 55 tuổi] Bạn tranh chấp với Mộ Dung Trạch Sơn rồi động thủ thử sức, thua ở Vụ Thành.
 [ 55 tuổi] Quy tắc nếu-thì: sinh lực dưới 30%, bạn nghỉ ngơi dưỡng sức.
 [ 56 tuổi] Tuổi 56: dưỡng sức.
-[ 56 tuổi] Nhiệm vụ cấp bách: Ghé thêm 2 địa điểm mới ở Vụ Trạch.
-[ 56 tuổi] Bạn lên đường từ Cổ Miếu Ma tới Hắc Thị Trạch (đích: Quỷ Mộ Đầm), mất 2 tháng.
-[ 56 tuổi] Bạn đã tới Hắc Thị Trạch.
-[ 56 tuổi] Bạn lên đường từ Hắc Thị Trạch tới Vụ Thành (đích: Quỷ Mộ Đầm), mất 1 tháng.
-[ 56 tuổi] Bạn đã tới Vụ Thành.
-[ 56 tuổi] Bạn lên đường từ Vụ Thành tới Âm Hồn Giáo (đích: Quỷ Mộ Đầm), mất 2 tháng.
-[ 56 tuổi] Bạn đã tới Âm Hồn Giáo.
-[ 56 tuổi] Bạn lên đường từ Âm Hồn Giáo tới Sương Mù Cốc (đích: Quỷ Mộ Đầm), mất 2 tháng.
-[ 56 tuổi] Tình cờ gặp một cơ duyên (cơ duyên 3).
-[ 56 tuổi] Bạn đã tới Sương Mù Cốc.
-[ 56 tuổi] Bạn lên đường từ Sương Mù Cốc tới Quỷ Mộ Đầm, mất 3 tháng.
+[ 56 tuổi] Bạn mua Linh thảo ở cho, giá 6 vàng.
+[ 56 tuổi] Bạn mua Linh thảo ở cho, giá 6 vàng.
+[ 56 tuổi] Bạn mua Linh thảo ở cho, giá 6 vàng.
+[ 56 tuổi] Luyện đan thành công: Hồi Xuân Đan.
+[ 56 tuổi] Bạn uống Hồi Xuân Đan, sinh lực hồi 65.
 [ 56 tuổi] Thiên Cơ Báo số 11 vừa phát hành (bốn năm từ năm 41 tới năm 45).
-[ 56 tuổi] Bạn đã tới Quỷ Mộ Đầm.
-[ 57 tuổi] Quy tắc nếu-thì: sinh lực dưới 30%, bạn nghỉ ngơi dưỡng sức.
-[ 57 tuổi] Tuổi 57: dưỡng sức.
-[ 57 tuổi] Nhiệm vụ cấp bách: Đột phá lên Luyện Khí.
-[ 57 tuổi] Một vệt sao băng xé ngang bầu trời đêm. Bạn ngắm sao băng một lúc lâu, nhớ lại ước nguyện thuở nhỏ. Lòng thấy bình yên.
-[ 57 tuổi] Bạn lên đường từ Quỷ Mộ Đầm tới Sương Mù Cốc, mất 3 tháng.
-[ 57 tuổi] Bạn đã tới Sương Mù Cốc.
-[ 57 tuổi] Quy tắc nếu-thì: sinh lực dưới 30%, bạn nghỉ ngơi dưỡng sức.
-[ 57 tuổi] Chiến tranh tổng Đại loạn Bát Hoang nổ ra ngay nơi bạn đứng.
-[ 58 tuổi] Tuổi 58: dưỡng sức.
-[ 58 tuổi] Hoàn thành nhiệm vụ: Ghé thêm 2 địa điểm mới ở Vụ Trạch.
-[ 58 tuổi] Bạn trò chuyện cùng Tạ Trạch Khê ở Sương Mù Cốc.
-[ 58 tuổi] Mùa đói tới, có người nói bạn từng làm ngơ lúc cả vùng cần một bàn tay. Bạn nghe được, không biện bạch.
-[ 58 tuổi] Bạn trò chuyện cùng Tạ Trạch Khê ở Sương Mù Cốc.
-[ 58 tuổi] Bạn lên đường từ Sương Mù Cốc tới Âm Hồn Giáo (đích: Vụ Thành), mất 2 tháng.
-[ 58 tuổi] Bạn đã tới Âm Hồn Giáo.
-[ 58 tuổi] Bạn lên đường từ Âm Hồn Giáo tới Vụ Thành, mất 2 tháng.
-[ 58 tuổi] Bạn đã tới Vụ Thành.
-[ 59 tuổi] Bạn bè Âu Dương Lam đã qua đời (thọ nguyên cạn kiệt).
-[ 59 tuổi] Bạn trò chuyện cùng Khúc Sơn ở Vụ Thành.
-[ 59 tuổi] Tuổi 59: giao du bạn bè.
-[ 59 tuổi] Bạn trò chuyện cùng Tạ Nhiên ở Vụ Thành. Quan hệ với Tạ Nhiên giờ là: Bạn bè.
-[ 59 tuổi] Bạn trò chuyện cùng Tạ Nhiên ở Vụ Thành.
-[ 59 tuổi] Quy tắc nếu-thì: sinh lực dưới 30%, bạn nghỉ ngơi dưỡng sức.
-[ 59 tuổi] Bị thương ở Vụ Thành, sinh lực -21.
-[ 59 tuổi] Quy tắc nếu-thì: sinh lực dưới 30%, bạn nghỉ ngơi dưỡng sức.
-[ 60 tuổi] Tuổi 60: dưỡng sức.
+[ 57 tuổi] Bạn mua Linh thảo ở cho, giá 6 vàng.
+[ 57 tuổi] Bạn mua Linh thảo ở cho, giá 6 vàng.
+[ 57 tuổi] Bạn mua Linh thảo ở cho, giá 6 vàng.
+[ 57 tuổi] Tuổi 57: luyện nghề.
+[ 57 tuổi] Nhận nhiệm vụ dài: Tích lũy tu vi thêm 37% nhu cầu của Luyện Khí (trước 92 tuổi).
+[ 57 tuổi] Nhận nhiệm vụ trung: Ghé thêm 2 địa điểm mới ở Vụ Trạch (trước 66 tuổi).
+[ 58 tuổi] Tuổi 58: tu vi +3.
+[ 58 tuổi] Nhận nhiệm vụ dài: Đột phá lên Trúc Cơ (trước 103 tuổi).
+[ 58 tuổi] Thiên Đạo ban đại nguyện: Đột phá lên Trúc Cơ (trước 103 tuổi).
+[ 59 tuổi] Tuổi 59: tu vi +2.
+[ 59 tuổi] Bị thương ở Vụ Thành, sinh lực -8.
+[ 60 tuổi] Bị thương ở Vụ Thành, sinh lực -15.
+[ 60 tuổi] Tuổi 60: vàng +3.
 [ 60 tuổi] Tuổi 60: Thiên cơ điểm +1 (mười hai năm một vòng).
-[ 60 tuổi] Bạn trò chuyện cùng Tạ Nhiên ở Vụ Thành.
-[ 60 tuổi] Bạn cãi nhau với Tạ Nhiên một trận ở Vụ Thành.
 [ 60 tuổi] Thiên Cơ Báo số 12 vừa phát hành (bốn năm từ năm 45 tới năm 49).
-[ 60 tuổi] Rong ruổi tìm kiếm, bạn gặp được một cơ duyên (cơ duyên 4).
-[ 61 tuổi] Tuổi 61: dưỡng sức.
-[ 61 tuổi] Thương tích nhẹ: sinh lực tối đa -10%, tu luyện chậm 15% trong 8 tháng (nghỉ ngơi lành nhanh gấp đôi).
-[ 61 tuổi] Nhiệm vụ thất bại: Đột phá lên Luyện Khí.
-[ 61 tuổi] Bạn trò chuyện cùng Mộ Dung Trạch Sơn ở Vụ Thành.
-[ 61 tuổi] Bạn trò chuyện cùng Mộ Dung Trạch Sơn ở Vụ Thành.
-[ 61 tuổi] Bị thương ở Vụ Thành, sinh lực -10.
-[ 61 tuổi] Quy tắc nếu-thì: sinh lực dưới 30%, bạn nghỉ ngơi dưỡng sức.
-[ 61 tuổi] Bị thương ở Vụ Thành, sinh lực -16.
-[ 61 tuổi] Quy tắc nếu-thì: sinh lực dưới 30%, bạn nghỉ ngơi dưỡng sức.
-[ 62 tuổi] Tuổi 62: dưỡng sức.
-[ 62 tuổi] Ngã rẽ: bạn đổi sang đạo phiêu lưu.
-[ 62 tuổi] Ngã rẽ: bạn vẫn kiên định với đạo phiêu lưu (đã đi 0 năm).
-[ 62 tuổi] Bạn trò chuyện cùng Tạ Nhiên ở Vụ Thành.
-[ 63 tuổi] Tuổi 63: dưỡng sức.
-[ 64 tuổi] Tuổi 64: dưỡng sức.
-[ 64 tuổi] Bị thương ở Vụ Thành, sinh lực -17.
-[ 64 tuổi] Tin đồn: Quỷ Mộ Đầm sắp mở cửa sau khoảng 2.4 năm.
-[ 64 tuổi] Quy tắc nếu-thì: sinh lực dưới 30%, bạn nghỉ ngơi dưỡng sức.
-[ 64 tuổi] Bị thương ở Vụ Thành, sinh lực -17.
-[ 64 tuổi] Tin đồn: Cổ Miếu Ma sắp mở cửa sau khoảng 1.1 năm.
+[ 61 tuổi] Tuổi 61: rong ruổi tìm cơ duyên.
+[ 61 tuổi] Tin đồn: Quỷ Mộ Đầm sắp mở cửa sau khoảng 1.8 năm.
+[ 61 tuổi] [Thiếu chủ ngạo mạn] Bạn cúi đầu bỏ đi. Úc Nguyệt Vi cười hả hê. Bạn ghi nhớ trong lòng.
+[ 62 tuổi] Tuổi 62: rong ruổi tìm cơ duyên.
+[ 62 tuổi] Bạn trò chuyện cùng Úc Nguyệt Vi ở Vụ Thành.
+[ 62 tuổi] Mùa đói tới, có người nói bạn từng làm ngơ lúc cả vùng cần một bàn tay. Bạn nghe được, không biện bạch.
+[ 62 tuổi] Đổi độ khó nhiệm vụ "Ghé thêm 2 địa điểm mới ở Vụ Trạch" thành Vừa.
+[ 62 tuổi] Nhận nhiệm vụ ngắn: Hoàn thành 1 đơn hàng nghề dược sư (trước 66 tuổi).
+[ 63 tuổi] Tuổi 63: tu vi +4.
+[ 64 tuổi] Tuổi 64: thân thể cường tráng hơn.
+[ 64 tuổi] Hoàn thành nhiệm vụ: Hoàn thành 1 đơn hàng nghề dược sư.
+[ 64 tuổi] Nhiệm vụ cấp bách: Ghé thêm 2 địa điểm mới ở Vụ Trạch.
+[ 64 tuổi] Bạn trò chuyện cùng Khúc Sơn ở Vụ Thành.
+[ 64 tuổi] Bạn lên đường từ Vụ Thành tới Âm Hồn Giáo (đích: Quỷ Mộ Đầm), mất 2 tháng.
+[ 64 tuổi] Bạn đã tới Âm Hồn Giáo.
+[ 64 tuổi] Bạn lên đường từ Âm Hồn Giáo tới Sương Mù Cốc (đích: Quỷ Mộ Đầm), mất 2 tháng.
+[ 64 tuổi] Bạn đã tới Sương Mù Cốc.
+[ 64 tuổi] Bạn lên đường từ Sương Mù Cốc tới Quỷ Mộ Đầm, mất 3 tháng.
+[ 64 tuổi] Bạn đã tới Quỷ Mộ Đầm.
 [ 64 tuổi] Thiên Cơ Báo số 13 vừa phát hành (bốn năm từ năm 49 tới năm 53).
-[ 64 tuổi] Bị thương ở Vụ Thành, sinh lực -14.
-[ 64 tuổi] [Kẻ móc túi] Bạn tặc lưỡi cho qua. Mất 10 vàng.
-[ 65 tuổi] Tuổi 65: dưỡng sức.
-[ 65 tuổi] Bị thương ở Vụ Thành, sinh lực -22.
-[ 66 tuổi] Tuổi 66: dưỡng sức.
-[ 67 tuổi] Tuổi 67: dưỡng sức.
-[ 67 tuổi] Rong ruổi tìm kiếm, bạn gặp được một cơ duyên (cơ duyên 5).
-[ 67 tuổi] Bị thương ở Vụ Thành, sinh lực -18.
+[ 65 tuổi] Bạn cùng Tống Ngưng Doanh luận đạo suốt đêm, cả hai đều có thu hoạch ở Quỷ Mộ Đầm.
+[ 65 tuổi] Tuổi 65: giao du bạn bè.
+[ 65 tuổi] Bạn lên đường từ Quỷ Mộ Đầm tới Sương Mù Cốc, mất 3 tháng.
+[ 65 tuổi] Bạn đã tới Sương Mù Cốc.
+[ 65 tuổi] Tin đồn: Cổ Miếu Ma sắp mở cửa sau khoảng 1.8 năm.
+[ 65 tuổi] Bạn lên đường từ Sương Mù Cốc tới Âm Hồn Giáo (đích: Cổ Miếu Ma), mất 2 tháng.
+[ 65 tuổi] Bạn đã tới Âm Hồn Giáo.
+[ 65 tuổi] Bạn lên đường từ Âm Hồn Giáo tới Vụ Thành (đích: Cổ Miếu Ma), mất 2 tháng.
+[ 66 tuổi] Tuổi 66: trên đường di chuyển.
+[ 66 tuổi] Hoàn thành nhiệm vụ: Ghé thêm 2 địa điểm mới ở Vụ Trạch.
+[ 66 tuổi] Bạn đã tới Vụ Thành.
+[ 66 tuổi] Bạn lên đường từ Vụ Thành tới Hắc Thị Trạch (đích: Cổ Miếu Ma), mất 1 tháng.
+[ 66 tuổi] Bạn đã tới Hắc Thị Trạch.
+[ 66 tuổi] Bạn lên đường từ Hắc Thị Trạch tới Cổ Miếu Ma, mất 2 tháng.
+[ 66 tuổi] Bạn đã tới Cổ Miếu Ma.
+[ 66 tuổi] Bị thương ở Cổ Miếu Ma, sinh lực -9.
 [ 67 tuổi] Quy tắc nếu-thì: sinh lực dưới 30%, bạn nghỉ ngơi dưỡng sức.
-[ 67 tuổi] Tình cờ gặp một cơ duyên (cơ duyên 6).
+[ 67 tuổi] Tuổi 67: dưỡng sức.
+[ 67 tuổi] Tin đồn: Cao nhân tại Âm Hồn Giáo sẽ tới giảng đạo sau khoảng 1.3 năm.
+[ 67 tuổi] [Bí cảnh mở cửa] Bạn đứng ngoài nhìn người ta ra vào, không dám liều.
+[ 67 tuổi] Bạn trò chuyện cùng Liễu Mặc Hy ở Cổ Miếu Ma.
+[ 67 tuổi] Bị thương ở Cổ Miếu Ma, sinh lực -8.
+[ 67 tuổi] Quy tắc nếu-thì: sinh lực dưới 30%, bạn nghỉ ngơi dưỡng sức.
+[ 68 tuổi] Bạn lên đường từ Cổ Miếu Ma tới Hắc Thị Trạch (đích: Vụ Thành), mất 2 tháng.
 [ 68 tuổi] Tuổi 68: dưỡng sức.
-[ 68 tuổi] Tin đồn: Tuyển đệ tử tại Âm Hồn Giáo sắp mở kỳ tuyển đệ tử sau khoảng 1 năm.
-[ 68 tuổi] Bạn trò chuyện cùng Mộ Dung Trạch Sơn ở Vụ Thành.
+[ 68 tuổi] Bạn đã tới Hắc Thị Trạch.
+[ 68 tuổi] Bạn lên đường từ Hắc Thị Trạch tới Vụ Thành, mất 1 tháng.
+[ 68 tuổi] Bạn đã tới Vụ Thành.
 [ 68 tuổi] Thiên Cơ Báo số 14 vừa phát hành (bốn năm từ năm 53 tới năm 57).
-[ 69 tuổi] Bị thương ở Vụ Thành, sinh lực -21.
-[ 69 tuổi] Quy tắc nếu-thì: sinh lực dưới 30%, bạn nghỉ ngơi dưỡng sức.
-[ 69 tuổi] Bị thương ở Vụ Thành, sinh lực -8.
-[ 69 tuổi] Bạn quyết định tới Âm Hồn Giáo để dự: Tuyển đệ tử ở Âm Hồn Giáo.
-[ 69 tuổi] Bạn lên đường từ Vụ Thành tới Âm Hồn Giáo, mất 2 tháng.
-[ 69 tuổi] Bạn đã tới Âm Hồn Giáo.
-[ 69 tuổi] Bạn được Âm Hồn Giáo nhận làm ngoại môn đệ tử. Từ nay có chỗ dựa, có nhiệm vụ và có thể đổi cống hiến lấy vật phẩm.
-[ 69 tuổi] Thử luyện nhập môn: bạn làm xuất sắc, chưởng môn để mắt tới. Cống hiến khởi điểm +40.
-[ 69 tuổi] [Mùa tuyển đệ tử] Bạn bái nhập Âm Hồn Giáo làm ngoại môn đệ tử.
-[ 69 tuổi] Thiên mệnh đã đổi: Vương triều Vụ Trạch mất mệnh trời, đất nước chia cắt: một nửa cát cứ tự xưng, triều đình chỉ còn giữ được Trình Dật Dương cùng nửa giang sơn.
-[ 70 tuổi] Bạn lên đường từ Âm Hồn Giáo tới Vụ Thành, mất 2 tháng.
-[ 70 tuổi] Tuổi 69: một năm trôi qua yên ả, không có gì đáng kể.
-[ 70 tuổi] Tuổi 70: dưỡng sức.
-[ 70 tuổi] Bạn nhận việc tông môn: Truy bắt kẻ phản đồ (5 tháng).
-[ 70 tuổi] Bổng lộc hằng năm của Âm Hồn Giáo: 6 vàng.
-[ 70 tuổi] Tuổi 70: thọ nguyên cạn kiệt.
+[ 69 tuổi] Tuổi 69: tu vi +2.
+[ 69 tuổi] Bạn trò chuyện cùng Cố Ngưng Ninh ở Vụ Thành.
+[ 69 tuổi] Bạn trò chuyện cùng Tạ Thanh Liên ở Vụ Thành.
+[ 70 tuổi] Tuổi 70: tu vi +2.
+[ 70 tuổi] Bạn trò chuyện cùng Úc Nguyệt Vi ở Vụ Thành.
+[ 70 tuổi] Tạ Thanh Liên cãi nhau với bạn một trận ở Vụ Thành.
+[ 71 tuổi] Tuổi 71: tu vi +3.
+[ 72 tuổi] Tuổi 72: dưỡng sức.
+[ 72 tuổi] Tuổi 72: Thiên cơ điểm +1 (mười hai năm một vòng).
+[ 72 tuổi] Bạn trò chuyện cùng Úc Nguyệt Vi ở Vụ Thành.
+[ 72 tuổi] Bạn trò chuyện cùng Cố Ngưng Ninh ở Vụ Thành.
+[ 72 tuổi] Bạn trò chuyện cùng Úc Nguyệt Vi ở Vụ Thành.
+[ 72 tuổi] Thiên Cơ Báo số 15 vừa phát hành (bốn năm từ năm 57 tới năm 61).
+[ 73 tuổi] Tuổi 73: dưỡng sức.
+[ 73 tuổi] Bạn mua Linh thảo ở cho, giá 6 vàng.
+[ 73 tuổi] Bạn mua Linh thảo ở cho, giá 6 vàng.
+[ 73 tuổi] Bạn mua Linh thảo ở cho, giá 6 vàng.
+[ 73 tuổi] Luyện đan thành công: Hồi Xuân Đan x2.
+[ 74 tuổi] Tuổi 74: tu vi +5.
+[ 74 tuổi] Bạn uống Hồi Xuân Đan, sinh lực hồi 67.
+[ 74 tuổi] Úc Nguyệt Vi trò chuyện cùng bạn ở Vụ Thành. Quan hệ với Úc Nguyệt Vi giờ là: Quen biết.
+[ 74 tuổi] Bạn bán 1 Hồi Xuân Đan ở dan, được 8 vàng.
+[ 74 tuổi] Thấy Hồi Xuân Đan sắp hỏng, bạn tự bán bớt.
+[ 75 tuổi] Tuổi 75: tu vi +5.
+[ 75 tuổi] [Đạo quả] Người xin học: Từ chối, giữ lối độc hành.
+[ 75 tuổi] Ngã rẽ: bạn đổi sang đạo kiếm sống.
+[ 75 tuổi] Tin đồn: Tuyển đệ tử tại Âm Hồn Giáo sắp mở kỳ tuyển đệ tử sau khoảng 1 năm.
+[ 75 tuổi] Bị thương ở Vụ Thành, sinh lực -19.
+[ 75 tuổi] [Đạo quả] Bạn cũ trở lại: Cùng Mộ Dung Nguyệt Liên gây dựng nghiệp chung.
+[ 75 tuổi] [Đạo quả] Bạn và Mộ Dung Nguyệt Liên dựng nên một nơi để người sau có chỗ nương. Nó không lớn, nhưng đủ khiến bạn nghĩ mình không đi qua đời này vô ích.
+[ 75 tuổi] Khí vận +1 (truyện Đạo quả).
+[ 75 tuổi] Bạn quyết định tới Âm Hồn Giáo để dự: Tuyển đệ tử ở Âm Hồn Giáo.
+[ 75 tuổi] Bạn lên đường từ Vụ Thành tới Âm Hồn Giáo, mất 2 tháng.
+[ 75 tuổi] Chiến loạn bùng lên ở Vụ Trạch: Kim Phong Môn đánh Âm Hồn Giáo.
+[ 75 tuổi] Bạn đã tới Âm Hồn Giáo.
+[ 76 tuổi] Tình cờ gặp một cơ duyên (cơ duyên 1).
+[ 76 tuổi] Tuổi 76: vàng +8.
+[ 76 tuổi] Rong ruổi tìm kiếm, bạn gặp được một cơ duyên (cơ duyên 2).
+[ 76 tuổi] Bạn được Âm Hồn Giáo nhận làm ngoại môn đệ tử. Từ nay có chỗ dựa, có nhiệm vụ và có thể đổi cống hiến lấy vật phẩm.
+[ 76 tuổi] Thử luyện nhập môn: bạn làm xuất sắc, chưởng môn để mắt tới. Cống hiến khởi điểm +40.
+[ 76 tuổi] [Mùa tuyển đệ tử] Bạn bái nhập Âm Hồn Giáo làm ngoại môn đệ tử.
+[ 76 tuổi] [Lệnh triệu tập của tông môn] Bạn ở lại hậu phương lo lương thảo và dược liệu. Cống hiến +14, không lập được công lớn.
+[ 76 tuổi] Thiên Cơ Báo số 16 vừa phát hành (bốn năm từ năm 61 tới năm 65).
+[ 77 tuổi] Tuổi 77: luyện nghề.
+[ 77 tuổi] Bạn nhận việc tông môn: Truy bắt kẻ phản đồ (5 tháng).
+[ 77 tuổi] Bổng lộc hằng năm của Âm Hồn Giáo: 5 vàng.
+[ 77 tuổi] Bị thương ở Âm Hồn Giáo, sinh lực -19.
+[ 77 tuổi] Hoàn thành việc tông: Truy bắt kẻ phản đồ. Cống hiến +41, thưởng 2.5 linh thạch, danh vọng +2.
+[ 77 tuổi] Bạn hiến 1 Linh thảo cho kho Âm Hồn Giáo. Cống hiến +2.
+[ 77 tuổi] Đổi độ khó nhiệm vụ "Tích lũy tu vi thêm 58% nhu cầu của Luyện Khí" thành Khó.
+[ 77 tuổi] Nhận nhiệm vụ trung: Hoàn thành 4 đơn hàng nghề dược sư (trước 92 tuổi).
+[ 77 tuổi] Nhận nhiệm vụ ngắn: Hoàn thành 2 đơn hàng nghề dược sư (trước 80 tuổi).
+[ 78 tuổi] Tuổi 78: tu vi +1.
+[ 78 tuổi] Bạn nhận việc tông môn: Tra cứu tung tích một truyền thừa (5 tháng).
+[ 78 tuổi] Bổng lộc hằng năm của Âm Hồn Giáo: 5 vàng.
+[ 78 tuổi] Bạn được thăng làm Nội môn đệ tử của Âm Hồn Giáo!
+[ 78 tuổi] Từ nội môn, bạn được chọn một trong bốn đường của tông (xem tab Tông môn).
+[ 78 tuổi] Úc Hy (Trúc Cơ sơ kỳ) nhận bạn làm đồ đệ nội môn, chỉ dạy thêm. Tu luyện nhanh thêm 3%.
+[ 78 tuổi] Bạn đi thu thập Linh thảo để luyện nghề.
+[ 78 tuổi] Bạn tặng Lâm Khải Khê 26 vàng ở Âm Hồn Giáo.
+[ 78 tuổi] Luyện đan đạt cấp 3!
+[ 78 tuổi] Luyện đan đã chạm trần cấp 3. Cần thành viên tông môn chuyên nghề hoặc tâm đắc và cảnh giới cao hơn để tiến thêm.
+[ 78 tuổi] Tính cách đổi: Tính tình của bạn đã bớt nóng nảy, nay là "Điềm tĩnh nhẫn nại".
+[ 78 tuổi] [Lệnh triệu tập của tông môn] Bạn ở lại hậu phương lo lương thảo và dược liệu. Cống hiến +14, không lập được công lớn.
+[ 78 tuổi] Hoàn thành việc tông: Tra cứu tung tích một truyền thừa. Cống hiến +26, thưởng 2 linh thạch, tu vi tăng.
+[ 79 tuổi] Tuổi 79: làm nhiệm vụ tông môn, cống hiến +49.
+[ 79 tuổi] Bạn theo đường Dược và luyện của Âm Hồn Giáo.
+[ 79 tuổi] Bạn nhận việc tông môn: Hộ tống thương đoàn của tông (6 tháng).
+[ 79 tuổi] Bổng lộc hằng năm của Âm Hồn Giáo: 1.3 linh thạch.
+[ 79 tuổi] Hoàn thành nhiệm vụ: Hoàn thành 2 đơn hàng nghề dược sư.
+[ 79 tuổi] Bạn hiến 2 Linh thảo cho kho Âm Hồn Giáo. Cống hiến +4.
+[ 79 tuổi] Bạn lên đường từ Âm Hồn Giáo tới Vụ Thành, mất 2 tháng.
+[ 79 tuổi] Bạn đã tới Vụ Thành.
+[ 80 tuổi] Bạn trò chuyện cùng Cố Ngưng Ninh ở Vụ Thành.
+[ 80 tuổi] Tuổi 80: giao du bạn bè.
+[ 80 tuổi] Bạn mua Hồi Xuân Đan ở hoi, giá 5.5 linh thạch.
+[ 80 tuổi] Bổng lộc hằng năm của Âm Hồn Giáo: 1.3 linh thạch.
+[ 80 tuổi] Hoàn thành nhiệm vụ: Hoàn thành 4 đơn hàng nghề dược sư.
+[ 80 tuổi] Bạn trò chuyện cùng Tạ Thanh Liên ở Vụ Thành.
+[ 80 tuổi] Bị thương ở Vụ Thành, sinh lực -12.
+[ 80 tuổi] Bạn uống Hồi Xuân Đan, sinh lực hồi 68.
+[ 80 tuổi] Việc tông "Hộ tống thương đoàn của tông" thất bại. Chỉ ghi được 12 cống hiến công sức.
+[ 80 tuổi] Bạn mua Linh thảo ở cho, giá 6 vàng.
+[ 80 tuổi] Bạn mua Linh thảo ở cho, giá 6 vàng.
+[ 80 tuổi] Bạn mua Linh thảo ở cho, giá 6 vàng.
+[ 80 tuổi] Mua bán ở chợ, bạn chuyện trò với Khúc Sơn và thân thêm một chút.
+[ 80 tuổi] Bạn mua Linh thảo ở cho, giá 6 vàng.
+[ 80 tuổi] Bạn mua Linh thảo ở cho, giá 6 vàng.
+[ 80 tuổi] Bạn mua Linh thảo ở hoi, giá 6 vàng.
+[ 80 tuổi] Bạn mua Linh thảo ở hoi, giá 6 vàng.
+[ 80 tuổi] Bạn trò chuyện cùng Khúc Sơn ở Vụ Thành.
+[ 80 tuổi] Bạn tặng Cố Ngưng Ninh 30 vàng ở Vụ Thành.
+[ 80 tuổi] Bạn rời Âm Hồn Giáo (tông môn bị tiêu diệt). Mọi cống hiến coi như bỏ lại.
+[ 80 tuổi] Âm Hồn Giáo đã bị tiêu diệt. Bạn trở thành tán tu, không còn chỗ dựa.
+[ 80 tuổi] Thương tích nhẹ: sinh lực tối đa -10%, tu luyện chậm 15% trong 8 tháng (nghỉ ngơi lành nhanh gấp đôi).
+[ 80 tuổi] Tin đồn: Tuyển đệ tử tại Âm Hồn Giáo sắp mở kỳ tuyển đệ tử sau khoảng 0.7 năm.
+[ 80 tuổi] Thiên Cơ Báo số 17 vừa phát hành (bốn năm từ năm 65 tới năm 69).
+[ 80 tuổi] Bạn quyết định tới Âm Hồn Giáo để dự: Tuyển đệ tử ở Âm Hồn Giáo.
+[ 80 tuổi] Bạn lên đường từ Vụ Thành tới Âm Hồn Giáo, mất 2 tháng.
+[ 80 tuổi] Tin đồn: Đấu giá tại Hắc Thị Trạch sắp tổ chức phiên đấu giá sau khoảng 0.8 năm.
+[ 81 tuổi] Bạn đã tới Âm Hồn Giáo.
+[ 81 tuổi] Tuổi 81: trên đường di chuyển.
+[ 81 tuổi] Bạn uống Tụ Khí Đan, tu vi tăng 7.
+[ 81 tuổi] Tình cờ gặp một cơ duyên (cơ duyên 3).
+[ 81 tuổi] [Mùa tuyển đệ tử] Người đo tư chất lắc đầu: Âm Hồn Giáo đã bị tiêu diệt, chỉ còn tàn tích. Bạn đành quay về.
+[ 81 tuổi] Bạn lên đường từ Âm Hồn Giáo tới Vụ Thành, mất 2 tháng.
+[ 81 tuổi] Bạn đã tới Vụ Thành.
+[ 81 tuổi] Bạn trò chuyện cùng Úc Nguyệt Vi ở Vụ Thành.
+[ 82 tuổi] Tuổi 82: rong ruổi tìm cơ duyên.
+[ 82 tuổi] Bạn cãi nhau với Tạ Thanh Liên một trận ở Vụ Thành.
+[ 82 tuổi] Bạn cãi nhau với Tạ Thanh Liên một trận ở Vụ Thành.
+[ 82 tuổi] Bạn trò chuyện cùng Úc Nguyệt Vi ở Vụ Thành. Quan hệ với Úc Nguyệt Vi giờ là: Quen biết.
+[ 82 tuổi] Bạn trò chuyện cùng Úc Nguyệt Vi ở Vụ Thành.
+[ 82 tuổi] Bạn trò chuyện cùng Úc Nguyệt Vi ở Vụ Thành.
+[ 83 tuổi] Tuổi 83: vàng +11.
+[ 83 tuổi] Tin đồn: Cổ Miếu Ma sắp mở cửa sau khoảng 1.2 năm.
+[ 83 tuổi] Bạn cãi nhau với Úc Nguyệt Vi một trận ở Vụ Thành.
+[ 84 tuổi] Tuổi 84: tu vi +1.
+[ 84 tuổi] Tuổi 84: Thiên cơ điểm +1 (mười hai năm một vòng).
+[ 84 tuổi] Bạn trò chuyện cùng Úc Nguyệt Vi ở Vụ Thành.
+[ 84 tuổi] Bạn mua Linh thảo ở cho, giá 6 vàng.
+[ 84 tuổi] Bạn mua Linh thảo ở cho, giá 6 vàng.
+[ 84 tuổi] Bạn mua Linh thảo ở cho, giá 6 vàng.
+[ 84 tuổi] Bạn mua Linh thảo ở cho, giá 6 vàng.
+[ 84 tuổi] Bạn mua Linh thảo ở cho, giá 6 vàng.
+[ 84 tuổi] Bạn mua Linh thảo ở cho, giá 6 vàng.
+[ 84 tuổi] Bạn mua Linh thảo ở cho, giá 6 vàng.
+[ 84 tuổi] Luyện đan thất bại, nguyên liệu hao mất.
+[ 84 tuổi] Bạn cãi nhau với Tạ Thanh Liên một trận ở Vụ Thành.
+[ 84 tuổi] Bạn tặng Úc Nguyệt Vi 18 vàng ở Vụ Thành.
+[ 84 tuổi] Thiên Cơ Báo số 18 vừa phát hành (bốn năm từ năm 69 tới năm 73).
+[ 85 tuổi] Tuổi 85: vàng +10.
+[ 85 tuổi] Nhiệm vụ cấp bách: Tích lũy tu vi thêm 58% nhu cầu của Luyện Khí.
+[ 85 tuổi] Cố Ngưng Ninh trò chuyện cùng bạn ở Vụ Thành. Quan hệ với Cố Ngưng Ninh giờ là: Quen biết.
+[ 85 tuổi] Bạn trò chuyện cùng Úc Nguyệt Vi ở Vụ Thành. Quan hệ với Úc Nguyệt Vi giờ là: Bạn bè.
+[ 85 tuổi] Bạn mua Linh thảo ở cho, giá 6 vàng.
+[ 85 tuổi] Bạn mua Linh thảo ở cho, giá 6 vàng.
+[ 85 tuổi] Bạn mua Linh thảo ở cho, giá 6 vàng.
+[ 85 tuổi] Luyện đan thành công: Hồi Xuân Đan.
+[ 86 tuổi] Tuổi 86: vàng +13.
+[ 86 tuổi] Tin đồn: Tuyển đệ tử tại Âm Hồn Giáo sắp mở kỳ tuyển đệ tử sau khoảng 1.7 năm.
+[ 86 tuổi] Bạn đi thu thập Linh thảo để luyện nghề.
+[ 86 tuổi] Bạn trò chuyện cùng Tạ Thanh Liên ở Vụ Thành.
+[ 86 tuổi] Bạn tranh chấp với Khúc Sơn rồi động thủ thử sức, thua ở Vụ Thành.
+[ 86 tuổi] Bạn uống Hồi Xuân Đan, sinh lực hồi 68.
+[ 86 tuổi] Bạn trò chuyện cùng Cố Ngưng Ninh ở Vụ Thành.
+[ 86 tuổi] Bị thương ở Vụ Thành, sinh lực -21.
+[ 86 tuổi] Bạn bán 2 Linh thảo ở cho, được 2 vàng.
+[ 86 tuổi] Thấy Linh thảo sắp hỏng, bạn tự bán bớt.
+[ 87 tuổi] Tuổi 87: tu vi +1.
+[ 87 tuổi] Bạn trò chuyện cùng Úc Nguyệt Vi ở Vụ Thành.
+[ 87 tuổi] Bị thương ở Vụ Thành, sinh lực -12.
+[ 87 tuổi] Quy tắc nếu-thì: sinh lực dưới 30%, bạn nghỉ ngơi dưỡng sức.
+[ 88 tuổi] Tuổi 88: dưỡng sức.
+[ 88 tuổi] Bạn mua Linh thảo ở cho, giá 6 vàng.
+[ 88 tuổi] Bạn mua Linh thảo ở cho, giá 6 vàng.
+[ 88 tuổi] Bạn mua Linh thảo ở cho, giá 6 vàng.
+[ 88 tuổi] Luyện đan thất bại, nguyên liệu hao mất.
+[ 88 tuổi] Thiên Cơ Báo số 19 vừa phát hành (bốn năm từ năm 73 tới năm 77).
+[ 89 tuổi] Tuổi 89: dưỡng sức.
+[ 89 tuổi] Nhiệm vụ cấp bách: Đột phá lên Trúc Cơ.
+[ 89 tuổi] Bạn trò chuyện cùng Khúc Sơn ở Vụ Thành.
+[ 89 tuổi] Bạn mua Linh thảo ở cho, giá 6 vàng.
+[ 89 tuổi] Bạn mua Linh thảo ở cho, giá 6 vàng.
+[ 89 tuổi] Bạn mua Linh thảo ở cho, giá 6 vàng.
+[ 90 tuổi] Tuổi 90: dưỡng sức.
+[ 90 tuổi] Bạn trò chuyện cùng Úc Nguyệt Vi ở Vụ Thành.
+[ 90 tuổi] [Duyên tình] Bạn nói lòng mình chưa thể trao đi. Úc Nguyệt Vi mỉm cười gượng, ánh mắt thoáng vẻ chùng xuống.
+[ 90 tuổi] Bạn cùng Mộ Dung Trạch Sơn luận đạo suốt đêm, cả hai đều có thu hoạch ở Vụ Thành.
+[ 91 tuổi] Bạn trò chuyện cùng Cố Phong Khê ở Vụ Thành.
+[ 91 tuổi] Tuổi 91: giao du bạn bè.
+[ 91 tuổi] Bị thương ở Vụ Thành, sinh lực -8.
+[ 91 tuổi] Quy tắc nếu-thì: sinh lực dưới 30%, bạn nghỉ ngơi dưỡng sức.
+[ 91 tuổi] Bạn trò chuyện cùng Úc Nguyệt Vi ở Vụ Thành.
+[ 92 tuổi] Bạn trò chuyện cùng Cố Ngưng Ninh ở Vụ Thành.
+[ 92 tuổi] Tuổi 92: giao du bạn bè.
+[ 92 tuổi] Nhiệm vụ thất bại: Tích lũy tu vi thêm 58% nhu cầu của Luyện Khí.
+[ 92 tuổi] Bạn trò chuyện cùng Cố Ngưng Ninh ở Vụ Thành.
+[ 92 tuổi] Tin đồn: Cao nhân tại Vụ Thành sẽ tới giảng đạo sau khoảng 0.8 năm.
+[ 92 tuổi] Nhận nhiệm vụ ngắn: Tích lũy thêm 3 linh thạch tài sản (đạt 6.1 linh thạch) (trước 98 tuổi).
+[ 92 tuổi] Tạ Thanh Liên tặng bạn 8 vàng ở Vụ Thành.
+[ 92 tuổi] Thiên Cơ Báo số 20 vừa phát hành (bốn năm từ năm 77 tới năm 81).
