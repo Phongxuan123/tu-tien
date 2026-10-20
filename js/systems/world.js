@@ -125,6 +125,7 @@
       return life.die(c, 'thân thể kiệt quệ' + (p ? ' tại ' + p.n : '') + ', gục xuống và không dậy nữa');
     }
     if (!c.travel && !c.cross) {
+      if (c.kind === 'player') TT.story.tick(c); // truyện (8B): chỉ người chơi; hộp truyện được ưu tiên hơn sự kiện lẻ cùng tháng
       TT.events.monthly(c);
       if (!c.alive) return;
       TT.ai.considerMove(c);
@@ -401,6 +402,7 @@
     opts = opts || {};
     const w = TT.world;
     const prev = w.playerId != null ? w.chars[w.playerId] : null;
+    if (life.keepUndo && !opts.noUndo) { life.undo = TT.save.snapshot(); life.undoOpts = { boost: !!opts.boost }; } // giao diện: để "Bốc lại" quay về trước lúc sinh
     const rid = rng.wpick(D.REGIONS, r => r.birth * TT.pop.birthMul(r.id)).id;
     life.enterRegion(rid);
     const c = TT.createChar({ kind: 'player', age: 12, region: rid });
@@ -427,7 +429,9 @@
     TT.log(c, 'Bạn bước chân vào con đường tu tiên.', 'age');
     TT.fac.welcome(c);
     TT.news('Một người mới ra đời ở ' + reg.n + ': ' + c.name + ' (bạn).', 'good', [c.id]);
-    TT.bus.emit('reincarnate', { id: c.id });
+    TT.bus.emit('reincarnate', { id: c.id, kind: 'new', first: !prev });
+    // Tuổi thơ (8A3): hộp Đời mới đang mở thì hộp tuổi thơ chạy sau khi xác nhận; không thì chạy tự động (Tự động, kiểm thử).
+    if (!(TT.ui && TT.ui.newLife && TT.ui.newLife.isOpen())) TT.childhood.auto(c);
     return c;
   };
 
@@ -479,7 +483,7 @@
     if (heir.nghiep) TT.log(heir, 'Nghiệp chướng đời trước để lại: ' + heir.nghiep + '.', 'bad');
     TT.fac.welcome(heir);
     TT.news(heir.name + ' kế thừa di sản của ' + prev.name + '.', 'age', [heir.id, prev.id]);
-    TT.bus.emit('reincarnate', { id: heir.id });
+    TT.bus.emit('reincarnate', { id: heir.id, kind: 'heir' });
     return heir;
   };
 

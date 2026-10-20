@@ -175,3 +175,199 @@ Quy tắc như 6A/6B. Kiểm thử: kế vị, tranh ngôi có trần, quốc s�
 
 ## Sau Đợt 6: Cổng chơi thử 4 (nếu chưa)
 Chơi thử kinh tế và quân sự; sau đó mới đến Đợt 7 (M5b Liên tông).
+
+---
+
+# Đợt 8: Nền nhân vật, làm theo lát cắt dọc (thiết kế chốt 2026-10-19, xem Z "Đợt 8")
+
+Thứ tự: **8A (Sonnet)** → **8B (Sonnet)** → **8C (Haiku dữ liệu, rồi Sonnet)** → **8D (Sonnet)** → Cổng chơi thử 6. Điều kiện chung: PR thiết kế Đợt 8 (nhánh `thiet-ke-dot-8`) đã merge vào `main`. Nhánh code: đầu Đợt 8 tạo lại `add-game-project` từ `origin/main` (`git fetch origin main && git checkout -B add-game-project origin/main`); các chặng sau trong Đợt 8 tiếp tục trên nhánh đó; mở PR nháp nếu chưa có.
+
+## 8A. Sonnet: tính cách bốn trục + khí vận v2 (chỉ người chơi) + hộp "Đời mới"
+
+```
+Repo: Phongxuan123/tu-tien. Gắn repo, clone nhánh `main` (trả lời tiếng Việt, ngắn gọn, xưng "mình", gọi tôi là "bạn"). Đọc CLAUDE.md của repo trước. Tạo lại nhánh `add-game-project` từ origin/main nếu nhánh đó chưa có commit Đợt 8 (nếu đã có thì làm tiếp trên đó).
+
+Đọc có chọn lọc (grep -n "^#" rồi đọc đúng mục, KHÔNG đọc nguyên Q):
+- ke-hoach/Z-lo-trinh-trien-khai.md: mục 2, 5, "Đợt 8" (nhất là "Đặc tả 8A": đây là bản chốt, ưu tiên hơn Q khi khác nhau).
+- ke-hoach/Q-cot-truyen.md: mục 6.2, 6.4, 6.8, 6.9 (tính cách), 5.2, 5.3, 5.6 (khí vận), 20.1 (đã chốt).
+- Mã: js/systems/character.js (createChar, dòng ~40-95: baseKv, personality, ring), js/systems/world.js (life.reincarnate ~400, life.createWorld ~486), js/systems/stats.js (S.kv), js/systems/events.js (dòng 75-170: rate, kyNgo kv, boldOf, chooseIndex), js/systems/cultivation.js (kvFactor), js/systems/crossing.js:96, js/ui/panels.js:40, js/ui/controls.js (btn-new ~78), js/systems/rules.js (pickChoice), js/data/traits.js (m.kv).
+
+NHIỆM VỤ (đúng "Đặc tả 8A" trong Z; chỉ người chơi, NPC giữ nguyên):
+1. js/data/nature.js (D.NATURE: on, trục, dải và nhãn, ánh xạ kind → hướng, bảng chuyển nhãn cũ, hệ số độ liều/tâm ma có trần) và js/systems/nature.js (TT.nature: ensure (khởi tạo muộn, băm không rng), get, band, label, summary, shift có quán tính và trần năm, affinity(c, choice), mods(c)). Thêm vào js/files.js đúng thứ tự.
+2. Bốc tính cách người chơi lúc sinh: ±8 mỗi trục, ít nhất 2 trục |v| ≥ 3, bằng băm (hạt giống thế giới + id), KHÔNG gọi rng. Nhãn cũ c.personality của người chơi suy từ trục (để boldOf, path.js, social.js cũ vẫn đọc được).
+3. Mọi lựa chọn của người chơi dịch trục theo kind (trong luồng fire/resolve của events.js và decisions.js); nhật ký khi đổi dải; c.natureLog 30 mục. chooseIndex của người chơi dùng affinity thay bold khi D.NATURE.on. Chưa khóa mềm, chưa phí trái tính.
+4. Khí vận: js/systems/kv.js (TT.kv: ensure, add(c, n, nguồn), spend, log). c.kvPts lấy từ chính baseKv đã rút (không rút thêm); không trần. S.kv của người chơi = min(kvPts, 20) + S.mod(c,'kv'); NPC giữ công thức cũ. Thay nguồn: kỳ ngộ vận mệnh +2, Nhẫn thật +2, đột phá Kim Đan trở lên +1 mỗi cảnh giới (một lần). Không cộng theo thời gian. Bản lưu cũ: kvPts = max(0, round(baseKv)).
+5. Giao diện: Hồ sơ có khối Tính cách (bốn thanh −10..+10, nhãn dải, xanh khi vừa đổi, bấm xem lịch sử) và "Khí vận: N điểm". Hộp "Đời mới" (overlay giao diện, KHÔNG dùng w.pending): hiện kết quả bốc; ngân sách 4 điểm +/−; nếu không chỉnh mà bấm Bắt đầu thì máy phân 4 điểm vào trục lệch nhất; nút "Bốc lại" không giới hạn (thế giới mới: createWorld với hạt giống mới; khi đầu thai: bốc lại người chơi). Hiện khi tạo thế giới (btn-new và lần đầu) và khi đầu thai; không hiện khi con kế thừa; không hiện trong chế độ Tự động và kiểm thử.
+
+Quy tắc: hàm đọc không gọi rng, không khởi tạo dữ liệu; không đổi TT.VERSION. Công tắc D.NATURE.on = false (gồm cả phần khí vận người chơi) thì `node tools/baseline.js --check` phải trùng khít; thêm cờ --nature=off cho baseline như các cờ cũ. Bật thì đo 40 hạt giống 101-140 (chiến tranh, diệt vong, đổi chủ) trước và sau, lưu lại seeds.json bằng --save nếu thế giới lệch, ghi số.
+Kiểm thử mới trong tests.html (nhóm "Tính cách và khí vận (8A)"): bốc không trung dung hết và không gọi rng (rng state trước/sau bằng nhau), dải và nhãn, quán tính và trần năm, ánh xạ kind, chooseIndex theo affinity, kvPts = baseKv cũ, không trần, S.kv thụ động trần 20, không tăng theo thời gian (chạy 80 năm không sự kiện), nguồn cộng, bản lưu cũ, lưu/tải, công tắc tắt. Chạy `node tools/run-tests.js` đầy đủ. Kiểm giao diện hộp Đời mới và Hồ sơ bằng Playwright (máy tính và điện thoại), không lỗi console.
+Cuối: ghi "8A đã làm" (Z, mục Đợt 8; Q mục 22 nhật ký), cập nhật KE-HOACH.md, commit, push theo CLAUDE.md, mở PR nháp nếu chưa có. Báo ngắn gọn: đã làm, số kiểm thử, số đo, việc cần tôi chơi thử, điều chưa làm.
+```
+
+## 8A2. Haiku: dữ liệu tuổi thơ (chỉ dữ liệu, chạy được trước hoặc sau 8A)
+
+```
+Repo: Phongxuan123/tu-tien. Gắn repo, clone nhánh `add-game-project` (trả lời tiếng Việt, ngắn gọn, xưng "mình", gọi tôi là "bạn"). Đọc CLAUDE.md của repo trước.
+
+Đọc: ke-hoach/Z-lo-trinh-trien-khai.md mục "Đợt 8", phần "Đặc tả tuổi thơ" và "Đặc tả 8A" (tên bốn trục: tinh, xuthe, daoduc, tudung; −10..+10). Xem js/data/events.js (30 dòng đầu) để biết kiểu viết `kind` và giọng chữ; js/data/traits.js để biết id các tật (g: 0).
+
+NHIỆM VỤ: chỉ viết DỮ LIỆU js/data/childhood.js, không sửa hệ thống.
+- D.CHILDHOOD = { on: true, p2: 0.5, p3: 0.5, cap: { atk: 6, nl: 6, hp: 30, luck: 3, daoTam: 10, tuchat: 1, kv: 1, bad: 1 }, ev: [...] }.
+- ev: 24 sự kiện trở lên, mỗi hồi (hoi: 1, 2, 3) ít nhất 8. Mỗi sự kiện: { id: 'th_...', hoi, w (trọng số 1 đến 3), t (tiêu đề ngắn), d (2 đến 3 câu, có thể dùng khe {ban} là tên bạn thuở nhỏ, chỉ khi có trường needBan: true), ch: [2 hoặc 3 lựa chọn] }.
+- Mỗi lựa chọn: { key, label, kind (risk/safe/fight/flee/help/pay hoặc kind mới đã giải thích trong chú thích), ax: { trục: ±1..±3 } (1 hoặc 2 trục), fx: { 1 đến 2 hiệu ứng trong: atk, nl, hp, gold, luck, daoTam, tuchat, kv, wake, bad, ban }, r (1 câu kết quả) }. tuchat và kv chỉ xuất hiện ở tối đa 3 lựa chọn mỗi loại trong cả bộ; mỗi lựa chọn có cái được và (nếu lợi lớn) cái mất.
+- Nội dung: Hồi 1 (0 đến 3 tuổi) là chuyện sơ sinh, bệnh, điềm lạ, cha mẹ; Hồi 2 (4 đến 7) là chơi đùa, bạn bè, học chữ, lần đầu thấy tu sĩ; Hồi 3 (8 đến 11) là việc nhà, đánh nhau, giữ lời, thử tư chất, gặp tán tu. Giọng đời thường pha nhẹ, chuyện buồn kể nhẹ nhàng. Không tên nước thật. Không cần biết xuất thân (bản theo xuất thân làm ở 9A).
+- Thêm vào js/files.js trong nhóm js/data. Thêm bài kiểm thử trong tests.html "Dữ liệu tuổi thơ (8A2)": mỗi hồi ≥ 8 sự kiện, id không trùng, mỗi sự kiện 2 đến 3 lựa chọn, ax chỉ dùng bốn trục và trong ±3, fx chỉ dùng khóa cho phép và 1 đến 2 khóa, bad trỏ đúng id tật, needBan khớp với khe {ban}, số lần dùng tuchat/kv ≤ 3.
+
+Kiểm: `node tools/run-tests.js` đạt toàn bộ, `node tools/baseline.js --check` trùng khít. Commit, push theo CLAUDE.md. Báo: số sự kiện mỗi hồi, kết quả kiểm thử.
+```
+
+## 8A3. Sonnet: nối tuổi thơ vào hộp Đời mới (cần 8A và 8A2)
+
+```
+Repo: Phongxuan123/tu-tien. Gắn repo, clone nhánh `add-game-project` (trả lời tiếng Việt, ngắn gọn, xưng "mình", gọi tôi là "bạn"). Đọc CLAUDE.md. Điều kiện: 8A và 8A2 đã có trên nhánh (thiếu thì dừng và báo tôi).
+
+Đọc: Z mục "Đợt 8" (Đặc tả 8A, Đặc tả tuổi thơ, mục "8A đã làm"); js/data/childhood.js; js/systems/nature.js; mã hộp Đời mới do 8A viết; js/systems/world.js (life.reincarnate, TT.social.childhood).
+
+NHIỆM VỤ: js/systems/childhood.js (TT.childhood: plan(c) bốc danh sách sự kiện ba hồi bằng băm, không gọi TT.rng; apply(c, ev, choice) áp ax qua TT.nature.shift (không tính trần năm) và fx có kẹp theo D.CHILDHOOD.cap cộng dồn trong c.childFx; auto(c) chọn theo affinity; summary(c)). Giao diện: sau khi xác nhận hộp Đời mới thì hiện lần lượt hộp từng sự kiện (tiêu đề hồi, chữ, lựa chọn có chấm "hợp tính"), rồi hộp Tổng kết 12 tuổi (đổi tính cách, chỉ số, tóm tắt từng hồi; nút "Đầu thai lại" và "Vào đời"). Ghi nhật ký tóm tắt. Chế độ Tự động và kiểm thử: chạy auto, không hiện hộp. Không dùng w.pending.
+
+Quy tắc như 8A. Công tắc D.CHILDHOOD.on = false thì `--check` trùng khít (thêm cờ --childhood=off). Bật thì đo 40 hạt giống, ghi số. Kiểm thử "Tuổi thơ (8A3)": số sự kiện mỗi hồi theo p2/p3 (đo trên 2.000 lần bốc: khoảng 1,75 mỗi hồi), không lặp, không gọi rng, kẹp trần, auto chọn theo affinity, lưu/tải, công tắc. Playwright: cả luồng Đời mới → ba hồi → Tổng kết trên máy tính và điện thoại.
+Cuối: ghi "8A3 đã làm" vào Z, Q mục 22; KE-HOACH.md; push theo CLAUDE.md. Báo ngắn gọn.
+```
+
+## 8B. Sonnet: khung tuyến `TT.story` + vòng quay `TT.wheel` + tuyến mẫu A1-A3 + life-sim (cần 8A; tốt nhất sau 8A3)
+
+```
+Repo: Phongxuan123/tu-tien. Gắn repo, clone nhánh `add-game-project` (trả lời tiếng Việt, ngắn gọn, xưng "mình", gọi tôi là "bạn"). Đọc CLAUDE.md. Điều kiện: 8A đã có trên nhánh (TT.nature, TT.kv); thiếu thì dừng và báo tôi.
+
+Đọc có chọn lọc: Z mục "Đợt 8" (Đặc tả 8A, Đặc tả 8B là bản chốt, các mục "đã làm"); Q mục 7 (vòng quay, 7.2 đến 7.8), 9.1 (xương sống A), 10 (kiến trúc tuyến), 6.5 (khóa mềm, phí trái tính); js/systems/decisions.js (cả file, 217 dòng: handlers, w.pending thuần dữ liệu), js/systems/events.js 120-250 (chooseIndex, cách đưa hộp), js/ui/quests.js, js/systems/cultivation.js 215-240 (đột phá), tools/baseline.js (mẫu chạy Playwright cho life-sim).
+
+NHIỆM VỤ: đúng "Đặc tả 8B".
+1. js/systems/story.js (TT.story) và js/systems/wheel.js (TT.wheel), handler 'story' và 'wheel' trong decisions.js; gọi tick tháng của story chỉ cho người chơi; mọi hàm đọc không gọi rng.
+2. js/data/stories/bb_a.js: tuyến A1 đến A3 (mỗi mốc 1 đến 2 chặng, 2 đến 4 lựa chọn, có gate và gia ở vài lựa chọn, 1 vòng quay ở A3, ít nhất 2 hậu quả trễ, kết cục cộng khí vận theo Q 5.3). Chữ tự viết ngắn gọn, giọng pha, nghiêm ở chuyện lớn.
+3. Giao diện: hộp chặng (nhãn Truyện, chấm hợp/trái tính, khóa có lý do), hộp vòng quay SVG, mục "Truyện của đời bạn" trong tab Nhiệm vụ; dừng thời gian ở x8/x16 khi có hộp.
+4. tools/story-lint.js (chạy được bằng node, kiểm toàn bộ D.STORY.arcs), lệnh TT.story.jump, tools/life-sim.js (`node tools/life-sim.js --seed=101 [--years=80]`, ra tools/life-sim/101.txt; thêm thư mục vào .gitignore trừ 3 tệp mẫu cho hạt giống 101, 102, 103).
+
+Quy tắc: không đổi TT.VERSION, trường mới khởi tạo muộn; công tắc D.STORY.on = false thì `node tools/baseline.js --check` trùng khít (cờ --story=off). Bật thì đo 40 hạt giống trước/sau và nhịp quyết định (bài "Nhịp quyết định" phải vẫn < 6 lần/phút). Kiểm thử "Truyện và vòng quay (8B)": story-lint sạch, mở tuyến đúng điều kiện, hạn tự tiến theo mac, hậu quả trễ chín đúng khoảng, gate và gia, vai lấy NPC có sẵn, vòng quay (tổng 100, một yếu tố, điểm trong [−10, +15], quay lại 1 lần, trừ khí vận, chặn vùng cao nhất và khi thiếu điểm, +1 khi vùng cao nhất), lưu/tải giữa chặng và giữa vòng quay, công tắc. Playwright: hộp chặng, vòng quay, tab Nhiệm vụ trên máy tính và điện thoại.
+Cuối: ghi "8B đã làm" vào Z, Q mục 22; KE-HOACH.md; push theo CLAUDE.md. Báo ngắn gọn, kèm đường dẫn 3 tệp life-sim mẫu để tôi đọc.
+```
+
+## 8B2. Sonnet: sửa lõi sau khi đọc life-sim (cần 8B)
+
+```
+Repo: Phongxuan123/tu-tien. Gắn repo, clone nhánh `main` (trả lời tiếng Việt, ngắn gọn, xưng "mình", gọi tôi là "bạn"). Đọc CLAUDE.md. Làm trên nhánh `add-game-project` (tạo lại từ origin/main nếu PR Đợt 8 đã merge; nếu chưa merge thì checkout origin/add-game-project). TIẾT KIỆM: chỉ đọc đúng phần ghi dưới đây, chạy kiểm thử lọc theo từ khóa, chạy đầy đủ một lần cuối, Playwright tối đa 1 ảnh.
+
+Đọc: Z mục "Đợt 8" phần "8B2" (bản chốt) và "8B đã làm"; js/data/story.js; js/data/stories/bb_a.js; js/systems/story.js (phần mở tuyến và kiểm điều kiện mo/khi); js/systems/nature.js (shift, quán tính, affinity); js/systems/events.js chooseIndex (dòng ~120-145); js/systems/stats.js 95-105 (sơ/trung/hậu kỳ); nơi ghi dòng tổng kết năm và tin đồn (grep "Tuổi ' +" và "Tin đồn").
+
+NHIỆM VỤ (đúng "8B2"):
+1. Điều kiện `stage` (0 sơ, 1 trung, 2 hậu kỳ) và `tuoi` cho mo/khi, ghép "cảnh giới HOẶC tuổi" (mo: { hoac: [ {realm, stage}, {age} ] } hoặc dạng tương đương gọn); cập nhật story-lint. Sửa bb_a: A2 Luyện Khí hoặc 18 tuổi; A3 Luyện Khí trung kỳ hoặc 35 tuổi; thêm d_pham cho chặng cần chữ khác khi còn phàm nhân. Ghi quy ước "60 đến 70% nội dung hạ xuống Luyện Khí trung kỳ" vào chú thích đầu js/data/story.js làm hướng dẫn viết tuyến.
+2. Chống trôi: quán tính dải cực 0,3; dịch trục từ sự kiện thường ngày (không phải chặng truyện, không phải tuổi thơ) nhân 0,5; chooseIndex của người chơi ở chế độ Tự động/Cân bằng chọn ngẫu nhiên theo trọng số affinity (quy tắc nếu-thì vẫn đè). Hệ số để trong D.NATURE.
+3. Lọc nhật ký: gom dòng tổng kết năm không có gì (+0) và tin đồn lặp (cùng loại, cùng nơi trong 3 năm) thành một dòng cuối năm.
+
+Kiểm: `node tools/story-lint.js` sạch; `node tools/baseline.js --check` trùng khít (baseline không bước người chơi); bài kiểm thử mới "Sửa lõi (8B2)": điều kiện hoặc-tuổi, stage, quán tính 0,3, Tự động không luôn chọn hợp nhất (đo 500 lần), lọc nhật ký; bài 8A/8B cũ vẫn đạt (sửa bài nếu chỉ do hệ số đổi, ghi rõ). Chạy lại `node tools/life-sim.js` cho 101, 102, 103: không đời nào có cả bốn trục ở dải cực, A1 đến A3 đều xảy ra trong 40 năm đầu; dòng nhật ký giảm rõ. Chạy đầy đủ run-tests một lần cuối.
+Cuối: ghi "8B2 đã làm" vào Z (kèm số dòng nhật ký trước/sau, tính cách cuối 3 đời), Q mục 22; push theo CLAUDE.md. Báo ngắn gọn.
+```
+
+---
+
+# Đợt 9 và gói nội dung (theo ngân sách, Z mục 7b; chốt 2026-10-20)
+
+Thứ tự (sửa 2026-10-20): 8B2 → **9A-d (Haiku)** → **9A (Sonnet)** → **9B (Sonnet)** → **9B-d (Haiku)** → **9K (Sonnet)** → Cổng chơi thử 7 → **N1, N2 (Haiku)** → (8C nếu còn tiền) → hoàn thiện. **9C, 9C-d hoãn** (bạn chưa muốn làm phần kết), prompt vẫn giữ bên dưới để dùng sau. Mọi phiên: nhánh `add-game-project` (tạo lại từ origin/main nếu PR trước đã merge, nếu chưa thì checkout origin/add-game-project); TIẾT KIỆM: chỉ đọc đúng phần ghi, kiểm thử lọc theo từ khóa, chạy đầy đủ một lần cuối, Playwright tối đa 1 ảnh; trả lời tiếng Việt, ngắn gọn, xưng "mình", gọi tôi là "bạn"; đọc CLAUDE.md trước; cuối phiên ghi "… đã làm" vào Z (mục Đợt 9 hoặc 7b), push theo CLAUDE.md, báo ngắn gọn.
+
+## 9A-d. Haiku: dữ liệu 8 xuất thân, tuổi thơ theo xuất thân, chữ mốc A4 đến A6
+
+```
+Repo: Phongxuan123/tu-tien. Gắn repo, làm theo dòng "Mọi phiên" ở đầu mục Đợt 9 trong ke-hoach/PROMPT-phien-moi.md.
+Đọc: Q mục 8.1 đến 8.4 (grep -n "^#" rồi đọc theo offset), 9.1 (xương sống A), Z mục "8B2" (hạ cảnh giới, mốc theo tuổi); js/data/childhood.js (định dạng sự kiện tuổi thơ); js/data/stories/bb_a.js (định dạng tuyến, đã có A1 đến A3); js/data/story.js (chú thích hướng dẫn viết tuyến).
+
+NHIỆM VỤ, chỉ DỮ LIỆU (không sửa js/systems):
+1. js/data/origins2.js: D.ORIGINS2 gồm 8 xuất thân: p1 Nông hộ (28), p2 Thợ thủ công, ngư dân, thợ săn (13), p3 Nhà thương nhân (13), p5 Cô nhi lang thang (12), t1 Cha hoặc mẹ là tán tu (12), t3 Gia tộc luyện đan (8), t6 Hậu duệ đệ tử tông (8), t10 Gia tộc sa sút (6) (số trong ngoặc là trọng số). Mỗi cái: { id, n, w, d (2 câu), start: { gold, luck?, daoTam?, atk?, nl?, items?: [id có thật trong js/data/items.js] }, gom: chuỗi gánh nặng 1 câu, cha_me: { co: true/false (cô nhi false), tu: true/false }, ax: { trục: ±1..±2 } (nghiêng tính cách lúc sinh), bi_mat?: 1 câu (chỉ t10, t1 có thể), place_types: [loại địa điểm phù hợp, lấy từ js/data/places.js] }.
+2. Thêm vào js/data/childhood.js mảng D.CHILDHOOD.ev các sự kiện có trường `origin: ['p1', ...]`: mỗi xuất thân 3 sự kiện (ít nhất 1 mỗi hồi cho p5, t3, t10), cùng định dạng và trần như sự kiện chung.
+3. js/data/stories/bb_a.js: thêm tuyến bb_a4 (Vị thế: biến cố thế giới kéo vào, chọn phe / đứng ngoài / lợi dụng), bb_a5 (Đạo quả: thu đồ, lập nghiệp, đồng kỳ trở lại), bb_a6 (Thiên môn: kết đời, vòng quay 4 vùng đọa ma / tọa hóa để lại truyền thừa / ẩn thế / phi thăng, yếu tố nhân quả: dùng stat 'nghiep' ngược chiều hoặc rep). Mở: A4 Trúc Cơ hoặc 55 tuổi, A5 tuổi 75 hoặc Kim Đan, A6 thọ còn 10% hoặc Hóa Thần (dùng điều kiện "hoặc" và stage do 8B2 làm; đọc story.js phần mo để dùng đúng khóa). Mỗi mốc 1 đến 2 chặng, 2 đến 4 lựa chọn, có d_pham khi người chơi còn phàm nhân, ít nhất 1 hậu quả trễ mỗi mốc, kết cục cộng khí vận theo Q 5.3.
+Kiểm: `node tools/story-lint.js` sạch; bài kiểm thử "Dữ liệu xuất thân (9A-d)" (đủ 8, tổng trọng số 100, items có thật, place_types có thật, mỗi xuất thân 3 sự kiện tuổi thơ hợp lệ); run-tests lọc "tuổi thơ|xuất thân|8B" rồi đầy đủ; baseline --check trùng khít. Ghi "9A-d đã làm". Push.
+```
+
+## 9A. Sonnet: hệ xuất thân, cha mẹ thật, nối A4 đến A6
+
+```
+Repo: Phongxuan123/tu-tien. Gắn repo, làm theo dòng "Mọi phiên" ở đầu mục Đợt 9 trong ke-hoach/PROMPT-phien-moi.md. Điều kiện: 9A-d đã có trên nhánh.
+Đọc: Q mục 8.2, 8.4, 8.5; Z "8B2", "9A-d đã làm"; js/data/origins2.js; js/systems/character.js (createChar, origin hiện tại lấy từ reg.origins); js/systems/world.js (life.reincarnate); js/systems/childhood.js (plan: bốc sự kiện); js/ui/newlife.js; js/systems/family.js (cách tạo quan hệ huyết thống, parents, children).
+
+NHIỆM VỤ (chỉ người chơi; NPC giữ origin cũ):
+1. Bốc xuất thân người chơi theo D.ORIGINS2 bằng băm (không gọi rng), áp start và ax; c.origin2 = id; c.origin (chữ hiển thị) đổi theo. Địa điểm sinh ưu tiên place_types. Công tắc D.ORIGINS2.on.
+2. Cha mẹ là NPC thật khi cha_me.co: dựng 1 đến 2 NPC (TT.life.spawnNpc hoặc createChar, tuổi 30 đến 50, tu theo cha_me.tu), quan hệ huyết thống với người chơi, sống tiếp trong thế giới (có thể chết). Vì việc này rút rng, đặt SAU mọi lần rút cũ của reincarnate và ghi rõ; đo 40 hạt giống bật/tắt.
+3. Tuổi thơ bốc thêm sự kiện có origin khớp (ưu tiên trọng số ×2). Hộp Đời mới hiện xuất thân, cha mẹ, gánh nặng; Bốc lại đổi cả xuất thân.
+4. Bí mật (bi_mat) ghi cờ c.flags.biMat để tuyến sau đọc; chưa cần lộ.
+5. Hồ sơ hiện xuất thân và cha mẹ (tên, còn sống).
+Kiểm thử "Xuất thân (9A)": tỉ lệ bốc gần trọng số (2.000 lần, băm), không gọi rng khi đọc, start áp đúng, cô nhi không có cha mẹ, cha mẹ có quan hệ huyết thống, tuổi thơ có sự kiện theo xuất thân, A4 đến A6 mở đúng (TT.story.jump và mô phỏng tuổi), lưu/tải, bản lưu cũ không vỡ, công tắc tắt trùng khít. life-sim 101-103 chạy lại, ghi vào Z. Ghi "9A đã làm". Push.
+```
+
+## 9B. Sonnet: R1 lõi + cơ chế đạo lữ
+
+```
+Repo: Phongxuan123/tu-tien. Gắn repo, làm theo dòng "Mọi phiên" ở đầu mục Đợt 9 trong ke-hoach/PROMPT-phien-moi.md.
+Đọc: R mục 1.1 (đã chốt, gồm mục 10), 4.1, 4.2, 5.1 đến 5.5, 10, 12 (mọi câu theo mặc định, đã chốt 2026-10-20); Z mục 7b; js/systems/relations.js (TT.rel), js/systems/family.js (song tu, kết đạo lữ, mixTraits), js/data/relevents.js (hộp Duyên tình cũ), js/systems/story.js (applyFx, vai) và js/data/story.js.
+
+NHIỆM VỤ (chỉ cặp của người chơi; NPC với NPC giữ cũ):
+1. R1 lõi: world.rel[key].d = { love, trust, respect, debt, st, since } khởi tạo muộn cho cặp thân thiết của người chơi (|v| ≥ 40 hoặc có loại đặc biệt); loại chính theo R 4.2 (ban, ket_nghia, dao_lu, thuong, hon_uoc, su_do, huyet, an, thu, cu); chuyển bản lưu cũ một lần (love cũ → d.love, k cũ → loại). TT.bond: get, bars, label, shift, setType. Hàm đọc không gọi rng.
+2. Đạo lữ: giai đoạn (gặp, mến, tỏ tình, hôn ước tùy, kết, ở bên, thử thách, rạn nứt hoặc vĩnh biệt) lưu ở d.st; 1 chính + tối đa 2 phụ; tương hợp từ bốn trục tính cách (khoảng cách) và đạo; song tu 1 đến 2 lần mỗi năm, thưởng giảm dần khi nhiều lần; chênh cảnh giới gây "nỗi buồn tuổi thọ"; đạo lữ NPC tự chủ (có thể từ chối, rời). Hôn ước chỉ do thế lực/gia tộc ép người chơi, có nhánh từ chối.
+3. Mở rộng fx của story: bond: { vai, love?, trust?, respect?, debt?, st?, type? } và điều kiện mo/khi theo bond (vai đạt giai đoạn hoặc thanh). Tuyến đạo lữ sẽ viết bằng dữ liệu (phiên 9B-d), nên chỉ cần 1 tuyến khung mẫu ngắn (3 chặng: gặp, tỏ tình, kết) trong js/data/stories/dl_mau.js để kiểm.
+4. Giao diện: tab Gia đình/Quan hệ hiện ba thanh (Tình, Tin, Kính) và chip Ơn/Oán cho cặp thân thiết, giai đoạn đạo lữ. Chưa gộp tab (để sau).
+Công tắc D.BOND.on; tắt thì baseline --check trùng khít. Kiểm thử "Quan hệ và đạo lữ (9B)": thanh, loại, chuyển bản cũ, giai đoạn, tương hợp, song tu giảm thưởng, đạo lữ NPC từ chối được, fx bond trong story, lưu/tải, công tắc. story-lint sạch. Ghi "9B đã làm" (kèm danh sách khóa fx/điều kiện mới để 9B-d viết dữ liệu). Push.
+```
+
+## 9B-d. Haiku: khoảng 12 chặng đạo lữ (dữ liệu tuyến)
+
+```
+Repo: Phongxuan123/tu-tien. Gắn repo, làm theo dòng "Mọi phiên" ở đầu mục Đợt 9 trong ke-hoach/PROMPT-phien-moi.md. Điều kiện: 9B đã có trên nhánh.
+Đọc: Z "9B đã làm" (khóa fx và điều kiện bond); R mục 5.1 đến 5.5, 3 (mục tiêu 6: văn học, không miêu tả thân mật, đau thương kể gián tiếp); js/data/story.js (hướng dẫn viết tuyến); js/data/stories/dl_mau.js và bb_a.js (mẫu).
+NHIỆM VỤ: chỉ DỮ LIỆU js/data/stories/dao_lu.js: 3 đến 4 tuyến, tổng khoảng 12 chặng, phủ hành trình gặp → mến → tỏ tình → (hôn ước bị ép, có nhánh từ chối) → kết đạo lữ → ở bên → thử thách (chia đường tu, kẻ thứ ba, chênh thọ) → rạn nứt và hòa giải hoặc chia tay → vĩnh biệt (tang, kể gián tiếp). Có 2 vòng quay (ví dụ lời tỏ tình, giữ hay buông khi chênh thọ, yếu tố rel hoặc nature), ít nhất 3 hậu quả trễ, khóa mềm theo tính cách ở vài lựa chọn. 60 đến 70% chặng mở từ Luyện Khí trung kỳ trở xuống (theo hướng dẫn). Chữ ngắn, giọng pha, nghiêm ở chuyện lớn; tên NPC qua khe vai.
+Kiểm: story-lint sạch; run-tests lọc "đạo lữ|9B|Truyện"; chạy life-sim 101-103 (in đời có chặng đạo lữ hay không). Ghi "9B-d đã làm". Push.
+```
+
+## 9K. Sonnet: kết nghĩa qua trải nghiệm chung (cần 9B; thay chỗ 9C)
+
+```
+Repo: Phongxuan123/tu-tien. Gắn repo, làm theo dòng "Mọi phiên" ở đầu mục Đợt 9 trong ke-hoach/PROMPT-phien-moi.md. Điều kiện: 9B đã có trên nhánh (TT.bond).
+Đọc: Z mục "Đợt 9" phần "9K" (bản chốt) và "9B đã làm"; R mục 4.1, 4.2, 1.1 mục 9 (nút hành động ưu tiên thấp, cùng địa điểm); js/data/relevents.js (rel_ket_nghia, rel_ke_thu, rel_nho_giup, opp_*); js/systems/social.js 130-160 (chỗ bật rel_ket_nghia); js/systems/dungeon.js (enter và kết thúc), js/systems/combat.js (chỗ đánh), js/systems/quests.js (hoàn thành); js/systems/world.js 55-65 (tin huynh đệ chết); js/ui/people.js (hồ sơ cặp).
+
+NHIỆM VỤ (đúng "9K"; chỉ cặp của người chơi; ưu tiên MÓC VÀO SỰ KIỆN SẴN CÓ, chỉ thêm 3 sự kiện mới):
+1. TT.bond.remember(c, o, loai, chu, nang) ghi d.mem (tối đa 8, giữ hoạn nạn) và cộng Tin/Kính; gọi ở các điểm móc liệt kê trong Z (bí cảnh, đánh nhau, nhờ giúp, nhiệm vụ, sự kiện thế giới ở vùng, bạn thuở nhỏ, nghe giảng/luận đạo/đấu giá). Chữ ký ức ngắn, có tên nơi.
+2. Đồng hành: TT.bond.ally(c) chọn bạn thân cùng nơi (thiện cảm ≥ 40) đi cùng theo xác suất (cao hơn nếu người chơi đã bấm "Rủ đi cùng", lệnh ưu tiên thấp); giúp +5 đến +10% thắng, chia chiến lợi phẩm, có thể bị thương/chết thay; ghi ký ức cho cả hai. Hệ số trong D.BOND.
+3. Viết lại rel_ket_nghia: chỉ bật khi ≥ 3 ký ức chung và ≥ 1 hoạn nạn (thay ngưỡng thiện cảm 60); chữ nhắc lại 1 đến 2 ký ức; giữ nhánh từ chối (nk).
+4. Sau kết nghĩa: huynh đệ tự đến giúp khi rel_ke_thu; liên lụy thù; tặng đồ khi thiếu; khi chết thêm ký ức cuối và nhật ký. Ba sự kiện mới (tự viết chữ, ngắn): "Huynh đệ gặp nạn" (đi cứu hay không, hậu quả trễ), "Lợi và nghĩa" (lợi lớn đặt cạnh lời thề; khóa mềm theo Đạo đức hoặc vòng quay yếu tố Tin), "Tái ngộ" (sau ≥ 10 năm không gặp).
+5. Giao diện: mục "Kỷ niệm" trong hồ sơ cặp; life-sim in ký ức các cặp thân.
+Công tắc D.BOND.mem; tắt thì baseline --check trùng khít. Kiểm thử "Kết nghĩa (9K)": ký ức sinh ở từng điểm móc (ít nhất 4 loại), trần 8 và giữ hoạn nạn, đồng hành giúp đúng biên, kết nghĩa không bật khi thiếu ký ức và bật khi đủ, chữ nhắc ký ức, ba sự kiện mới, lưu/tải, công tắc. life-sim 101-103 (100 năm): đếm ký ức, có kết nghĩa hay không. Ghi "9K đã làm"; push. Sau phiên này là Cổng chơi thử 7: báo tôi chơi thử.
+```
+
+## 9C. Sonnet: con cái, thừa kế, màn kết đời (HOÃN, chưa chạy)
+
+```
+Repo: Phongxuan123/tu-tien. Gắn repo, làm theo dòng "Mọi phiên" ở đầu mục Đợt 9 trong ke-hoach/PROMPT-phien-moi.md. Điều kiện: 9B đã có trên nhánh.
+Đọc: R mục 6.1 đến 6.7, 12 (mặc định đã chốt); Q mục 21.1 ý 1 (màn kết đời, bia mộ); Z "9B đã làm"; js/systems/family.js (thụ thai, sinh, mixTraits, tối đa con); js/systems/world.js (life.inherit, chết, đầu thai); js/ui/newlife.js.
+NHIỆM VỤ (con của người chơi):
+1. Thụ thai: ý định có con (cờ người chơi, mặc định theo tính cách), xác suất 10% mỗi buổi song tu ở Phàm nhân/Luyện Khí giảm dần về 1% ở cảnh giới cao; tối đa 2 con cả đời (gồm con nuôi); thai kỳ có rủi ro hiếm (kể gián tiếp). Thay xác suất 1,8%/tháng cũ cho người chơi; NPC giữ cũ.
+2. Con có bốn trục tính cách (băm từ cha mẹ + nhiễu), xuất thân thừa hưởng từ cha mẹ (gia tộc của người chơi), giai đoạn (sơ sinh, thơ ấu, thiếu niên, lập nghiệp) và 5 điểm quyết định (giáo dưỡng 6-8 tuổi, vào tu hành 12, nổi loạn, lập nghiệp, thừa kế) dưới dạng chặng truyện (fx mới: kid: { id/vai, ax, st }); phần còn lại chạy theo tính cách. Bond cha mẹ-con dùng TT.bond (9B).
+3. Thừa kế: di chúc (chọn trước người nhận gia sản, di vật; mặc định theo năng lực và quan hệ); khi kế thừa con mang theo ơn, oán, nợ, di vật rõ ràng (nối life.inherit).
+4. Màn kết đời: khi chết hoặc phi thăng, hộp tóm tắt đời (xuất thân, tuổi thơ, xương sống đến mốc nào và kết cục, tuyến đã qua, đạo lữ, con, tính cách đầu/cuối, khí vận kiếm/tiêu, dòng bia mộ: đạo hiệu + một câu ghép từ dữ liệu D.EPITAPH), lưu vào Sổ đời (w.lives). Có nút "Kế thừa" / "Đầu thai".
+5. 1 tuyến khung mẫu ngắn js/data/stories/con_mau.js (2 chặng) để kiểm.
+Công tắc D.KID.on; tắt thì baseline --check trùng khít. Kiểm thử "Con cái và kết đời (9C)": xác suất theo cảnh giới, tối đa 2, tính cách con, 5 điểm quyết định, di chúc và kế thừa mang ơn oán, màn kết đời có đủ mục và lưu Sổ đời, lưu/tải, công tắc. Ghi "9C đã làm" (kèm khóa fx/điều kiện mới cho 9C-d). Push.
+```
+
+## 9C-d. Haiku: khoảng 12 chặng con cái + chữ bia mộ (HOÃN, chưa chạy)
+
+```
+Repo: Phongxuan123/tu-tien. Gắn repo, làm theo dòng "Mọi phiên" ở đầu mục Đợt 9 trong ke-hoach/PROMPT-phien-moi.md. Điều kiện: 9C đã có trên nhánh.
+Đọc: Z "9C đã làm"; R mục 6.2 đến 6.6; js/data/story.js (hướng dẫn); js/data/stories/con_mau.js, dao_lu.js (mẫu).
+NHIỆM VỤ: chỉ DỮ LIỆU: js/data/stories/con_cai.js khoảng 12 chặng phủ 5 điểm quyết định (mỗi điểm 2 đến 3 lựa chọn, có 1 vòng quay ở "nổi loạn" hoặc "thừa kế", yếu tố rel cha mẹ-con), thai kỳ (1 chặng, rủi ro kể gián tiếp), con gặp nạn hoặc thành danh (hậu quả trễ của giáo dưỡng, ít nhất 2). Bổ sung D.EPITAPH (khoảng 40 mảnh câu theo kết cục, tính cách cuối, chuyện lớn) để ghép dòng bia mộ.
+Kiểm: story-lint sạch; run-tests lọc "con|9C"; life-sim 101-103 với 120 năm, ghi đời nào có con, kết đời ra sao. Ghi "9C-d đã làm". Push.
+```
+
+## N1, N2. Haiku: gói nội dung tuyến (sau Cổng 7)
+
+```
+Repo: Phongxuan123/tu-tien. Gắn repo, làm theo dòng "Mọi phiên" ở đầu mục Đợt 9 trong ke-hoach/PROMPT-phien-moi.md.
+Gói: N1 = T1 Tán tu, T2 Đệ tử tông, T5 Thương nhân, tuyến thế giới W1 (làng bị phá). N2 = T3 Đan sư, T9 Báo thù, chuỗi Nhẫn (chuyển từ sự kiện cũ c.ring, Q 14.3), tuyến thế giới W3. (Ghi gói đang làm ở dòng đầu khi dán prompt.)
+Đọc: Q mục 11.0 và đúng mục con của từng tuyến trong gói (grep tên tuyến), 12 (tuyến thế giới tương ứng), 7.5 (ví dụ vòng quay), 13.3 (dàn nhân vật); js/data/story.js (hướng dẫn, khóa fx và điều kiện, gồm bond; KHÔNG dùng kid vì 9C hoãn); mẫu bb_a.js, dao_lu.js.
+NHIỆM VỤ: chỉ DỮ LIỆU, mỗi tuyến một tệp js/data/stories/<id>.js, 4 đến 6 chặng, 1 vòng quay ở chặng cuối, ít nhất 2 hậu quả trễ, khóa mềm theo tính cách, khi hợp thì cho bạn đồng hành/huynh đệ kết nghĩa tham gia (vai lấy người có ký ức chung, xem Z "9K"), điều kiện mở theo nghề/đạo/tông/vùng sẵn có (đọc tên trường trong js/data/jobs.js, paths.js, sects.js khi cần); 60 đến 70% chặng mở từ Luyện Khí trung kỳ trở xuống. Tuyến thế giới mở khi biến cố thế giới tương ứng xảy ra (đọc tên sự kiện/cú sốc trong js/data/eco.js hoặc natevents.js; nếu chưa có móc phù hợp thì mở theo điều kiện vùng + xác suất thấp và ghi chú để phiên hoàn thiện nối).
+Kiểm: story-lint sạch; run-tests lọc "Truyện"; life-sim 101-103 (đếm số hộp truyện mỗi đời, mục tiêu tăng rõ so với trước gói; nhịp dưới 6 hộp/phút). Ghi "N1 đã làm" (hoặc N2) vào Z mục 7b. Push.
+```

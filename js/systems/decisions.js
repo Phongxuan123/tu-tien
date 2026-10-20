@@ -70,6 +70,14 @@
       const c = TT.world.chars[d.charId];
       if (c && c.alive && d.choices[i].key === 'sub') TT.press.subscribe(c);
     },
+    story(d, i) {
+      const c = TT.world.chars[d.charId];
+      if (c && c.alive) TT.story.choose(c, d, d.choices[i].key);
+    },
+    wheel(d, i) {
+      const c = TT.world.chars[d.charId];
+      if (c && c.alive) TT.wheel.act(c, d, d.choices[i].key);
+    },
     death: rebirth,
     ascend: rebirth
   };
@@ -204,6 +212,8 @@
       w.pending = null;
       const h = handlers[d.type];
       if (h) h(d, i);
+      // Lựa chọn có kind ở các hộp khác (hộp sự kiện đã dịch trong events.apply) cũng dịch tính cách người chơi.
+      if (d.type !== 'event' && d.choices[i].kind) { const pc = TT.world.chars[d.charId]; if (pc && pc.alive && pc.kind === 'player') TT.nature.shiftKind(pc, d.choices[i].kind, d.title); }
       if (TT.time) TT.time.slowAfterChoice();
       TT.bus.emit('decision', null);
     },

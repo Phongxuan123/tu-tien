@@ -12,6 +12,7 @@
     ui.render();
     TT.time.start();
     ui.loop();
+    ui.childhood.resume(); // tải bản lưu giữa chừng tuổi thơ
   }
 
   window.addEventListener('DOMContentLoaded', boot);

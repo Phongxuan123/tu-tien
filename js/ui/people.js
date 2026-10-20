@@ -68,7 +68,7 @@
       off: qs.offers.map(o => o.text),
       recent: TT.quests.list(c).filter(q => q.state !== 'on').slice(-4).map(q => q.id + q.state),
       opps: TT.rumors.active().filter(o => o.region === c.region || o.kind === 'ke_thu').map(o => [o.id, Math.floor((o.open - m) / 3), Math.floor((o.close - m) / 3)]),
-      plan: c.plan, n: Object.keys(TT.rel.list(c)).length
+      plan: c.plan, n: Object.keys(TT.rel.list(c)).length, story: TT.story.sig(c)
     };
   }
   function buildGoals(box, c) {

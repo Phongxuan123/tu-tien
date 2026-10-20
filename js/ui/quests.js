@@ -94,5 +94,6 @@
     }
     const st = s.stats;
     if (st.done + st.fail + st.drop) box.appendChild(h('div', { class: 'small' }, 'Cả đời này: xong ' + st.done + ', hỏng ' + st.fail + ', bỏ ' + st.drop + '.'));
+    if (ui.story) ui.story.build(box, c);
   };
 })();

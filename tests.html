@@ -431,7 +431,7 @@ test('Tầng quyết định: tầng 2 đếm ngược rồi chọn mặc địn
 });
 
 test('Quy tắc nếu-thì: ép hành động theo sinh lực/vàng/bình cảnh và chọn lựa chọn sự kiện', () => {
-  const p = freshPlayer(21, { realm: 1, direction: 'phieu_luu' });
+  D.CHILDHOOD.on = false; const p = freshPlayer(21, { realm: 1, direction: 'phieu_luu' }); D.CHILDHOOD.on = true; // tuổi thơ (8A3) đổi tính cách: bài này đo quy tắc, không đo tuổi thơ
   p.rules = TT.rules.defaults();
   p.hp = S.hpMax(p) * 0.2;
   for (let i = 0; i < 30; i++) eq(TT.ai.choose(p), 'rest', 'sinh lực thấp phải nghỉ');
@@ -3275,6 +3275,553 @@ test('Liên tông (S8): đọc không gọi rng, vai trò và bổng, quốc sư
   const txt = JSON.stringify([K.roles, K.stance, D.DIPLO.kinds, D.DIPLO.pactLabel]);
   ['Trung Quốc', 'Nhật Bản', 'Mỹ', 'Nga', 'Đức', 'Ấn Độ', 'Mông Cổ', 'Iran', 'Venice', 'La Mã', 'Hà Lan', 'Ottoman', 'Viking', 'Khmer'].forEach(w => ok(txt.indexOf(w) < 0, 'chữ không nhắc tên nước thật: ' + w));
   line('info', '   300 năm có liên tông: ' + Math.round(ms) + ' ms');
+});
+// ---------------- Tính cách và khí vận (8A) ----------------
+test('Tính cách và khí vận (8A): bốc không trung dung hết, trong ±8, ít nhất 2 trục |v| ≥ 3, tất định, không gọi rng', () => {
+  const N = TT.nature, K = D.NATURE.roll, s0 = TT.rng.getState();
+  let wide = 0;
+  for (let id = 1; id <= 400; id++) {
+    const a = N.rollVec(500 + (id % 7), id, id % 3), b = N.rollVec(500 + (id % 7), id, id % 3);
+    eq(JSON.stringify(a), JSON.stringify(b), 'cùng đầu vào thì cùng kết quả');
+    const abs = N.IDS.map(k => Math.abs(a[k]));
+    ok(abs.every(x => x <= K.max), 'trong ±8: ' + JSON.stringify(a));
+    ok(abs.filter(x => x >= K.minAbs).length >= K.minAxes, 'ít nhất 2 trục lệch: ' + JSON.stringify(a));
+    if (abs.some(x => x >= 7)) wide++;
+  }
+  ok(wide > 0, 'có người lệch tới dải cực');
+  eq(TT.rng.getState(), s0, 'bốc bằng băm, không đụng rng');
+  // Khác id thì khác kết quả (không phải một giá trị cố định)
+  ok(new Set([1, 2, 3, 4, 5, 6, 7, 8].map(i => JSON.stringify(N.rollVec(9, i, 0)))).size > 4, 'đa dạng');
+  // Tạo thế giới: bật/tắt công tắc cho cùng trạng thái rng (bốc người chơi không rút thêm số)
+  D.NATURE.on = true; TT.life.createWorld(61); const sOn = TT.rng.getState(), pOn = TT.player();
+  ok(pOn.nature && N.IDS.every(k => Math.abs(pOn.nature[k]) <= 8), 'người chơi có c.nature');
+  D.NATURE.on = false; try { TT.life.createWorld(61); eq(TT.rng.getState(), sOn, 'bật hay tắt đều cùng dòng rng'); } finally { D.NATURE.on = true; }
+});
+
+test('Tính cách và khí vận (8A): dải, nhãn, nhãn tóm tắt và nhãn cũ suy từ trục', () => {
+  const N = TT.nature;
+  [[-10, 0], [-7, 0], [-6, 1], [-3, 1], [-2, 2], [0, 2], [2, 2], [3, 3], [6, 3], [7, 4], [10, 4]].forEach(x => eq(N.bandIdx(x[0]), x[1], 'dải của ' + x[0]));
+  TT.life.createWorld(62); const p = TT.player();
+  N.set(p, { tinh: -9, xuthe: 5, daoduc: 0, tudung: 1 });
+  eq(N.label(p, 'tinh'), 'Nóng nảy bộc phát'); eq(N.label(p, 'xuthe'), 'Khá khéo léo'); eq(N.label(p, 'daoduc'), 'Trung dung');
+  eq(N.summary(p), 'Nóng nảy, khéo léo');
+  eq(p.personality, 'lieu_linh', 'nhãn cũ suy từ trục (boldOf, path.js, social.js đọc được)');
+  ok(D.personalityById[p.personality], 'nhãn cũ có trong D.personalities');
+  N.set(p, { tinh: 5, xuthe: 0, daoduc: 7, tudung: 0 }); eq(p.personality, 'hien_hoa');
+  N.set(p, { tinh: 1, xuthe: -1, daoduc: 0, tudung: 2 }); eq(p.personality, 'trung_lap', 'không trục nào lệch thì Bình thường');
+  eq(N.summary(p), 'Trung dung');
+  // NPC: chỉ có ánh xạ đọc
+  const npc = Object.values(TT.world.chars).find(c => c.kind === 'npc');
+  const v = N.get(npc); ok(npc.nature === undefined && N.IDS.every(k => typeof v[k] === 'number'), 'NPC không có c.nature, chỉ ánh xạ đọc');
+});
+
+test('Tính cách và khí vận (8A): dịch có quán tính, trần mỗi năm, sổ 30 mục, nhật ký khi đổi dải', () => {
+  const N = TT.nature; TT.life.createWorld(63); const p = TT.player();
+  N.set(p, { tinh: 0, xuthe: 0, daoduc: 0, tudung: 0 }); p.natureLog = []; p.log.length = 0; p.daoTam = 50; p.realm = 0;
+  const d1 = N.shift(p, 'tinh', 1, 'thử');
+  ok(Math.abs(d1 - 1) < 0.01 && Math.abs(p.nature.tinh - 1) < 0.01, 'dịch +1: ' + d1);
+  const d2 = N.shift(p, 'tinh', 10, 'thử');
+  ok(Math.abs(p.nature.tinh - 3) < 0.011, 'trần ±3 mỗi trục mỗi năm: ' + p.nature.tinh);
+  eq(N.shift(p, 'tinh', 1, 'thử'), 0, 'hết hạn mức năm');
+  const big = N.shift(p, 'xuthe', 9, 'biến cố lớn', true);
+  ok(big > 5.9 && big <= 6, 'biến cố lớn tới ±6: ' + big);
+  TT.world.months += 12; // sang năm khác thì dịch tiếp được
+  ok(N.shift(p, 'tinh', 1, 'thử') > 0.9, 'năm mới');
+  // Quán tính: đi tiếp vào dải cực chậm hơn, đi ngược thì bình thường
+  p.nature.daoduc = 8; TT.world.months += 12;
+  const into = N.shift(p, 'daoduc', 1, 'thử'), back = N.shift(p, 'daoduc', -1, 'thử');
+  ok(Math.abs(into - 0.6) < 0.02, 'vào dải cực nhân 0,6: ' + into); ok(Math.abs(back + 1) < 0.02, 'đi ngược nhân 1: ' + back);
+  // Đạo tâm cao, cảnh giới cao làm khó đổi
+  TT.world.months += 12; p.nature.tudung = 0; p.daoTam = 100; const hard = N.shift(p, 'tudung', 1, 'thử'); ok(hard < 0.85, 'đạo tâm cao đổi chậm: ' + hard);
+  // Không vượt ±10
+  TT.world.months += 12; p.nature.tinh = 9.8; p.daoTam = 50; N.shift(p, 'tinh', 3, 'thử'); ok(p.nature.tinh <= 10, 'không quá +10');
+  // Nhật ký khi đổi dải
+  TT.world.months += 12; p.nature.xuthe = 2.4; p.log.length = 0; N.shift(p, 'xuthe', 1, 'thử');
+  ok(p.log.some(e => /Tính cách đổi/.test(e.t)), 'ghi nhật ký khi qua dải: ' + JSON.stringify(p.log.map(e => e.t)));
+  p.log.length = 0; TT.world.months += 12; N.shift(p, 'xuthe', 0.3, 'thử'); ok(!p.log.some(e => /Tính cách đổi/.test(e.t)), 'cùng dải thì không ghi');
+  // Sổ 30 mục
+  for (let i = 0; i < 80; i++) { TT.world.months += 12; N.shift(p, 'tudung', i % 2 ? 0.5 : -0.5, 'vòng ' + i); }
+  ok(p.natureLog.length <= 30 && p.natureLog.length >= 25, 'sổ tối đa 30 mục: ' + p.natureLog.length);
+  const e = p.natureLog[p.natureLog.length - 1]; ok(e.ax && e.d && e.why && e.m != null, 'mục có đủ trường');
+  // NPC không dịch
+  const npc = Object.values(TT.world.chars).find(c => c.kind === 'npc'); eq(N.shift(npc, 'tinh', 1, 'x'), 0); ok(!npc.nature);
+});
+
+test('Tính cách và khí vận (8A): kind của lựa chọn dịch trục; sự kiện thật của người chơi dịch, của NPC thì không', () => {
+  const N = TT.nature; TT.life.createWorld(64); const p = TT.player();
+  const base = () => { N.set(p, { tinh: 0, xuthe: 0, daoduc: 0, tudung: 0 }); p.natureLog = []; p.daoTam = 50; p.realm = 0; p.natureYr = null; TT.world.months += 12; };
+  Object.keys(D.NATURE.kindAx).forEach(kind => {
+    base(); N.shiftKind(p, kind, 'thử');
+    const m = D.NATURE.kindAx[kind];
+    Object.keys(m).forEach(k => ok(Math.sign(p.nature[k]) === Math.sign(m[k]) && p.nature[k] !== 0, kind + ' dịch ' + k));
+    N.IDS.filter(k => !m[k]).forEach(k => eq(p.nature[k], 0, kind + ' không đụng ' + k));
+  });
+  eq(D.NATURE.kindAx.risk.tinh < 0 && D.NATURE.kindAx.safe.tinh > 0 && D.NATURE.kindAx.help.daoduc > 0 && D.NATURE.kindAx.pay.xuthe > 0, true);
+  ok(D.NATURE.kindAx.fight.xuthe < 0 && D.NATURE.kindAx.fight.tinh < 0 && D.NATURE.kindAx.flee.tinh > 0, 'fight, flee');
+  // Qua events.apply
+  base();
+  const e = { id: 'thu8a', title: 'Thử', tier: 2, choices: [{ key: 'g', label: 'Giúp', kind: 'help', run: () => 'xong' }] };
+  TT.events.apply(p, e, 'g', {}); ok(p.nature.daoduc > 0, 'apply dịch trục người chơi');
+  const npc = Object.values(TT.world.chars).find(c => c.kind === 'npc'); TT.events.apply(npc, e, 'g', {}); ok(!npc.nature, 'NPC không có c.nature');
+  // Qua hộp quyết định khác (decisions.resolve): lựa chọn có kind
+  base(); TT.world.pending = null;
+  TT.decisions.request({ type: 'job', charId: p.id, tier: 3, title: 'Thử', text: 't', choices: [{ key: '', label: 'a', kind: 'help' }, { key: '', label: 'b' }], def: 0 });
+  TT.decisions.resolve(0); ok(p.nature.daoduc > 0, 'hộp quyết định khác cũng dịch theo kind');
+});
+
+test('Tính cách và khí vận (8A): độ hợp tính cách (affinity) và chooseIndex của người chơi', () => {
+  const N = TT.nature; TT.life.createWorld(65); const p = TT.player(); p.daoTam = 50;
+  const ev = { choices: [{ key: 'r', kind: 'risk' }, { key: 's', kind: 'safe' }] }, ch = ev.choices.map(x => ({ key: x.key, kind: x.kind, disabled: false }));
+  const s0 = TT.rng.getState();
+  N.set(p, { tinh: -9, xuthe: 0, daoduc: 0, tudung: 0 });
+  ok(N.affinity(p, { kind: 'risk' }) > 1.5 && N.affinity(p, { kind: 'safe' }) < 0.7, 'nóng nảy hợp liều');
+  eq(ev.choices[TT.events.defaultIndex(p, ev, ch, false)].key, 'r', 'nóng nảy chọn liều');
+  N.set(p, { tinh: 9, xuthe: 0, daoduc: 0, tudung: 0 });
+  ok(N.affinity(p, { kind: 'safe' }) > 1.5 && N.affinity(p, { kind: 'risk' }) < 0.7, 'điềm tĩnh hợp an toàn');
+  eq(ev.choices[TT.events.defaultIndex(p, ev, ch, false)].key, 's', 'điềm tĩnh chọn an toàn');
+  const ev2 = { choices: [{ key: 'a', kind: 'help' }, { key: 'b', kind: 'pay' }] }, ch2 = ev2.choices.map(x => ({ key: x.key, kind: x.kind, disabled: false }));
+  p.gold = 500; N.set(p, { tinh: 0, xuthe: 0, daoduc: 9, tudung: 0 }); eq(ev2.choices[TT.events.defaultIndex(p, ev2, ch2, false)].key, 'a', 'nhân hậu chọn giúp');
+  N.set(p, { tinh: 0, xuthe: 9, daoduc: -3, tudung: 0 }); eq(ev2.choices[TT.events.defaultIndex(p, ev2, ch2, false)].key, 'b', 'khéo léo chọn trả');
+  eq(N.affinity(p, { kind: 'khong_co' }), 1, 'kind lạ trung tính');
+  N.set(p, { tinh: 0, xuthe: 0, daoduc: 0, tudung: 0 }); ok(Math.abs(N.affinity(p, { kind: 'risk' }) - 1) < 1e-9, 'trung dung thì trung tính');
+  eq(TT.rng.getState(), s0, 'hàm đọc không gọi rng');
+  // Quy tắc nếu-thì vẫn đè
+  p.rules.risk = { on: true, v: 'skip' }; N.set(p, { tinh: -9, xuthe: 0, daoduc: 0, tudung: 0 });
+  eq(ev.choices[TT.events.defaultIndex(p, ev, ch, false)].key, 's', 'quy tắc nếu-thì đè tính cách');
+  // Tác động số có trần ±10%
+  N.set(p, { tinh: -10, xuthe: 0, daoduc: 0, tudung: -10 }); let m = N.mods(p); ok(m.bold <= 1.1 + 1e-9 && m.tamMa >= -0.1 - 1e-9 && m.tamMa < 0, 'đầu cực âm: liều +10%, tâm ma -10%');
+  N.set(p, { tinh: 10, xuthe: 0, daoduc: 0, tudung: 10 }); m = N.mods(p); ok(m.bold >= 0.9 - 1e-9 && m.tamMa <= 0.1 + 1e-9 && m.tamMa > 0, 'đầu cực dương');
+  const npc = Object.values(TT.world.chars).find(c => c.kind === 'npc'); const mn = N.mods(npc); eq(mn.bold, 1); eq(mn.tamMa, 0);
+});
+
+test('Tính cách và khí vận (8A): khí vận kvPts = baseKv đã rút, không rút thêm, không trần, S.kv thụ động tối đa 20, tiêu giảm vận thụ động', () => {
+  const K = TT.kv; D.CHILDHOOD.on = false; // tuổi thơ (8A3) có thể cộng/trừ khí vận: bài này đo lần rút lúc sinh
+  D.NATURE.on = true; TT.life.createWorld(71); const sOn = TT.rng.getState(), p = TT.player();
+  ok(Number.isInteger(p.kvPts) && p.kvPts === p.baseKv - (p.ring ? 30 : 0) + (p.ring ? 2 : 0), 'kvPts lấy từ baseKv: ' + p.kvPts + ' / ' + p.baseKv);
+  ok(p.kvPts >= 0 && p.kvPts <= 12, 'trong 0..10 (cộng 2 nếu có nhẫn)');
+  D.NATURE.on = false; let off; try { TT.life.createWorld(71); off = TT.player(); eq(TT.rng.getState(), sOn, 'không rút thêm số'); } finally { D.NATURE.on = true; }
+  eq(off.baseKv, p.baseKv, 'baseKv cũ y nguyên'); eq(off.kvPts, undefined, 'tắt thì không có kvPts');
+  // 40 người: kvPts = lần rút cũ
+  for (let s = 100; s < 140; s++) {
+    D.NATURE.on = false; TT.life.createWorld(s); const o = TT.player(); const bk = o.baseKv - (o.ring ? 30 : 0); D.NATURE.on = true;
+    TT.life.createWorld(s); const n = TT.player(); eq(n.kvPts - (n.ring ? 2 : 0), bk, 'hạt ' + s);
+  }
+  D.CHILDHOOD.on = true; TT.life.createWorld(72); const q = TT.player(); q.ring = false; q.kvPts = 5; q.traitIds = [];
+  K.add(q, 40, 'thử'); eq(q.kvPts, 45, 'không trần');
+  eq(S.kv(q), 20 + S.mod(q, 'kv'), 'S.kv thụ động tối đa 20');
+  q.kvPts = 7; eq(S.kv(q), 7 + S.mod(q, 'kv'));
+  ok(K.spend(q, 3, 'thử') && q.kvPts === 4 && S.kv(q) === 4 + S.mod(q, 'kv'), 'tiêu làm giảm vận thụ động');
+  ok(!K.spend(q, 5, 'thử') && q.kvPts === 4, 'thiếu điểm thì không tiêu'); ok(K.can(q, 4) && !K.can(q, 5));
+  eq(K.add(q, 0, 'x'), 0); eq(K.add(q, -2, 'x'), 0, 'add chỉ cộng');
+  ok(K.log(q).length >= 2 && K.log(q).every(e => e.m != null && e.d && e.src !== undefined), 'sổ khí vận');
+  for (let i = 0; i < 40; i++) K.add(q, 1, 'vòng ' + i); ok(q.kvLog.length <= 20, 'sổ tối đa 20 mục');
+  // NPC giữ công thức cũ
+  const npc = Object.values(TT.world.chars).find(c => c.kind === 'npc'); eq(S.kv(npc), npc.baseKv + S.mod(npc, 'kv'), 'NPC giữ baseKv'); eq(K.add(npc, 2, 'x'), 0); ok(npc.kvPts === undefined);
+});
+
+test('Tính cách và khí vận (8A): khí vận nguồn cộng (kỳ ngộ vận mệnh, nhẫn thật, đột phá Kim Đan trở lên), không cộng theo thời gian', () => {
+  const K = TT.kv; TT.life.createWorld(73); const p = TT.player(); p.ring = false; p.kvPts = 3; p.kvLog = []; p.flags = {};
+  // Kỳ ngộ vận mệnh +2
+  let got = null, n = 0; while (!got && n++ < 400) got = TT.ev.kyNgo(p, 1, ['kv']);
+  ok(got, 'kỳ ngộ vận mệnh xảy ra'); eq(p.kvPts, 5, 'kỳ ngộ vận mệnh +2');
+  // Nhẫn thật +2
+  p.ring = false; p.flags = {}; p.gold = 500; const before = p.kvPts, nl = D.eventById.nhan_la; n = 0;
+  while (!p.ring && n++ < 200) nl.choices[0].run(p);
+  ok(p.ring, 'nhẫn thật'); eq(p.kvPts, before + 2, 'nhẫn thật +2 (không phải +15)');
+  // Đột phá Kim Đan trở lên +1 mỗi cảnh giới, một lần
+  p.realm = 2; p.xp = 0; const b2 = p.kvPts;
+  TT.cult.breakSuccess(p, 0, null, true, false); eq(p.realm, 3); eq(p.kvPts, b2 + 1, 'lên Kim Đan +1');
+  TT.cult.breakSuccess(p, 0, null, true, false); eq(p.realm, 4); eq(p.kvPts, b2 + 2, 'lên Nguyên Anh +1');
+  p.realm = 2; TT.cult.breakSuccess(p, 0, null, true, false); eq(p.kvPts, b2 + 2, 'cùng cảnh giới không cộng lần hai');
+  p.realm = 1; TT.cult.breakSuccess(p, 0, null, true, false); eq(p.kvPts, b2 + 2, 'dưới Kim Đan không cộng');
+  // Không cộng theo thời gian: 80 năm, tắt sự kiện ngẫu nhiên, chỉ có nguồn đột phá
+  TT.life.createWorld(74); const q = TT.player(); q.ring = false; const k0 = q.kvPts, log0 = (q.kvLog || []).length;
+  const mo = TT.events.monthly, hold = TT.events.monthly; TT.events.monthly = () => {};
+  try { for (let i = 0; i < 960 && q.alive; i++) { if (TT.world.pending) TT.decisions.resolveDefault(); TT.life.stepWorld(); } } finally { TT.events.monthly = mo; }
+  const gained = (q.kvLog || []).slice(log0).filter(e => e.d > 0 && !/đột phá/.test(e.src));
+  eq(gained.length, 0, 'không có nguồn cộng nào ngoài đột phá'); 
+  eq(q.kvPts, k0 + (q.kvLog || []).slice(log0).reduce((a, e) => a + e.d, 0), 'điểm chỉ đổi theo sổ');
+});
+
+test('Tính cách và khí vận (8A): bản lưu cũ, lưu/tải, người kế thừa', () => {
+  const N = TT.nature, K = TT.kv; TT.life.createWorld(75); const p = TT.player();
+  // Bản lưu cũ: chưa có nature, kvPts; có nhãn cũ và baseKv
+  delete p.nature; delete p.natureLog; delete p.kvPts; delete p.kvLog; p.personality = 'hien_hoa'; p.baseKv = 7.4; p.ring = false;
+  const s0 = TT.rng.getState(), snap = JSON.stringify([p.nature, p.kvPts]);
+  eq(K.pts(p), 7, 'kvPts = max(0, round(baseKv))'); eq(S.kv(p), 7 + S.mod(p, 'kv'));
+  const g = N.get(p); ok(N.IDS.every(k => typeof g[k] === 'number'), 'đọc được khi chưa có c.nature');
+  ok(p.nature === undefined && p.kvPts === undefined, 'hàm đọc không khởi tạo dữ liệu'); eq(TT.rng.getState(), s0, 'hàm đọc không gọi rng');
+  eq(JSON.stringify(N.get(p)), JSON.stringify(N.get(p)), 'suy ra ổn định (băm)');
+  ok(g.daoduc >= 3 && g.tinh >= 2, 'suy từ nhãn Hiền hòa (Đạo đức +5, Tính tình +4, lệch ±2): ' + JSON.stringify(g));
+  p.baseKv = -5; eq(K.pts(p), 0, 'baseKv âm thì 0'); p.baseKv = 7.4;
+  N.shift(p, 'daoduc', 0.5, 'thử'); ok(p.nature && p.natureLog.length === 1, 'ensure muộn khi dịch');
+  eq(TT.rng.getState(), s0, 'ensure và shift không gọi rng');
+  K.add(p, 2, 'thử'); eq(p.kvPts, 9);
+  // Lưu và tải
+  const txt = TT.save.snapshot(), nat = JSON.stringify(p.nature), log = JSON.stringify(p.natureLog), lv = JSON.stringify(p.kvLog);
+  TT.life.createWorld(76); TT.save.restore(txt); const r = TT.player();
+  eq(JSON.stringify(r.nature), nat); eq(JSON.stringify(r.natureLog), log); eq(r.kvPts, 9); eq(JSON.stringify(r.kvLog), lv); eq(TT.VERSION, 13, 'không đổi TT.VERSION');
+  // Người kế thừa: con có nhãn cũ, ensure muộn, không lỗi
+  const heir = Object.values(TT.world.chars).find(c => c.kind === 'npc' && c.alive); const prev = TT.player();
+  TT.life.inherit(prev, heir); eq(TT.player().id, heir.id);
+  eq(heir.nature, undefined, 'kế thừa không bốc lại'); ok(K.pts(heir) >= 0 && S.kv(heir) >= 0);
+  N.shift(heir, 'tinh', 0.5, 'thử'); ok(heir.nature, 'dịch được sau khi kế thừa');
+});
+
+test('Tính cách và khí vận (8A): chia điểm chỉnh lúc sinh, Bốc lại, công tắc tắt trả về như cũ', () => {
+  const N = TT.nature;
+  const v = { tinh: 2, xuthe: -7, daoduc: 4, tudung: 0 }, a = N.autoAlloc(v, 4);
+  eq(a.xuthe, -10, 'dồn vào trục lệch nhất, cùng chiều (-7 → -10)'); eq(a.tinh, 2); eq(v.xuthe, -7, 'không đổi bản gốc');
+  eq(N.IDS.reduce((s, k) => s + Math.abs(a[k]) - Math.abs(v[k]), 0), 4, 'đúng 4 điểm');
+  const b = N.autoAlloc({ tinh: 9, xuthe: 0, daoduc: 0, tudung: -8 }, 4); eq(b.tinh, 10, 'đầy trục thì tràn sang trục kế'); eq(b.tudung, -10); eq(b.xuthe, 1, 'điểm còn lại tràn tiếp');
+  // Công tắc tắt: như cũ hoàn toàn
+  D.NATURE.on = false;
+  try {
+    TT.life.createWorld(77); const p = TT.player();
+    eq(p.nature, undefined); eq(p.kvPts, undefined); eq(p.personality, 'trung_lap', 'nhãn cũ của người chơi vẫn Bình thường');
+    eq(S.kv(p), p.baseKv + S.mod(p, 'kv'), 'S.kv như cũ');
+    eq(N.shift(p, 'tinh', 1, 'x'), 0); eq(TT.kv.add(p, 2, 'x'), 0); eq(TT.kv.spend(p, 1, 'x'), false); eq(N.mods(p).tamMa, 0);
+    const bk = p.baseKv; let got = null, n = 0; while (!got && n++ < 400) got = TT.ev.kyNgo(p, 1, ['kv']);
+    ok(got && p.baseKv > bk, 'kỳ ngộ vận mệnh cộng baseKv như cũ');
+    p.realm = 2; TT.cult.breakSuccess(p, 0, null, true, false); eq(p.kvPts, undefined, 'đột phá không cộng điểm khi tắt');
+    const ev = { choices: [{ key: 'r', kind: 'risk' }, { key: 's', kind: 'safe' }] }, ch = ev.choices.map(x => ({ key: x.key, kind: x.kind, disabled: false }));
+    TT.events.apply(p, { id: 'x', title: 'x', choices: [{ key: 'g', kind: 'help', run: () => 'ok' }] }, 'g', {}); eq(p.nature, undefined, 'apply không dịch khi tắt');
+    TT.events.defaultIndex(p, ev, ch, false);
+  } finally { D.NATURE.on = true; }
+  // Giao diện (chỉ khi có): hộp Đời mới và khối Hồ sơ không lỗi
+});
+
+// ---------------- Dữ liệu tuổi thơ (8A2) ----------------
+const CHILD_KINDS = ['risk', 'safe', 'fight', 'flee', 'help', 'pay'];
+const CHILD_AXES = ['tinh', 'xuthe', 'daoduc', 'tudung'];
+const CHILD_FX = ['atk', 'nl', 'hp', 'gold', 'luck', 'daoTam', 'tuchat', 'kv', 'wake', 'bad', 'ban'];
+const CHILD_NUM_FX = CHILD_FX.filter(k => k !== 'bad');
+test('Dữ liệu tuổi thơ (8A2): bật, p2/p3, trần; mỗi hồi ≥ 8 sự kiện, id không trùng, hoi 1 đến 3, w 1 đến 3', () => {
+  const C = TT.data.CHILDHOOD, ids = C.ev.map(e => e.id);
+  eq(C.on, true, 'công tắc bật'); ok(C.p2 > 0 && C.p2 <= 1 && C.p3 > 0 && C.p3 <= 1, 'p2, p3 trong (0, 1]');
+  eq(JSON.stringify(Object.keys(C.cap).sort()), JSON.stringify(['atk', 'bad', 'daoTam', 'hp', 'kv', 'luck', 'nl', 'tuchat']), 'trần đủ khóa');
+  ok(C.ev.length >= 24, 'tổng ≥ 24: ' + C.ev.length);
+  [1, 2, 3].forEach(h => ok(C.ev.filter(e => e.hoi === h).length >= 8, 'hồi ' + h + ' có ≥ 8: ' + C.ev.filter(e => e.hoi === h).length));
+  eq(new Set(ids).size, ids.length, 'id không trùng');
+  ok(C.ev.every(e => /^th_/.test(e.id) && [1, 2, 3].indexOf(e.hoi) >= 0 && e.w >= 1 && e.w <= 3 && e.t && e.d), 'id th_, hoi, w, t, d đủ');
+});
+test('Dữ liệu tuổi thơ (8A2): mỗi sự kiện d 2 đến 3 câu; 2 đến 3 lựa chọn, key không trùng, kind và label, r đủ', () => {
+  TT.data.CHILDHOOD.ev.forEach(e => {
+    const n = e.d.split(/[.!?](?:\s|$)/).map(s => s.trim()).filter(Boolean).length;
+    ok(n >= 2 && n <= 3, e.id + ': d có ' + n + ' câu');
+    ok(e.ch.length >= 2 && e.ch.length <= 3, e.id + ': ' + e.ch.length + ' lựa chọn');
+    eq(new Set(e.ch.map(c => c.key)).size, e.ch.length, e.id + ': key không trùng');
+    e.ch.forEach(c => {
+      ok(CHILD_KINDS.indexOf(c.kind) >= 0, e.id + '/' + c.key + ': kind ' + c.kind);
+      ok(typeof c.label === 'string' && c.label.length > 0 && typeof c.r === 'string' && c.r.length > 0, e.id + '/' + c.key + ': label và r');
+    });
+  });
+});
+test('Dữ liệu tuổi thơ (8A2): ax chỉ dùng bốn trục, 1 đến 2 trục, giá trị nguyên trong ±3', () => {
+  TT.data.CHILDHOOD.ev.forEach(e => e.ch.forEach(c => {
+    const keys = Object.keys(c.ax);
+    ok(keys.length >= 1 && keys.length <= 2, e.id + '/' + c.key + ': ' + keys.length + ' trục');
+    keys.forEach(k => {
+      ok(CHILD_AXES.indexOf(k) >= 0, e.id + '/' + c.key + ': trục lạ ' + k);
+      const v = c.ax[k];
+      ok(Number.isInteger(v) && v !== 0 && Math.abs(v) <= 3, e.id + '/' + c.key + ': ' + k + ' = ' + v);
+    });
+  }));
+});
+test('Dữ liệu tuổi thơ (8A2): fx chỉ dùng khóa cho phép, 1 đến 2 khóa, số đúng kiểu, bad trỏ đúng tật g: 0', () => {
+  TT.data.CHILDHOOD.ev.forEach(e => e.ch.forEach(c => {
+    const keys = Object.keys(c.fx);
+    ok(keys.length >= 1 && keys.length <= 2, e.id + '/' + c.key + ': ' + keys.length + ' hiệu ứng');
+    keys.forEach(k => {
+      ok(CHILD_FX.indexOf(k) >= 0, e.id + '/' + c.key + ': fx lạ ' + k);
+      if (k === 'bad') { const t = TT.data.traitById[c.fx.bad]; ok(t && t.g === 0, e.id + '/' + c.key + ': bad ' + c.fx.bad + ' không phải tật'); }
+      else ok(Number.isInteger(c.fx[k]) && c.fx[k] !== 0, e.id + '/' + c.key + ': ' + k + ' phải là số nguyên khác 0');
+    });
+  }));
+});
+test('Dữ liệu tuổi thơ (8A2): needBan khớp khe {ban}, ban chỉ ở sự kiện có bạn; tuchat và kv ≤ 3 lựa chọn mỗi loại', () => {
+  const ev = TT.data.CHILDHOOD.ev;
+  ev.forEach(e => {
+    const hasSlot = e.d.indexOf('{ban}') >= 0;
+    eq(!!e.needBan, hasSlot, e.id + ': needBan khớp với {ban} trong d');
+    ok(e.ch.every(c => c.fx.ban === undefined) || !!e.needBan, e.id + ': fx ban chỉ ở sự kiện có needBan');
+    ok(e.ch.every(c => c.r.indexOf('{ban}') < 0), e.id + ': {ban} không lọt vào r');
+  });
+  const count = k => ev.reduce((s, e) => s + e.ch.filter(c => c.fx[k] !== undefined).length, 0);
+  ok(count('tuchat') <= 3, 'tuchat ' + count('tuchat') + ' lựa chọn');
+  ok(count('kv') <= 3, 'kv ' + count('kv') + ' lựa chọn');
+});
+
+// ---------------- Tuổi thơ (8A3) ----------------
+test('Tuổi thơ (8A3): số sự kiện mỗi hồi theo p2/p3 (đo 2.000 lần bốc), không lặp, không gọi rng, đọc thuần', () => {
+  const C = TT.data.CHILDHOOD, H = TT.childhood; TT.life.createWorld(81); const p = TT.player();
+  const s0 = TT.rng.getState(), snap = JSON.stringify([p.baseAtk, p.gold, p.childFx, p.child, TT.world.rel]);
+  let tot = 0, n2 = 0, n3 = 0, minN = 9, maxN = 0;
+  for (let i = 0; i < 2000; i++) {
+    const fake = { id: 5000 + i, birthMonth: -i * 7, name: 'Thử ' + i, relIds: {} }, pl = H.plan(fake), seen = {};
+    eq(pl.length, 3, 'ba hồi');
+    pl.forEach(h => {
+      ok(h.evs.length >= 1 && h.evs.length <= 3, 'mỗi hồi 1 đến 3: ' + h.evs.length); tot += h.evs.length; if (h.evs.length >= 2) n2++; if (h.evs.length === 3) n3++;
+      h.evs.forEach(e => { const ev = C.ev.find(x => x.id === e.id); eq(ev.hoi, h.hoi, 'đúng hồi'); ok(!seen[e.id], 'không lặp ' + e.id); seen[e.id] = 1; ok(!ev.needBan, 'không có bạn thì không bốc sự kiện cần bạn'); });
+    });
+    eq(JSON.stringify(H.plan(fake)), JSON.stringify(pl), 'cùng đầu vào, cùng danh sách (băm)');
+  }
+  const avg = tot / 6000, r2 = n2 / 6000, r3 = n3 / 6000;
+  ok(Math.abs(avg - (1 + C.p2 + C.p2 * C.p3)) < 0.06, 'trung bình mỗi hồi ' + avg.toFixed(3) + ' (kỳ vọng ' + (1 + C.p2 + C.p2 * C.p3) + ')');
+  ok(Math.abs(r2 - C.p2) < 0.04 && Math.abs(r3 - C.p2 * C.p3) < 0.04, 'tỉ lệ có sự kiện 2: ' + r2.toFixed(3) + ', sự kiện 3: ' + r3.toFixed(3));
+  eq(TT.rng.getState(), s0, 'plan không gọi rng'); eq(JSON.stringify([p.baseAtk, p.gold, p.childFx, p.child, TT.world.rel]), snap, 'plan không ghi dữ liệu');
+  // có bạn thì sự kiện cần bạn chỉ trỏ đúng bạn đó
+  const fr = Object.values(TT.world.chars).find(c => c.kind === 'npc' && c.alive), me = { id: 6000, birthMonth: 3, name: 'Thử', relIds: {} };
+  TT.rel.ensure(me, fr).v = 30; me.relIds[fr.id] = 1; let sawBan = 0;
+  for (let i = 0; i < 300; i++) { me.birthMonth = i; H.plan(me).forEach(h => h.evs.forEach(e => { if (e.ban) { eq(e.ban, fr.id); sawBan++; } })); }
+  ok(sawBan > 0, 'có sự kiện cần bạn khi có bạn');
+});
+
+test('Tuổi thơ (8A3): apply kẹp theo trần cộng dồn, ax qua nature.shift không tính trần năm', () => {
+  const H = TT.childhood, C = TT.data.CHILDHOOD; TT.life.createWorld(82); const p = TT.player();
+  if (!p.child) H.auto(p);
+  // làm lại sạch để đo trần
+  TT.life.createWorld(83); const q = TT.player(); const g0 = q.gold; q.child = null; q.childFx = {}; q.childLog = []; H.begin(q);
+  const a0 = q.baseAtk, n0 = q.baseNl, hp0 = q.trainHp, dt0 = q.daoTam, lk0 = q.baseLuck, t0 = q.tuchat.total, ax0 = q.nature.tinh, steps = q.child.steps.length;
+  const ev = { id: 'x', hoi: 1, t: 'x', d: 'x', ch: [{ key: 'a', label: 'a', kind: 'risk', ax: { tinh: -3 }, fx: { atk: 5, nl: 5 }, r: 'r' }] };
+  for (let i = 0; i < 6; i++) H.apply(q, ev, 'a', 0);
+  eq(q.baseAtk, a0 + C.cap.atk, 'atk kẹp +6'); eq(q.baseNl, n0 + C.cap.nl, 'nl kẹp +6'); eq(q.childFx.atk, C.cap.atk);
+  ok(q.nature.tinh < ax0 - 3.5, 'ax không tính trần ±3 mỗi năm: ' + ax0 + ' → ' + q.nature.tinh);
+  const ev2 = { id: 'y', hoi: 1, t: 'y', d: 'y', ch: [{ key: 'a', label: 'a', kind: 'safe', ax: {}, fx: { hp: 99, luck: 9, daoTam: 99, tuchat: 5, kv: 4, gold: 999 }, r: 'r' }, { key: 'b', label: 'b', kind: 'safe', ax: {}, fx: { luck: -9, daoTam: -99, atk: -99, gold: -999 }, r: 'r' }] };
+  H.apply(q, ev2, 'a', 0);
+  eq(q.trainHp - hp0, C.cap.hp, 'hp +30'); eq(q.baseLuck - lk0, C.cap.luck, 'luck +3'); eq(q.daoTam - dt0, C.cap.daoTam, 'daoTam +10'); eq(q.tuchat.total - t0, C.cap.tuchat, 'tuchat +1');
+  eq(q.tuchat.attrs.reduce((a, x) => a + x.p, 0), q.tuchat.total, 'tổng tư chất khớp các hệ'); eq(q.childFx.kv, C.cap.kv, 'kv +1'); eq(q.gold, g0 * 2, 'vàng cộng tối đa bằng vàng xuất thân'); 
+  H.apply(q, ev2, 'b', 0);
+  ok(q.childFx.luck >= -C.cap.luck && q.childFx.luck <= C.cap.luck, 'luck trong ±3');
+  ok(q.childFx.daoTam >= -C.cap.daoTam && q.childFx.atk >= -C.cap.atk, 'trần âm'); ok(q.gold >= 0, 'vàng không âm'); ok(q.hp === TT.stats.hpMax(q), 'đầy máu');
+  // tật: tối đa 1
+  const ev3 = { id: 'z', hoi: 1, t: 'z', d: 'z', ch: [{ key: 'a', label: 'a', kind: 'safe', ax: {}, fx: { bad: 'the_nhuoc' }, r: 'r' }, { key: 'b', label: 'b', kind: 'safe', ax: {}, fx: { bad: 'be_quan' }, r: 'r' }] };
+  const bads = TT.data.TRAITS.filter(t => !t.g).map(t => t.id); ev3.ch[1].fx.bad = bads.find(x => x !== 'the_nhuoc') || 'the_nhuoc';
+  H.apply(q, ev3, 'a', 0); H.apply(q, ev3, 'b', 0); eq(q.childFx.bad, 1, 'tối đa một tật'); ok(q.traitIds.indexOf('the_nhuoc') >= 0);
+  eq(q.child.i, 10, 'mỗi lần áp nhích một bước (6 + 1 + 1 + 2)'); ok(steps > 0);
+});
+
+test('Tuổi thơ (8A3): auto chọn theo affinity, ghi nhật ký, lưu/tải, bước dở dang', () => {
+  const H = TT.childhood; TT.life.createWorld(84); const p = TT.player();
+  ok(p.child && p.child.done, 'createWorld (không giao diện) chạy auto xong'); ok(p.childLog.length >= 3, 'có nhật ký ' + p.childLog.length);
+  const logs = p.log.filter(l => /Tuổi thơ/.test(l.t || l.text || JSON.stringify(l))); ok(logs.length >= 3, 'nhật ký tóm tắt ba hồi + chỉ số');
+  // chọn theo affinity: với tính cách cực, pick là lựa chọn hợp nhất
+  p.nature = { tinh: 10, xuthe: 0, daoduc: 10, tudung: 0 };
+  const ev = { ch: [{ key: 'a', kind: 'risk', ax: { daoduc: -3 } }, { key: 'b', kind: 'help', ax: { daoduc: 3 } }, { key: 'c', kind: 'safe', ax: { tinh: -3 } }] };
+  eq(H.pick(p, ev), 1, 'hợp nhất = giúp (daoduc +3)'); p.nature.daoduc = -10; eq(H.pick(p, ev), 0, 'đổi tính thì đổi lựa chọn');
+  TT.data.CHILDHOOD.ev.forEach(e => { const i = H.pick(p, e); ok(i >= 0 && i < e.ch.length); });
+  // tóm tắt thuần
+  const s0 = TT.rng.getState(), sm = H.summary(p); eq(TT.rng.getState(), s0); ok(sm.hoi.length === 3 && Array.isArray(sm.stats) && Array.isArray(sm.nature));
+  // lưu / tải
+  const txt = TT.save.snapshot(), fx = JSON.stringify(p.childFx), lg = JSON.stringify(p.childLog), ch = JSON.stringify(p.child);
+  TT.life.createWorld(85); TT.save.restore(txt); const r = TT.player();
+  eq(JSON.stringify(r.childFx), fx); eq(JSON.stringify(r.childLog), lg); eq(JSON.stringify(r.child), ch); eq(TT.VERSION, 13, 'không đổi TT.VERSION');
+  // bước dở dang: begin rồi apply từng bước bằng tay
+  TT.life.createWorld(86); const q = TT.player(); q.child = null; q.childFx = {}; q.childLog = []; H.begin(q);
+  ok(H.pending(q), 'đang dở'); let n = 0, s; while ((s = H.current(q))) { H.apply(q, s.ev, 0, s.ban); n++; }
+  eq(n, q.child.steps.length); const L0 = q.log.length; H.finish(q); ok(!H.pending(q)); const L1 = q.log.length; ok(L1 > L0, 'finish ghi nhật ký'); H.finish(q); eq(q.log.length, L1, 'finish lần hai không ghi lại');
+});
+
+test('Tuổi thơ (8A3): công tắc tắt thì không có gì; bật thì người chơi mạnh hơn chút; rng không lệch', () => {
+  const C = TT.data.CHILDHOOD; C.on = false;
+  try {
+    TT.life.createWorld(87); const p = TT.player();
+    eq(p.child, undefined, 'không có c.child'); eq(p.childFx, undefined); eq(TT.childhood.auto(p), null); eq(TT.childhood.begin(p), null);
+    ok(!p.log.some(l => /Tuổi thơ/.test(JSON.stringify(l))), 'không ghi nhật ký');
+    var off = TT.rng.getState(), a = p.baseAtk;
+  } finally { C.on = true; }
+  TT.life.createWorld(87); const q = TT.player();
+  eq(TT.rng.getState(), off, 'bật hay tắt, trạng thái rng sau khi sinh bằng nhau');
+  ok(q.child && q.child.done && q.childLog.length >= 3, 'bật thì có tuổi thơ');
+  ['atk', 'nl', 'luck', 'daoTam', 'hp'].forEach(k => { const v = q.childFx[k] || 0, cap = C.cap[k]; ok(v >= -cap && v <= cap, k + ' trong trần: ' + v); });
+  // NPC không có tuổi thơ
+  const npc = Object.values(TT.world.chars).find(c => c.kind === 'npc'); eq(npc.child, undefined); eq(TT.childhood.auto(npc), null);
+});
+
+// ---------------- Truyện và vòng quay (8B) ----------------
+function storyWorld(seed) { TT.life.createWorld(seed); const p = TT.player(); TT.world.pending = null; return p; }
+function clearPending() { TT.world.pending = null; }
+function withRoll(v, fn) { const o = TT.rng.RI; TT.rng.RI = function (a, b) { return a === 0 && b === 100 ? v : o.apply(this, arguments); }; try { return fn(); } finally { TT.rng.RI = o; } }
+
+test('Truyện và vòng quay (8B): story-lint sạch trên dữ liệu thật, và bắt được lỗi trên dữ liệu hỏng', () => {
+  const errs = TT.story.lint(); eq(errs.length, 0, 'lint: ' + errs.join(' | '));
+  ok(D.STORY.arcs.length >= 3 && D.STORY.arcs.every(a => a.loai === 'bb'), 'A1 đến A3 đã đăng ký');
+  const bad = JSON.parse(JSON.stringify(D.STORY.arcs.filter(a => a.id === 'bb_a3')));
+  bad[0].chang.c2.lc[0].wheel.vung[0].w = 20; bad[0].chang.c1.lc[0].toi = 'khong_co'; bad[0].chang.c1.lc[1].fx.tuy_y = 3; delete bad[0].chang.c1.lc[0].gate.why;
+  bad[0].chang.c1.lc[2].ax = { tinh: 9 }; bad[0].chang.c2.lc[0].wheel.gia = 9; bad[0].chang.c1.d = 'Chào {la}.';
+  const e2 = TT.story.lint(bad).join(' | ');
+  ['tổng độ rộng', 'chặng không có: khong_co', 'fx khóa không cho phép: tuy_y', 'thiếu lý do', 'ax.tinh', 'wheel.gia', 'khe {la}'].forEach(k => ok(e2.indexOf(k) >= 0, 'bắt được: ' + k + ' trong ' + e2));
+  D.STORY.arcs.forEach(a => Object.keys(a.chang).forEach(id => { const n = a.chang[id].lc.length; ok(n >= 2 && n <= 4, a.id + '/' + id + ' có ' + n + ' lựa chọn'); }));
+  ok(D.STORY.arcs.some(a => Object.keys(a.chang).some(id => a.chang[id].lc.some(l => l.gate))), 'có gate'); ok(D.STORY.arcs.some(a => Object.keys(a.chang).some(id => a.chang[id].lc.some(l => l.gia))), 'có gia');
+  eq(D.STORY.arcs.reduce((n, a) => n + Object.keys(a.chang).reduce((m, id) => m + a.chang[id].lc.reduce((k, l) => k + (l.tre ? l.tre.length : 0), 0), 0), 0) >= 2, true, 'ít nhất 2 hậu quả trễ');
+});
+
+test('Truyện và vòng quay (8B): mở tuyến đúng điều kiện (tuổi, tuyến trước xong, cảnh giới), mỗi tháng tối đa một hộp', () => {
+  const p = storyWorld(91), T = TT.story, w = TT.world;
+  ok(!p.story, 'khởi tạo muộn: chưa có c.story trước tick đầu');
+  T.tick(p); ok(p.story.arcs.bb_a1, 'A1 mở khi 12 tuổi'); ok(!p.story.arcs.bb_a2 && !p.story.arcs.bb_a3, 'A2, A3 chưa mở');
+  clearPending(); p.realm = 2; T.tick(p); ok(!p.story.arcs.bb_a2, 'A2 chưa mở khi A1 chưa xong dù cảnh giới đủ');
+  // làm xong A1 bằng tay
+  T.go(p, D.STORY.arcById.bb_a1, 'ket:vung'); ok(p.story.arcs.bb_a1.ket, 'A1 xong'); eq(p.story.done[0], 'bb_a1');
+  p.realm = 0; T.tick(p); ok(!p.story.arcs.bb_a2, 'A2 chưa mở khi chưa chạm Luyện Khí');
+  p.realm = 1; T.tick(p); ok(p.story.arcs.bb_a2 && !p.story.arcs.bb_a3, 'A2 mở ở Luyện Khí, A3 chưa');
+  T.go(p, D.STORY.arcById.bb_a2, 'ket:vung'); p.realm = 1; T.tick(p); ok(!p.story.arcs.bb_a3, 'A3 chưa mở ở Luyện Khí'); p.realm = 2; T.tick(p); ok(p.story.arcs.bb_a3, 'A3 mở ở Trúc Cơ');
+  // mỗi tháng tối đa một hộp, và cách nhau ít nhất gap tháng
+  const q = storyWorld(92), w2 = TT.world; clearPending(); let boxes = [], last = -99;
+  for (let m = 0; m < 400; m++) { w2.months++; q.realm = Math.min(2, Math.floor(m / 60)); T.tick(q); if (w2.pending) { if (w2.pending.type === 'story') { boxes.push(w2.months); ok(w2.months - last >= D.STORY.gap, 'cách nhau ≥ gap'); last = w2.months; } TT.decisions.resolveDefault(); } }
+  ok(boxes.length >= 3, 'có ít nhất 3 hộp chặng trong 400 tháng: ' + boxes.length); eq(new Set(boxes).size, boxes.length, 'không có hai hộp cùng tháng');
+});
+
+test('Truyện và vòng quay (8B): chặng quá hạn tự đi theo mac (ghi bỏ lỡ), không đi khi chưa tới hạn', () => {
+  const p = storyWorld(93), T = TT.story, w = TT.world, arc = D.STORY.arcById.bb_a1, ch = arc.chang.c1;
+  T.tick(p); clearPending(); const st = p.story.arcs.bb_a1; ok(st.st === 'c1', 'đang ở c1');
+  w.pending = { type: 'event', charId: p.id, tier: 3, choices: [{ key: 'x' }], title: 'chặn', text: 'chặn' }; // chặn hộp truyện hiện ra
+  w.months = st.since + (ch.khi.sau || 0) + ch.han; T.tick(p); eq(st.st, 'c1', 'đúng hạn chưa quá: chưa tự đi'); ok(p.nature, 'p còn sống');
+  w.months += 1; T.tick(p); eq(st.st, 'c2', 'quá hạn tự đi theo mac'); ok(p.flags.a1_tu && !p.flags.a1_su, 'đúng nhánh mac (tu_hoc)'); ok(p.log.some(l => /lỡ mất dịp/.test(l.t)), 'ghi bỏ lỡ'); ok(st.log.some(x => /bỏ lỡ/.test(x)));
+});
+
+test('Truyện và vòng quay (8B): gate (khóa mềm có lý do), gia (phí, thiếu thì khóa), phí trái tính, ax đổi tính cách', () => {
+  const p = storyWorld(94), T = TT.story; clearPending(); T.jump('bb_a3', 'c1');
+  let d = TT.world.pending; eq(d.type, 'story'); eq(d.choices.length, 3);
+  p.nature = { tinh: 0, xuthe: 0, daoduc: -8, tudung: 0 }; clearPending(); T.jump('bb_a3', 'c1'); d = TT.world.pending;
+  const tha = d.choices.find(x => x.key === 'tha'), giet = d.choices.find(x => x.key === 'giet');
+  ok(tha.disabled && /cứng như đá/.test(tha.why), 'Đạo đức −8 thì "Tha" bị khóa kèm lý do'); ok(!giet.disabled);
+  p.nature = { tinh: 0, xuthe: 0, daoduc: 8, tudung: 0 }; clearPending(); T.jump('bb_a3', 'c1'); d = TT.world.pending;
+  ok(d.choices.find(x => x.key === 'giet').disabled && /nhân hậu quá/.test(d.choices.find(x => x.key === 'giet').why), 'Đạo đức +8 thì "Ra tay" bị khóa'); ok(!d.choices.find(x => x.key === 'tha').disabled);
+  ok(d.choices.find(x => x.key === 'tha').hop && !d.choices.find(x => x.key === 'tha').trai, 'chấm hợp tính');
+  ok(d.choices.find(x => x.key === 'ne').trai || d.choices.find(x => x.key === 'giet').trai, 'có chấm trái tính');
+  eq(d.def, d.choices.findIndex(x => x.key === 'tha'), 'mặc định theo độ hợp tính cách');
+  // gia: thiếu vàng thì khóa, đủ thì trừ đúng
+  p.nature = { tinh: 0, xuthe: 0, daoduc: 0, tudung: 0 }; p.gold = 3; clearPending(); T.jump('bb_a1', 'c1'); d = TT.world.pending;
+  const tong = d.choices.find(x => x.key === 'xin_tong'); ok(tong.disabled && /vàng/.test(tong.why), 'thiếu vàng thì khóa: ' + tong.why);
+  p.gold = 50; clearPending(); T.jump('bb_a1', 'c1'); d = TT.world.pending; ok(!d.choices.find(x => x.key === 'xin_tong').disabled);
+  const x0 = p.xp; TT.decisions.resolve(d.choices.findIndex(x => x.key === 'xin_tong')); eq(p.gold, 40, 'trừ đúng 10 vàng'); ok(p.flags.a1_tong); ok(p.xp > x0, 'xp tăng'); eq(p.story.arcs.bb_a1.st, 'c2');
+  // phí trái tính và ax
+  p.nature = { tinh: 10, xuthe: 0, daoduc: 0, tudung: -10 }; p.daoTam = 50; clearPending(); T.jump('bb_a1', 'c2'); d = TT.world.pending;
+  const bo = d.choices.find(x => x.key === 'bo_cuoc'), cam = d.choices.find(x => x.key === 'cam_rang'); ok(cam.disabled, 'Tu dưỡng −10 thì "cắn răng" bị khóa (< −8)');
+  eq(!bo.disabled && bo.trai !== undefined, true);
+  const t0 = p.nature.tudung; TT.decisions.resolve(d.choices.findIndex(x => x.key === 'bo_cuoc')); ok(p.nature.tudung <= t0, 'ax tudung −2 dịch trục');
+  ok(p.daoTam <= 50 - 3 - (bo.trai ? D.STORY.trai.daoTam : 0) + 0.001, 'đạo tâm giảm theo fx (và phí trái tính nếu có): ' + p.daoTam);
+});
+
+test('Truyện và vòng quay (8B): khóa theo khoảng cách tính cách (3 điểm trái ý thì trái tính, 5 điểm thì không chọn được), lựa chọn mặc định không bị khóa', () => {
+  const p = storyWorld(107), T = TT.story, K = D.STORY; const L = K.traiAt, H = K.khoaAt; ok(L >= 2 && H > L && H <= 10, 'ngưỡng hợp lý: ' + L + '/' + H);
+  const at = v => { p.nature = { tinh: 0, xuthe: 0, daoduc: v, tudung: 0 }; clearPending(); p.gold = 100; T.jump('bb_a3', 'c1'); return TT.world.pending.choices.find(x => x.key === 'tha'); }; // tha: ax daoduc +2 (gate min −6)
+  let c = at(-(L - 1)); ok(!c.disabled && !c.trai, 'dưới ngưỡng trái: chọn được, chưa trái tính');
+  c = at(-L); ok(!c.disabled && c.trai, 'đủ ngưỡng trái: trái tính (mất đạo tâm) nhưng chọn được');
+  c = at(-(H - 1)); ok(!c.disabled && c.trai, 'sát ngưỡng khóa: còn chọn được');
+  c = at(-H); ok(c.disabled, 'đủ ngưỡng khóa: khóa (gate hoặc khoảng cách)');
+  p.nature = { tinh: 0, xuthe: 0, daoduc: -H, tudung: 0 }; clearPending(); T.jump('bb_a1', 'c1'); c = TT.world.pending.choices.find(x => x.key === 'theo_su'); // ax daoduc +1, không có gate
+  ok(c.disabled && /Quá trái bản tính/.test(c.why) && new RegExp('Đạo đức -' + H).test(c.why), 'khóa theo khoảng cách, ghi lý do: ' + c.why);
+  c = at(8); ok(!c.disabled && !c.trai && c.hop, 'đúng hướng thì không khóa');
+  eq(T.check(p, 'bb_a3', 'tha', 'c1').disabled, false);
+  // lựa chọn mặc định (mac) không bao giờ bị khóa theo khoảng cách
+  p.nature = { tinh: 10, xuthe: 0, daoduc: 0, tudung: 0 }; clearPending(); T.jump('bb_a3', 'c1'); const ne = TT.world.pending.choices.find(x => x.key === 'ne'); // ne: ax tinh +1, tudung −1; mac = ne
+  p.nature = { tinh: -10, xuthe: 0, daoduc: 0, tudung: 10 }; clearPending(); T.jump('bb_a3', 'c1'); ok(!TT.world.pending.choices.find(x => x.key === 'ne').disabled, 'mac không khóa dù trái hết cỡ'); eq(D.STORY.arcById.bb_a3.chang.c1.mac, 'ne');
+  // trục không nằm trong ax thì không tính
+  p.nature = { tinh: 0, xuthe: -10, daoduc: L - 1, tudung: 0 }; clearPending(); T.jump('bb_a3', 'c1'); ok(!TT.world.pending.choices.find(x => x.key === 'tha').disabled);
+  // máy không chọn lựa chọn bị khóa
+  p.nature = { tinh: 0, xuthe: 0, daoduc: -H, tudung: 0 }; clearPending(); T.jump('bb_a3', 'c1'); const d = TT.world.pending; ok(!d.choices[d.def].disabled, 'mặc định không phải lựa chọn bị khóa');
+});
+test('Truyện và vòng quay (8B): hậu quả trễ chín đúng khoảng, vai lấy NPC có sẵn trước khi dựng mới', () => {
+  const p = storyWorld(95), T = TT.story, w = TT.world; clearPending();
+  p.nature.daoduc = 3; T.jump('bb_a3', 'c1'); const st = p.story.arcs.bb_a3, vid = st.vai.dich; ok(vid, 'có vai dich'); const dich = w.chars[vid]; ok(dich && dich.kind === 'npc', 'vai là NPC thật');
+  const g0 = p.gold, m0 = w.months; TT.decisions.resolve(w.pending.choices.findIndex(x => x.key === 'tha'));
+  eq(p.story.due.length, 1, 'một hậu quả trễ'); const due = p.story.due[0]; ok(due.m >= m0 + 36 && due.m <= m0 + 120, 'chín trong 36 đến 120 tháng: +' + (due.m - m0));
+  clearPending(); w.months = due.m - 1; T.tick(p); eq(p.story.due.length, 1, 'chưa chín'); eq(p.gold, g0, 'chưa có tiền');
+  w.months = due.m; T.tick(p); eq(p.story.due.length, 0, 'chín đúng hạn'); ok(p.gold >= g0 + 40, 'nhận 40 vàng'); ok(p.log.some(l => /Mạng này ta nhớ/.test(l.t) && l.t.indexOf(dich.name) >= 0), 'log có tên người ở vai');
+  ok(T.pendingDue(p) === 0);
+  // vai: có NPC phù hợp thì dùng NPC sẵn, không dựng thêm
+  const q = storyWorld(96); const n0 = Object.keys(TT.world.chars).length; T.jump('bb_a1', 'c1'); const dan = TT.world.chars[q.story.arcs.bb_a1.vai.dan]; ok(dan && dan.kind === 'npc');
+  const n1 = Object.keys(TT.world.chars).length; const hadAdult = Object.values(TT.world.chars).some(o => o.id !== dan.id && o.kind === 'npc' && o.alive && o.tier === 'core' && o.region === q.region && TT.age(o) >= 25);
+  if (hadAdult || n1 === n0) eq(n1, n0, 'không dựng NPC mới khi đã có người phù hợp');
+  // không có ai thì dựng mới (dung_moi)
+  const r = storyWorld(97); Object.values(TT.world.chars).forEach(o => { if (o.kind === 'npc') o.left = true; }); const c0 = Object.keys(TT.world.chars).length; clearPending(); delete r.story; T.jump('bb_a1', 'c1');
+  ok(Object.keys(TT.world.chars).length > c0, 'dựng NPC mới khi không còn ai'); ok(TT.world.chars[r.story.arcs.bb_a1.vai.dan], 'vai trỏ NPC mới');
+});
+
+test('Truyện và vòng quay (8B): vòng quay: tổng 100, một yếu tố, điểm trong [−10, +15], vùng theo số, hàm đọc không gọi rng', () => {
+  const W = TT.wheel; let n = 0;
+  D.STORY.arcs.forEach(a => Object.keys(a.chang).forEach(id => a.chang[id].lc.forEach(lc => { if (!lc.wheel) return; n++;
+    const v = lc.wheel.vung; eq(v.reduce((s, z) => s + z.w, 0), 100, 'tổng = 100'); ok(v.length >= 2 && v.length <= 4, '2 đến 4 vùng'); ok(lc.wheel.yeu_to && !Array.isArray(lc.wheel.yeu_to), 'đúng một yếu tố'); ok(lc.wheel.gia >= 1 && lc.wheel.gia <= 5);
+    eq(W.zoneAt(v, 0), 0); eq(W.zoneAt(v, 100), v.length - 1, '100 vào vùng cuối'); eq(W.zoneAt(v, v[0].w - 1), 0); eq(W.zoneAt(v, v[0].w), 1, 'ranh giới vùng');
+  })));
+  ok(n >= 1, 'có ít nhất 1 vòng quay');
+  const p = storyWorld(98), st = { vai: {} }, wh = D.STORY.arcById.bb_a3.chang.c2.lc[0].wheel;
+  for (let t = -10; t <= 10; t++) { p.nature = { tinh: 0, xuthe: 0, daoduc: 0, tudung: t }; const f = W.factor(p, wh, st); ok(f.pts >= -10 && f.pts <= 15, 'điểm ' + f.pts + ' với trục ' + t); ok(f.why.length > 0); }
+  p.nature.tudung = 10; eq(W.factor(p, wh, st).pts, 15, 'trục +10 → +15 (trần)'); p.nature.tudung = -10; eq(W.factor(p, wh, st).pts, -10, 'trục −10 → −15 kẹp ở −10');
+  p.nature.tudung = 4; eq(W.factor(p, wh, st).pts, 6, '+1,5 điểm mỗi bậc');
+  // loại rel và stat
+  const o = Object.values(TT.world.chars).find(c => c.kind === 'npc'); TT.rel.ensure(p, o).v = 100; eq(W.factor(p, { yeu_to: { loai: 'rel', vai: 'x', tran: 15 } }, { vai: { x: o.id } }).pts, 15); TT.rel.ensure(p, o).v = -100; eq(W.factor(p, { yeu_to: { loai: 'rel', vai: 'x', tran: 15 } }, { vai: { x: o.id } }).pts, -10);
+  p.realm = 5; eq(W.factor(p, { yeu_to: { loai: 'stat', chi_so: 'realm', tran: 12 } }, st).pts, 12, 'tran kẹp');
+  const s0 = TT.rng.getState(), T = TT.story; T.rows(p); T.sig(p); T.pendingDue(p); T.check(p, 'bb_a1', 'theo_su', 'c1');
+  eq(TT.rng.getState(), s0, 'hàm đọc không gọi rng');
+});
+
+test('Truyện và vòng quay (8B): quay, quay lại (1 lần, tốn khí vận), chặn vùng cao nhất và khi thiếu điểm, +1 khí vận ở vùng cao nhất', () => {
+  const p = storyWorld(99), T = TT.story, W = TT.wheel, w = TT.world; p.nature = { tinh: 0, xuthe: 0, daoduc: 0, tudung: 0 };
+  const gia = D.STORY.arcById.bb_a3.chang.c2.lc[0].wheel.gia;
+  const start = () => { clearPending(); delete p.story; T.jump('bb_a3', 'c2'); eq(w.pending.choices.length, 2); clearPending(); p.story.arcs.bb_a3.w = 'doi_mat'; W.begin(p, 'bb_a3', 'c2', 'doi_mat'); eq(w.pending.type, 'wheel'); eq(w.pending.st, 'wait'); eq(w.pending.mod, W.factor(p, D.STORY.arcById.bb_a3.chang.c2.lc[0].wheel, p.story.arcs.bb_a3).pts, 'điểm yếu tố khớp trục'); };
+  // 1. số thấp → vùng 0, quay lại được, tốn đúng giá; vòng sau số cao → vùng cao nhất, không +1 vì đã quay lại
+  p.kvPts = 10; start(); withRoll(10, () => TT.decisions.resolve(0)); let d = w.pending; eq(d.st, 'done'); eq(d.roll, 10); eq(d.num, 10 + d.mod); eq(d.zone, 0); ok(!d.choices[1].disabled, 'vùng thấp: quay lại được');
+  ok(/Quay lại sẽ tốn 3 trong 10/.test(d.text), 'ghi rõ giá: ' + d.text);
+  const k0 = TT.kv.pts(p); withRoll(95, () => TT.decisions.resolve(1)); d = w.pending; eq(TT.kv.pts(p), k0 - gia, 'quay lại trừ đúng ' + gia); eq(d.rerolls, 1); eq(d.num, 95 + d.mod, 'số mới thay hẳn số cũ'); eq(d.zone, 2); ok(d.choices[1].disabled, 'đã quay lại một lần: khóa');
+  const k1 = TT.kv.pts(p); TT.decisions.resolve(0); eq(TT.kv.pts(p), k1 + 1, 'trúng vùng cao nhất sau khi quay lại: không +1 vòng quay, chỉ +1 kết cục "sáng"'); eq(p.story.arcs.bb_a3.ket, 'sang'); ok(!w.pending);
+  // 2. vùng cao nhất ngay lần đầu: không cho quay lại, +1 khí vận
+  p.kvPts = 10; start(); withRoll(100, () => TT.decisions.resolve(0)); d = w.pending; eq(d.zone, 2); ok(d.choices[1].disabled && /vùng phù hợp nhất/.test(d.choices[1].why), 'vùng cao nhất: chặn quay lại');
+  const k2 = TT.kv.pts(p); TT.decisions.resolve(0); eq(TT.kv.pts(p), k2 + 1, '+1 vòng quay vùng cao nhất (kết cục của mốc 3 chỉ cộng một lần mỗi tuyến, đã cộng ở bước 1)');
+  // 3. thiếu điểm: chặn
+  p.kvPts = gia - 1; start(); withRoll(5, () => TT.decisions.resolve(0)); d = w.pending; ok(d.choices[1].disabled && /Cần 3 điểm khí vận/.test(d.choices[1].why), 'thiếu điểm: ' + d.choices[1].why);
+  const before = JSON.stringify(w.pending); TT.decisions.resolve(1); eq(JSON.stringify(w.pending), before, 'bấm nút bị khóa không làm gì'); TT.decisions.resolve(0); eq(p.story.arcs.bb_a3.ket, 'sa');
+  // 4. điểm yếu tố cộng vào số quay, kẹp 0..100
+  p.nature.tudung = 10; start(); eq(w.pending.mod, 15, 'kẹp +15'); withRoll(90, () => TT.decisions.resolve(0)); eq(w.pending.num, 100, 'kẹp ở 100'); eq(w.pending.roll, 90); clearPending();
+  p.nature.tudung = -10; start(); ok(w.pending.mod <= -10 + 0 && w.pending.mod >= -10, 'kẹp −10: ' + w.pending.mod); withRoll(4, () => TT.decisions.resolve(0)); eq(w.pending.num, 0, 'kẹp ở 0'); clearPending();
+  // 5. tự quay mặc định: hết giờ ở Cân bằng chọn lựa chọn đầu, không bao giờ tự quay lại
+  p.nature.tudung = 0; p.kvPts = 20; start(); withRoll(3, () => TT.decisions.resolveDefault()); eq(w.pending.st, 'done'); const k3 = TT.kv.pts(p); TT.decisions.resolveDefault(); eq(TT.kv.pts(p), k3, 'mặc định là Nhận, không tự quay lại'); ok(!w.pending);
+});
+
+test('Truyện và vòng quay (8B): chế độ Tự động đi trọn một tuyến không còn hộp treo; lệnh jump', () => {
+  const p = storyWorld(100), T = TT.story, w = TT.world; w.settings = w.settings || {}; w.settings.auto = 'tu_dong';
+  try {
+    eq(T.jump('khong_co', 'c1'), false); eq(T.jump('bb_a3', 'khong_co'), false);
+    for (const id of ['bb_a1', 'bb_a2', 'bb_a3']) { clearPending(); const first = D.STORY.arcById[id].dau; ok(T.jump(id, first), 'jump ' + id); }
+    for (let m = 0; m < 200 && !['bb_a1', 'bb_a2', 'bb_a3'].every(id => p.story.arcs[id].ket); m++) { w.months++; p.realm = 2; T.tick(p); if (w.pending) TT.decisions.resolveDefault(); }
+    ok(!w.pending, 'không còn hộp treo');
+    ['bb_a1', 'bb_a2', 'bb_a3'].forEach(id => ok(p.story.arcs[id].ket, id + ' đã có kết cục: ' + JSON.stringify(p.story.arcs[id])));
+    ok(p.story.done.length >= 3);
+  } finally { w.settings.auto = 'can_bang'; }
+  // jump khi đang có hộp thì từ chối
+  const q = storyWorld(101); T.jump('bb_a1', 'c1'); ok(TT.world.pending); eq(T.jump('bb_a2', 'c1'), false, 'đang có hộp thì không nhảy');
+});
+
+test('Truyện và vòng quay (8B): lưu/tải giữa chặng và giữa vòng quay, kết cục cộng khí vận một lần', () => {
+  const p = storyWorld(102), T = TT.story, w = TT.world; clearPending(); p.nature.tudung = 0; p.kvPts = 5;
+  T.jump('bb_a1', 'c1'); let txt = TT.save.snapshot(); const pd = JSON.stringify(w.pending);
+  TT.life.createWorld(103); TT.save.restore(txt); eq(JSON.stringify(TT.world.pending), pd, 'hộp chặng giữ nguyên sau khi tải'); eq(TT.world.pending.type, 'story');
+  TT.decisions.resolve(TT.world.pending.choices.findIndex(x => x.key === 'tu_hoc')); const q = TT.player(); eq(q.story.arcs.bb_a1.st, 'c2'); ok(q.flags.a1_tu);
+  // giữa vòng quay (giai đoạn done)
+  clearPending(); delete q.story; q.kvPts = 6; T.jump('bb_a3', 'c2'); TT.decisions.resolve(TT.world.pending.choices.findIndex(x => x.key === 'doi_mat'));
+  withRoll(10, () => TT.decisions.resolve(0)); const wd = JSON.stringify(TT.world.pending); eq(JSON.parse(wd).st, 'done');
+  txt = TT.save.snapshot(); TT.life.createWorld(104); TT.save.restore(txt); eq(JSON.stringify(TT.world.pending), wd, 'hộp vòng quay giữ nguyên (đã ra số)'); const r = TT.player(); const k0 = TT.kv.pts(r);
+  TT.decisions.resolve(1); eq(TT.world.pending.rerolls, 1, 'quay lại được sau khi tải'); eq(TT.kv.pts(r), k0 - 3);
+  TT.decisions.resolve(0); ok(!TT.world.pending); ok(r.story.arcs.bb_a3.ket, 'xong sau khi tải'); eq(TT.VERSION, 13, 'không đổi TT.VERSION');
+  // kết cục cộng khí vận đúng một lần (addOnce)
+  const kk = TT.kv.pts(r); T.go(r, D.STORY.arcById.bb_a3, 'ket:sang'); ok(TT.kv.pts(r) === kk, 'cộng một lần mỗi tuyến (cờ kv_arc_)');
+  // bản lưu tuyến vẫn đọc được qua tab (rows/sig)
+  ok(T.rows(r).length >= 1 && T.sig(r).length > 0);
+});
+
+test('Truyện và vòng quay (8B): công tắc D.STORY.on = false thì không có gì; người khác ngoài người chơi không có truyện', () => {
+  D.STORY.on = false;
+  try {
+    const p = storyWorld(105), w = TT.world, s0 = TT.rng.getState();
+    for (let m = 0; m < 36; m++) { w.months++; TT.story.tick(p); }
+    eq(TT.rng.getState(), s0, 'tick tắt không gọi rng'); eq(p.story, undefined, 'không có c.story'); ok(!w.pending); eq(TT.story.jump('bb_a1', 'c1'), false, 'jump không làm gì khi tắt');
+    for (let m = 0; m < 60; m++) { if (w.pending) TT.decisions.resolveDefault(); TT.life.stepWorld(); }
+    ok(!Object.values(w.chars).some(c => c.story), 'không ai có c.story khi tắt');
+  } finally { D.STORY.on = true; }
+  const q = storyWorld(106), npc = Object.values(TT.world.chars).find(c => c.kind === 'npc'); TT.story.tick(npc); eq(npc.story, undefined, 'NPC không có truyện');
+  for (let m = 0; m < 24; m++) { if (TT.world.pending) TT.decisions.resolveDefault(); TT.life.stepWorld(); } ok(!Object.values(TT.world.chars).some(c => c.kind === 'npc' && c.story), 'NPC không bao giờ có c.story');
 });
 runNext();
 </script>

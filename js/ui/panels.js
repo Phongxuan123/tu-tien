@@ -37,7 +37,8 @@
       '<div>Sinh lực: <b>' + Math.round(c.hp) + '/' + hm + '</b><div class="bar hp"><i style="width:' + hpp + '%"></i></div></div>' +
       '<div>Công kích: <b>' + S.atk(c) + '</b></div><div>Niệm lực: <b>' + S.nl(c) + '</b></div></div>' +
       '<div class="sec">Chỉ số ẩn và suy ra</div><div class="grid">' +
-      '<div>Khí vận: <b>' + (c.known.kv ? S.kv(c) : '???') + '</b></div>' +
+      (D.NATURE.on ? '<div title="Tài nguyên tiêu được, chỉ cộng bằng chuyện lớn (kỳ ngộ vận mệnh, nhẫn thật, đột phá từ Kim Đan). Phần thụ động tính tối đa ' + TT.kv.passiveCap + '.">Khí vận: <b>' + TT.kv.pts(c) + ' điểm</b></div>'
+        : '<div>Khí vận: <b>' + (c.known.kv ? S.kv(c) : '???') + '</b></div>') +
       '<div>Vận may: <b>' + (c.known.luck ? S.luck(c) : '???') + '</b></div>' +
       '<div title="Tính từ thuộc tính cao nhất">Tốc độ tu: <b>x' + S.trainMul(c).toFixed(2) + '</b></div>' +
       '<div title="Tính từ thuộc tính cao nhất và niệm lực">Linh ngộ: <b>' + S.ngo(c).toFixed(2) + '</b></div></div>' +
@@ -100,6 +101,8 @@
     if (d.type === 'break_reroll') return 'Thiên mệnh';
     if (d.type === 'nt_offer') return 'Nghịch Thiên';
     if (d.type === 'qreview') return 'Nhiệm vụ';
+    if (d.type === 'story') return 'Truyện';
+    if (d.type === 'wheel') return 'Vòng quay vận mệnh';
     if (d.type === 'crossroad') return 'Ngã rẽ';
     if (d.type === 'job') return 'Nghề nghiệp';
     if (d.type === 'death') return 'Đạo tiêu';
@@ -153,13 +156,15 @@
         body.appendChild(row);
       });
     }
+    if (d.type === 'wheel' && ui.story) body.appendChild(ui.story.wheelBox(d));
     const def = TT.decisions.safeDefault(d), list = h('div', { class: 'mchoices' });
     d.choices.forEach((ch, i) => {
-      const isDef = i === def, hint = ch.why || KIND_HINT[ch.kind] || '';
+      const isDef = i === def, hint = ch.why || ch.hint || KIND_HINT[ch.kind] || '';
+      const dot = d.type === 'story' && !ch.disabled ? (ch.hop ? h('span', { class: 'fitdot hop', title: 'Hợp tính bạn' }, '● hợp tính') : ch.trai ? h('span', { class: 'fitdot trai', title: 'Trái bản tính của bạn' }, '● trái tính') : null) : null;
       list.appendChild(h('button', {
         class: 'mch' + (isDef && d.timeout ? ' def' : '') + (ch.disabled ? ' off' : ''), disabled: ch.disabled ? 'disabled' : null, title: ch.why || null,
         onclick: () => TT.decisions.resolve(i)
-      }, h('span', { class: 'mn' }, String(i + 1)), h('span', { class: 'mt' }, h('b', null, (d.timeout && isDef ? '★ ' : '') + ch.label), hint ? h('small', null, hint) : null)));
+      }, h('span', { class: 'mn' }, String(i + 1)), h('span', { class: 'mt' }, h('b', null, (d.timeout && isDef ? '★ ' : '') + ch.label), dot, hint ? h('small', null, hint) : null)));
     });
     body.appendChild(list);
     if (d.timeout) {
