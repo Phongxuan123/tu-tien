@@ -104,7 +104,7 @@
       // Tình cảm yêu đương chỉ nảy nở giữa những cặp có thể (đủ tuổi, không ruột thịt, còn tự do).
       if (TT.family.eligible(a, b)) {
         const gain = out.love != null ? out.love : { luan_dao: 2, tang_qua: 3, hop_tac: 3, chuyen: 1, cai_va: -5, tranh: -3 }[int.id] || 0;
-        TT.bond.addLoveRec(res.r, gain * TT.family.attract(a, b));
+        TT.bond.addLoveRec(res.r, gain * TT.family.attract(a, b) * TT.bond.loveMul(a, b));
       }
       const pl = a.kind === 'player' ? a : (b.kind === 'player' ? b : null);
       // NPC tự tìm người chơi chỉ được ghi vào nhật ký khi có điều đáng chú ý, để nhật ký không bị tràn.

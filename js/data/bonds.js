@@ -40,6 +40,8 @@
     // Nỗi buồn tuổi thọ: chênh từ này cảnh giới thì mỗi năm đạo tâm người chơi giảm nhẹ, tình giảm nhẹ.
     grief: { realmGap: 2, daoTam: 1, love: 1, every: 5 },
     // Tình, Tin, Kính trôi theo năm cho đạo lữ của người chơi: ở cùng nơi thì tăng, xa nhau thì nhạt.
+    // rom: Tình tăng mỗi năm của cặp có thể nảy tình (gặp gỡ, mến nhau) khi ở cùng nơi; loveMul: nhân Tình nhận được từ giao du của cặp người chơi.
+    rom: { near: 7, compat: 3 }, loveMul: 1.6,
     drift: { near: 2, far: -3, trustNear: 1, trustFar: -1 },
     // Rạn nứt: Tình hoặc Tin dưới ngưỡng liên tục lowYears năm thì chuyển giai đoạn rạn nứt, hỏi người chơi.
     ran: { love: 30, trust: 25, years: 2 },

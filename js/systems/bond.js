@@ -59,6 +59,9 @@
     // Cặp đang trong hành trình (tỏ tình, hôn ước...) thì không bốc lại hộp "Duyên tình" kiểu cũ.
     holds(r) { return !!(K().on && r.d && (rankOf(r.d.st) >= K().rank.to && rankOf(r.d.st) <= LINE() || r.d.t === 'thuong' || r.d.t === 'hon_uoc' || r.d.st === 'ran' || r.d.st === 'biet')); },
 
+    // Hệ số nhân Tình nhận được từ giao du (cặp của người chơi khi bật; còn lại 1).
+    loveMul(a, b) { return K().on && plOf(a, b) ? K().loveMul : 1; },
+
     type(a, b) { const r = rel.get(a, b); if (!r) return ''; return K().on && r.d ? r.d.t : legacyType(r); },
     typeName(t) { return (K().types[t] || { n: '' }).n; },
     stage(a, b) { const d = bond.get(a, b); return d && d.st ? K().stageById[d.st] : null; },
@@ -363,6 +366,13 @@
         }
       });
       bond.promote(c);
+      // cặp có thể nảy tình ở cùng nơi: Tình tăng dần theo năm tháng bên nhau (cao hơn khi hợp tính)
+      rel.list(c).forEach(x => {
+        const d = x.r.d, o = x.c;
+        if (!d || !o || !o.alive || (d.t !== 'ban' && d.t !== 'thuong') || (d.st !== 'gap' && d.st !== 'men' && d.st !== 'to') || x.r.nl) return;
+        if (!(o.region === c.region && o.place === c.place && !o.travel && !o.cross) || TT.family.attract(c, o) <= 0) return;
+        d.love = clamp(d.love + (B.rom.near + (bond.compat(c, o) >= 0.1 ? B.rom.compat : 0)) * TT.family.attract(c, o), 0, 100);
+      });
       // hôn ước: người kia tự tìm tới, ở gần thì Tình nảy dần (R 5.4: chuyện cảm động cũng bắt đầu từ đây)
       rel.list(c).forEach(x => {
         const d = x.r.d, o = x.c;
