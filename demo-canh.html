@@ -607,6 +607,7 @@ function bakeChar() {
     });
   });
 }
+const K = 1.5; // hệ số phóng nhân vật
 const tc = mk(16, 24), tq = tc.getContext('2d');
 
 // ===================== trạng thái, hạt, sự kiện =====================
@@ -750,8 +751,8 @@ function drawChar(x, y, key, dir, glow, pal) {
   tq.globalCompositeOperation = 'source-atop'; tq.globalAlpha = clamp(pal.amb * .7, 0, .5); tq.fillStyle = pal.m3; tq.fillRect(0, 0, 16, 24);
   if (glow > .01) { tq.globalAlpha = clamp(glow, 0, 1); tq.fillStyle = '#d8fff4'; tq.fillRect(0, 0, 16, 24); }
   tq.globalAlpha = 1; tq.globalCompositeOperation = 'source-over';
-  ctx.globalAlpha = .3; ctx.fillStyle = pal.ink; ctx.fillRect(Math.round(x) - 5, Math.round(y) - 1, 10, 1); ctx.fillRect(Math.round(x) - 3, Math.round(y), 6, 1); ctx.globalAlpha = 1;
-  ctx.save(); ctx.translate(Math.round(x), Math.round(y) - 24); if (dir < 0) ctx.scale(-1, 1); ctx.drawImage(tc, -8, 0); ctx.restore();
+  ctx.globalAlpha = .3; ctx.fillStyle = pal.ink; ctx.fillRect(Math.round(x) - 8, Math.round(y) - 1, 16, 1); ctx.fillRect(Math.round(x) - 5, Math.round(y), 10, 1); ctx.globalAlpha = 1;
+  ctx.save(); ctx.translate(Math.round(x), Math.round(y) - 24 * K); if (dir < 0) ctx.scale(-1, 1); ctx.drawImage(tc, 0, 0, 16, 24, -8 * K, 0, 16 * K, 24 * K); ctx.restore();
 }
 function drawSwordUnder(x, y, dir, len, pal) {
   const L = Math.round(len), x0 = Math.round(x) - Math.floor(L / 2);
@@ -780,12 +781,12 @@ const evChar = () => ({ x: ch.x, y: GY + 3 });
 function updateEvent(dt, t) {
   const e = EV; e.t += dt; const et = e.t, fx = FX();
   if (e.n === 'dotpha') {
-    const c = evChar(), cx = c.x, cy = c.y - 12;
+    const c = evChar(), cx = c.x, cy = c.y - 12 * K;
     if (et < 3 && PT.length < 700) { const n = (110 + et * 110) * dt * fx; for (let i = 0; i < n + rnd(); i++) { const ang = rnd() * 6.283, rad = 60 + rnd() * 240, sx = clamp(cx + Math.cos(ang) * rad, -4, W + 4), sy = clamp(cy + Math.sin(ang) * rad * .55, 4, H - 4); PT.push({ k: 4, x: sx, y: sy, sx, sy, tx: cx + (rnd() - .5) * 4, ty: cy + (rnd() - .5) * 8, l: 0, m: .9 + rnd() * 1.1, an: rnd() * 6.28, cv: (rnd() - .5) * 40, col: ['#7af4dc', '#ffffff', '#ecc873', '#5ee0c4'][Math.floor(rnd() * 4)] }); } }
     if (et >= 2.9 && !e.burst) { e.burst = true; burst(cx, cy, Math.round(70 * fx), ['#ffffff', '#7af4dc', '#ecc873'], 80, 20, 1.2, 1); if (!S.red) flash = .5; }
   } else if (e.n === 'kiep') {
     const ts = [1.5, 2.6, 3.7];
-    ts.forEach((s, i) => { if (!e.struck[i] && et >= s) { e.struck[i] = true; const c = evChar(); e.bolts[i] = { b: bolt(c.x + (rnd() - .5) * 24, 22, c.x, c.y - 26, e.seed + i * 17), t: et }; if (!S.red) flash = .75; burst(c.x, c.y - 10, Math.round(26 * fx), ['#ffffff', '#c0b8ff', '#8aa0ff'], 70, 30, .8, 1); } });
+    ts.forEach((s, i) => { if (!e.struck[i] && et >= s) { e.struck[i] = true; const c = evChar(); e.bolts[i] = { b: bolt(c.x + (rnd() - .5) * 24, 22, c.x, c.y - 26 * K, e.seed + i * 17), t: et }; if (!S.red) flash = .75; burst(c.x, c.y - 10 * K, Math.round(26 * fx), ['#ffffff', '#c0b8ff', '#8aa0ff'], 70, 30, .8, 1); } });
   } else if (e.n === 'kiem') {
     const p = kiemPath(et, e.x0); if (p.fly) { ch.fly = p; if (rnd() < 60 * dt * fx) PT.push({ k: 3, x: p.x - p.dir * 8, y: p.y + 1, vx: -p.dir * 10, vy: (rnd() - .5) * 8, g: 0, dr: .96, l: 0, m: .7, col: rnd() < .5 ? '#7af4dc' : '#ffffff', sz: 1 }); }
     if (!e.lift && et >= .7) { e.lift = true; burst(e.x0, GY + 1, Math.round(16 * fx), ['#e8e4d0', '#cfd8c8'], 40, 30, .7, 1); }
@@ -803,13 +804,13 @@ function kiemPath(et, x0) {
 function drawEventUnder(pal, t) { // dưới nhân vật
   const e = EV; if (!e) return; const et = e.t, c = evChar();
   if (e.n === 'kiep') { const dk = et < 1 ? et : et > e.d - .9 ? (e.d - et) / .9 : 1; ctx.globalAlpha = .68 * clamp(dk, 0, 1); ctx.fillStyle = '#060418'; ctx.fillRect(-4, -4, W + 8, H + 8); ctx.globalAlpha = 1; }
-  if (e.n === 'dotpha') { const cx = c.x, cy = c.y - 12; g = ctx;
+  if (e.n === 'dotpha') { const cx = c.x, cy = c.y - 12 * K; g = ctx;
     const h = clamp(et / 2.9, 0, 1); ctx.globalAlpha = .12 * h + (et > 2.9 ? .1 * Math.max(0, 1 - (et - 2.9) / 1.2) : 0); disc(cx, cy, 14 + Math.round(3 * Math.sin(t * 8)), '#bffff0'); ctx.globalAlpha = .12 * h; disc(cx, cy, 24, '#7af4dc'); ctx.globalAlpha = 1;
     if (et > 2.9) { const k = et - 2.9; ctx.globalAlpha = Math.max(0, .55 - k * .3); ctx.fillStyle = '#d8fff4'; ctx.fillRect(Math.round(cx) - 4, 0, 9, Math.round(cy)); ctx.globalAlpha = Math.max(0, .5 - k * .3); ctx.fillStyle = '#ffffff'; ctx.fillRect(Math.round(cx) - 1, 0, 3, Math.round(cy)); ctx.globalAlpha = 1; } }
 }
 function drawEventOver(pal, t) { // trên cùng
   const e = EV; if (!e) { return; } const et = e.t, c = evChar(), fx = FX();
-  if (e.n === 'dotpha') { const cx = c.x, cy = c.y - 12;
+  if (e.n === 'dotpha') { const cx = c.x, cy = c.y - 12 * K;
     if (et > 2.9) { const k = et - 2.9; ringPts(cx, cy, k * 100, '#7af4dc', Math.max(0, .5 - k / 3), 5); ringPts(cx, cy, k * 100, '#ffffff', Math.max(0, 1.1 - k / 1.4), 2); ringPts(cx, cy, Math.max(0, (k - .25)) * 76, '#7af4dc', Math.max(0, 1 - k / 1.4), 3); ringPts(cx, cy, Math.max(0, (k - .5)) * 58, '#ecc873', Math.max(0, 1 - k / 1.3), 2); }
   } else if (e.n === 'kiep') {
     const dk = et < 1 ? et : et > e.d - .9 ? (e.d - et) / .9 : 1, d = clamp(dk, 0, 1);
@@ -843,8 +844,8 @@ function charDraw(pal, t) {
     else if (e.n === 'kiep') e.bolts.forEach(b => { if (b) { const k = et - b.t; if (k < .3) glow = Math.max(glow, (Math.floor(k * 30) % 2 ? .9 : .3) * (1 - k / .3)); } });
     else if (e.n === 'kiem') {
       const p = kiemPath(et, e.x0); dir = ch.dir;
-      if (p.fly) { x = p.x; y = p.y; dir = p.dir; key = Math.floor(t * 6) % 2 ? 'i1' : 'i0'; drawSwordUnder(x, y, dir, 24, pal); glow = .15; }
-      else { const L = et < .7 ? 24 * smooth(et / .7) : 24 * clamp((e.d - et) / (e.d - 4.65), 0, 1); if (L > 1) drawSwordUnder(x, y, dir, L, pal); if (et < .7) glow = .4 * smooth(et / .7); }
+      if (p.fly) { x = p.x; y = p.y; dir = p.dir; key = Math.floor(t * 6) % 2 ? 'i1' : 'i0'; drawSwordUnder(x, y, dir, 30, pal); glow = .15; }
+      else { const L = et < .7 ? 30 * smooth(et / .7) : 30 * clamp((e.d - et) / (e.d - 4.65), 0, 1); if (L > 1) drawSwordUnder(x, y, dir, L, pal); if (et < .7) glow = .4 * smooth(et / .7); }
     }
   }
   drawChar(x, y, key, dir, glow, pal);
