@@ -6,3 +6,8 @@ desktop.ini
 .claude/settings.local.json
 *.tmp
 node_modules/
+# Kết quả chạy tools/life-sim.js: chỉ giữ 3 tệp mẫu (hạt giống 101, 102, 103)
+tools/life-sim/*
+!tools/life-sim/101.txt
+!tools/life-sim/102.txt
+!tools/life-sim/103.txt

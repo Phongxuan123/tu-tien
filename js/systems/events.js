@@ -98,7 +98,8 @@
       ok: c => c.traitIds.length < 5,
       run: c => { const t = ev.addGoodTrait(c); return t ? 'Bạn nhận được tiên thiên "' + t.n + '" (phẩm ' + D.QNAME[t.q] + ')!' : 'Linh quang chợt lóe rồi tắt.'; }
     },
-    kv: { ok: () => true, run: c => { c.baseKv += rng.RI(3, 8); c.known.kv = true; return 'Khí vận của bạn tăng lên rõ rệt, và bạn cảm nhận được nó.'; } },
+    // Người chơi (8A): +2 điểm khí vận thay cho baseKv += 3..8; vẫn rút số như cũ để dòng rng của thế giới không đổi.
+    kv: { ok: () => true, run: c => { const g = rng.RI(3, 8); if (c.kind === 'player' && D.NATURE.on) TT.kv.add(c, 2, 'kỳ ngộ vận mệnh'); else c.baseKv += g; c.known.kv = true; return 'Khí vận của bạn tăng lên rõ rệt, và bạn cảm nhận được nó.'; } },
     // Nhặt được một pháp bảo (phẩm theo cảnh giới, hệ theo thuộc tính chính). Chỉ người chơi có túi đồ; NPC coi như chưa có gì.
     phap_bao: {
       ok: c => c.kind === 'player',
@@ -125,6 +126,7 @@
   // ---------- chọn mặc định ----------
   function boldOf(c) {
     const dir = D.DIRECTIONS[c.direction] || D.DIRECTIONS.can_bang;
+    if (c.kind === 'player' && D.NATURE.on) return dir.bold * TT.nature.mods(c).bold; // tính cách bốn trục: độ hợp tính ở chooseIndex
     const pers = D.personalityById[c.personality] || D.personalityById.trung_lap;
     return dir.bold * (pers.bold || 1);
   }
@@ -146,6 +148,7 @@
       else if (k === 'safe' || k === 'flee') w /= b;
       if ((k === 'risk' || k === 'fight') && hpr < 0.4) w *= 0.35;
       if (k === 'pay' && TT.ls.wealth(c) < 60) w *= 0.6;
+      if (c.kind === 'player' && D.NATURE.on) w *= TT.nature.affinity(c, x.def); // người chơi: độ hợp tính cách thay cho nhãn cũ
       return w;
     });
     if (random) {
@@ -167,6 +170,7 @@
       p = rng.clamp(p, 0.004, 0.18);
       if (c.kind !== 'player') p *= 0.15; // NPC gặp ít sự kiện hơn để giữ nhịp tu luyện của thế giới
       else p /= Math.sqrt(TT.config.timeScale(c)); // thời gian chạy nhanh dần thì sự kiện mỗi năm thưa đi, số hộp hỏi mỗi phút thật không vọt lên
+      if (c.kind === 'player' && D.STORY.on) p *= D.STORY.evMul; // hộp truyện (8B) chiếm một phần nhịp: sự kiện lẻ thưa đi để tổng hộp mỗi phút vẫn dưới 6
       return p;
     },
 
@@ -237,6 +241,7 @@
     apply(c, e, key, ctx) {
       const ch = e.choices.find(x => x.key === key) || e.choices[0];
       const r = ch.run(c, ctx || {});
+      if (c.kind === 'player') TT.nature.shiftKind(c, ch.kind, typeof e.title === 'function' ? e.title(c, ctx || {}) : e.title);
       const res = typeof r === 'string' ? { t: r, cls: classify(r) } : r;
       const title = typeof e.title === 'function' ? e.title(c, ctx || {}) : e.title;
       const prefix = e.tier === 1 ? (typeof e.text === 'function' ? e.text(c, ctx || {}) : e.text) + ' ' : '[' + title + '] ';

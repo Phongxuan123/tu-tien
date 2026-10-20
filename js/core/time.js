@@ -8,6 +8,7 @@
     speed: 1, // 0 = tạm dừng
     SPEEDS: [0, 1, 2, 4, 8, 16],
     skipping: false,
+    hold: false,                // giao diện giữ đồng hồ (hộp "Đời mới" đang mở), không dùng world.pending
     skipLeft: 0,
     SKIP_MAX_MONTHS: 12 * 15,   // tua tối đa 15 năm game mỗi lần bấm
     slowUntil: 0,               // mốc thời gian thực (ms) hết đoạn làm chậm sau lựa chọn
@@ -27,7 +28,7 @@
 
     // Tua tới sự kiện kế tiếp: chạy hết tốc độ cho tới khi có hộp quyết định hoặc hết giới hạn.
     skip() {
-      if (!TT.world || TT.world.pending) return;
+      if (!TT.world || TT.world.pending || TT.time.hold) return;
       TT.time.skipping = true; TT.time.skipLeft = TT.time.SKIP_MAX_MONTHS;
       TT.bus.emit('speed', TT.time.speed);
     },
@@ -37,12 +38,12 @@
       const loop = () => {
         const w = TT.world, t = TT.time;
         let delay = 200;
-        if (w && t.skipping) {
+        if (w && t.skipping && !t.hold) {
           // chạy từng đợt nhỏ để giao diện không bị đơ
-          for (let i = 0; i < 6 && t.skipLeft > 0 && !w.pending; i++) { TT.life.stepWorld(); t.skipLeft--; }
+          for (let i = 0; i < 6 && t.skipLeft > 0 && !w.pending && !t.hold; i++) { TT.life.stepWorld(); t.skipLeft--; }
           if (w.pending || t.skipLeft <= 0) { t.skipping = false; TT.bus.emit('speed', t.speed); }
           delay = 0; t.stepLen = 0;
-        } else if (w && !w.pending && t.speed > 0) {
+        } else if (w && !w.pending && !t.hold && t.speed > 0) {
           t.stepAt = Date.now();
           TT.life.stepWorld();
           const p = TT.player();

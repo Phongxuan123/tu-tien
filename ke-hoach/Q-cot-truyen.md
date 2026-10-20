@@ -241,8 +241,8 @@ Nền (4 Tiên thiên, 5 Khí vận, 6 Tính cách)  ──>  7 Vòng quay (cầ
 | **Vòng quay vùng cao nhất** (quay trúng "phù hợp nhất") | +1 | chỉ khi **không** quay lại |
 | **Đột phá thiên kiếp thành công** (Kim Đan trở lên) | +1 | một lần mỗi cảnh giới |
 | **Không có**: theo thời gian, theo tuổi, theo tiền, theo nhặt nhạnh nhỏ | — | — |
-- **Trần**: giữ tối đa **10**; vượt thì cắt ("khí vận đầy, phần dư tan vào thiên địa").
-- **Khởi đầu**: 1 điểm (+1 nếu có tiên thiên Phúc duyên hoặc Đại khí vận giả; về 0 nếu Thiên cơ ghét bỏ).
+- **Trần**: ~~giữ tối đa 10~~ **bỏ trần (bạn chốt 2026-10-19)**: điểm khí vận không có tối đa.
+- **Khởi đầu**: **(bạn chốt 2026-10-19) bốc ngẫu nhiên 0 đến 10 lúc sinh như `baseKv` cũ** (giữ tính may rủi lúc sinh, dùng lại đúng lần rút `rng.RI(0, 10)` hiện có nên không đổi thứ tự số ngẫu nhiên). Bản cũ của dòng này: 1 điểm (+1 nếu có tiên thiên Phúc duyên hoặc Đại khí vận giả; về 0 nếu Thiên cơ ghét bỏ).
 - **Mất điểm**: phản bội ân nhân, bội ước thề lớn, giết kẻ vô tội xin tha (−1 đến −2, không xuống dưới 0); **nợ trời** không tồn tại (không được quay khi hết điểm).
 - **Ước lượng cả đời**: 12 đến 20 điểm, **khoảng 10 vòng quay**, trung bình tốn 2,5 mỗi lần quay lại. Nghĩa là chỉ **quay lại được khoảng 5 đến 8 lần cả đời**, nên mỗi lần phải **đáng giá**; đây là mục tiêu cân bằng, `story-sim` đo và chỉnh.
 
@@ -284,6 +284,7 @@ Hiện NPC có **một nhãn** trong 6 (Cần cù, Tham lam, Liều lĩnh, Hiề
 
 ### 6.3 Lúc sinh và chỉnh ban đầu
 - **Bốc** quanh 0 (±3) theo xuất thân (quan lại: Xử thế cao; nông hộ: Tu dưỡng cao; cô nhi: Xử thế cao, Đạo đức thấp nhẹ...), theo xương sống (E: Tính tình thấp), theo tiên thiên (đã có `traits`), cha mẹ truyền một phần (con cái người chơi).
+- **(Bạn chốt 2026-10-19)** tính cách **định ngay lúc sinh**; trước 12 tuổi có **sự kiện định hướng tuổi thơ** dịch trục (làm cùng xuất thân và tuổi thơ ở 9A). Đoạn dưới về ngân sách 4 điểm chờ chốt lại.
 - **Chỉnh ban đầu** (đúng ảnh mẫu có +/−): ở lúc sinh/đầu thai hoặc ở tuổi 12 (mốc A1) người chơi có **ngân sách 4 điểm** cộng/trừ giữa các trục (tổng không đổi: tăng trục này phải giảm trục kia); chỉnh xong khóa. Chế độ tự động: bốc mặc định.
 - **Đời sau kế thừa nhẹ**: đầu thai giữ **một phần ngấm** (15%) từ kiếp trước (người rất tà để lại tính ngang ngạnh), ghi Sổ đời.
 
@@ -414,7 +415,7 @@ wheel {
 - Giao diện: **hộp "Vòng quay vận mệnh"**: tiêu đề tình huống, vòng chia vùng màu (tên vùng ghi cạnh vòng), thanh số 0 đến 100 phía dưới, dòng yếu tố "+N vì ...", số khí vận hiện có, nút Quay, nút Quay lại (kèm giá), kết quả. Chế độ giảm hiệu ứng: hiện kết quả ngay không xoay. Trong nhật ký: dòng "Vòng quay: 64 → vùng 'hợp nhất' (yếu tố Độ tin +9)".
 - Dữ liệu: trong dữ liệu chặng `wheel: {...}` (7.2); lưu `w.pending = { type: 'wheel', ..., rolled, mod, rerolls }` (thuần dữ liệu), `c.kvPts`.
 - Hệ: `TT.wheel` (`spin`, `reroll`, `resolve`, `factorValue`), handler `wheel` trong `decisions.js`, `TT.nature.mods` cung cấp điểm cộng cho yếu tố tính cách.
-- Kiểm thử: tổng độ rộng vùng = 100, số vùng 2 đến 4, đúng một yếu tố, điểm cộng nằm trong [−10, +15], quay lại trừ điểm khí vận và đúng giá, tối đa 2 lần, không quay lại ở vùng cao nhất, lưu/tải giữa chừng, tự động quay, mô phỏng lặp lại được.
+- Kiểm thử: tổng độ rộng vùng = 100, số vùng 2 đến 4, đúng một yếu tố, điểm cộng nằm trong [−10, +15], quay lại trừ điểm khí vận và đúng giá, tối đa 1 lần, không quay lại ở vùng cao nhất, lưu/tải giữa chừng, tự động quay, mô phỏng lặp lại được.
 
 
 
@@ -1029,6 +1030,23 @@ CỤM 10 ĐẠO TÂM
 ### 20.1 Đã chốt
 Xem bảng 1.2. Thêm các chi tiết đã chốt sau khi bạn chỉnh: thang tính cách −10 đến +10; điểm khí vận không tích theo thời gian; quay lại tối đa 1 lần mỗi vòng, không ở vùng cao nhất; T13, T14 mở từ Trúc Cơ và do vòng quay quyết; tiên thiên Quý 15%, Thiên 5%, giảm một nửa mỗi lần ra; nhân duyên, đạo lữ, con cái chuyển sang kế hoạch R.
 
+**Chốt 2026-10-19 (phiên thiết kế Đợt 8):**
+- Hệ v2 (tiên thiên, khí vận, tính cách) **chỉ áp cho người chơi và con của người chơi** ở Đợt 8-9; NPC giữ hệ cũ, chỉ có hàm ánh xạ đọc. NPC bốn trục để Đợt 11 trở đi.
+- Làm theo **lát cắt dọc** (Z Đợt 8: 8A tính cách + khí vận, 8B khung tuyến + vòng quay + một tuyến thật, 8C tiên thiên, 8D R1).
+- **Hoãn:** xương sống B đến E (Q4), xuất thân 9 đến 17, cấy/chuyển tiên thiên, chặng ghép và loại trừ (13.2), tuyến mẫu ngoài tuyến đầu, Q9 AI. **Thêm vào Đợt 9:** màn kết đời / bia mộ (21.1#1).
+- **Công cụ chơi thử:** `tools/life-sim.js` (truyện đời dạng văn bản, từ 8B), trang thử nghiệm (21.3#19, từ 8C).
+- Sửa mâu thuẫn: quay lại **tối đa 1 lần** mỗi vòng (bài kiểm thử ở 7.8 sửa theo).
+
+- **(Lượt 2, 2026-10-19)** Tính cách **định lúc sinh**, có **sự kiện định hướng trước 12 tuổi** (ở 9A, sau xuất thân). Điểm khí vận **bốc 0 đến 10 lúc sinh** như cũ (dùng lại lần rút `baseKv` nên thứ tự `rng` không đổi) và **không có trần**. Các câu còn lại của lượt 2 (Q18 đến Q21 mặc định, 8A chỉ tự dịch trục theo `kind`, chưa khóa mềm và phí trái tính với sự kiện cũ, tác động số chỉ độ liều và tâm ma) theo mặc định vì bạn không sửa.
+
+- **(Lượt 3 và 4, 2026-10-19)** Hộp "Đời mới" (Bốc lại không giới hạn, ngân sách 4 điểm, máy tự phân nếu không chỉnh); tính cách người chơi bốc ngẫu nhiên ±8, không trung dung hết. Khí vận vừa thụ động (tính tối đa 20) vừa tiêu được. **Tuổi thơ** kéo lên Đợt 8 (8A2, 8A3): sau hộp Đời mới là ba hồi (0-3, 4-7, 8-11 tuổi), mỗi hồi 1 đến 3 sự kiện (sự kiện 2 ra 50%, sự kiện 3 ra 25%), mỗi lựa chọn dịch trục và 1 đến 2 chỉ số khác (có trần), rồi hộp Tổng kết lúc 12 tuổi. Chi tiết ở Z "Đợt 8". Câu 13 mục 20.2 coi như đã chốt.
+
+- **(Lượt 5, 2026-10-19)** Chặng 8B: tuyến mẫu là xương sống A mốc A1 đến A3 (có 1 vòng quay, ít nhất 2 hậu quả trễ); bộ máy tối thiểu (nhân quả tạm dùng `nghiep`, `rep`; chặng ghép hoãn); vai lấy NPC có sẵn trước; hộp chặng dùng lại hộp quyết định, mục "Truyện của đời bạn" trong tab Nhiệm vụ (câu 5 mục 20.2 chốt: gộp vào Nhiệm vụ). Chi tiết và định dạng dữ liệu tuyến ở Z "Đặc tả 8B".
+
+- **(Lượt 6, 2026-10-20)** Tiến độ cảnh giới chậm là cố ý; **60 đến 70% nội dung từng dự tính từ Trúc Cơ hạ xuống Luyện Khí trung kỳ** (giữ T13, T14 và chuyện rất lớn ở Trúc Cơ+); mốc xương sống mở theo cảnh giới hoặc tuổi; chống trôi tính cách (quán tính dải cực 0,3, việc thường ngày ×0,5, Tự động chọn ngẫu nhiên theo trọng số hợp tính); lọc nhật ký. Theo ngân sách còn lại, thứ tự: 8B2 → 9A → 9B (gộp R1) → 9C → gói nội dung → 8C (Z mục 7b).
+
+- **(Lượt 7, 2026-10-20)** 8 xuất thân đầu: p1, p2, p3, p5, t1, t3, t6, t10 (trọng số 28/13/13/12/12/8/8/6). Gói nội dung N1 (T1, T2, T5, W1), N2 (T3, T9, chuỗi Nhẫn, W3), N3 chọn sau Cổng 7. Tiên thiên v2 (8C) quyết sau Cổng 7 theo tiền còn lại. Prompt toàn bộ ở `PROMPT-phien-moi.md`.
+
 ### 20.2 Câu hỏi còn mở (mỗi câu có mặc định, bạn chỉ cần sửa chỗ muốn khác)
 **Giọng và nhịp truyện**
 1. **Giọng truyện**: nghiêm túc tiên hiệp hay pha hài đời thường như các sự kiện cũ? *(mặc định: pha, nghiêm khi chuyện lớn)*
@@ -1157,6 +1175,8 @@ Xem bảng 1.2. Thêm các chi tiết đã chốt sau khi bạn chỉnh: thang t
 4. **Mức nội dung tối đa** cho AI sinh: bằng mức các tuyến T13, T14 (gián tiếp), hay thấp hơn? *(mặc định: bằng, có nút truyện nhẹ)*
 ## 22. Nhật ký làm việc
 (Các số mục trong những dòng nhật ký cũ là số theo bản của từng lần ghi; từ bản 10 dùng số mới ở bảng đối chiếu.)
+- 2026-10-20 (**8B đã làm**): khung truyện `TT.story` (tuyến là đồ thị chặng, mở theo điều kiện, hạn tự tiến theo `mac`, khóa mềm `gate`, phí `gia` và phí trái tính, hậu quả trễ `tre`, kết cục cộng khí vận) và vòng quay `TT.wheel` (mục 7: một yếu tố trong [−10, +15], quay lại một lần tốn khí vận, +1 ở vùng cao nhất), tuyến mẫu xương sống A1 đến A3 (`js/data/stories/bb_a.js`), hộp chặng và hộp vòng quay SVG, mục "Truyện của đời bạn", `tools/story-lint.js`, `tools/life-sim.js`. Tắt `D.STORY.on` trùng khít 40/40. Chưa làm: A4 đến A6, tuyến thân phận và thế giới, xuất thân. Chi tiết và số đo: Z mục Đợt 8.
+- 2026-10-20 (**8A3 đã làm**): tuổi thơ ba hồi cho người chơi (`TT.childhood`, `js/ui/childhood.js`): bốc sự kiện bằng băm không gọi rng, áp `ax` qua `TT.nature.shift` (không tính trần năm) và `fx` kẹp theo trần cả tuổi thơ, hộp từng sự kiện và hộp Tổng kết 12 tuổi, chế độ Tự động và kiểm thử chạy `auto` theo độ hợp tính cách. Tắt `D.CHILDHOOD.on` trùng khít 40/40; bật cũng trùng khít. Chưa làm: `wake` (8C), tuổi thơ theo xuất thân (9A). Chi tiết: Z mục Đợt 8.
 - 2026-10-18 (bản 12): theo ý bạn gộp kế hoạch quốc gia và tông môn hiện đại thành [S-quoc-gia-tong-mon-ton-giao](S-quoc-gia-tong-mon-ton-giao.md); thêm PHẦN VII, mục 24: giáo sĩ (T15) và Thần Chức đạo (T16) chuyển vào Q, tuyến T17 đến T21, tuyến thế giới W13 đến W24, 12 cụm chuỗi (11 đến 22), 36 sự kiện nghịch lý của chín tông, và các sự kiện quốc gia, tôn giáo, hội, gia tộc.
 - 2026-10-18: bạn yêu cầu làm mới toàn bộ hệ cốt truyện, lựa chọn và kỳ ngộ. Khảo sát hiện trạng, viết kế hoạch bản 1, chưa code.
 - 2026-10-18 (bản 11): bạn hỏi cách thêm nhiều kịch bản tu tiên kiểu phim ngắn, có thể kéo API cho AI tự thiết kế lúc chơi. Thêm mục 21.5: bốn tầng (kho trope, gói truyện JSON, AI viết lại chữ, AI sinh tuyến) với rào chắn và thứ tự làm.`r`n- 2026-10-18 (bản 9): chốt tỉ lệ tiên thiên (Quý 15%, Thiên 5%, mỗi cái ra thì lần sau giảm một nửa, 4.1b); chốt điều kiện T13, T14: từ Trúc Cơ trở lên, và việc dùng Trùng đồng hay xương (móc, đào, cấy) do vòng quay vận mệnh quyết (11.2), có bảng vùng và yếu tố cộng điểm cho từng vai.
@@ -1647,3 +1667,4 @@ Mỗi sự kiện: tình huống → 3 lựa chọn (có giá) → hệ quả l�
 - **Nhịp:** các sự kiện lẻ của hệ này chỉ bốc khi điều kiện hệ thật xảy ra (không ngẫu nhiên đơn); tối đa 1 chặng nóng, hàng đợi 3; mọi chặng có hạn; bám ngân sách K của mục 14.4.
 - **Kỹ thuật:** dữ liệu tại `js/data/natevents.js` (cùng định dạng chặng mục 10), nhân vật định mệnh dùng chung dàn 8 vai (mục 13.3), cờ cụm lưu trong `c.story`; mọi trường khởi tạo muộn, không đổi `TT.VERSION`. Điều kiện mở dựa trên cơ chế S (quốc vận, `gt`, `slots`, `huong`), nên **Q10 phải làm sau S3 đến S5**.
 - **Rủi ro:** nội dung tôn giáo dễ nhạy cảm: dùng khe `{tn}`, viết cho cả hai phía, kẻ cực đoan là cá nhân/phái, cho bạn duyệt chữ từng biến thể; nội dung tàn khốc (đồ sát, hiến tế) kể gián tiếp, có chế độ truyện nhẹ (mục 20).
+- 2026-10-19 (**8A đã làm**): Q1.2 (khí vận v2) và Q1.3 (tính cách bốn trục) cho người chơi theo đặc tả 8A trong Z: `D.NATURE`, `TT.nature`, `TT.kv`, hộp Đời mới (ngân sách 4 điểm, Bốc lại), khối Tính cách và "Khí vận: N điểm" ở Hồ sơ. Tắt công tắc trùng khít đường cơ sở. Chưa làm: khóa mềm, phí trái tính (8B), kế thừa 15% tính cách khi đầu thai, sổ đời. Chi tiết và số đo: Z mục Đợt 8.
