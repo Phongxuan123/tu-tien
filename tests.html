@@ -17,6 +17,8 @@ body{font-family:Consolas,monospace;background:#14110f;color:#e8dfd0;padding:16p
 <script src="js/ui/bldart.js"></script>
 <script src="js/ui/sprites.js"></script>
 <script>TT_SCENE();</script>
+<script src="js/ui/dom.js"></script>
+<script src="js/ui/devpanel.js"></script>
 <script src="js/data/natevents.js"></script>
 <script>
 const out = document.getElementById('out');
@@ -4579,6 +4581,89 @@ test('Cảnh pixel (T-D): mọi thời tiết vùng có dữ liệu và vẽ đ�
   eq(TT.rng.getState(), S0, 'vẽ cảnh không gọi rng của mô phỏng');
 });
 
+// ---------- Bảng chỉnh nhân vật (công cụ thử nghiệm, js/ui/devpanel.js) ----------
+function devWorld(seed) { TT.life.createWorld(seed); const p = TT.player(); TT.world.pending = null; return p; }
+
+test('Bảng chỉnh nhân vật: tắt thì không có nút, không có dấu vết; bật mà không bấm gì thì không đổi gì (rng và thế giới)', () => {
+  eq(D.DEV.on, false, 'mặc định tắt'); eq(TT.VERSION, 13, 'không đổi TT.VERSION');
+  const p = devWorld(300);
+  eq(TT.dev.mount(), false, 'tắt thì mount không làm gì'); ok(!document.getElementById('btn-dev') && !document.getElementById('dev-panel'));
+  eq(TT.world.devUsed, undefined, 'chưa có devUsed'); ok(!p.log.some(e => e.cat === 'dev'));
+  const a = JSON.stringify(TT.world), r0 = TT.rng.getState();
+  const bar = document.createElement('div'); bar.className = 'bar-controls'; document.body.appendChild(bar);
+  D.DEV.on = true;
+  try {
+    ok(TT.dev.mount(), 'bật thì có nút'); ok(document.getElementById('btn-dev'), 'có nút 🛠');
+    TT.dev.open(); ok(document.getElementById('dev-panel'), 'bảng mở được'); TT.dev.close();
+    eq(TT.rng.getState(), r0, 'mở bảng không gọi rng'); eq(JSON.stringify(TT.world), a, 'mở bảng không đổi thế giới');
+  } finally { D.DEV.on = false; bar.remove(); const b = document.getElementById('btn-dev'); if (b) b.remove(); const pn = document.getElementById('dev-panel'); if (pn) pn.remove(); }
+});
+
+test('Bảng chỉnh nhân vật: đặt cảnh giới, chỉ số cơ bản, tư chất, tiên thiên, nhật ký loại dev và devUsed', () => {
+  const p = devWorld(301), T = TT.dev, S = TT.stats;
+  ok(T.setRealm(3, 1)); eq(p.realm, 3); eq(T.stageOf(p), 1, 'trung kỳ'); eq(p.hp, S.hpMax(p), 'đầy máu');
+  ok(T.setRealm(2, 2)); eq(T.stageOf(p), 2, 'hậu kỳ'); eq(T.setRealm(9, 0), false);
+  ok(T.set('gold', 12345)); eq(p.gold, 12345); ok(T.set('xp', 77)); eq(p.xp, 77); ok(T.set('atk', 200)); eq(S.atk(p), 200); ok(T.set('nl', 150)); eq(S.nl(p), 150);
+  ok(T.set('daoTam', 80)); eq(p.daoTam, 80); ok(T.set('nghiep', 5)); eq(p.nghiep, 5); ok(T.set('chinh', -20)); eq(p.rep.chinh, -20); ok(T.set('luck', 9)); eq(S.luck(p), 9);
+  ok(T.set('age', 40)); eq(TT.age(p), 40); eq(T.set('gold', 'abc'), false); eq(T.set('khong_co', 1), false);
+  if (T.has.ls()) { ok(T.set('ls', 33)); eq(p.ls, 33); }
+  ok(T.set('hp', 1e6)); eq(p.hp, S.hpMax(p), 'sinh lực không vượt tối đa');
+  ok(T.setAttr(0, 40)); eq(p.tuchat.attrs[0].p, 40); eq(p.tuchat.total, p.tuchat.attrs.reduce((a, x) => a + x.p, 0)); ok(T.setTcTotal(300)); eq(p.tuchat.total, 300);
+  const t0 = p.traitIds.length, id = D.TRAITS.find(x => p.traitIds.indexOf(x.id) < 0).id;
+  ok(T.toggleTrait(id)); eq(p.traitIds.length, t0 + 1); ok(T.toggleTrait(id)); eq(p.traitIds.length, t0);
+  ok(T.rerollTuchat()); ok(p.tuchat.total >= 50);
+  eq(TT.world.devUsed, true, 'devUsed được đặt'); const L = p.log.filter(e => e.cat === 'dev'); ok(L.length >= 10, 'nhật ký loại dev'); ok(/^\[Thử nghiệm\] /.test(L[0].t) && L[0].lv === 'norm');
+});
+
+test('Bảng chỉnh nhân vật: tính cách, khí vận, tông, thương hội, nghề, đạo, dịch chuyển, quan hệ, NPC đồng kỳ', () => {
+  const p = devWorld(302), T = TT.dev, w = TT.world;
+  if (T.has.nature()) { ok(T.setNature('daoduc', 8)); eq(TT.nature.get(p, 'daoduc'), 8); ok(T.setNature('tinh', -99)); eq(TT.nature.get(p, 'tinh'), -D.NATURE.max); eq(T.setNature('khong_co', 1), false); }
+  if (T.has.kv()) { ok(T.setKv(25)); eq(TT.kv.pts(p), 25); }
+  const sid = T.sectList()[0];
+  ok(T.joinSect(sid, 2)); eq(p.sect.id, sid); eq(p.sect.rank, 2); ok(T.leaveSect()); eq(p.sect, null);
+  if (T.has.hoi() && T.hoiList().length) { const hid = T.hoiList()[0].id; ok(T.joinHoi(hid, 1)); eq(TT.hoi.member(p).id, hid); ok(T.leaveHoi()); eq(TT.hoi.member(p), null); }
+  const jid = Object.keys(D.JOBS)[0]; ok(T.setJob(jid, 3)); eq(TT.job.level(p, jid), 3); eq(TT.job.mainId(p), jid);
+  const pid = Object.keys(D.PATHS)[0]; ok(T.setPath(pid)); eq(TT.path.get(p).id, pid);
+  const rid = D.REGIONS.find(r => r.id !== p.region).id, pl = TT.map.placesOf(rid)[0].id;
+  ok(T.goTo(rid, pl)); eq(p.region, rid); eq(p.place, pl); eq(T.goTo(p.region, 'khong_co'), false);
+  const n = T.spawnPeer(); ok(n && n.realm === p.realm && n.place === p.place); ok(T.peers().some(x => x.c.id === n.id), 'NPC mới đã quen');
+  ok(T.setRel(n.id, 66)); eq(TT.rel.v(p, n), 66);
+  if (T.has.bond()) { ok(T.setBar(n.id, 'trust', 55)); eq(TT.bond.get(p, n).trust, 55); ok(T.setMem(n.id, 2)); eq(TT.bond.mems(p, n).length, 2); }
+});
+
+test('Bảng chỉnh nhân vật: nhảy chặng, cờ, hậu quả trễ, tua 5 năm, bất tử, hồi sinh, lưu/tải giữ giá trị đã chỉnh', () => {
+  const p = devWorld(303), T = TT.dev, w = TT.world;
+  if (T.has.story()) {
+    const arc = D.STORY.arcs[0]; ok(T.jump(arc.id, arc.dau)); ok(w.pending && w.pending.type === 'story', 'hộp chặng mở'); w.pending = null;
+    p.story.due.push({ m: w.months + 50, arc: arc.id, fx: {}, log: 'thử' }); eq(T.ripen(), 1); eq(p.story.due[0].m, w.months);
+  }
+  ok(T.setFlag('co_thu_nghiem', true)); eq(p.flags.co_thu_nghiem, 1); ok(T.setFlag('co_thu_nghiem', false)); eq(p.flags.co_thu_nghiem, undefined);
+  T.setRealm(2, 0); T.set('gold', 999); if (T.has.nature()) T.setNature('xuthe', 6); if (T.has.kv()) T.setKv(12);
+  const txt = TT.save.snapshot(); TT.life.createWorld(304); TT.save.restore(txt);
+  const q = TT.player(); eq(q.realm, 2); eq(q.gold, 999); eq(TT.world.devUsed, true, 'devUsed giữ sau khi tải'); if (T.has.nature()) eq(TT.nature.get(q, 'xuthe'), 6); if (T.has.kv()) eq(TT.kv.pts(q), 12);
+  const m0 = TT.world.months; T.setImmortal(true); T.set('age', 4000); eq(T.immortal(), true);
+  const done = T.advance(5); eq(done, 60, 'tua đủ 60 tháng'); eq(TT.world.months - m0 >= 60, true); ok(TT.player().alive, 'bất tử thì không chết vì thọ');
+  T.setImmortal(false); eq(T.immortal(), false);
+  const r = TT.player(); TT.life.dieNow(r, 'thử'); ok(!r.alive); ok(T.revive()); ok(r.alive); eq(T.revive(), false, 'còn sống thì không hồi sinh');
+  ok(T.reincarnate()); ok(TT.player().alive && TT.player().id !== r.id, 'đầu thai ra người mới');
+});
+
+test('Bảng chỉnh nhân vật: hệ nào không có thì khối đó ẩn, không báo lỗi', () => {
+  devWorld(305);
+  const T = TT.dev, all = T.sections(), saved = {};
+  ['nature', 'kv', 'story'].forEach(k => eq(all.indexOf(k) >= 0, T.has[k](), k));
+  ['nature', 'kv', 'bond', 'story'].forEach(k => { saved[k] = TT[k]; });
+  try {
+    TT.nature = undefined; TT.kv = undefined; TT.story = undefined; TT.bond = undefined;
+    const s = T.sections();
+    ['nature', 'kv', 'story'].forEach(k => ok(s.indexOf(k) < 0, 'ẩn ' + k)); ok(s.indexOf('basic') >= 0 && s.indexOf('life') >= 0);
+    eq(T.has.bond(), false); eq(T.setNature('tinh', 1), false); eq(T.setKv(5), false); eq(T.jump('a', 'b'), false);
+    D.DEV.on = true; TT.dev.open(); ok(document.getElementById('dev-panel').textContent.indexOf('Tính cách') < 0, 'bảng không có khối Tính cách'); TT.dev.close();
+  } finally {
+    D.DEV.on = false; Object.keys(saved).forEach(k => { TT[k] = saved[k]; });
+    const pn = document.getElementById('dev-panel'); if (pn) pn.remove();
+  }
+});
 runNext();
 </script>
 </body>

@@ -7,6 +7,7 @@
   const D = TT.data, h = ui.h, $ = ui.$;
 
   const CATS = { tu: ['☯', 'Tu luyện'], chien: ['⚔', 'Chiến đấu'], tien: ['◈', 'Tiền bạc, đồ'], nguoi: ['♥', 'Người quen'], tong: ['⌂', 'Tông môn, nghề'], nv: ['✦', 'Nhiệm vụ'], kp: ['➶', 'Khám phá, đi lại'], the: ['☼', 'Thế giới, khác'] };
+  CATS.dev = ['🛠', 'Thử nghiệm']; // mục nhật ký do bảng chỉnh nhân vật ghi (có thể nằm trong bản lưu dù công cụ đang tắt)
   const FILTERS = [['all', 'Tất cả'], ['big', 'Việc lớn'], ['star', '★ Đánh dấu'], ['tu', '☯ Tu luyện'], ['nguoi', '♥ Người'], ['tien', '◈ Tiền'], ['nv', '✦ Nhiệm vụ'], ['chien', '⚔ Chiến đấu']];
   const MERGE_NAME = { kp: 'Đi lại', tong: 'Việc tông môn, nghề', tien: 'Luyện nghề, trang bị', tu: 'Tu luyện', nguoi: 'Giao du', chien: 'Chữa trị', nv: 'Việc nhiệm vụ', the: 'Việc vặt' };
   const MAX_STAR = 60;
