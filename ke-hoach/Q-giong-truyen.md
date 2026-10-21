@@ -1,4 +1,4 @@
-# Q-giọng truyện. Cẩm nang kể chuyện (bản 4): dàn định mệnh, gắn bó, cao trào, tàn khốc
+# Q-giọng truyện. Cẩm nang kể chuyện (bản 5): dàn định mệnh, gắn bó, cao trào, tàn khốc
 
 - Trạng thái: **Bản mẫu chờ bạn duyệt** (2026-10-21). Dùng cho MỌI phiên viết chữ truyện (Sonnet và Haiku) sau khi bạn duyệt.
 - Vì sao có file này: sau một lần chơi đủ đời, bạn thấy **không có gì đọng lại**. Đo dữ liệu 15 tuyến: 44 cờ đặt ra nhưng 0 cờ được đọc lại; 5/126 lựa chọn có hậu quả đáng kể; 22/47 chặng chọn gì cũng về cùng một chỗ; mỗi tuyến bốc người lạ rồi bỏ. Chữ không tệ; **cách kể** mới là chỗ yếu.
@@ -173,6 +173,24 @@ Không chép câu văn của hai nhà văn; học **cách nhìn và cách kể**
 - Lựa chọn viết như **việc làm**, ngắn, không giải thích ("Cõng hắn về."); cái giá viết ở `mat` bằng **một câu sự thật lạnh**.
 - Cấm: "vô cùng, cực kỳ, đau đớn tột cùng, trái tim tan nát, nước mắt lăn dài"; cấm giảng đạo lý dài; cấm kết bằng câu cảm thán.
 
+## 6c. Dựng cảnh và cách hiện cốt truyện (bản 5, 2026-10-21; bạn duyệt: giọng văn đạt, còn kịch bản và cách thể hiện)
+**Cảnh lớn** (`lon: true`, chỉ ở bước ngoặt và tuyến quan trọng; khoảng 8 đến 12 cảnh lớn mỗi đời):
+1. **Một nơi, một đêm, một vật.** Không kể lướt nhiều năm trong một cảnh; năm tháng giữa các cảnh lớn đi qua bằng nhật ký và chặng nhỏ.
+2. **Người chơi biết điều nhân vật khác không biết** (thấy danh sách, nghe lén, đọc thư) **trước** lúc chọn; mỗi câu thoại của người kia vì thế mà đau.
+3. **Đồng hồ đếm ngược trong cảnh**: sáng mai hắn đi, thuốc chỉ giữ được ba ngày, thư phải gửi trước mùa mưa.
+4. **Lựa chọn là việc tay làm** (viết, ký, đưa, đóng cửa, xé, im), đặt **đúng lúc đau nhất**; cái giá một câu lạnh trong `mat`.
+5. **Thứ người chơi tạo ra quay lại**: lá thư viết bằng chữ của bạn, cái tên bạn ký, viên đan bạn đưa; ở chặng gặt chúng trở về trong tay người khác.
+6. **Mỗi tuyến có một lần đảo nghĩa**: một cảnh cũ hóa ra nghĩa khác (người thầy hiền là người ký danh sách).
+7. **Thang leo**: hồi I mất cái của mình; hồi II mất một người; hồi III mất nhiều người hoặc mất danh; hồi IV mất chính con người cũ của mình.
+8. **Thế giới thật vào cảnh**: lý do của phản diện đọc từ mô phỏng (tông đang yếu thật, chiến sự thật, giá gạo thật), để "tông còn thì ngàn người còn" không phải lời nói suông.
+9. **Cảnh pixel theo không khí cảnh lớn**: cảnh lớn có thể ghi `canh: { gio: 'dem', thoi_tiet: 'mua' }` để cảnh đầu cột đổi theo trong lúc hộp mở (dùng hàm xem trước của `ui.scene`, không đổi trạng thái thế giới).
+
+**Lời dẫn sau lựa chọn** (★`sau`, bạn chốt 2026-10-21):
+- Chỉ ở cảnh lớn. Sau khi chọn, hộp hiện **một đoạn ngắn tiếp diễn câu chuyện** (3 đến 6 câu, đọc trong khoảng **20 giây**), viết như phần nối của cảnh, **không** tóm tắt cơ chế; các thay đổi số (thiện cảm, đạo tâm, nợ...) hiện nhỏ ở dưới.
+- Thời gian: chế độ **Thủ công** chờ bấm "Tiếp"; chế độ **Cân bằng và Tự động** khung tồn tại **40 giây** rồi tự đóng (có nút đóng sớm). Thời gian game **dừng** trong lúc khung mở.
+- Mỗi lựa chọn của cảnh lớn có lời dẫn riêng (`lc.sau`); có thể có biến thể theo cờ (`sau_neu`).
+- Lời dẫn tính vào nhịp hộp (bài "Nhịp quyết định"); cảnh lớn thưa nên không vượt 6 hộp/phút.
+
 ## 7. Mẫu (định dạng đề xuất; các khóa mới đánh dấu ★ sẽ do phiên Sonnet thêm vào bộ máy)
 Khóa mới: ★`dan` (vai lấy từ dàn định mệnh: `than_nhan`, `ban`, `su`, `doi_thu`, `huynh`, `thuong`, `ke_thu`, `ke_thua`), ★`gan_bo` (cộng gắn bó; và điều kiện tối thiểu), ★`mat` (chữ cái mất, hiện trên hộp), ★`d_neu` (chữ thay theo cờ), ★`can` (lựa chọn chỉ hiện khi có cờ), ★`fx.chet` / `fx.roi` / `fx.thu` (người trong dàn chết, bỏ đi, thành kẻ thù), ★`fx.tong` (đổi bậc tông), ★`fx.vat` (vật kỷ niệm hoặc bảo vật), ★`tre.chang` (hậu quả trễ mở một chặng gặt).
 
@@ -281,9 +299,37 @@ c4: {
 ```
 Ba đường đều có giá thật: **công sức và thời gian** (thử thách đo bằng vàng thật trong túi, có thể trượt), **sĩ diện** (sỉ nhục, nợ ghi sổ), **thiện ác** (nhanh nhưng chắc chắn bị đòi). Không đường nào được kể như "khôn".
 
+### Mẫu 6: cảnh lớn đầy đủ (bạn duyệt giọng 2026-10-21), kèm lời dẫn sau lựa chọn
+```js
+c3: {
+  t: 'Đêm trước ngày lên nội môn', lon: true, canh: { gio: 'dem', thoi_tiet: 'mua' },
+  can_gan_bo: { dan: 'huynh', min: 3 },
+  d: 'Mưa đầu mùa. Dầu trong đèn sắp cạn, ngọn lửa co lại bằng hạt đậu. {huynh} gói đồ: đôi giày rơm mẹ hắn đan, cái lược gãy răng, và tấm chăn. Hắn đẩy tấm chăn sang chỗ bạn như cái đêm sáu năm trước: "Lên trên ấy người ta phát chăn gấm." Chiều nay, trong thư phòng, bạn đã thấy tên hắn ở dòng thứ bảy, có son của {su}; sáu cái tên bên trên chưa ai gửi thư về. "Ta nhờ ngươi viết cho mẹ ta mấy dòng. Ta đọc, ngươi viết." Bạn mài mực. Tay bạn vững. "Ghi là con được ăn cơm trắng. Sang năm con về đưa mẹ đi xem biển." Ngoài hiên mưa dày thêm, và bạn lại nghe mẹ mình nói con không có lỗi gì. Người ta có thể sống cả đời trong năm chữ ấy.',
+  han: 1, mac: 'viet',
+  lc: [
+    { key: 'viet', label: 'Viết nốt, gấp thư lại, đưa hắn', kind: 'safe', ax: { daoduc: -1, xuthe: 1 },
+      fx: { flag: ['thu_chu_ban', 'im_danh_sach'], no: { dan: 'huynh', d: 5 } },
+      mat: 'Giữ hòa khí. Lá thư này sẽ về tới thôn, cùng với một thứ khác.',
+      sau: 'Hắn cầm lá thư bằng hai tay, như cầm một thứ dễ vỡ, cất vào ngực áo. Sáng hôm sau trời tạnh. Bạn đứng ở cổng ngoại môn nhìn hắn theo người của nội môn lên bậc đá, cái chân hơi tập tễnh vì đôi giày rơm mới. Đến bậc thứ một trăm thì không nhìn thấy nữa. Đêm ấy bạn đắp tấm chăn và ngủ rất ngon. Đó là điều về sau bạn không tha thứ được cho mình.',
+      tre: [{ sau: [96, 144], chang: 'c_la_thu' }], toi: 'c4' },
+    { key: 'ke', label: 'Đặt bút xuống, kể cho hắn về tờ danh sách', kind: 'risk', ax: { daoduc: 2, xuthe: -2 },
+      fx: { flag: 'ke_danh_sach', gan_bo: { dan: 'huynh', d: 2 }, rel: { vai: 'su', d: -20 } },
+      mat: 'Hắn có thể không tin. {su} sẽ biết là bạn đã nói.',
+      sau: 'Hắn nghe hết, không ngắt lời. Rồi hắn cười, cái cười của người vừa được mời một bát cơm trắng mà người mời lại bảo cơm có độc. "Ngươi ghen à?" Hắn quay vào vách. Gần sáng, bạn nghe hắn trở mình rất lâu. Khi gà gáy, chỗ nằm của hắn trống; tấm chăn vẫn gấp vuông vức ở đầu phản.',
+      toi: 'c4_nghi' },
+    { key: 'tron', label: 'Xé thư, bảo hắn đêm nay trốn khỏi tông', kind: 'risk', ax: { daoduc: 3, tinh: -2 },
+      gate: { truc: 'tinh', max: 6, why: 'Bạn quá nhẫn nhịn để làm một việc liều như thế.' },
+      fx: { flag: 'tron_cung', tong: { truy: true }, gan_bo: { dan: 'huynh', d: 3 } },
+      mat: 'Đào tẩu đệ tử bị truy. Ngươi là người cuối cùng thấy hắn.',
+      sau: 'Hai người lội suối trong mưa, giày rơm tuột mất một chiếc. Đến bìa rừng hắn dừng lại, nhìn về phía thôn. "Mẹ ta thì sao?" Bạn không trả lời được. Hắn ôm bạn một cái rất mạnh, rồi đi về phía núi, một chân đất, một chân giày. Tiếng chuông sơn môn bắt đầu điểm, từng hồi, như đếm.',
+      toi: 'c4_tron' }
+  ]
+}
+```
+
 ## 8. Kiểm tra trước khi nộp (story-lint sẽ kiểm phần đo được)
 - [ ] Khung mục 0 đủ bảy mảnh; mỗi chặng trả lời được "vì… nên…"; tai họa lớn do lựa chọn hoặc khuyết điểm gây ra; trở ngại chặn được câu "sao không cứ…?".
-- [ ] Mỗi lựa chọn có `mat` (trừ khoảnh khắc ấm).
+- [ ] Mỗi lựa chọn có `mat` (trừ khoảnh khắc ấm); cảnh lớn đủ 9 điểm ở mục 6c và mỗi lựa chọn có lời dẫn `sau`.
 - [ ] Mỗi tuyến đặt ≥ 2 cờ và đọc lại ≥ 2 cờ.
 - [ ] ≥ 50% chặng có rẽ; ≥ 2 kết cục.
 - [ ] Mọi nhịp tàn khốc có `can_gan_bo` (luật ba lần) và báo trước trong `mat`.
@@ -298,7 +344,7 @@ Ba đường đều có giá thật: **công sức và thời gian** (thử thá
 - [ ] Không máu me chi tiết, không tình dục, trẻ con không bị tả bạo lực.
 
 ## 9. Việc tiếp theo (sau khi bạn duyệt)
-1. **Sonnet** (một phiên, gộp N1b): khuyết điểm gốc (`c.story.kd`, kể cả trung dung) và sổ nợ (`no`), thử thách có hạn (`thu_thach`), cờ `khinh_*` và luật gọi tên, dàn định mệnh 6 đến 8 người (đối thủ và kẻ thù dựng theo khuyết điểm), điểm gắn bó và luật ba lần, các khóa ★, hậu quả thật, chặng gặt, Story Director nhẹ (bốn hồi), khoảnh khắc ấm và thư, vật kỷ niệm, người trong dàn hiện trên cảnh; story-lint kiểm mục 8.
+1. **Sonnet** (một phiên, gộp N1b): khuyết điểm gốc (`c.story.kd`, kể cả trung dung) và sổ nợ (`no`), thử thách có hạn (`thu_thach`), cờ `khinh_*` và luật gọi tên, cảnh lớn (`lon`, `canh`) và khung lời dẫn sau lựa chọn (`sau`, 20 giây đọc, 40 giây tự đóng ở Cân bằng/Tự động), dàn định mệnh 6 đến 8 người (đối thủ và kẻ thù dựng theo khuyết điểm), điểm gắn bó và luật ba lần, các khóa ★, hậu quả thật, chặng gặt, Story Director nhẹ (bốn hồi), khoảnh khắc ấm và thư, vật kỷ niệm, người trong dàn hiện trên cảnh; story-lint kiểm mục 8.
 2. **Sonnet** viết lại xương sống A (A1 đến A6) theo bốn hồi, đúng cẩm nang (đây là lõi, cần chất lượng).
 3. **Haiku** viết lại T1, T2, T5, W1, đạo lữ, kết nghĩa theo mẫu; rồi N2.
 4. Hồi ký cuối đời: để sau (bạn chốt 2026-10-21).
