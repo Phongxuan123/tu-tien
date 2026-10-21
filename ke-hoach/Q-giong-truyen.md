@@ -1,4 +1,4 @@
-# Q-giọng truyện. Cẩm nang kể chuyện (bản 5): dàn định mệnh, gắn bó, cao trào, tàn khốc
+# Q-giọng truyện. Cẩm nang kể chuyện (bản 6): dàn định mệnh, gắn bó, cao trào, tàn khốc
 
 - Trạng thái: **Bản mẫu chờ bạn duyệt** (2026-10-21). Dùng cho MỌI phiên viết chữ truyện (Sonnet và Haiku) sau khi bạn duyệt.
 - Vì sao có file này: sau một lần chơi đủ đời, bạn thấy **không có gì đọng lại**. Đo dữ liệu 15 tuyến: 44 cờ đặt ra nhưng 0 cờ được đọc lại; 5/126 lựa chọn có hậu quả đáng kể; 22/47 chặng chọn gì cũng về cùng một chỗ; mỗi tuyến bốc người lạ rồi bỏ. Chữ không tệ; **cách kể** mới là chỗ yếu.
@@ -40,6 +40,26 @@
 - **II. Lời nói dối bắt đầu tốn**: đệ tử ngoại môn nghèo "được tuyển lên nội môn" rồi bặt tin; Lục Tam được tuyển. Bạn nghi, hỏi trưởng lão Hà; ông bảo "đừng làm lớn chuyện, sư môn khó xử". Bạn nghe theo. **Lục Tam không về nữa.** (Nếu bạn trái tính mà điều tra: có thể cứu được hắn, nhưng thầy bắt đầu lạnh với bạn.)
 - **III. Sụp đổ, đánh đúng khuyết điểm**: Tần Diệp, người bạn ghét vì tàn nhẫn, đã điều tra riêng và tố giác; cần một nhân chứng, chỉ có bạn từng thấy danh sách. Bạn im để giữ hòa khí; Tần Diệp bị vu tội, bị phế tu vi. Trong đồ di vật "đệ tử nội môn" gửi về thôn, mẹ Lục Tam nhận lại **tấm chăn dày**. Trưởng lão Hà nói thật với bạn, bình thản: "Con hiểu ta mà. Ta cũng chưa từng làm ai đau."
 - **IV. Chọn điều cần, hoặc thành bóng tối**: tố giác trước toàn tông (mất nội môn, đối đầu người thầy nuôi mình, bị truy; phải **tin** Tần Diệp, phải **gánh** phần lỗi của chính mình) → đường dài để thành người vĩ đại (cứu những đệ tử còn lại, lập lại sơn môn hoặc lập tông mới); hoặc im lặng → kế nhiệm trưởng lão Hà.
+
+## 0b. Tính đại diện (bạn chốt 2026-10-21: "có phản diện, có chính diện nhưng thiếu tính đại diện")
+Mỗi kịch bản đặt **một câu hỏi trung tâm** về con người; **mỗi người trong dàn là một câu trả lời khác nhau** cho câu hỏi đó, và **thế giới mô phỏng là phiên bản lớn của câu hỏi**. Phản diện không chỉ là "người xấu", mà là **một lối sống nhiều người đang theo**; chính diện không chỉ là "người tốt", mà là **câu trả lời người chơi tự chọn và trả giá cho nó**.
+
+**Áp vào kịch bản "mềm yếu" (Thanh Khê):** câu hỏi trung tâm: ***"Có nên im lặng trước cái ác để giữ cho nhiều người được yên?"***
+| Người | Câu trả lời họ sống | Đại diện cho |
+|---|---|---|
+| Trưởng lão Hà (bóng tối) | "Có. Hy sinh vài người để ngàn người sống, và đừng ai phải biết." | kẻ thỏa hiệp với cái ác để tồn tại; người hiền làm điều ác bằng chữ ký |
+| Cả sơn môn và thôn dưới núi | im lặng vì mình được lợi (tông còn, ruộng còn, con mình không bị chọn) | **đám đông đồng lõa**, không ai ác mà ai cũng có phần |
+| Tần Diệp (gương đối lập) | "Không. Công lý phải được thực thi, ai đau mặc ai." | công lý không có lòng thương; đúng mà không ai theo |
+| Lục Tam | không biết câu hỏi tồn tại; tin vào hệ thống | người nghèo không có tiếng nói, nạn nhân tin tưởng |
+| Mẹ của Lục Tam | "Đừng nói gì với ta cả." | người chọn không biết để còn sống nổi |
+| Âm Hồn Giáo (thế lực trong mô phỏng) | kẻ mạnh lấy của kẻ yếu, vì làm được | **sức mạnh trần trụi**; lý do có thật trong S (tông lớn, quân lực, thôn tính) |
+| Bạn (người chơi) | bắt đầu ở câu trả lời của Hà ("không làm ai đau"); cuối đời là câu trả lời **bạn đã chọn** | người chơi |
+
+**Luật:**
+1. Câu hỏi trung tâm **không có đáp án dễ**: lý lẽ của phản diện phải thuyết phục được một phần người chơi (thôn dưới núi sống nhờ sự im lặng ấy thật).
+2. **Ít nhất ba câu trả lời** trong dàn; người chơi được thấy **hậu quả của từng câu trả lời** trên người đã chọn nó (Tần Diệp đúng mà bị phế; Hà sai mà được kính trọng tới cuối).
+3. **Đám đông đồng lõa có mặt**: người chơi thấy cái giá của sự im lặng không nằm ở một kẻ ác, mà rải trên mọi người, kể cả chính mình.
+4. **Thế giới mô phỏng là quy mô lớn**: biến cố thật (tông bị thôn tính, chiến tranh tổng, quốc vận suy) đặt cùng câu hỏi ở tầm thiên hạ, để kết của đời người chơi có nghĩa ra ngoài bản thân.
 
 ## 1b. Trục nhân vật: khuyết điểm, sỉ nhục, phản chiếu (bạn gửi 2026-10-21, từ một video phân tích kịch bản)
 Nguyên lý rút ra: *sỉ nhục là thuốc đặc trị của kiêu hãnh*; *phản diện đại diện cho mặt tối mà chính diện phải vượt qua*; *nhân vật học mình là ai, niềm tin, trách nhiệm, vị tha, hy sinh để từ khiếm khuyết thành toàn vẹn*; *món quà quá lớn thành lời nguyền*. Và các lỗi phải tránh: kiêu ngạo mà không bao giờ bị sỉ nhục; làm tổn thương người khác mà không trả giá; chấn thương quá khứ chỉ là hồi tưởng, không có hậu quả; không có thời gian để lớn; kế thừa di sản mà không có gắn bó với người để lại; trở ngại không phải trở ngại thật nên trưởng thành không phải trưởng thành thật; lời giải là đường tắt; nhân vật phụ chỉ để làm nền.
@@ -128,6 +148,34 @@ Không được giết người mà người chơi chưa kịp thương. Bộ m�
 | **IV. Quả báo** | sau 80 hoặc cuối đời | lời hứa đến hạn; kẻ thù định mệnh tìm tới; bạn thuở nhỏ chết già; gặt các vật kỷ niệm | mọi lời hứa được trả hoặc bị phá; mọi vật quay lại |
 
 Bộ máy (Story Director nhẹ) giữ **nhịp**: không để hai cao trào liền nhau; sau cái chết có ít nhất một năm yên; hồi II không có ai chết trong dàn trừ thân nhân già.
+
+## 4b. Cấu trúc phim bộ: nhiều cao trào (bạn chốt 2026-10-21; bốn hồi ở mục 4 thành "mạch mùa", chia nhỏ thành các phần)
+Một đời dựng như **một bộ phim nhiều tập**: **mạch lớn** đi theo bốn hồi và bảy mảnh (mục 0); đời được chia thành **5 đến 7 phần**, mỗi phần **10 đến 20 năm** và có **cao trào riêng**.
+
+**Mỗi phần có năm nhịp:**
+1. **Móc** (cảnh nhỏ): biến cố mở phần, đặt câu hỏi của phần.
+2. **Leo thang** (1 đến 2 chặng, có thể có thử thách có hạn): tình hình xấu đi vì lựa chọn hoặc vì thế giới.
+3. **Điểm giữa / đảo**: một thông tin làm đổi nghĩa (người chơi biết thêm điều người khác không biết).
+4. **Cao trào** (**cảnh lớn**, có lời dẫn sau lựa chọn): lựa chọn tay làm, đúng lúc đau nhất.
+5. **Treo** (cliffhanger): một hậu quả trễ hoặc tin dữ **mở phần sau**; người chơi biết "chuyện chưa xong".
+
+**Mạch lớn đặt các mốc kiểu phim lên các phần:** phần 1 có *biến cố khởi đầu*; giữa đời có *chiến thắng giả* (lời nói dối có lợi nhất, nhân vật lên cao nhất); gần cuối có *tất cả đã mất* và *đêm tối của tâm hồn*; phần cuối là *trận cuối* và *hình ảnh khép lại* đối lập với hình ảnh mở đầu.
+
+**Nhịp:** mỗi đời **5 đến 7 cao trào** (cảnh lớn) + **6 đến 10 cảnh lớn phụ** (điểm giữa, móc quan trọng); giữa hai cao trào có ít nhất 2 năm yên (khoảnh khắc ấm, thư, gieo). Story Director giữ nhịp; người chơi thụ động thì phần vẫn mở theo tuổi.
+
+### Dàn cảnh mẫu: kịch bản "mềm yếu" (Thanh Khê Tông, 6 phần)
+Câu hỏi trung tâm ở mục 0b. Tên tông dùng tông người chơi đang ở; Thanh Khê chỉ là tên ví dụ. Âm Hồn Giáo là thế lực thật trong mô phỏng (hoặc tông mạnh nhất kề bên).
+
+| Phần | Tuổi | Móc | Điểm giữa / đảo | Cao trào (cảnh lớn, ba lựa chọn) | Treo |
+|---|---|---|---|---|---|
+| **1. Chiếc chăn** | 12 đến 18 | vào ngoại môn; đêm chiếc chăn dày; trưởng lão Hà nhận dạy riêng vì bạn "biết nhường" | thử luyện: bạn nhường cơ hội cho Lục Tam, được Hà khen trước cả ngoại môn (*lời nói dối có lợi*) | **Đêm mất tích đầu tiên**: một đệ tử nghèo cùng phòng "lên nội môn" bỏ quên đôi giày; bạn nhặt được, trong giày có mảnh giấy "cứu". Đưa Hà / giấu đi / hỏi Tần Diệp | Hà cất mảnh giấy, xoa đầu bạn; Tần Diệp nhìn bạn khinh: "Ngươi đưa cho đúng người rồi đấy." |
+| **2. Danh sách** | 18 đến 25 | Âm Hồn Giáo đóng quân ở biên vùng (tin báo, chiến sự thật) | bạn thấy danh sách có son của Hà; tên Lục Tam dòng thứ bảy | **Đêm trước ngày lên nội môn** (mẫu 6): viết thư / kể / trốn cùng | Lục Tam lên bậc đá không về; hoặc trốn và bạn bị nghi |
+| **3. Nhân chứng** | 25 đến 35 | Tần Diệp tìm bạn: hắn có bằng chứng, cần một nhân chứng | **thử thách có hạn**: trong 2 năm gom đủ ba bằng chứng (sổ kho, lời một đệ tử sống sót, dấu ấn), mỗi bằng chứng tốn công thật | **Phiên chấp pháp**: đứng ra làm chứng / im / làm chứng nửa vời (khai đúng nhưng giấu tên Hà) | Tần Diệp bị phế tu vi, đuổi khỏi tông (hoặc thoát nhờ bạn và thành kẻ bị truy) |
+| **4. Hòa khí** (*chiến thắng giả*) | 35 đến 50 | bạn lên nội môn, được Hà chọn làm người kế nhiệm; thôn dưới núi được mùa nhờ tông che chở | Hà nói thật với bạn, bình thản: "Con hiểu ta mà. Ta cũng chưa từng làm ai đau." | **Tờ danh sách đầu tiên của bạn**: Hà đưa bút; trong danh sách có đứa trẻ bạn từng cho ăn. Ký / ký mà đổi tên đứa trẻ bằng tên khác / không ký | Âm Hồn Giáo đòi gấp đôi vì chiến sự (mô phỏng); hoặc Hà bắt đầu tìm người kế nhiệm khác |
+| **5. Tất cả đã mất** | 50 đến 70 | mẹ Lục Tam nhờ bạn đọc lá thư bà cất kỹ nhất: chữ của bạn; gói di vật có tấm chăn (*gặt*) | đêm tối: Tần Diệp, phế nhân, xuất hiện ở cổng sơn môn với đệ tử sống sót cuối cùng | **Đại hội toàn tông**: tố giác trước mọi người (mất tất cả, đối đầu người thầy, thôn dưới núi có thể bị Âm Hồn Giáo trả thù) / kế nhiệm im lặng / giết Hà trong đêm (đường tắt: nhanh, và bạn thành kẻ phản sư) | sơn môn vỡ; hoặc bạn ngồi vào ghế của Hà |
+| **6. Biển** | 70 trở đi | hậu quả của phần 5 đổ xuống: Âm Hồn Giáo tràn tới (nếu tố giác), hoặc một đệ tử trẻ mềm lòng nhìn bạn như bạn từng nhìn Hà (nếu im) | **trận cuối**: bảo vệ thôn bằng chính tu vi của mình / đem tông mới ra đối diện Âm Hồn Giáo / ký thêm một danh sách | **Hình ảnh khép lại**: toàn vẹn: bạn đưa tấm chăn ra biển; đọa: bạn xoa đầu đệ tử trẻ, "đừng làm lớn chuyện"; cô độc: bạn sống, không còn ai để đưa ra biển | (kết đời) |
+
+Mỗi phần nối phần sau bằng một "vì… nên…": vì đưa mảnh giấy cho Hà nên Hà biết bạn nhìn thấy; vì Hà biết nên chọn bạn làm người kế nhiệm để trói bạn; vì bạn im ở phiên chấp pháp nên Tần Diệp bị phế, và nên ở phần 5 hắn không còn tin bạn... Lựa chọn khác ở phần trước làm **cao trào phần sau đổi hình**, không chỉ đổi số.
 
 ## 5. Bảng tàn khốc (chọn ít nhất một cho mỗi cao trào)
 1. **Hai người, một lối:** chỉ cứu được một trong hai người của dàn.
@@ -328,6 +376,8 @@ c3: {
 ```
 
 ## 8. Kiểm tra trước khi nộp (story-lint sẽ kiểm phần đo được)
+- [ ] Có câu hỏi trung tâm; ít nhất ba người trong dàn là ba câu trả lời khác nhau; đám đông đồng lõa và thế giới mô phỏng có mặt (mục 0b).
+- [ ] Đời chia 5 đến 7 phần, mỗi phần đủ năm nhịp và có treo nối phần sau (mục 4b).
 - [ ] Khung mục 0 đủ bảy mảnh; mỗi chặng trả lời được "vì… nên…"; tai họa lớn do lựa chọn hoặc khuyết điểm gây ra; trở ngại chặn được câu "sao không cứ…?".
 - [ ] Mỗi lựa chọn có `mat` (trừ khoảnh khắc ấm); cảnh lớn đủ 9 điểm ở mục 6c và mỗi lựa chọn có lời dẫn `sau`.
 - [ ] Mỗi tuyến đặt ≥ 2 cờ và đọc lại ≥ 2 cờ.
