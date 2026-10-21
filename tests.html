@@ -4590,7 +4590,7 @@ test('Bảng chỉnh nhân vật: tắt thì không có nút, không có dấu v
   eq(TT.dev.mount(), false, 'tắt thì mount không làm gì'); ok(!document.getElementById('btn-dev') && !document.getElementById('dev-panel'));
   eq(TT.world.devUsed, undefined, 'chưa có devUsed'); ok(!p.log.some(e => e.cat === 'dev'));
   const a = JSON.stringify(TT.world), r0 = TT.rng.getState();
-  const bar = document.createElement('div'); bar.className = 'bar-controls'; document.body.appendChild(bar);
+  const bar = document.createElement('div');
   D.DEV.on = true;
   try {
     ok(TT.dev.mount(), 'bật thì có nút'); ok(document.getElementById('btn-dev'), 'có nút 🛠');
