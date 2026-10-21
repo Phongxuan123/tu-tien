@@ -164,5 +164,8 @@
 
   // Tên hiển thị: nhà của tông dùng tên cổ trang riêng của tông đó (Đan Các, Khí Các, Hải Vụ Đường...).
   const nameOf = id => (TT.sect && TT.sect.bldName && TT.sect.bldName(id)) || (DEFS[id] ? DEFS[id].n : id);
-  ui.bld = { defs: DEFS, draw, ids: Object.keys(DEFS), nameOf };
+  // icon: chỉ vẽ biểu tượng treo trước nhà (cảnh mới vẽ nhà bằng kiến trúc riêng rồi gọi hàm này); special: các công trình có hình riêng
+  const SPECIAL = ['vo', 'ham', 'den', 'tau', 'cua', 'ai', 'son', 'rong', 'lang', 'tang', 'dien', 'tran', 'bi'];
+  const icon = (c, id, cx, y, f) => { if (!E[id]) return false; ctx = c; E[id](cx, y, f || 0); return true; };
+  ui.bld = { defs: DEFS, draw, ids: Object.keys(DEFS), nameOf, icon, special: SPECIAL };
 })();

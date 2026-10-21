@@ -267,6 +267,7 @@
       if (r.dao) { TT.ev.dao(c, r.dao); c.daoDiem += r.dao; }
       const o = g === 'npc' && TT.world.chars[q.giver.id];
       if (o && r.rel) TT.rel.add(c, o, r.rel, 'hoàn thành việc nhờ');
+      if (o && o.kind === 'npc') TT.bond.remember(c, o, 'nhiem_vu', 'Làm xong việc ' + o.name + ' nhờ', 1); // 9K
       TT.log(c, 'Hoàn thành nhiệm vụ: ' + q.text + '.', 'big', 'Người giao: ' + q.giver.name + ' · Thưởng: ' + rewardText(q) + '.');
       TT.news(c.name + ' hoàn thành một nhiệm vụ ' + Q.TIERS[q.tier].n.toLowerCase() + ': ' + q.text + '.', 'good', [c.id]);
       TT.report.mark(c, 'quest', 'Xong: ' + q.text);

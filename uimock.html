@@ -34,7 +34,7 @@ main{display:grid;grid-template-columns:380px minmax(0,1fr) 330px;gap:16px;paddi
 .id .body{padding:14px}.id h3{font:700 24px var(--serif);margin:0 0 8px}
 .kv{display:grid;grid-template-columns:96px 1fr;gap:6px 10px;font-size:13px}.kv span:nth-child(odd){color:var(--mute)}
 .mrz{margin-top:12px;border-top:1px dashed var(--line);padding-top:10px;font:11px/1.5 var(--mono);color:#69788c;word-break:break-all}
-.scene{padding:0;overflow:hidden}.scene canvas{display:block;width:100%;image-rendering:pixelated;aspect-ratio:240/72;height:auto}
+.scene{padding:0;overflow:hidden}.scene canvas{display:block;width:100%;image-rendering:pixelated;aspect-ratio:480/144;height:auto}
 .scene .scap{padding:10px 16px;font:12px var(--mono);letter-spacing:.06em;text-transform:uppercase;color:var(--mute);border-top:1px solid var(--line)}
 .ev{border-color:#7a5a1e;background:#1c1a14}.ev h2{color:#f0c35a}.ev .choice{display:block;width:100%;text-align:left;margin:8px 0 0;padding:11px 14px;border-radius:10px;background:#2a2a30;border:1px solid #3a3a44;color:var(--text);font:14px var(--sans);cursor:pointer}
 .ev .choice.pri{background:#e0b73a;border-color:#e0b73a;color:#1b1608;font-weight:600}.ev .tm{height:5px;border-radius:3px;background:#2c2a20;margin-top:12px}.ev .tm i{display:block;height:100%;width:55%;background:#e0b73a;border-radius:3px}
@@ -71,7 +71,7 @@ main{display:grid;grid-template-columns:380px minmax(0,1fr) 330px;gap:16px;paddi
 <main>
   <section>
 
-    <div class="sph" id="sph" style="display:none">Màn hình nhân vật đang tách ra <span class="lnk" id="sdock2">gắn lại</span></div><div class="card scene sticky-scene" id="scenecard" style="margin-bottom:12px"><div class="sgrip" id="sgrip"><span class="cap">⋮⋮ Màn hình nhân vật</span><span class="cap"><span class="lnk" id="ssize" style="margin-right:10px">to / nhỏ</span><span class="lnk" id="sdetach">tách ra</span></span></div><canvas id="scene" width="240" height="72"></canvas><div class="scap">Thiên Mã Trấn · Tây Thiên Sơn · ban đêm</div></div>
+    <div class="sph" id="sph" style="display:none">Màn hình nhân vật đang tách ra <span class="lnk" id="sdock2">gắn lại</span></div><div class="card scene sticky-scene" id="scenecard" style="margin-bottom:12px"><div class="sgrip" id="sgrip"><span class="cap">⋮⋮ Màn hình nhân vật</span><span class="cap"><span class="lnk" id="ssize" style="margin-right:10px">to / nhỏ</span><span class="lnk" id="sdetach">tách ra</span></span></div><canvas id="scene" width="480" height="144"></canvas><div class="scap">Thiên Mã Trấn · Tây Thiên Sơn · ban đêm</div></div>
     <div class="id"><div class="band"><span>Hồ sơ nhân vật</span><span>AFG · 2026</span></div><div class="body">
       <h3>Hamid Safi</h3>
       <div class="kv"><span>Giới tính</span><span>Nam</span><span>Sinh</span><span>Afghanistan · 2026</span><span>Nơi ở</span><span>Thiên Mã Trấn, Tây Thiên Sơn</span><span>Cảnh giới</span><span>Luyện Khí · tầng 3</span><span>Tư chất</span><span>86 điểm · Kim 55, Thủy 31</span><span>Tiên thiên</span><span>Tay khéo, Phúc duyên</span></div>
@@ -98,7 +98,7 @@ main{display:grid;grid-template-columns:380px minmax(0,1fr) 330px;gap:16px;paddi
     <div class="card" style="margin-top:12px"><h2>Bản đồ vùng</h2><div class="mapph">bản đồ vùng và đại địa đồ giữ như hiện nay</div></div>
     <div class="card people" style="margin-top:12px"><h2>Người ở đây</h2><div class="row"><span>Âu Dương Nhiên<small>Trúc Cơ · bạn bè</small></span><span class="cap">thân</span></div><div class="row"><span>Liễu Liên<small>Luyện Khí · đồng môn</small></span><span class="cap">quen</span></div></div>
   </section>
-</main><script src="js/files.js"></script><script>TT_LOAD(false);</script><script src="js/ui/sprites.js"></script><script src="js/ui/scene.js"></script>
+</main><script src="js/files.js"></script><script>TT_LOAD(false);</script><script src="js/ui/sprites.js"></script><script src="js/ui/bldart.js"></script><script>TT_SCENE();</script>
 <script>
 (function(){
   // bản đồ cuộc đời: 24 tuổi, thọ nguyên 118, mỗi ô 5 năm

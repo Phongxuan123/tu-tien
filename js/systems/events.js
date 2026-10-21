@@ -151,6 +151,7 @@
       if (c.kind === 'player' && D.NATURE.on) w *= TT.nature.affinity(c, x.def); // người chơi: độ hợp tính cách thay cho nhãn cũ
       return w;
     });
+    if (!random && c.kind === 'player' && D.NATURE.on && D.NATURE.autoRandom && TT.decisions.mode() !== 'thu_cong') random = true; // 8B2: Tự động/Cân bằng bốc theo trọng số độ hợp, không luôn lấy lựa chọn hợp nhất
     if (random) {
       let tot = 0; ws.forEach(w => { tot += w; });
       let r = rng.next() * tot;

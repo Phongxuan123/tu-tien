@@ -24,12 +24,18 @@
     });
   }
 
-  function condOk(c, k) {
+  function condOk(c, k, st) {
     if (!k) return true;
+    if (k.hoac && !k.hoac.some(x => condOk(c, x, st))) return false; // hoặc: một trong các nhánh đủ là được (ví dụ cảnh giới hoặc tuổi)
     if (k.realm != null && c.realm < k.realm) return false;
+    if (k.stage != null && k.realm != null && c.realm === k.realm && TT.stats.stage(c) < k.stage) return false; // giai đoạn chỉ tính trong đúng cảnh giới `realm`
     if (k.age != null && TT.age(c) < k.age) return false;
     if (k.flag && !c.flags[k.flag]) return false;
     if (k.sau && typeof k.sau === 'string') { const s = stOf(c, k.sau); if (!s || !s.ket) return false; }
+    if (k.bond) { // 9B: theo cặp thân thiết. Ở khi: vai đã bốc; ở mo (chưa có vai) hoặc không ghi vai: có ai đó thỏa là đủ.
+      const o = st && st.vai && k.bond.vai && TT.world.chars[st.vai[k.bond.vai]];
+      if (k.bond.vai && st) { if (!o || !TT.bond.cond(c, o, k.bond)) return false; } else if (!TT.bond.find(c, k.bond)) return false;
+    }
     return true;
   }
 
@@ -40,10 +46,12 @@
     const here = o => (o.place === c.place ? 0 : 1);
     if (spec.pick === 'su') list = list.filter(o => TT.age(o) >= 25).sort((a, b) => here(a) - here(b) || b.realm - a.realm || a.id - b.id);
     else if (spec.pick === 'dong_ky') list = list.filter(o => Math.abs(TT.age(o) - age) <= 8 && TT.age(o) >= 12).sort((a, b) => Math.abs(TT.age(a) - age) - Math.abs(TT.age(b) - age) || here(a) - here(b) || a.id - b.id);
+    else if (spec.pick === 'tinh') list = list.filter(o => TT.age(o) >= 18 && TT.family.eligible(c, o)).sort((a, b) => here(a) - here(b) || TT.rel.v(c, b) - TT.rel.v(c, a) || a.id - b.id); // người có thể nảy tình
     else list = list.filter(o => TT.age(o) >= 9).sort((a, b) => here(a) - here(b) || TT.rel.v(c, b) - TT.rel.v(c, a) || a.id - b.id);
     return list;
   }
-  function pickNpc(c, spec, taken) {
+  function pickNpc(c, spec, taken, arc) {
+    if (spec.pick === 'bond') return TT.bond.find(c, spec.bond || (arc && arc.mo && arc.mo.bond) || {}, taken); // người đã có cặp thân thiết thỏa điều kiện (không dựng mới)
     const cand = candidates(c, spec, taken);
     if (cand.length) return cand[0];
     if (!spec.dung_moi) return null;
@@ -58,7 +66,7 @@
     Object.keys(arc.vai || {}).forEach(k => {
       const cur = st.vai[k] && TT.world.chars[st.vai[k]];
       if (cur && cur.alive) return;
-      const n = pickNpc(c, arc.vai[k], taken);
+      const n = pickNpc(c, arc.vai[k], taken, arc);
       if (n) { st.vai[k] = n.id; taken.push(n.id); }
     });
   }
@@ -77,6 +85,14 @@
     if (fx.flag) [].concat(fx.flag).forEach(f => { c.flags[f] = 1; });
     if (fx.kv) { if (fx.kv > 0) TT.kv.add(c, fx.kv, why); else if (TT.kv.can(c, -fx.kv)) TT.kv.spend(c, -fx.kv, why); }
     if (fx.ax) Object.keys(fx.ax).forEach(a => TT.nature.shift(c, a, fx.ax[a], why, true));
+    if (fx.bond) { // 9B: thanh Tình/Tin/Kính/Ơn oán, loại, giai đoạn. Bước tỏ tình/hôn ước/kết có thể bị NPC từ chối: trả { refused } để lc.toi_tu rẽ nhánh.
+      const b = fx.bond, o = st && st.vai && TT.world.chars[st.vai[b.vai]];
+      if (o && TT.bond.on()) {
+        TT.bond.shift(c, o, b, why);
+        if (b.type) TT.bond.setType(c, o, b.type);
+        if (b.st && TT.bond.advance(c, o, b.st).refused) return { refused: true };
+      }
+    }
   }
 
   // ---------- lựa chọn ----------
@@ -127,7 +143,7 @@
     });
     let def = -1, bv = -Infinity;
     choices.forEach((x, i) => { if (!x.disabled && x.fit > bv + 1e-9) { bv = x.fit; def = i; } });
-    return { type: 'story', charId: c.id, tier: 2, timeout: K().timeout, arc: arc.id, ch: chId, title: fmt(c, st, ch.t), text: fmt(c, st, ch.d), choices, def: def < 0 ? 0 : def };
+    return { type: 'story', charId: c.id, tier: 2, timeout: K().timeout, arc: arc.id, ch: chId, title: fmt(c, st, ch.t), text: fmt(c, st, c.realm === 0 && ch.d_pham ? ch.d_pham : ch.d), choices, def: def < 0 ? 0 : def };
   }
 
   function note(c, st, text) { st.log = st.log || []; st.log.push(text); if (st.log.length > 20) st.log.shift(); }
@@ -180,7 +196,7 @@
       const ch = arc.chang[st.st]; if (!ch) return;
       const k = ch.khi || {};
       if (st.w) { if (!w.pending) wheelAgain(c, arc, st); return; } // đang chờ vòng quay mà hộp bị mất: dựng lại
-      if (!condOk(c, { realm: k.realm, age: k.age })) return;
+      if (!condOk(c, { realm: k.realm, stage: k.stage, age: k.age, hoac: k.hoac, bond: k.bond }, st)) return;
       if (st.ready == null) st.ready = st.since + (k.sau || 0);
       if (now < st.ready) return;
       if (now - st.ready > ch.han) { // quá hạn: tự đi theo mặc định
@@ -217,14 +233,14 @@
     }
     if (k.trai && !missed) { c.daoTam = Math.max(0, c.daoTam - K().trai.daoTam); TT.log(c, 'Chọn trái bản tính, bạn dằn vặt một hồi: đạo tâm -' + K().trai.daoTam + '.', 'age'); }
     Object.keys(lc.ax || {}).forEach(a => TT.nature.shift(c, a, lc.ax[a], ch.t, true));
-    fxApply(c, st, lc.fx, arc.n);
+    const fr = fxApply(c, st, lc.fx, arc.n);
     (lc.tre || []).forEach(t => {
       const S = ensure(c);
       S.due.push({ m: TT.world.months + TT.rng.RI(t.sau[0], t.sau[1]), arc: arc.id, fx: t.fx, log: t.log });
     });
     TT.log(c, '[' + arc.n + '] ' + fmt(c, st, ch.t) + ': ' + fmt(c, st, lc.label) + '.', 'age');
     if (!missed) note(c, st, fmt(c, st, ch.t) + ': ' + fmt(c, st, lc.label));
-    if (lc.wheel) { st.w = lc.key; TT.wheel.begin(c, arc.id, chId, lc.key); } else go(c, arc, lc.toi);
+    if (lc.wheel) { st.w = lc.key; TT.wheel.begin(c, arc.id, chId, lc.key); } else go(c, arc, fr && fr.refused && lc.toi_tu ? lc.toi_tu : lc.toi);
     return true;
   }
 
@@ -279,11 +295,34 @@
         if (!str(arc.n)) E('thiếu tên n');
         if (P.loai.indexOf(arc.loai) < 0) E('loai không hợp lệ: ' + arc.loai);
         const mo = arc.mo || {};
-        Object.keys(mo).forEach(k => { if (['realm', 'age', 'flag', 'sau'].indexOf(k) < 0) E('mo có khóa lạ: ' + k); });
+        const bondCond = (b, where, needVai) => { // điều kiện bond: { vai?, st?, type?, love?, trust?, respect?, debt? }
+          if (!b || typeof b !== 'object' || !Object.keys(b).length) return E(where + '.bond rỗng');
+          Object.keys(b).forEach(x => {
+            if (['vai', 'st', 'type', 'love', 'trust', 'respect', 'debt'].indexOf(x) < 0) E(where + '.bond có khóa lạ: ' + x);
+            else if (x === 'vai') { if (!(arc.vai || {})[b.vai]) E(where + '.bond.vai trỏ vai không có: ' + b.vai); }
+            else if (x === 'st') { if (!D.BOND.stageById[b.st]) E(where + '.bond.st không hợp lệ: ' + b.st); }
+            else if (x === 'type') { if (!D.BOND.types[b.type]) E(where + '.bond.type không hợp lệ: ' + b.type); }
+            else if (!num(b[x])) E(where + '.bond.' + x + ' không phải số');
+          });
+          if (needVai && !b.vai) E(where + '.bond cần vai (chặng đã có vai, khóa điều kiện theo người ở vai)');
+        };
+        const condLint = (k, where, add) => {
+          Object.keys(k).forEach(x => { if (['realm', 'stage', 'age', 'hoac'].concat(add).indexOf(x) < 0) E(where + ' có khóa lạ: ' + x); else if (x !== 'hoac' && x !== 'bond' && !(where === 'mo' && (x === 'flag' || x === 'sau')) && !num(k[x])) E(where + '.' + x + ' không phải số'); });
+          if (k.bond !== undefined) bondCond(k.bond, where, where !== 'mo');
+          if (k.stage != null && k.realm == null) E(where + ': stage cần đi kèm realm');
+          if (k.stage != null && !(k.stage >= 0 && k.stage <= 2)) E(where + '.stage phải 0, 1 hoặc 2');
+          if (k.hoac !== undefined) {
+            if (!Array.isArray(k.hoac) || k.hoac.length < 2) E(where + '.hoac cần mảng từ 2 nhánh'); else k.hoac.forEach((x, i) => { if (!x || typeof x !== 'object' || !Object.keys(x).length) E(where + '.hoac[' + i + '] rỗng'); else condLint(x, where + '.hoac[' + i + ']', []); });
+          }
+        };
+        condLint(mo, 'mo', ['flag', 'sau', 'bond']);
         if (mo.sau && !ids[mo.sau]) E('mo.sau trỏ tuyến không có: ' + mo.sau);
         if (!Object.keys(mo).length) E('mo rỗng (tuyến sẽ mở ngay khi sinh)');
         const vai = arc.vai || {};
-        Object.keys(vai).forEach(k => { if (P.picks.indexOf(vai[k].pick) < 0) E('vai ' + k + ': pick không hợp lệ'); });
+        Object.keys(vai).forEach(k => {
+          if (P.picks.indexOf(vai[k].pick) < 0) E('vai ' + k + ': pick không hợp lệ');
+          if (vai[k].pick === 'bond') { if (!vai[k].bond && !(mo.bond && Object.keys(mo.bond).length)) E('vai ' + k + ': pick bond cần vai.bond hoặc mo.bond'); if (vai[k].dung_moi) E('vai ' + k + ': pick bond không dựng mới'); }
+        });
         const ch = arc.chang || {}, ket = arc.ket || {};
         if (!ch[arc.dau]) E('dau trỏ chặng không có: ' + arc.dau);
         if (!Object.keys(ket).length) E('thiếu ket');
@@ -292,11 +331,22 @@
           if (!str(t)) return E(where + ': thiếu toi');
           if (/^ket:/.test(t)) { if (!ket[t.slice(4)]) E(where + ': kết cục không có: ' + t); } else if (!ch[t]) E(where + ': chặng không có: ' + t);
         };
-        const fxCheck = (fx, where) => {
+        const fxCheck = (fx, where, late) => {
           Object.keys(fx || {}).forEach(k => {
             const v = fx[k];
             if (FX.indexOf(k) < 0) return E(where + ': fx khóa không cho phép: ' + k);
             if (k === 'rep') { Object.keys(v).forEach(x => { if (x !== 'chinh' && x !== 'danh') E(where + ': rep.' + x); else if (!num(v[x])) E(where + ': rep.' + x + ' không phải số'); }); }
+            else if (k === 'bond') {
+              Object.keys(v).forEach(x => {
+                if (['vai', 'love', 'trust', 'respect', 'debt', 'st', 'type'].indexOf(x) < 0) E(where + ': bond khóa lạ ' + x);
+                else if (x === 'vai') { if (!vai[v.vai]) E(where + ': bond trỏ vai không có: ' + v.vai); }
+                else if (x === 'st') { if (!D.BOND.stageById[v.st]) E(where + ': bond.st không hợp lệ: ' + v.st); }
+                else if (x === 'type') { if (!D.BOND.types[v.type]) E(where + ': bond.type không hợp lệ: ' + v.type); }
+                else if (!num(v[x]) || Math.abs(v[x]) > 100) E(where + ': bond.' + x + ' phải là số trong ±100');
+              });
+              if (!v.vai) E(where + ': bond thiếu vai');
+              if (late && D.BOND.consent.indexOf(v.st) >= 0) E(where + ': bond.st ' + v.st + ' cần người kia đồng ý, chỉ dùng trong fx của lựa chọn (có toi_tu), không dùng ở tre hay vùng vòng quay');
+            }
             else if (k === 'rel') { if (!vai[v.vai]) E(where + ': rel trỏ vai không có: ' + v.vai); if (!num(v.d)) E(where + ': rel.d không phải số'); }
             else if (k === 'flag') { if (![].concat(v).every(str)) E(where + ': flag phải là chuỗi'); }
             else if (k === 'ax') { Object.keys(v).forEach(x => { if (AXES.indexOf(x) < 0) E(where + ': ax trục lạ ' + x); else if (!num(v[x])) E(where + ': ax.' + x); }); }
@@ -306,15 +356,15 @@
         const reach = {}, stack = [arc.dau];
         while (stack.length) {
           const id = stack.pop(); if (reach[id] || !ch[id]) continue; reach[id] = 1;
-          ch[id].lc.forEach(lc => { if (lc.toi && !/^ket:/.test(lc.toi)) stack.push(lc.toi); if (lc.wheel) lc.wheel.vung.forEach(z => { if (z.toi && !/^ket:/.test(z.toi)) stack.push(z.toi); }); });
+          ch[id].lc.forEach(lc => { if (lc.toi && !/^ket:/.test(lc.toi)) stack.push(lc.toi); if (lc.toi_tu && !/^ket:/.test(lc.toi_tu)) stack.push(lc.toi_tu); if (lc.wheel) lc.wheel.vung.forEach(z => { if (z.toi && !/^ket:/.test(z.toi)) stack.push(z.toi); }); });
         }
         Object.keys(ch).forEach(id => {
           const c0 = ch[id], W = arc.id + '/' + id, e = m => errs.push(W + ': ' + m);
           if (!str(c0.t)) e('thiếu t'); else slotsOk(c0.t, W);
           if (!str(c0.d)) e('thiếu d'); else slotsOk(c0.d, W);
           if (!reach[id]) e('chặng không tới được từ dau');
-          const khi = c0.khi || {};
-          Object.keys(khi).forEach(k => { if (['realm', 'age', 'sau'].indexOf(k) < 0) e('khi có khóa lạ: ' + k); else if (!num(khi[k])) e('khi.' + k + ' không phải số'); });
+          if (c0.d_pham !== undefined) { if (!str(c0.d_pham)) e('d_pham phải là chữ'); else slotsOk(c0.d_pham, W + '/d_pham'); }
+          condLint(c0.khi || {}, W + '/khi', ['sau', 'bond']);
           if (!(num(c0.han) && c0.han > 0)) e('han phải là số tháng > 0');
           const lcs = c0.lc || [];
           if (lcs.length < 2 || lcs.length > 4) e('cần 2 đến 4 lựa chọn, có ' + lcs.length);
@@ -338,16 +388,18 @@
             fxCheck(lc.fx, L);
             (lc.tre || []).forEach((t, i) => {
               if (!Array.isArray(t.sau) || t.sau.length !== 2 || !num(t.sau[0]) || !num(t.sau[1]) || t.sau[0] < 1 || t.sau[1] < t.sau[0] || t.sau[1] > 240) le('tre[' + i + '].sau phải là [min, max] tháng trong 1..240');
-              fxCheck(t.fx, L + '/tre' + i);
+              fxCheck(t.fx, L + '/tre' + i, true);
               if (!str(t.log)) le('tre[' + i + '] thiếu log'); else slotsOk(t.log, L);
             });
             if (lc.wheel && lc.toi) le('có cả wheel lẫn toi');
+            if (lc.toi_tu !== undefined) { if (lc.wheel) le('toi_tu không dùng cùng wheel'); else dest(lc.toi_tu, L + '/toi_tu'); if (!(lc.fx && lc.fx.bond && D.BOND.consent.indexOf(lc.fx.bond.st) >= 0)) le('toi_tu chỉ có nghĩa khi fx.bond.st là to, hon hoặc ket'); }
+            else if (lc.fx && lc.fx.bond && D.BOND.consent.indexOf(lc.fx.bond.st) >= 0) le('fx.bond.st ' + lc.fx.bond.st + ' có thể bị từ chối: cần toi_tu (chặng/kết cục khi bị từ chối)');
             if (!lc.wheel) dest(lc.toi, L);
             else {
               const wh = lc.wheel, Z = P.wheel, v = wh.vung || [];
               if (v.length < Z.zMin || v.length > Z.zMax) le('wheel cần ' + Z.zMin + ' đến ' + Z.zMax + ' vùng');
               if (v.reduce((a, z) => a + z.w, 0) !== 100) le('wheel: tổng độ rộng vùng phải bằng 100');
-              v.forEach((z, i) => { if (!(num(z.w) && z.w > 0)) le('wheel vùng ' + i + ': w phải > 0'); if (!str(z.n)) le('wheel vùng ' + i + ': thiếu n'); fxCheck(z.fx, L + '/vung' + i); dest(z.toi, L + '/vung' + i); });
+              v.forEach((z, i) => { if (!(num(z.w) && z.w > 0)) le('wheel vùng ' + i + ': w phải > 0'); if (!str(z.n)) le('wheel vùng ' + i + ': thiếu n'); fxCheck(z.fx, L + '/vung' + i, true); dest(z.toi, L + '/vung' + i); });
               const y = wh.yeu_to;
               if (!y || ['nature', 'rel', 'stat'].indexOf(y.loai) < 0) le('wheel: đúng một yeu_to loại nature, rel hoặc stat');
               else {

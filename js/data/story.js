@@ -4,6 +4,13 @@
 //     lc: [ { key, label, kind, ax, gate?: { truc, min?, max?, why }, gia?: { gold|hp|daoTam|kv }, fx, toi: 'chang'|'ket:x', tre?: [ { sau: [min, max] tháng, fx, log } ], wheel? } ] } },
 //   ket: { x: { t, kv, log } } }
 // wheel: { vung: [ { w, n, fx, toi } ] (2 đến 4, tổng 100, xếp từ phù hợp ít đến nhiều), yeu_to: { loai: 'nature'|'rel'|'stat', ... , tran }, gia }.
+// Điều kiện mo/khi: { realm?, stage? (0 sơ, 1 trung, 2 hậu kỳ, đi kèm realm), age? (tuổi), hoac?: [ điều kiện, ... ] (một nhánh đủ là được, ví dụ cảnh giới HOẶC tuổi) }.
+// Chặng có thể có d_pham: chữ thay cho d khi người chơi còn là phàm nhân (realm 0).
+// HƯỚNG DẪN VIẾT TUYẾN (8B2): tiến độ cảnh giới chậm là cố ý. 60 đến 70% nội dung hạ xuống "Luyện Khí trung kỳ" ({ realm: 1, stage: 1 }); chỉ 30 đến 40%
+//   chuyện rất lớn mới giữ "từ Trúc Cơ" (T13, T14, A4 trở lên). Mốc xương sống mở theo "cảnh giới HOẶC tuổi" (hoac), cái nào trước; chặng cần chữ khác cho phàm nhân thì viết d_pham.
+// 9B (quan hệ có chiều sâu, D.BOND): fx.bond: { vai, love?, trust?, respect?, debt? (cộng dồn, ±100), type? (ban|ket_nghia|dao_lu|thuong|hon_uoc|su_do|huyet|an|thu|cu), st? (gap|men|to|hon|ket|ben|thu|ran|biet) }.
+//   Bước st = to, hon, ket cần người kia (NPC) đồng ý: lựa chọn đó phải có toi_tu (chặng hoặc kết cục khi bị từ chối). Điều kiện mo/khi: bond: { vai (bắt buộc ở khi), st (đạt giai đoạn đó, đường chính gap..thu; ran/biet khớp đúng), love/trust/respect (từ ngưỡng), debt (dương: từ ngưỡng ơn, âm: từ ngưỡng oán), type }.
+//   Ở mo, bond chỉ cần có một người thỏa. vai pick 'bond' lấy người thân nhất thỏa; pick 'tinh' lấy người có thể nảy tình (dung_moi dựng mới khi vắng). Công tắc D.BOND.on tắt thì fx.bond bị bỏ qua và điều kiện bond không bao giờ đủ.
 // Chữ có khe {khe} (tên người ở vai) và {ten} (tên người chơi). Kiểm bằng tools/story-lint.js (TT.story.lint).
 (function () {
   const TT = window.TT = window.TT || {};
@@ -11,7 +18,8 @@
 
   D.STORY = {
     on: true,                    // false: mọi thứ chạy như cũ, baseline.js --story=off phải trùng khít
-    evMul: 0.85,                 // nhân vào xác suất sự kiện lẻ của người chơi khi bật truyện (hộp truyện chiếm một phần nhịp quyết định)
+    evMul: 0.3,                 // nhân vào xác suất sự kiện lẻ của người chơi khi bật truyện (hộp truyện chiếm một phần nhịp quyết định)
+    logGom: { on: true, rumorMonths: 36 }, // 8B2: gom năm trống (+0) và tin đồn lặp (cùng loại, cùng nơi trong rumorMonths) thành một dòng cuối năm
     gap: 2,                      // tối thiểu 2 tháng giữa hai hộp truyện (tối đa 1 hộp mỗi tháng, giữ nhịp ≤ 6 hộp/phút)
     timeout: 25,                 // giây đếm ngược của hộp chặng ở chế độ Cân bằng
     fit: { hop: 1.1, trai: 0.9 },// độ hợp (TT.nature.affinity) từ hop trở lên là chấm "hợp tính", dưới trai là "trái tính"
@@ -20,8 +28,8 @@
     trai: { daoTam: 1 },         // phí trái bản tính (Q 6.5): chọn lựa chọn trái tính thì mất bấy nhiêu đạo tâm
     loai: ['bb', 'tp', 'tg'],    // bb xương sống, tp tuyến thân phận, tg tuyến thế giới
     kinds: ['risk', 'safe', 'fight', 'flee', 'help', 'pay'],
-    picks: ['gan', 'su', 'dong_ky'],
-    fxKeys: ['gold', 'xp', 'hp', 'daoTam', 'nghiep', 'rep', 'rel', 'flag', 'kv', 'ax'],
+    picks: ['gan', 'su', 'dong_ky', 'tinh', 'bond'], // tinh: người có thể nảy tình (đủ 18 tuổi, không ruột thịt, còn tự do); bond: người đã có cặp thân thiết thỏa vai.bond hoặc mo.bond (9B)
+    fxKeys: ['gold', 'xp', 'hp', 'daoTam', 'nghiep', 'rep', 'rel', 'flag', 'kv', 'ax', 'bond'],
     giaKeys: ['gold', 'hp', 'daoTam', 'kv'],
     stats: ['realm', 'daoTam', 'kv'],       // chi_so cho yếu tố vòng quay loại stat
     wheel: { zMin: 2, zMax: 4, min: -10, max: 15, giaMin: 1, giaMax: 5, kvHigh: 1 },

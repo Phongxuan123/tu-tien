@@ -362,12 +362,22 @@ NHIỆM VỤ: chỉ DỮ LIỆU: js/data/stories/con_cai.js khoảng 12 chặng 
 Kiểm: story-lint sạch; run-tests lọc "con|9C"; life-sim 101-103 với 120 năm, ghi đời nào có con, kết đời ra sao. Ghi "9C-d đã làm". Push.
 ```
 
+## N1b. Sonnet: sửa sau N1 (làm TRƯỚC N2)
+
+```
+Repo: Phongxuan123/tu-tien. Gắn repo, làm theo dòng "Mọi phiên" ở đầu mục Đợt 9 trong ke-hoach/PROMPT-phien-moi.md (nhánh add-game-project).
+Đọc: Z mục 7b dòng "N1b" (bản chốt) và "N1 đã làm"; js/systems/story.js (condOk dòng ~27-40, candidates/pickNpc ~43-60, tick ~190-215); js/data/story.js (chú thích hướng dẫn); bốn tệp js/data/stories/tp_tan_tu.js, tp_dao_tong.js, tp_thuong_nhan.js, tg_chien_su.js; tools/story-lint.js; js/systems/factions.js dòng ~460-470 (warAt); js/systems/jobs.js 1-60 (TT.job, c.job), js/systems/hoi.js 1-12 (c.hoi.m), js/systems/path.js 1-15 (c.path), js/systems/bond.js find và js/systems/bondmem.js (ký ức chung); bài "Sửa lõi (8B2)" và "Nhịp quyết định" trong tests.html.
+
+NHIỆM VỤ: đúng dòng "N1b" trong Z: (1) khóa điều kiện mới tong, hoi, nghe, dao, xt, vung, nhan, ke_thu trong condOk (hàm đọc, không gọi rng) + story-lint + ghi vào chú thích hướng dẫn của js/data/story.js; (2) hạ điều kiện mở T1, T2, T5, W1 và chặng 4-5 như ghi, bỏ cờ tạm; (3) pick 'ky_uc' và đổi vai trong N1; (4) sửa hai bài đỏ (tìm nguyên nhân thật, ghi lý do; nhịp phải dưới 6 hộp/phút); (5) baseline --check trùng khít (nếu sửa factions.js làm lệch thì chỉ áp cho người chơi và chứng minh baseline không bước người chơi), life-sim 101-103.
+Kiểm thử "Điều kiện thân phận (N1b)": từng khóa mới đúng/sai, T1 mở khi không tông lúc 16 tuổi, T2 mở khi vào tông, T5 mở khi hội viên hoặc nghề thương, W1 mở khi chiến sự tới làng lúc 14 tuổi, ky_uc chọn đúng người. Chạy đầy đủ run-tests (phải 0 lỗi). Ghi "N1b đã làm" vào Z mục 7b (số nhịp trước/sau, đời nào mở tuyến nào). Push.
+```
+
 ## N1, N2. Haiku: gói nội dung tuyến (sau Cổng 7)
 
 ```
 Repo: Phongxuan123/tu-tien. Gắn repo, làm theo dòng "Mọi phiên" ở đầu mục Đợt 9 trong ke-hoach/PROMPT-phien-moi.md.
-Gói: N1 = T1 Tán tu, T2 Đệ tử tông, T5 Thương nhân, tuyến thế giới W1 (làng bị phá). N2 = T3 Đan sư, T9 Báo thù, chuỗi Nhẫn (chuyển từ sự kiện cũ c.ring, Q 14.3), tuyến thế giới W3. (Ghi gói đang làm ở dòng đầu khi dán prompt.)
-Đọc: Q mục 11.0 và đúng mục con của từng tuyến trong gói (grep tên tuyến), 12 (tuyến thế giới tương ứng), 7.5 (ví dụ vòng quay), 13.3 (dàn nhân vật); js/data/story.js (hướng dẫn, khóa fx và điều kiện, gồm bond; KHÔNG dùng kid vì 9C hoãn); mẫu bb_a.js, dao_lu.js.
+Gói: N1 = T1 Tán tu, T2 Đệ tử tông, T5 Thương nhân, tuyến thế giới W1 (làng bị phá). N2 = T3 Đan sư (nghe dan), T9 Báo thù (ke_thu), chuỗi Nhẫn (nhan; chuyển từ sự kiện cũ c.ring, Q 14.3), tuyến thế giới W3. N2 chỉ chạy SAU N1b. (Ghi gói đang làm ở dòng đầu khi dán prompt.)
+Đọc: Q mục 11.0 và đúng mục con của từng tuyến trong gói (grep tên tuyến), 12 (tuyến thế giới tương ứng), 7.5 (ví dụ vòng quay), 13.3 (dàn nhân vật); js/data/story.js (hướng dẫn, khóa fx và điều kiện, gồm bond và các khóa thân phận của N1b (tong, hoi, nghe, dao, xt, vung, nhan, ke_thu) cùng vai ky_uc; KHÔNG dùng kid vì 9C hoãn; KHÔNG dùng cờ tạm thay cho điều kiện thân phận (thiếu khóa nào thì ghi rõ trong báo cáo, không tự sửa js/systems)); mẫu bb_a.js, dao_lu.js.
 NHIỆM VỤ: chỉ DỮ LIỆU, mỗi tuyến một tệp js/data/stories/<id>.js, 4 đến 6 chặng, 1 vòng quay ở chặng cuối, ít nhất 2 hậu quả trễ, khóa mềm theo tính cách, khi hợp thì cho bạn đồng hành/huynh đệ kết nghĩa tham gia (vai lấy người có ký ức chung, xem Z "9K"), điều kiện mở theo nghề/đạo/tông/vùng sẵn có (đọc tên trường trong js/data/jobs.js, paths.js, sects.js khi cần); 60 đến 70% chặng mở từ Luyện Khí trung kỳ trở xuống. Tuyến thế giới mở khi biến cố thế giới tương ứng xảy ra (đọc tên sự kiện/cú sốc trong js/data/eco.js hoặc natevents.js; nếu chưa có móc phù hợp thì mở theo điều kiện vùng + xác suất thấp và ghi chú để phiên hoàn thiện nối).
 Kiểm: story-lint sạch; run-tests lọc "Truyện"; life-sim 101-103 (đếm số hộp truyện mỗi đời, mục tiêu tăng rõ so với trước gói; nhịp dưới 6 hộp/phút). Ghi "N1 đã làm" (hoặc N2) vào Z mục 7b. Push.
 ```

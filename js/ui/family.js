@@ -17,7 +17,8 @@
     const w = TT.world;
     return {
       id: c.id, preg: !!c.pregnant,
-      partners: TT.family.partners(c).map(x => [x.id, Math.round(x.r.love || 0), x.c.place, x.c.region, x.c.travel ? 1 : 0]),
+      hon: TT.rel.list(c).filter(x => x.c && TT.bond.get(c, x.c) && TT.bond.get(c, x.c).t === 'hon_uoc').map(x => x.id + ':' + Math.round(TT.bond.get(c, x.c).love)).join(),
+      partners: TT.family.partners(c).map(x => [x.id, Math.round(TT.bond.loveRec(x.r)), x.c.place, x.c.region, x.c.travel ? 1 : 0, ui.bondKey(c, x.c)]),
       kids: (c.children || []).map(i => { const k = w.chars[i]; return k ? [i, k.alive, TT.age(k), k.realm, k.place] : [i]; }),
       dis: TT.family.disciples(c).map(d => [d.id, d.realm, d.place, TT.age(d)]),
       debts: (c.debts || []).map(d => d.id + ':' + d.amt),
@@ -44,11 +45,22 @@
     box.appendChild(h('h2', null, 'Đạo lữ'));
     const ps = TT.family.partners(c);
     if (!ps.length) box.appendChild(h('div', { class: 'small' }, 'Bạn chưa có đạo lữ. Tình cảm nảy nở qua giao du, tâm sự và các biến cố; khi đủ gắn bó, hai người có thể kết đạo lữ. Bạn được phép có nhiều đạo lữ, nhưng ghen tuông là chuyện khó tránh. Đạo lữ ở cùng chỗ có thể song tu, vừa tu nhanh hơn vừa tăng đạo tâm.'));
-    ps.forEach(x => {
-      const { card } = person(x.c, c, 'gắn bó ' + Math.round(x.r.love || 0) + '/100');
-      card.insertBefore(h('div', { html: '<div class="bar"><i style="width:' + Math.round(x.r.love || 0) + '%"></i></div>' }), card.children[2] || null);
+    TT.bond.partners(c).forEach(x => {
+      const love = Math.round(TT.bond.loveRec(x.r)), bb = ui.bondBlock(c, x.c);
+      const { card } = person(x.c, c, bb ? '' : 'gắn bó ' + love + '/100');
+      if (bb) card.insertBefore(bb, card.children[2] || null);
+      else card.insertBefore(h('div', { html: '<div class="bar"><i style="width:' + love + '%"></i></div>' }), card.children[2] || null);
       box.appendChild(card);
     });
+    const hon = TT.rel.list(c).filter(x => x.c && x.c.alive && TT.bond.get(c, x.c) && TT.bond.get(c, x.c).t === 'hon_uoc');
+    if (hon.length) {
+      box.appendChild(h('h2', { style: 'margin-top:14px' }, 'Hôn ước'));
+      hon.forEach(x => {
+        const { card } = person(x.c, c, ''); card.insertBefore(ui.bondBlock(c, x.c), card.children[2] || null);
+        card.appendChild(h('div', { class: 'btns' }, h('button', { onclick: () => { TT.bond.breakup(c, x.c, 'bạn từ hôn'); ui.markDirty(); } }, 'Từ hôn')));
+        box.appendChild(card);
+      });
+    }
     if (c.pregnant) box.appendChild(h('div', { class: 'small good-txt' }, 'Có sinh mệnh nhỏ sắp chào đời.'));
 
     const kids = (c.children || []).map(i => w.chars[i]).filter(Boolean);
