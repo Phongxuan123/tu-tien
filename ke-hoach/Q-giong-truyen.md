@@ -14,6 +14,8 @@
 ## 1b. Trục nhân vật: khuyết điểm, sỉ nhục, phản chiếu (bạn gửi 2026-10-21, từ một video phân tích kịch bản)
 Nguyên lý rút ra: *sỉ nhục là thuốc đặc trị của kiêu hãnh*; *phản diện đại diện cho mặt tối mà chính diện phải vượt qua*; *nhân vật học mình là ai, niềm tin, trách nhiệm, vị tha, hy sinh để từ khiếm khuyết thành toàn vẹn*; *món quà quá lớn thành lời nguyền*. Và các lỗi phải tránh: kiêu ngạo mà không bao giờ bị sỉ nhục; làm tổn thương người khác mà không trả giá; chấn thương quá khứ chỉ là hồi tưởng, không có hậu quả; không có thời gian để lớn; kế thừa di sản mà không có gắn bó với người để lại; trở ngại không phải trở ngại thật nên trưởng thành không phải trưởng thành thật; lời giải là đường tắt; nhân vật phụ chỉ để làm nền.
 
+**Đức tính cũng là khuyết điểm** (bạn chốt 2026-10-21): không có đầu trục nào "an toàn". Điềm tĩnh thành thờ ơ, nhân hậu thành mềm yếu, khắc kỷ thành lạnh lùng, khéo léo thành giả dối; người **trung dung** cũng có khuyết điểm riêng (ba phải). Truyện đánh vào **chính điều người chơi tự hào nhất** ở nhân vật của mình.
+
 **Khuyết điểm gốc** (bộ máy suy ra ở mốc A1 từ trục tính cách lệch nhất, lưu `c.story.kd`; đổi được nếu trục khác vượt lên rõ ràng trước hồi III):
 
 | Đầu trục | Khuyết điểm | "Thuốc" (bài học hồi III, IV) | Đối thủ / kẻ thù phản chiếu |
@@ -26,6 +28,7 @@ Nguyên lý rút ra: *sỉ nhục là thuốc đặc trị của kiêu hãnh*; *
 | Đạo đức dương (nhân hậu) | mềm lòng, tha kẻ không nên tha | **trách nhiệm**: kẻ bạn tha quay lại giết người khác | kẻ bạn từng tha, nay mang ơn thành hận |
 | Tu dưỡng âm (buông thả) | lười, ham vui, bỏ dở | **kỷ luật và hy sinh**: vì bỏ dở mà không đủ sức bảo vệ ai | đồng kỳ từng thua bạn, nay vượt xa vì chịu khổ |
 | Tu dưỡng dương (khắc kỷ) | lạnh lùng, cầu đạo bỏ người | **tình người**: đạt cảnh giới thì không còn ai để báo tin | kẻ đã hiến hết người thân để thành tiên |
+| Trung dung (không trục nào lệch quá 3) | **ba phải**, né mọi lựa chọn, muốn vừa lòng tất cả | **đứng về một phía**: vì không chọn mà cả hai bên cùng mất | kẻ chọn phe dứt khoát, chiến thắng, và khinh bạn là kẻ không có mặt |
 
 **Luật dùng:**
 1. **Hồi III đánh đúng khuyết điểm**: cao trào là thất bại hoặc sỉ nhục do chính khuyết điểm gây ra (không phải tai họa từ trên trời rơi xuống).
@@ -36,6 +39,23 @@ Nguyên lý rút ra: *sỉ nhục là thuốc đặc trị của kiêu hãnh*; *
 6. **Chấn thương có hậu quả**: mất mát lớn để lại dấu thật (tật, tâm ma, khóa một loại lựa chọn, sợ một nơi), không chỉ một dòng hồi tưởng.
 7. **Kế thừa phải có gắn bó**: người kế thừa (vai 8) chỉ nhận di sản khi gắn bó đủ; không có thì di sản rơi vào tay người khác (có thể là kẻ thù).
 8. **Không ai chỉ để làm nền**: mỗi người trong dàn có động cơ, có lúc đúng, có lúc giúp bạn thật; không ai chỉ ác hay chỉ vô dụng.
+
+## 1c. Chống "ép tình tiết": trở ngại thật, vấn đề thật, trưởng thành thật (bạn chốt 2026-10-21, trọng tâm)
+Lỗi phải tránh: tình tiết bị ép để phục vụ một lối nghĩ nghèo đạo đức: **ghét người giàu mà muốn giàu; lười lao động; bất chấp thiện ác để có kết quả nhanh; không có trở ngại thật; vấn đề không thật là vấn đề; nên phát triển không thật là phát triển.** Trong game, lỗi này hiện ra khi: một cú bấm giải quyết mọi chuyện; đường tắt bất lương được thưởng như "khôn"; nhân vật lên đời mà không phải bỏ công; truyện chửi một thứ rồi thưởng cho đúng thứ đó.
+
+**Mười luật (story-lint và người duyệt kiểm):**
+1. **Không thành quả miễn phí.** Phần thưởng lớn chỉ đến từ **công sức có thật trong lối chơi** (năm tháng tu luyện, nghề, công đóng góp tông, tiền tích góp, đi đường xa) hoặc từ **một cái giá đạo đức thật**. Không có lựa chọn "bấm là được".
+2. **Đường tắt nhanh nhưng đắt, và không được tô vẽ.** Cướp, lừa, giết, ma công, bán người cho kết quả **nhanh hơn**, nhưng cái giá **chắc chắn đến** (nợ, kẻ thù, tâm ma, người thân quay lưng, bị thế giới gọi đúng tên). Chữ không bao giờ khen đường tắt là khôn ngoan; người hưởng lợi từ nó cũng không được kể như người thắng.
+3. **Trở ngại đo được.** Mỗi tuyến có ít nhất một **thử thách có hạn** (★`thu_thach`) gắn với trạng thái game: đủ X linh thạch, đạt cảnh giới Y, nghề cấp Z, công tông W, trong N tháng. Người chơi phải **làm** (tu, buôn, làm nhiệm vụ) chứ không chỉ chọn. Hộp và tab Nhiệm vụ hiện **mục tiêu, tiến độ, hạn**.
+4. **Thất bại là có thật và ở lại.** Hết hạn mà không đạt thì hậu quả xảy ra (người chết, mất suất, mất nhà); không có "thử lại". Ít nhất **một phần ba kết cục** của mỗi tuyến là kết cục xấu hoặc mất mát.
+5. **Vấn đề phải đe dọa thứ người chơi quý**: người trong dàn, nhà, đạo tâm, tu vi, danh. Vấn đề không đe dọa gì thì không được viết thành chặng.
+6. **Vấn đề không tan trong một hộp.** Chuyện lớn kéo qua **ít nhất 2 chặng và một khoảng thời gian** (gieo, dồn ép, đối mặt); giữa các chặng thế giới vẫn chạy và tình hình có thể tệ đi.
+7. **Trưởng thành phải lặp lại và có giá.** Vượt khuyết điểm gốc cần **ít nhất 3 lựa chọn trái tính có giá thật** ở hồi III và IV (không phải một câu ngộ ra). Một lần chọn đúng không làm nhân vật thay đổi.
+8. **Không đạo đức giả mà không bị gọi tên.** Truyện ghi lại điều nhân vật từng khinh (cờ `khinh_*`: khinh người giàu, khinh kẻ phản bội, khinh tà tu); khi nhân vật làm đúng điều đó, **một người trong dàn nói thẳng ra**, và thiện cảm, danh trả giá.
+9. **Giàu có, quyền lực không tự động là ác, nghèo khó không tự động là thiện.** Người giàu trong truyện có thể là người làm lụng cả đời; kẻ nghèo có thể tham lam. Đánh giá theo **việc làm**, không theo vị thế.
+10. **Rõ ràng.** Đầu mỗi tuyến nói rõ **điều đang bị đe dọa** và **mục tiêu**; mỗi lựa chọn ghi rõ **mất gì** (`mat`); khi hậu quả tới, hộp nhắc **vì việc nào năm nào**. Người chơi không bao giờ phải đoán vì sao mình mất.
+
+**Cơ chế (★, phiên Sonnet thêm):** `thu_thach: { can: { gold?, realm?, nghe?, cong?, xp? }, han: tháng, dat: 'chặng nếu đạt', truot: 'chặng nếu trượt' }` (dùng lại tab Nhiệm vụ để hiện tiến độ); cờ `khinh_*` và luật "gọi tên" (một chặng ngắn tự bật khi làm điều từng khinh); story-lint đếm thử thách, kết cục xấu, lựa chọn "bấm là được" (phần thưởng lớn không kèm `mat` hay thử thách).
 
 ## 2. Dàn định mệnh (6 đến 8 người, đi suốt một đời)
 Sáu vai **cố định**, dựng ở tuổi thơ và mốc A1 (người thật trong thế giới, già, bệnh, chết thật); hai vai **mở theo lựa chọn**. Mọi tuyến (xương sống, T1, T2, T5, W1, đạo lữ, kết nghĩa, N2...) **lấy vai từ dàn này trước**, chỉ dựng người mới khi dàn không có ai hợp.
@@ -100,6 +120,29 @@ Bộ máy (Story Director nhẹ) giữ **nhịp**: không để hai cao trào li
 7. **Giọng:** ngôi "bạn"; câu ngắn ở cảnh đau; không dùng từ "vô cùng, cực kỳ, đau đớn tột cùng"; nhân vật nói ít hơn nghĩ.
 8. **Mỗi người trong dàn có giọng riêng:** {ban} nói kiểu quê, đùa; {su} nói ít, ẩn ý; {doi_thu} nói thẳng, cay.
 
+## 6b. Giọng văn: học Nam Cao và Bảo Ninh (bạn chốt 2026-10-21)
+Không chép câu văn của hai nhà văn; học **cách nhìn và cách kể**.
+
+**Học Nam Cao** (hiện thực tâm lý, lạnh mà xót):
+- **Cái đói, miếng ăn, sĩ diện** là chỗ con người lộ ra. Trong tu tiên: một viên đan, một suất nội môn, một bát cơm trong năm mất mùa.
+- **Độc thoại nửa trực tiếp**: lời kể trượt vào ý nghĩ nhân vật mà không báo trước ("Hắn biết thế. Biết thì đã sao?").
+- **Giọng lạnh, có lúc mỉa mai**, không khóc thay nhân vật; xót xa nằm ở chi tiết, không ở tính từ.
+- **Người vừa đáng ghét vừa đáng thương**: kẻ ác có lý do tầm thường, người tốt có lúc hèn.
+- **Một câu triết lý ngắn chen ngang**, rồi kể tiếp như không có gì (tối đa một câu mỗi chặng lớn).
+- **Sự tha hóa từ từ**: không ai thành ác trong một đêm; mỗi lần nhân nhượng nhỏ được kể rõ.
+
+**Học Bảo Ninh** (ký ức, mất mát, im lặng):
+- **Thời gian vỡ**: hiện tại bị ký ức chen vào giữa câu; một mùi, một tiếng mưa kéo nhân vật về năm cũ.
+- **Thiên nhiên mang ám ảnh**: mưa, rừng, sông, gió nói thay nhân vật.
+- **Câu dài, nhịp buồn** ở chặng ký ức; xen **câu cực ngắn** ở nhát đau.
+- **Không anh hùng ca**: chiến thắng kể bằng cái giá, chiến tranh kể bằng người ở lại.
+- **Im lặng là đỉnh điểm**: nỗi đau lớn nhất thường là điều nhân vật không nói ra.
+
+**Áp vào game:**
+- Chặng lớn: một đoạn 5 đến 8 câu theo giọng trên; chặng nhỏ và nhật ký vẫn gọn.
+- Lựa chọn viết như **việc làm**, ngắn, không giải thích ("Cõng hắn về."); cái giá viết ở `mat` bằng **một câu sự thật lạnh**.
+- Cấm: "vô cùng, cực kỳ, đau đớn tột cùng, trái tim tan nát, nước mắt lăn dài"; cấm giảng đạo lý dài; cấm kết bằng câu cảm thán.
+
 ## 7. Mẫu (định dạng đề xuất; các khóa mới đánh dấu ★ sẽ do phiên Sonnet thêm vào bộ máy)
 Khóa mới: ★`dan` (vai lấy từ dàn định mệnh: `than_nhan`, `ban`, `su`, `doi_thu`, `huynh`, `thuong`, `ke_thu`, `ke_thua`), ★`gan_bo` (cộng gắn bó; và điều kiện tối thiểu), ★`mat` (chữ cái mất, hiện trên hộp), ★`d_neu` (chữ thay theo cờ), ★`can` (lựa chọn chỉ hiện khi có cờ), ★`fx.chet` / `fx.roi` / `fx.thu` (người trong dàn chết, bỏ đi, thành kẻ thù), ★`fx.tong` (đổi bậc tông), ★`fx.vat` (vật kỷ niệm hoặc bảo vật), ★`tre.chang` (hậu quả trễ mở một chặng gặt).
 
@@ -123,12 +166,12 @@ c1: {
 c2: {
   t: 'Thử luyện',
   can_gan_bo: { dan: 'huynh', min: 3 },        // ★ luật ba lần
-  d: 'Rừng sau núi tối sớm. {huynh} sa bẫy đá, xương ống chân trắng lòi qua da. Hắn cười méo xệch: "Đi đi, suất nội môn chỉ có một." Trong túi bạn là đúng ba mươi cây linh thảo, cây cuối cùng vừa hái dưới chân hắn. Trời trở lạnh, như cái đêm hắn đưa bạn chiếc chăn.',
+  d: 'Rừng sau núi tối sớm. {huynh} sa bẫy đá; cái chân gập về một phía mà chân người không gập được. Hắn cười, cái cười méo của người cố tỏ ra không đau: "Đi đi. Suất nội môn chỉ có một." Bạn đếm lại túi thảo dược, đúng ba mươi cây, cây cuối cùng vừa hái dưới chân hắn. Ba năm ăn cơm độn khoai ở ngoại môn là để chờ ngày này. Gió lùa qua tán thông, lạnh như cái đêm đầu tiên ấy. Người ta bảo tu tiên là đi ngược trời. Không ai nói là phải đi ngược cả người.',
   khi: { hoac: [{ realm: 1 }, { age: 16 }], sau: 3 }, han: 3, mac: 'cong',
   lc: [
     { key: 'cong', label: 'Cõng hắn về', kind: 'help', ax: { daoduc: 2 },
       fx: { gan_bo: { dan: 'huynh', d: 3 }, tong: { mat_suat: true }, flag: 'cong_huynh' },
-      mat: 'Suất nội môn. Người lên thay bạn sẽ là {doi_thu}.', toi: 'c3' },
+      mat: 'Suất nội môn. Ba năm nữa mới có kỳ thử luyện sau. {doi_thu} sẽ lên thay.', toi: 'c3' },
     { key: 'de_thao', label: 'Để lại linh thảo cho hắn, một mình về trước', kind: 'safe', ax: { xuthe: 2 },
       fx: { tong: { len_noi_mon: true }, flag: 'de_huynh' },
       tre: [{ sau: [6, 12], chang: 'c2b' }],
@@ -148,9 +191,9 @@ c9: {
   khi: { sau: 240 },                          // hai mươi năm sau
   d: 'Bạn về thôn cũ. Trong góc nhà, chiếc chăn dày đã bạc màu vẫn gấp vuông vức.',
   d_neu: [
-    { flag: 'cong_huynh', d: '{huynh} tóc đã muối tiêu, rót cho bạn chén rượu nhạt. "Năm ấy ngươi ngu thật." Hắn cười, và bạn biết hắn chưa từng hối hận vì đã có người ngu như thế.' },
+    { flag: 'cong_huynh', d: '{huynh} tóc đã muối tiêu, rót cho bạn chén rượu nhạt. "Năm ấy ngươi ngu thật." Ngoài hiên mưa rơi đều, cái thứ mưa rừng sau núi, và bạn bỗng nghe lại tiếng thở của hắn trên lưng mình suốt quãng đường xuống núi, nặng, nóng, đứt quãng. Hai mươi năm. Bạn đã Luyện Khí trung kỳ, hắn đã có cháu nội. Hắn không hỏi bạn có hối hận không. Bạn cũng không hỏi hắn.' },
     { flag: 'de_huynh', d: '{huynh} chống gậy ra cửa. Hắn nhìn bạn rất lâu, rồi nói chuyện mùa màng. Suốt bữa cơm, hắn không nhắc đến rừng sau núi. Bạn cũng không.' },
-    { flag: 'bo_huynh', d: 'Mẹ của {huynh} đã mù. Bà sờ tay áo bạn, hỏi có phải bạn đồng môn của con bà không, rồi kể rằng nó đi tu tiên, chắc giờ đã thành tiên ở đâu đó rồi.' }
+    { flag: 'bo_huynh', d: 'Mẹ của {huynh} đã mù. Bà sờ tay áo bạn, sờ cả đường chỉ thêu của nội môn, rồi cười: áo tốt thế này thì chắc là bạn đồng môn của con bà. Bà kể nó đi tu tiên, chắc giờ đã thành tiên ở đâu đó rồi, nên không về. Bà vẫn để phần nó cái chăn. Bạn ngồi đến lúc cơm nguội. Có những sự thật, nói ra là tàn nhẫn, giữ lại là hèn; mà người ta thường chọn hèn, vì hèn thì không ai thấy.' }
   ],
   han: 6, mac: 'im',
   lc: [
@@ -185,6 +228,29 @@ c5: {
 }
 ```
 
+### Mẫu 5: thử thách có hạn (trở ngại thật, không bấm là xong)
+```js
+c4: {
+  t: 'Món nợ thuốc',
+  d: 'Thầy lang lắc đầu: bệnh của {than_nhan} chữa được, nhưng phải có Tử Sâm trăm năm, giá bằng ba năm bổng lộc ngoại môn. Ông nói xong thì rửa tay, như thể chuyện còn lại là của nhà bạn. {doi_thu} có thừa số linh thạch ấy; hắn đã nói, chỉ cần bạn xin, trước mặt cả ngoại môn.',
+  han: 2, mac: 'tu_kiem',
+  lc: [
+    { key: 'tu_kiem', label: 'Tự kiếm đủ trong hai năm', kind: 'safe', ax: { tudung: 2 },
+      thu_thach: { can: { gold: 600 }, han: 24, dat: 'c5_kip', truot: 'c5_muon' },
+      mat: 'Hai năm không tu được bao nhiêu. Và có thể vẫn không kịp.' },
+    { key: 'xin', label: 'Cúi đầu xin {doi_thu}', kind: 'pay', ax: { xuthe: 3 },
+      fx: { gold: 600, rep: { danh: -2 }, no: { dan: 'doi_thu', d: 3 }, flag: 'xin_doi_thu' },
+      mat: 'Cả ngoại môn sẽ nhớ cảnh này. {doi_thu} cũng vậy, và hắn sẽ đòi.', toi: 'c5_kip' },
+    { key: 'trom', label: 'Đêm nay vào dược kho', kind: 'risk', ax: { daoduc: -3 },
+      gate: { truc: 'daoduc', max: 2, why: 'Tay bạn không làm nổi việc ấy.' },
+      fx: { gold: 600, flag: 'trom_kho', nghiep: 2 },
+      tre: [{ sau: [12, 36], chang: 'c_bi_lo' }],
+      mat: 'Nhanh nhất. Sổ kho thì không biết quên.', toi: 'c5_kip' }
+  ]
+}
+```
+Ba đường đều có giá thật: **công sức và thời gian** (thử thách đo bằng vàng thật trong túi, có thể trượt), **sĩ diện** (sỉ nhục, nợ ghi sổ), **thiện ác** (nhanh nhưng chắc chắn bị đòi). Không đường nào được kể như "khôn".
+
 ## 8. Kiểm tra trước khi nộp (story-lint sẽ kiểm phần đo được)
 - [ ] Mỗi lựa chọn có `mat` (trừ khoảnh khắc ấm).
 - [ ] Mỗi tuyến đặt ≥ 2 cờ và đọc lại ≥ 2 cờ.
@@ -194,10 +260,14 @@ c5: {
 - [ ] Cao trào (hồi III) đánh đúng khuyết điểm gốc; hồi IV có lựa chọn vượt qua có giá thật.
 - [ ] Đối thủ hoặc kẻ thù trong tuyến phản chiếu khuyết điểm và có lý do chính đáng.
 - [ ] Mọi cơ duyên lớn có lời nguyền; mọi tổn thương gây ra cho người trong dàn có nợ được đòi.
+- [ ] Mỗi tuyến có ít nhất 1 thử thách có hạn đo bằng trạng thái game; ít nhất 1/3 kết cục là xấu hoặc mất mát.
+- [ ] Không phần thưởng lớn nào "bấm là được" (phải kèm `mat`, thử thách, hoặc hậu quả trễ chắc chắn); đường tắt bất lương không được kể như khôn.
+- [ ] Vượt khuyết điểm cần ≥ 3 lựa chọn trái tính có giá; đạo đức giả bị một người trong dàn gọi tên.
+- [ ] Giọng văn theo mục 6b; không dùng từ cấm.
 - [ ] Không máu me chi tiết, không tình dục, trẻ con không bị tả bạo lực.
 
 ## 9. Việc tiếp theo (sau khi bạn duyệt)
-1. **Sonnet** (một phiên, gộp N1b): khuyết điểm gốc (`c.story.kd`) và sổ nợ (`no`), dàn định mệnh 6 đến 8 người (đối thủ và kẻ thù dựng theo khuyết điểm), điểm gắn bó và luật ba lần, các khóa ★, hậu quả thật, chặng gặt, Story Director nhẹ (bốn hồi), khoảnh khắc ấm và thư, vật kỷ niệm, người trong dàn hiện trên cảnh; story-lint kiểm mục 8.
+1. **Sonnet** (một phiên, gộp N1b): khuyết điểm gốc (`c.story.kd`, kể cả trung dung) và sổ nợ (`no`), thử thách có hạn (`thu_thach`), cờ `khinh_*` và luật gọi tên, dàn định mệnh 6 đến 8 người (đối thủ và kẻ thù dựng theo khuyết điểm), điểm gắn bó và luật ba lần, các khóa ★, hậu quả thật, chặng gặt, Story Director nhẹ (bốn hồi), khoảnh khắc ấm và thư, vật kỷ niệm, người trong dàn hiện trên cảnh; story-lint kiểm mục 8.
 2. **Sonnet** viết lại xương sống A (A1 đến A6) theo bốn hồi, đúng cẩm nang (đây là lõi, cần chất lượng).
 3. **Haiku** viết lại T1, T2, T5, W1, đạo lữ, kết nghĩa theo mẫu; rồi N2.
 4. Hồi ký cuối đời: để sau (bạn chốt 2026-10-21).
