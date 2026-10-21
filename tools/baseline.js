@@ -17,6 +17,8 @@
 //             --bond=off (tắt 9B quan hệ có chiều sâu và đạo lữ của người chơi: phải trùng khít; D.BOND.on = false).
 //             --mem=off (tắt 9K ký ức chung, đồng hành, huynh đệ: phải trùng khít; D.BOND.mem = false).
 //             --story=off (tắt 8B truyện và vòng quay của người chơi: phải trùng khít đường cơ sở trước 8B; D.STORY.on = false).
+//             --kb=on (bật bộ máy kịch bản K1, D.STORY.kbOn = true). MẶC ĐỊNH TẮT: baseline không chơi người chơi nhưng vẫn gọi fac.yearly -> playerHooks,
+//             nên bật kbOn (đổi điều kiện chiến loạn của người chơi sang 14 tuổi) làm lệch rng; tắt thì phải trùng khít đường cơ sở trước K1.
 //             In thêm: số đại chiến liên tông (không tính vào chiến tranh thường), số đại chiến mỗi thế giới, số lần mở, cách nhau tối thiểu (chỉ tiêu: không quá một lần trong 150 năm), kết cục.
 //             Không ghi --seeds thì dùng danh sách trong seeds.json (nếu có).
 const fs = require('fs');
@@ -43,14 +45,15 @@ const INTER_OFF = arg('intersect') === 'off';
 const NATURE_OFF = arg('nature') === 'off';
 const CHILD_OFF = arg('childhood') === 'off';
 const STORY_OFF = arg('story') === 'off';
+const KB_ON = arg('kb') === 'on';
 const ORIGINS_OFF = arg('origins') === 'off';
 const BOND_OFF = arg('bond') === 'off';
 const MEM_OFF = arg('mem') === 'off';
 const SET = arg('set') ? arg('set').split(',').map(x => x.split('=')) : []; // ví dụ --set=power.kVan=0,van.base=50: chỉnh D.NATION để đo thử
 
 // Chạy trong trang: trả về { hash, chiến tranh, diệt vong, đổi chủ, ... } cho một hạt giống.
-function inPage(seed, years, natOff, sectOff, faithOff, set, ecoOff, hqOff, armyOff, twOff, courtOff, interOff, natureOff, childOff, storyOff, originsOff, bondOff, memOff) {
-  TT.data.BOND.on = !bondOff; TT.data.BOND.mem = !memOff; TT.data.ORIGINS2.on = !originsOff; TT.data.NATURE.on = !natureOff; TT.data.CHILDHOOD.on = !childOff; TT.data.STORY.on = !storyOff;
+function inPage(seed, years, natOff, sectOff, faithOff, set, ecoOff, hqOff, armyOff, twOff, courtOff, interOff, natureOff, childOff, storyOff, originsOff, bondOff, memOff, kbOn) {
+  TT.data.BOND.on = !bondOff; TT.data.BOND.mem = !memOff; TT.data.ORIGINS2.on = !originsOff; TT.data.NATURE.on = !natureOff; TT.data.CHILDHOOD.on = !childOff; TT.data.STORY.on = !storyOff; TT.data.STORY.kbOn = !!kbOn;
   TT.data.NATION.on = !natOff; TT.data.ARMY.on = !armyOff; TT.data.SECT_MOD.on = !sectOff; TT.data.FAITH.on = !faithOff; TT.data.ECO.sx = !ecoOff; TT.data.ECO.hq = !hqOff; TT.data.TOTALWAR.on = !twOff; TT.data.COURT.on = !courtOff; TT.data.INTERSECT.on = !interOff;
   const ROOT = { sect: 'SECT_MOD', faith: 'FAITH', army: 'ARMY', totalwar: 'TOTALWAR', court: 'COURT', intersect: 'INTERSECT' };
   set.forEach(kv => { const p = kv[0].split('.'), root = TT.data[ROOT[p[0]] || 'NATION']; if (ROOT[p[0]]) p.shift(); let o = root; for (let i = 0; i < p.length - 1; i++) o = o[p[i]]; o[p[p.length - 1]] = +kv[1]; });
@@ -112,7 +115,7 @@ function inPage(seed, years, natOff, sectOff, faithOff, set, ecoOff, hqOff, army
   const errs = []; page.on('pageerror', e => errs.push(String(e)));
   await page.goto(pathToFileURL(path.join(__dirname, '..', 'sim.html')).href);
   const out = [];
-  for (const s of SEEDS) out.push(await page.evaluate(`(${inPage.toString()})(${s}, ${YEARS}, ${NATION_OFF}, ${SECT_OFF}, ${FAITH_OFF}, ${JSON.stringify(SET)}, ${ECO_OFF}, ${HQ_OFF}, ${ARMY_OFF}, ${TW_OFF}, ${COURT_OFF}, ${INTER_OFF}, ${NATURE_OFF}, ${CHILD_OFF}, ${STORY_OFF}, ${ORIGINS_OFF}, ${BOND_OFF}, ${MEM_OFF})`));
+  for (const s of SEEDS) out.push(await page.evaluate(`(${inPage.toString()})(${s}, ${YEARS}, ${NATION_OFF}, ${SECT_OFF}, ${FAITH_OFF}, ${JSON.stringify(SET)}, ${ECO_OFF}, ${HQ_OFF}, ${ARMY_OFF}, ${TW_OFF}, ${COURT_OFF}, ${INTER_OFF}, ${NATURE_OFF}, ${CHILD_OFF}, ${STORY_OFF}, ${ORIGINS_OFF}, ${BOND_OFF}, ${MEM_OFF}, ${KB_ON})`));
   await browser.close();
   if (errs.length) { console.error(errs.join('\n')); process.exit(2); }
   const stable = o => ({ seed: o.seed, rel: o.rel, list: o.list, chron: o.chron, pacts: o.pacts, wars: o.wars, destroyed: o.destroyed, rulers: o.rulers, chronLen: o.chronLen, relPairs: o.relPairs });

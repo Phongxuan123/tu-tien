@@ -25,11 +25,16 @@
     let phase = hsh < 0.42 ? 'night' : hsh < 0.7 ? 'dusk' : 'day';
     if (c.dungeon) phase = 'cave';
     if (c.cross) phase = 'void';
+    // cảnh lớn (K1): giờ và thời tiết của cảnh truyện, chỉ để xem trong lúc hộp mở, không đổi thế giới
+    const cn = pend && (pend.type === 'story' || pend.type === 'story_sau') && pend.canh;
+    let wid2 = wid;
+    if (cn && !c.dungeon && !c.cross) { if (cn.gio) phase = ({ dem: 'night', hoang_hon: 'dusk', ngay: 'day' })[cn.gio] || phase; if (cn.thoi_tiet) wid2 = cn.thoi_tiet; }
     const life = TT.stats.lifeSpan(c), age = TT.age(c), fam = [];
     if (!c.dungeon && !c.cross) {
       try { TT.family.partners(c).forEach(x => fam.push({ k: 'love', c: x.c })); } catch (e) { /* chưa có */ }
       try { TT.family.children(c).forEach(x => fam.push({ k: 'kid', c: x })); } catch (e) { /* chưa có */ }
       try { TT.family.disciples(c).forEach(x => fam.push({ k: 'dis', c: x })); } catch (e) { /* chưa có */ }
+      try { if (TT.dan && TT.dan.on(c)) TT.dan.people(c).forEach(o => { if (!fam.some(f => f.c === o)) fam.push({ k: 'dan', c: o }); }); } catch (e) { /* chưa có */ } // K1: người trong dàn định mệnh cùng nơi
     }
     let monId = null, foe = null; const node = c.dungeon ? c.dungeon.nodes[c.dungeon.i] || null : null;
     if (pend && pend.type === 'event') {
@@ -44,10 +49,10 @@
     if (c.place !== lastPlace) { lastPlace = c.place; pageNow = 0; }
     const bl = !c.dungeon && !c.cross && !c.travel && pl && TT.bld ? TT.bld.at(c) : [], pages = Math.max(1, Math.ceil(bl.length / PAGE)), page = Math.min(pageNow, pages - 1), vis = bl.slice(page * PAGE, page * PAGE + PAGE);
     return {
-      key: [c.id, c.region, c.place, !!c.travel, !!c.cross, !!c.dungeon, phase, wid, c.realm, c.gender, age < 12, age / (life === Infinity ? 1e9 : life) > 0.72, !!TT.loss.active(c), people.map(p => p.c.id).join(), TT.fac.atFront(c.region), pend ? (pend.evId || pend.type) : '', monId, foe ? foe.id : '', node ? node.t : '', c.dungeon ? c.dungeon.kind : '', JSON.stringify(geoEq), vis.join(), page, pages].join('|'),
+      key: [c.id, c.region, c.place, !!c.travel, !!c.cross, !!c.dungeon, phase, wid2, c.realm, c.gender, age < 12, age / (life === Infinity ? 1e9 : life) > 0.72, !!TT.loss.active(c), people.map(p => p.c.id).join(), TT.fac.atFront(c.region), pend ? (pend.evId || pend.type) : '', monId, foe ? foe.id : '', node ? node.t : '', c.dungeon ? c.dungeon.kind : '', JSON.stringify(geoEq), vis.join(), page, pages].join('|'),
       geo: geoEq, bl, vis, page, pages,
       mon: monId, foe, node, dgkind: c.dungeon ? c.dungeon.kind : '',
-      sect: pl && pl.type === 'tong_mon' ? pl.id : '', c, reg, pl, cls, wid, phase, terr: (DATA.TERRAIN[c.region] || DATA.TERRAIN.trung_chau), kid: age < 12, elder: life !== Infinity && age / life > 0.72, wound: !!TT.loss.active(c), people, war: TT.fac.atFront(c.region),
+      sect: pl && pl.type === 'tong_mon' ? pl.id : '', c, reg, pl, cls, wid: wid2, phase, terr: (DATA.TERRAIN[c.region] || DATA.TERRAIN.trung_chau), kid: age < 12, elder: life !== Infinity && age / life > 0.72, wound: !!TT.loss.active(c), people, war: TT.fac.atFront(c.region),
       boom: pend && pend.type === 'breakthrough', thunder: pend && pend.evId === 'tri_phase', rise: pend && pend.type === 'ascend', dead: pend && pend.type === 'death', year
     };
   }

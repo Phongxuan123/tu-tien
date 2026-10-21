@@ -1,13 +1,12 @@
 // Tuyến thân phận T5 "Một chuyến buôn" (Q 11.0, gói N1). Thuần dữ liệu; khung ở js/data/story.js.
-// Cờ mở 'nghe_thuong' (chưa có hệ nào gán): đúng khi nghề Thương nhân cấp 2 (c.job === 'thuong_nhan'). Khi engine đọc được nghề thì thay bằng điều kiện đó.
-// Vai 'ban' và 'doi' lấy người đồng kỳ (dong_ky); khi 9K xong thì ưu tiên người có ký ức chung.
+// Mở (N1b): từ 14 tuổi và (nghề thương nhân cấp 1, hoặc hội viên thương hội, hoặc xuất thân nhà thương nhân p3). Vai 'ban', 'doi' lấy người có nhiều ký ức chung nhất (ky_uc), không có thì người đồng kỳ.
 (function () {
   const D = window.TT.data;
 
   D.STORY.reg({
     id: 'tp_thuong_nhan', n: 'Một chuyến buôn', loai: 'tp',
-    mo: { realm: 1, flag: 'nghe_thuong' },
-    vai: { doi: { pick: 'dong_ky', dung_moi: true }, moi: { pick: 'gan', dung_moi: true }, ban: { pick: 'dong_ky', dung_moi: true } },
+    mo: { age: 14, hoac: [{ nghe: { id: 'thuong_nhan', lv: 1 } }, { hoi: true }, { xt: ['p3'] }] },
+    vai: { doi: { pick: 'ky_uc', dung_moi: true }, moi: { pick: 'gan', dung_moi: true }, ban: { pick: 'ky_uc', dung_moi: true } },
     dau: 'c1',
     chang: {
       c1: {
@@ -65,7 +64,7 @@
       c4: {
         t: 'Hợp đồng sinh tử',
         d: 'Hội và triều đang bàn một hợp đồng thuế muối và phí qua ải. Cần một thương nhân đứng ra ký bảo đảm. {moi} đặt tờ giấy trước mặt bạn, nhấn mạnh rằng chỉ một cái tên được ghi vào sổ. Lợi lớn nếu thành, nhưng nếu lỡ, người ký sẽ gánh hết.',
-        khi: { realm: 2, sau: 6 }, han: 18, mac: 'tu_choi',
+        khi: { sau: 6, hoac: [{ realm: 1, stage: 1 }, { age: 30 }] }, han: 18, mac: 'tu_choi',
         lc: [
           { key: 'ky', label: 'Ký tên bảo đảm', kind: 'risk', ax: { xuthe: 2, tudung: 1 },
             fx: { rep: { danh: 3 }, rel: { vai: 'moi', d: 10 }, flag: 'nt_ky' },
@@ -86,7 +85,7 @@
       c5: {
         t: 'Đế chế nhỏ, hay bị nuốt',
         d: 'Mười năm buôn bán, bạn có một cửa tiệm, vài chuyến xe, và một chuỗi nợ dài. Sáng nay, hội đề nghị mua lại toàn bộ. {doi} thì mời bạn hợp tác mở thêm chi nhánh. {ban} hỏi bạn có còn nhớ chuyến xe đầu tiên trên đèo Đá Đen không.',
-        khi: { realm: 2, sau: 6 }, han: 12, mac: 'ban_het',
+        khi: { sau: 6, hoac: [{ realm: 1, stage: 1 }, { age: 40 }] }, han: 12, mac: 'ban_het',
         lc: [
           { key: 'hop_tac', label: 'Hợp tác với {doi} mở rộng đế chế nhỏ', kind: 'risk', ax: { xuthe: 2, daoduc: -1 },
             wheel: {

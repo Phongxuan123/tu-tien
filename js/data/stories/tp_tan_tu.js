@@ -1,13 +1,12 @@
 // Tuyến thân phận T1 "Gió không thuộc về ai" (Q 11.0, gói N1). Thuần dữ liệu; khung ở js/data/story.js.
-// Cờ mở 'tan_tu' (chưa có hệ nào gán): đúng khi không tông, không hội, từ Luyện Khí. Khi engine đọc được nghề/tông/vùng thì thay bằng điều kiện đó.
-// Vai 'ban' lấy người đồng kỳ (dong_ky), sẽ đổi sang người có ký ức chung khi 9K xong.
+// Mở (N1b): không tông và (Luyện Khí hoặc 16 tuổi). Vai 'ban' lấy người có nhiều ký ức chung nhất (ky_uc), không có thì người đồng kỳ.
 (function () {
   const D = window.TT.data;
 
   D.STORY.reg({
     id: 'tp_tan_tu', n: 'Gió không thuộc về ai', loai: 'tp',
-    mo: { realm: 1, flag: 'tan_tu' },
-    vai: { an: { pick: 'gan', dung_moi: true }, lua: { pick: 'gan', dung_moi: true }, ban: { pick: 'dong_ky', dung_moi: true } },
+    mo: { tong: false, hoac: [{ realm: 1 }, { age: 16 }] },
+    vai: { an: { pick: 'gan', dung_moi: true }, lua: { pick: 'gan', dung_moi: true }, ban: { pick: 'ky_uc', dung_moi: true } },
     dau: 'c1',
     chang: {
       c1: {
@@ -63,7 +62,7 @@
       c4: {
         t: 'Ba lời mời',
         d: 'Ba người tìm tới trong cùng một tuần. Đại diện một tông môn hứa chỗ ngồi nếu bạn chịu làm việc vặt. Một người của hội buôn muốn bạn làm mắt cho họ ở chợ. Một viên quan muốn bạn đứng tên trong sổ dân binh. Cả ba đều hứa hậu hĩnh, và có một điều chung: ai nhận thì không còn là tán tu nữa.',
-        khi: { realm: 2, sau: 6 }, han: 18, mac: 'giu_tu_do',
+        khi: { sau: 6, hoac: [{ realm: 1, stage: 1 }, { age: 30 }] }, han: 18, mac: 'giu_tu_do',
         lc: [
           { key: 'nhan_tong', label: 'Nhận lời vào tông làm việc vặt', kind: 'pay', ax: { xuthe: 1, tudung: 1 },
             gia: { gold: 20 }, fx: { rep: { danh: 1 }, flag: 'tt_tong' }, toi: 'ket:tong' },
@@ -81,7 +80,7 @@
       c5: {
         t: 'Ngày trả nợ',
         d: 'Ân oán cũ dồn về một ngày. {an} đợi bạn ở quán trọ đầu thành. {lua} nhắn người đến, nói bạn còn một khoản chưa thanh. Không ai ép bạn chọn bên, nhưng tán tu cũng cần một kết cục cho chính mình.',
-        khi: { realm: 2, sau: 6 }, han: 12, mac: 'bo_qua',
+        khi: { sau: 6, hoac: [{ realm: 1, stage: 1 }, { age: 40 }] }, han: 12, mac: 'bo_qua',
         lc: [
           { key: 'tra_no', label: 'Đứng ra giải quyết cả hai khoản nợ', kind: 'help', ax: { daoduc: 1, xuthe: 1 },
             wheel: {

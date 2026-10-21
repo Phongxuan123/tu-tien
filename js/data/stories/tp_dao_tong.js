@@ -1,13 +1,12 @@
 // Tuyến thân phận T2 "Dưới mái ngói sơn môn" (Q 11.0, gói N1). Thuần dữ liệu; khung ở js/data/story.js.
-// Cờ mở 'dao_tong' (chưa có hệ nào gán): đúng khi đã vào tông (ngoại môn trở lên). Khi engine đọc được c.sect thì thay bằng điều kiện đó.
-// Vai 'huynh' lấy người đồng kỳ (dong_ky); khi 9K xong thì ưu tiên người có ký ức chung.
+// Mở (N1b): đã có tông (bất kỳ bậc), không đòi cảnh giới. Vai 'huynh' lấy người có nhiều ký ức chung nhất (ky_uc), không có thì người đồng kỳ.
 (function () {
   const D = window.TT.data;
 
   D.STORY.reg({
     id: 'tp_dao_tong', n: 'Dưới mái ngói sơn môn', loai: 'tp',
-    mo: { realm: 1, flag: 'dao_tong' },
-    vai: { su: { pick: 'su', dung_moi: true }, huynh: { pick: 'dong_ky', dung_moi: true }, phan: { pick: 'gan', dung_moi: true } },
+    mo: { tong: true },
+    vai: { su: { pick: 'su', dung_moi: true }, huynh: { pick: 'ky_uc', dung_moi: true }, phan: { pick: 'gan', dung_moi: true } },
     dau: 'c1',
     chang: {
       c1: {
@@ -66,7 +65,7 @@
       c4: {
         t: 'Đại bỉ và phe phái',
         d: 'Đại bỉ mùa thu chia tông thành hai phe. Phe {su} giữ nếp cũ; phe trưởng lão trẻ muốn mở cửa cho các nhà khác. Ai đứng về phía nào sẽ được nhớ rất lâu. Bạn được gọi lên đài, đối thủ là {huynh}.',
-        khi: { realm: 2, sau: 6 }, han: 18, mac: 'thang_tay',
+        khi: { sau: 6, hoac: [{ realm: 1, stage: 1 }, { age: 30 }] }, han: 18, mac: 'thang_tay',
         lc: [
           { key: 'thang_tay', label: 'Nhường {huynh} một trận', kind: 'safe', ax: { daoduc: 1, xuthe: 1 },
             fx: { rel: { vai: 'huynh', d: 10 }, rep: { danh: -1 }, daoTam: 1 },
@@ -86,7 +85,7 @@
       c5: {
         t: 'Mùa đông trong nhà chính',
         d: 'Tông chủ gọi bạn vào nhà chính. Ông hỏi bạn muốn ở lại, đi, hay chọn một con đường khác. Lời hỏi không có vẻ đe dọa, nhưng {phan} đứng sau cửa, và bạn nghe rõ tiếng hắn thở.',
-        khi: { realm: 2, sau: 3 }, han: 12, mac: 'roi_tong',
+        khi: { sau: 3, hoac: [{ realm: 1, stage: 1 }, { age: 40 }] }, han: 12, mac: 'roi_tong',
         lc: [
           { key: 'o_lai', label: 'Ở lại, nhận việc tông giao', kind: 'help', ax: { xuthe: 1, daoduc: 1 },
             wheel: {

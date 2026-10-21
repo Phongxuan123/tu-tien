@@ -221,6 +221,11 @@ body.has-modal{overflow:hidden}
 #decision .mch .mt{display:block}
 #decision .mch .mt b{font-weight:600;display:block}
 #decision .mch .mt small{display:block;color:#8d9aab;font-size:13px;margin-top:2px}
+#decision .mch .mt small.mat{color:#d9985a}
+#decision .mghi{font-size:13px;color:#8d9aab;margin:6px 0 8px;padding:6px 8px;border-left:2px solid #3a4658}
+#decision.lon .mtitle{letter-spacing:.02em}
+.tt-head{margin-top:6px;color:#e8c872}.tt-row{margin:4px 0}.tt-row .timer{height:6px}.tt-row .timer i{display:block;height:100%;background:var(--green,#3f8a5a)}
+.dan-row{display:flex;justify-content:space-between;gap:8px;font-size:13px;padding:2px 0}.dan-row.mat{color:#8d9aab}
 #decision .timer{height:5px;border-radius:3px;background:#1f2937;margin-top:14px;overflow:hidden}
 #decision .timer i{display:block;height:100%;background:var(--pink);width:100%}
 #decision .mfoot{display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end;margin-top:12px}

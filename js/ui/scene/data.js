@@ -79,6 +79,7 @@
   // tint / k: lớp phủ màu trời, mây, sương (k = mức pha, tối dần về đêm); part: loại hạt (rain, snow, sand, leaf, ash, glow, petal, meteor, splash, aurora, rays, mist);
   // n: mật độ; col: màu hạt (chuỗi hoặc danh sách); wind: -1..1 (gió nghiêng mây, cây tiền cảnh, tà áo, khói); flash: có chớp; fog: sương thấp thêm; war: coi như chiến sự.
   const WEATHER = {
+    mua: { tint: '#4a5a78', k: 0.18, part: 'rain', n: 90, col: '#9ab4e8', wind: 0.2, fog: 0.15 }, // mưa thường (cảnh lớn của truyện, canh.thoi_tiet = 'mua')
     thu_hoach: { tint: '#e8b858', k: 0.1, part: 'leaf', n: 26, col: ['#e8b838', '#d88a28', '#f0d060'], wind: 0.25 },
     chien_loan: { tint: '#8a2a22', k: 0.2, part: 'ash', n: 30, wind: 0.3, war: true },
     bao_bien: { tint: '#3a4a68', k: 0.3, part: 'rain', n: 150, col: '#9ab4e8', wind: 0.9, flash: true, fog: 0.3 },

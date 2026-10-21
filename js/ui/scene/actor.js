@@ -165,7 +165,7 @@
   }
   function kinLook(f, i) {
     const o = f.c, kid = f.k === 'kid' || TT.age(o) < 12;
-    return { robe: f.k === 'love' ? '#e87aa0' : f.k === 'dis' ? REALM_ROBE[Math.min(6, o.realm)] : ['#6aa0d8', '#d8b43a', '#8ad88a', '#c88ae0'][o.id % 4], hair: HAIRS[o.id % 4], sash: f.k === 'dis' ? '#e8497c' : null, female: o.gender === 'nu', kid, elder: false, wound: false };
+    return { robe: f.k === 'love' ? '#e87aa0' : f.k === 'dis' ? REALM_ROBE[Math.min(6, o.realm)] : ['#6aa0d8', '#d8b43a', '#8ad88a', '#c88ae0'][o.id % 4], hair: HAIRS[o.id % 4], sash: f.k === 'dis' ? '#e8497c' : null, female: o.gender === 'nu', kid, elder: f.k === 'dan' && TT.age(o) >= 55, wound: false };
   }
 
   // vẽ người nhà + người chơi + kẻ thù (không vẽ quái, quái do scene.js)

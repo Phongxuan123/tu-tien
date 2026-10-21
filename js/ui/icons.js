@@ -16,7 +16,8 @@
     tu_khi_dan: { kind: 'pill', col: '#4aa3ff' }, pha_canh_dan: { kind: 'pill', col: '#f0a840' },
     ho_than_bua: { kind: 'bua', col: '#4a8ed8' }, thoat_than_bua: { kind: 'bua', col: '#58b36a' }, cong_kich_bua: { kind: 'bua', col: '#d8302a' },
     linh_thao: { kind: 'thao' }, quang_thach: { kind: 'khoang', ore: 0 }, tinh_thiet: { kind: 'khoang', ore: 1 }, huyen_thiet: { kind: 'khoang', ore: 2 }, thien_thach: { kind: 'khoang', ore: 3 },
-    phu_giay: { kind: 'giay' }, yeu_dan: { kind: 'yeu' }
+    phu_giay: { kind: 'giay' }, yeu_dan: { kind: 'yeu' },
+    chan_day: { kind: 'tamdac', col: '#b08a5a' }, giay_rom: { kind: 'da', col: '#c9b27a' }, thu_cu: { kind: 'giay' }, kiem_go: { kind: 'kiem', tier: 0 }, chuoi_hat: { kind: 'ngoc', tier: 0 } // vật kỷ niệm (K1)
   };
 
   function spec(id) {

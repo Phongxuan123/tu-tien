@@ -51,13 +51,23 @@
   // Mục "Truyện của đời bạn" ở tab Nhiệm vụ: tuyến đang đi, chặng đã qua, hậu quả đang chờ (ghi mơ hồ).
   function build(box, c) {
     box.appendChild(h('h2', { style: 'margin-top:14px' }, 'Truyện của đời bạn'));
-    const rows = TT.story.rows(c);
+    const rows = TT.story.rows(c), dan = TT.story.isKb(c) ? TT.dan.rows(c) : [];
+    if (dan.length) { // K1: người đi cùng đời bạn (dàn định mệnh) và mức gắn bó
+      const dc = h('div', { class: 'card story-card' });
+      dc.appendChild(h('div', { class: 'qtop' }, h('b', null, 'Người đi cùng bạn')));
+      dan.forEach(r => dc.appendChild(h('div', { class: 'dan-row' + (r.alive ? '' : ' mat') }, h('span', null, r.n + ': ' + r.ten + (r.sp === 'chet' ? ' (đã mất)' : r.sp === 'roi' ? ' (đã bỏ đi)' : r.sp === 'thu' ? ' (kẻ thù)' : '')), h('span', null, 'gắn bó ' + r.gb))));
+      box.appendChild(dc);
+    }
     if (!rows.length) { box.appendChild(h('div', { class: 'small' }, 'Chuyện của đời bạn mới bắt đầu.')); return; }
     rows.forEach(r => {
       const card = h('div', { class: 'card story-card' });
       card.appendChild(h('div', { class: 'qtop' }, h('b', null, r.n), h('span', { class: 'qchip ' + (r.state === 'xong' ? 'ok' : 't-1') }, r.state === 'xong' ? 'Đã xong' : 'Đang đi')));
       if (r.state === 'xong') card.appendChild(h('div', { class: 'small' }, 'Kết cục: ' + r.ket));
-      else if (r.cur) card.appendChild(h('div', { class: 'small' }, 'Chặng hiện tại: ' + r.cur));
+      else if (r.cur) card.appendChild(h('div', { class: 'small' }, (r.phan ? r.phan + ' · ' : '') + 'Chặng hiện tại: ' + r.cur));
+      if (r.tt) { // thử thách có hạn: mục tiêu, tiến độ, hạn
+        card.appendChild(h('div', { class: 'small tt-head' }, 'Thử thách: ' + r.tt.ten + ' · còn ' + r.tt.left + '/' + r.tt.han + ' tháng'));
+        r.tt.items.forEach(x => card.appendChild(h('div', { class: 'tt-row small' }, h('span', null, x.n + ': ' + (x.txt || (x.cur + ' / ' + x.can)) + (x.ok ? ' ✓' : '')), h('div', { class: 'timer' }, h('i', { style: 'width:' + Math.max(0, Math.min(100, x.cur / x.can * 100)) + '%' })))));
+      }
       r.log.forEach(t => card.appendChild(h('div', { class: 'small' }, '• ' + t)));
       box.appendChild(card);
     });

@@ -1,13 +1,13 @@
 // Tuyến thế giới W1 "Lửa tới làng" (Q 12, gói N1): chiến sự lan tới vùng bạn, pha tin báo → lửa tới → đêm lửa (làng bị phá) → sáng sau → hòa nghị hoặc thất thủ.
-// Mở khi cờ 'warAt' (đặt bởi sự kiện chiến loạn lan tới, js/systems/factions.js: fac_chien_loan) và đã Luyện Khí.
+// Mở khi cờ 'warAt' (đặt bởi sự kiện chiến loạn lan tới, js/systems/factions.js: fac_chien_loan; N1b: người chơi từ 14 tuổi là gặp, không đòi Luyện Khí).
 // Thuần dữ liệu; khung ở js/data/story.js.
 (function () {
   const D = window.TT.data;
 
   D.STORY.reg({
     id: 'tg_chien_su', n: 'Lửa tới làng', loai: 'tg',
-    mo: { realm: 1, flag: 'warAt' },
-    vai: { truong: { pick: 'gan', dung_moi: true }, linh: { pick: 'gan', dung_moi: true }, ban: { pick: 'dong_ky', dung_moi: true } },
+    mo: { flag: 'warAt' },
+    vai: { truong: { pick: 'gan', dung_moi: true }, linh: { pick: 'gan', dung_moi: true }, ban: { pick: 'ky_uc', dung_moi: true } },
     dau: 'c1',
     chang: {
       c1: {
@@ -70,7 +70,7 @@
       c4: {
         t: 'Sáng sau',
         d: 'Sáng hôm sau, làng còn vài chục mái nhà. Quan phủ tới ghi tên người sống sót, và bảo ai chịu nộp lương thì được cấp đất ở tỉnh khác. Lời ấy có thể là lối thoát, cũng có thể là cái bẫy.',
-        khi: { realm: 2, sau: 2 }, han: 12, mac: 'nhan_dat',
+        khi: { sau: 2, hoac: [{ realm: 1, stage: 1 }, { age: 30 }] }, han: 12, mac: 'nhan_dat',
         lc: [
           { key: 'nhan_dat', label: 'Nhận đất ở tỉnh khác, rời làng', kind: 'pay', ax: { tudung: 1, xuthe: 1 },
             gia: { gold: 30 }, fx: { rep: { chinh: 1 }, flag: 'w1_dat' }, toi: 'c5' },
@@ -86,7 +86,7 @@
       c5: {
         t: 'Hòa nghị hoặc thất thủ',
         d: 'Trong tháng thứ ba, hai bên ngồi xuống bàn hòa ở thành cũ. Đồn rằng ai giúp dân qua chiến loạn sẽ được nhắc tên trên bia. Quân ấy có thể thắng, có thể thất thủ, còn bạn chỉ quyết được việc mình mang gì đến bàn.',
-        khi: { realm: 2, sau: 3 }, han: 12, mac: 'lui_ve',
+        khi: { sau: 3, hoac: [{ realm: 1, stage: 1 }, { age: 40 }] }, han: 12, mac: 'lui_ve',
         lc: [
           { key: 'bao_cao', label: 'Mang chứng cứ của dân làng đến bàn hòa', kind: 'help', ax: { daoduc: 1, xuthe: 1 },
             wheel: {
