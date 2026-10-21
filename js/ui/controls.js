@@ -75,6 +75,16 @@
       rd.readAsText(f);
       e.target.value = '';
     };
+    // Ô "Thử nghiệm" (cài đặt công cụ chỉnh nhân vật): lưu vào localStorage rồi tải lại để nạp/bỏ giao diện.
+    const chkDev = $('chk-dev');
+    if (chkDev) {
+      chkDev.checked = !!(D.DEV && D.DEV.on);
+      chkDev.onchange = e => {
+        try { localStorage.setItem('tt8b_dev', e.target.checked ? '1' : '0'); } catch (err) { /* bỏ qua */ }
+        TT.save.write();
+        location.href = location.pathname + location.search.replace(/([?&])dev=1(&|$)/, (m, a, b) => (b ? a : '')).replace(/[?&]$/, '');
+      };
+    }
     $('btn-new').onclick = () => {
       if (!confirm('Tạo thế giới mới? Thế giới hiện tại sẽ bị thay thế.')) return;
       TT.life.createWorld();
@@ -85,6 +95,10 @@
   };
 
   ui.syncControls = function () {
+    // Bản lưu đã từng chỉnh bằng công cụ thử nghiệm: hiện chữ nhỏ ở góc cột Hồ sơ.
+    const used = !!(TT.world && TT.world.devUsed), bd = $('dev-badge');
+    if (used && !bd) { const t = $('side-tabs'); if (t && t.parentNode) t.parentNode.insertBefore(h('span', { id: 'dev-badge', style: 'display:block;text-align:right;font-size:11px;color:#c9a35a;padding:0 8px', title: 'Bản lưu này đã dùng công cụ thử nghiệm chỉnh nhân vật' }, 'đã chỉnh'), t); }
+    else if (!used && bd) bd.remove();
     TT.time.SPEEDS.forEach(n => speedBtns[n].classList.toggle('on', TT.time.speed === n));
     const p = TT.player();
     if (p && pathLbl) {
