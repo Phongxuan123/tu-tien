@@ -1047,6 +1047,8 @@ Xem bảng 1.2. Thêm các chi tiết đã chốt sau khi bạn chỉnh: thang t
 
 - **(Lượt 7, 2026-10-20)** 8 xuất thân đầu: p1, p2, p3, p5, t1, t3, t6, t10 (trọng số 28/13/13/12/12/8/8/6). Gói nội dung N1 (T1, T2, T5, W1), N2 (T3, T9, chuỗi Nhẫn, W3), N3 chọn sau Cổng 7. Tiên thiên v2 (8C) quyết sau Cổng 7 theo tiền còn lại. Prompt toàn bộ ở `PROMPT-phien-moi.md`.
 
+- **(Lượt 8, 2026-10-21)** Sau một lần chơi đủ đời: lựa chọn thiếu sức nặng, không có gì đọng lại. Chốt: **dàn định mệnh 6 đến 8 người** đi suốt đời, mọi tuyến lấy vai từ dàn; **nhiều drama, cao trào, tàn khốc hơn** (lựa chọn nào cũng mất, hai người một lối, phản bội, sự thật đổi nghĩa ký ức), kể gián tiếp; **gắn bó trước, mất sau** (luật ba lần); hồi ký cuối đời **để sau**. Cẩm nang và mẫu ở `ke-hoach/Q-giong-truyen.md` (chờ duyệt).
+
 ### 20.2 Câu hỏi còn mở (mỗi câu có mặc định, bạn chỉ cần sửa chỗ muốn khác)
 **Giọng và nhịp truyện**
 1. **Giọng truyện**: nghiêm túc tiên hiệp hay pha hài đời thường như các sự kiện cũ? *(mặc định: pha, nghiêm khi chuyện lớn)*
