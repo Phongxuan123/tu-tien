@@ -78,11 +78,12 @@
     // Ô "Thử nghiệm" (cài đặt công cụ chỉnh nhân vật): lưu vào localStorage rồi tải lại để nạp/bỏ giao diện.
     const chkDev = $('chk-dev');
     if (chkDev) {
-      chkDev.checked = !!(D.DEV && D.DEV.on);
+      chkDev.checked = !!(D.DEV && D.DEV.on && TT.dev); // chỉ tick khi công cụ đã thật sự được nạp
       chkDev.onchange = e => {
         try { localStorage.setItem('tt8b_dev', e.target.checked ? '1' : '0'); } catch (err) { /* bỏ qua */ }
         TT.save.write();
-        location.href = location.pathname + location.search.replace(/([?&])dev=1(&|$)/, (m, a, b) => (b ? a : '')).replace(/[?&]$/, '');
+        const q = location.search.replace(/([?&])dev=1(&|$)/, (m, a, b) => (b ? a : '')).replace(/[?&]$/, '');
+        if (q !== location.search) location.search = q; else location.reload();
       };
     }
     $('btn-new').onclick = () => {

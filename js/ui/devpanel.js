@@ -325,7 +325,9 @@
   const st = { open: false, sec: { basic: true }, rid: null, pid: null, sect: null, hoi: null, job: null, path: null, peer: null, arc: null, ch: null, msg: '' };
   let panel = null, body = null, msgEl = null;
 
+  let cssDone = false;
   function css() {
+    if (cssDone) return; cssDone = true;
     const s = document.createElement('style');
     s.textContent = '#dev-panel{position:fixed;z-index:9999;top:70px;right:12px;width:min(94vw,420px);max-height:80vh;display:flex;flex-direction:column;background:#161b24;color:#d5dde8;border:1px solid #3a4a60;border-radius:10px;box-shadow:0 8px 30px #0009;font-size:13px}' +
       '#dev-panel .dh{display:flex;align-items:center;gap:8px;padding:6px 10px;cursor:move;touch-action:none;border-bottom:1px solid #2a3444;user-select:none}#dev-panel .dh b{flex:1}' +
@@ -539,13 +541,14 @@
     head.addEventListener('pointerup', () => { drag = false; });
   }
 
-  // Gắn nút 🛠 vào thanh điều khiển; trả về false nếu tắt hoặc không có thanh.
+  // Gắn nút 🛠 nổi ở góc dưới trái (luôn thấy, kể cả khi hộp "Đời mới" đang phủ thanh điều khiển); trả về false nếu tắt.
   dev.mount = function () {
-    if (!D.DEV || !D.DEV.on) return false;
-    const bar = document.querySelector('.bar-controls');
-    if (!bar || document.getElementById('btn-dev')) return !!bar;
+    if (!D.DEV || !D.DEV.on || !document.body) return false;
+    if (document.getElementById('btn-dev')) return true;
+    css();
     const b = ui.h('button', { id: 'btn-dev', title: 'Bảng chỉnh nhân vật (thử nghiệm)', onclick: () => (st.open ? dev.close() : dev.open()) }, '🛠');
-    bar.insertBefore(b, bar.querySelector('.sp') ? bar.querySelector('.sp').nextSibling : null);
+    b.style.cssText = 'position:fixed;left:12px;bottom:12px;z-index:10000;width:44px;height:44px;font-size:20px;border-radius:50%;border:1px solid #c9a35a;background:#161b24;color:#d5dde8;cursor:pointer;box-shadow:0 2px 10px #0008';
+    document.body.appendChild(b);
     return true;
   };
   window.addEventListener('DOMContentLoaded', () => dev.mount());
