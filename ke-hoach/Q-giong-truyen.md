@@ -11,6 +11,32 @@
 2. Người chơi **tiếc** ít nhất một quyết định ("giá mà hôm ấy…").
 3. Người chơi **kể lại được** đời mình thành 3 câu có cao trào ("Tôi bỏ huynh lại giữa rừng để lên nội môn; hai mươi năm sau hắn là người đốt sơn môn; tôi chết dưới tay hắn ở tuổi 140").
 
+## 1b. Trục nhân vật: khuyết điểm, sỉ nhục, phản chiếu (bạn gửi 2026-10-21, từ một video phân tích kịch bản)
+Nguyên lý rút ra: *sỉ nhục là thuốc đặc trị của kiêu hãnh*; *phản diện đại diện cho mặt tối mà chính diện phải vượt qua*; *nhân vật học mình là ai, niềm tin, trách nhiệm, vị tha, hy sinh để từ khiếm khuyết thành toàn vẹn*; *món quà quá lớn thành lời nguyền*. Và các lỗi phải tránh: kiêu ngạo mà không bao giờ bị sỉ nhục; làm tổn thương người khác mà không trả giá; chấn thương quá khứ chỉ là hồi tưởng, không có hậu quả; không có thời gian để lớn; kế thừa di sản mà không có gắn bó với người để lại; trở ngại không phải trở ngại thật nên trưởng thành không phải trưởng thành thật; lời giải là đường tắt; nhân vật phụ chỉ để làm nền.
+
+**Khuyết điểm gốc** (bộ máy suy ra ở mốc A1 từ trục tính cách lệch nhất, lưu `c.story.kd`; đổi được nếu trục khác vượt lên rõ ràng trước hồi III):
+
+| Đầu trục | Khuyết điểm | "Thuốc" (bài học hồi III, IV) | Đối thủ / kẻ thù phản chiếu |
+|---|---|---|---|
+| Tính tình âm (nóng nảy) | bốc đồng, giận thì phá | **nhẫn**: một lần nóng giận làm chết người mình thương | kẻ giận dữ đã đốt cả một thôn, và từng giống hệt bạn |
+| Tính tình dương (điềm tĩnh) | thờ ơ, chờ mãi không làm | **dám**: vì chờ mà mất | kẻ chưa bao giờ ra tay, nhìn thế gian sụp đổ và gọi đó là đạo |
+| Xử thế âm (cương trực) | **kiêu hãnh**, coi thường người | **sỉ nhục**: bị hạ bệ trước mặt người mình khinh, phải cúi đầu nhờ họ | kẻ kiêu ngạo hơn, mạnh hơn, giẫm bạn như bạn từng giẫm người |
+| Xử thế dương (khéo léo) | mưu mô, dùng người như quân cờ | **niềm tin**: bị chính quân cờ của mình phản | kẻ thao túng giỏi hơn, coi bạn là quân cờ |
+| Đạo đức âm (tàn nhẫn) | vị kỷ, đạp người để lên | **vị tha**: người duy nhất còn ở lại bên bạn là người bạn từng hại | kẻ tàn nhẫn hơn, chính là thứ bạn sẽ thành nếu không dừng |
+| Đạo đức dương (nhân hậu) | mềm lòng, tha kẻ không nên tha | **trách nhiệm**: kẻ bạn tha quay lại giết người khác | kẻ bạn từng tha, nay mang ơn thành hận |
+| Tu dưỡng âm (buông thả) | lười, ham vui, bỏ dở | **kỷ luật và hy sinh**: vì bỏ dở mà không đủ sức bảo vệ ai | đồng kỳ từng thua bạn, nay vượt xa vì chịu khổ |
+| Tu dưỡng dương (khắc kỷ) | lạnh lùng, cầu đạo bỏ người | **tình người**: đạt cảnh giới thì không còn ai để báo tin | kẻ đã hiến hết người thân để thành tiên |
+
+**Luật dùng:**
+1. **Hồi III đánh đúng khuyết điểm**: cao trào là thất bại hoặc sỉ nhục do chính khuyết điểm gây ra (không phải tai họa từ trên trời rơi xuống).
+2. **Hồi IV cho chọn vượt qua hay chìm**: lựa chọn đi ngược khuyết điểm (có giá thật) dịch trục mạnh về phía kia và mở kết cục "toàn vẹn"; đi theo khuyết điểm mở kết cục "đọa" hoặc "cô độc". Trưởng thành phải **trả giá**, không có lời giải đường tắt.
+3. **Đối thủ và kẻ thù định mệnh dựng theo khuyết điểm** (cột cuối): họ là phiên bản xấu nhất của bạn, có lý do chính đáng, và **thắng được bạn** ở hồi III.
+4. **Món quà thành lời nguyền**: mọi cơ duyên lớn (tiên thiên Quý hoặc Thiên, nhẫn, truyền thừa, kế vị) kèm một lời nguyền thật (bị săn, nợ, người khác trả giá thay).
+5. **Làm tổn thương thì ghi nợ**: lựa chọn gây hại cho người trong dàn ghi `no` (nợ); nợ **đòi ở hồi IV** bằng một chặng gặt, không tự xóa theo thời gian.
+6. **Chấn thương có hậu quả**: mất mát lớn để lại dấu thật (tật, tâm ma, khóa một loại lựa chọn, sợ một nơi), không chỉ một dòng hồi tưởng.
+7. **Kế thừa phải có gắn bó**: người kế thừa (vai 8) chỉ nhận di sản khi gắn bó đủ; không có thì di sản rơi vào tay người khác (có thể là kẻ thù).
+8. **Không ai chỉ để làm nền**: mỗi người trong dàn có động cơ, có lúc đúng, có lúc giúp bạn thật; không ai chỉ ác hay chỉ vô dụng.
+
 ## 2. Dàn định mệnh (6 đến 8 người, đi suốt một đời)
 Sáu vai **cố định**, dựng ở tuổi thơ và mốc A1 (người thật trong thế giới, già, bệnh, chết thật); hai vai **mở theo lựa chọn**. Mọi tuyến (xương sống, T1, T2, T5, W1, đạo lữ, kết nghĩa, N2...) **lấy vai từ dàn này trước**, chỉ dựng người mới khi dàn không có ai hợp.
 
@@ -165,10 +191,13 @@ c5: {
 - [ ] ≥ 50% chặng có rẽ; ≥ 2 kết cục.
 - [ ] Mọi nhịp tàn khốc có `can_gan_bo` (luật ba lần) và báo trước trong `mat`.
 - [ ] Mỗi người trong dàn xuất hiện ở tuyến có ước muốn hoặc vật quay lại.
+- [ ] Cao trào (hồi III) đánh đúng khuyết điểm gốc; hồi IV có lựa chọn vượt qua có giá thật.
+- [ ] Đối thủ hoặc kẻ thù trong tuyến phản chiếu khuyết điểm và có lý do chính đáng.
+- [ ] Mọi cơ duyên lớn có lời nguyền; mọi tổn thương gây ra cho người trong dàn có nợ được đòi.
 - [ ] Không máu me chi tiết, không tình dục, trẻ con không bị tả bạo lực.
 
 ## 9. Việc tiếp theo (sau khi bạn duyệt)
-1. **Sonnet** (một phiên, gộp N1b): dàn định mệnh 6 đến 8 người, điểm gắn bó và luật ba lần, các khóa ★, hậu quả thật, chặng gặt, Story Director nhẹ (bốn hồi), khoảnh khắc ấm và thư, vật kỷ niệm, người trong dàn hiện trên cảnh; story-lint kiểm mục 8.
+1. **Sonnet** (một phiên, gộp N1b): khuyết điểm gốc (`c.story.kd`) và sổ nợ (`no`), dàn định mệnh 6 đến 8 người (đối thủ và kẻ thù dựng theo khuyết điểm), điểm gắn bó và luật ba lần, các khóa ★, hậu quả thật, chặng gặt, Story Director nhẹ (bốn hồi), khoảnh khắc ấm và thư, vật kỷ niệm, người trong dàn hiện trên cảnh; story-lint kiểm mục 8.
 2. **Sonnet** viết lại xương sống A (A1 đến A6) theo bốn hồi, đúng cẩm nang (đây là lõi, cần chất lượng).
 3. **Haiku** viết lại T1, T2, T5, W1, đạo lữ, kết nghĩa theo mẫu; rồi N2.
 4. Hồi ký cuối đời: để sau (bạn chốt 2026-10-21).
