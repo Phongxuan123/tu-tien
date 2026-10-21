@@ -379,6 +379,21 @@
 | 10 | Hoàn thiện | Sonnet | cân bằng nhịp, sửa lỗi chơi thử, kiểm thử đầy đủ | 2,5 |
 | | **Cộng** | | | **khoảng 23** |
 
+### 7c. Đổi hướng sau Cổng chơi thử 7 (chốt 2026-10-21): làm lại kịch bản theo cẩm nang
+**Lý do:** chơi một đời đủ, lựa chọn thiếu sức nặng, không có gì đọng lại; giọng văn đã đạt (mẫu 6), chỗ yếu là **kịch bản và cách thể hiện**. Từ nay mọi nội dung truyện theo [Q-giong-truyen](Q-giong-truyen.md) (bản 7): khung nhân quả bảy mảnh, tính đại diện, dàn định mệnh 6 đến 8 người, cấu trúc phim bộ 5 đến 7 phần, tám luật chỉnh kịch bản, cảnh lớn có lời dẫn sau lựa chọn, chống ép tình tiết.
+**N1b gộp vào K1; N2 hoãn** (viết lại theo cẩm nang sau K3). Tuyến cũ (A1 đến A6, T1, T2, T5, W1, đạo lữ, kết nghĩa) **giữ chạy** cho tới khi kịch bản mới thay chỗ.
+
+| # | Phiên | Model | Việc | Ước |
+|---|---|---|---|---|
+| K1 | Bộ máy kịch bản | Sonnet | dàn định mệnh (6 đến 8 vai, điểm gắn bó, luật ba lần, vật kỷ niệm, khoảnh khắc ấm, thư, hiện trên cảnh); khuyết điểm gốc và kịch bản theo khuyết điểm; phần và cao trào (Story Director: 5 đến 7 phần, nhịp); cảnh lớn (`lon`, `canh`) + khung lời dẫn sau lựa chọn (`sau`, 20 giây đọc, 40 giây tự đóng ở Cân bằng/Tự động); khe kịch bản (`khe_kb`); hậu quả thật (`chet`, `roi`, `thu`, `tong`, `vat`, `no`); `d_neu`, `can`, `sau_neu`; chặng gặt (`tre.chang`); thử thách có hạn (`thu_thach`); cờ `khinh_*` và luật gọi tên; **gộp N1b** (điều kiện thân phận, vai `ky_uc`, sửa 2 bài đỏ); story-lint kiểm mục 8 cẩm nang | 4 |
+| K2 | Kịch bản "mềm yếu" | Sonnet | viết đủ chữ 6 phần theo dàn cảnh bản 2 (mục 4b), dùng khóa của K1; thay xương sống A cho người chơi có khuyết điểm "Đạo đức dương" | 2,5 |
+| — | **Cổng chơi thử 7b** | bạn | chơi một đời có khuyết điểm "mềm yếu" (trang thử nghiệm ép khuyết điểm) | |
+| K3 | Hai kịch bản nữa | Sonnet | "kiêu hãnh" (Xử thế âm: thuốc là sỉ nhục) và "tàn nhẫn" (Đạo đức âm: thuốc là vị tha), dàn cảnh rồi chữ, theo khuôn K2 | 4 |
+| K4 | Tuyến phụ thành nguồn gieo | Haiku | sửa T1, T2, T5, W1, đạo lữ, kết nghĩa: lấy vai từ dàn, trao vật, gieo cờ cho kịch bản chính; bỏ phần tự kết lỏng lẻo | 1,5 |
+| | **Cộng thêm** | | | **khoảng 12** |
+
+Sáu khuyết điểm còn lại tạm dùng xương sống A cũ; viết dần nếu còn ngân sách. Thứ tự: **K1 → K2 → Cổng 7b → K3 → K4**, rồi mới N2, 8C, hoàn thiện.
+
 **Cắt hoặc để vô thời hạn:** Đợt 10 (F5, S9); xương sống B đến E; R4 dây duyên; Q9 AI; S10, S11; phần lớn mục 24 (chỉ lấy vài tuyến vào gói N); tuyến V hình ảnh (assets).
 **Cách tiết kiệm (mọi phiên):** mỗi chặng một phiên mới (không kéo dài phiên); prompt ghi sẵn file và dòng cần đọc; chạy kiểm thử lọc theo từ khóa, chạy đầy đủ một lần cuối; Playwright chỉ chụp 1 đến 2 ảnh cần thiết; không dùng Opus; phiên thiết kế kết thúc sau khi viết xong prompt.
 **Chơi thử:** đọc `life-sim` sau mỗi chặng Sonnet; chơi thật sau 9K (Cổng 7, chưa có con cái và màn kết đời).
@@ -454,3 +469,4 @@
 - 2026-10-20: theo ý bạn, **hoãn 9C, 9C-d** (con cái, kết đời); thay bằng **9K kết nghĩa qua trải nghiệm chung** (móc vào sự kiện có sẵn, chỉ thêm 3 sự kiện); Cổng 7 dời sau 9K; prompt N1/N2 bỏ phụ thuộc vào `kid`.
 - 2026-10-20: **N1 đã làm** (Haiku, dữ liệu): bốn tuyến mới trong `js/data/stories/` (`tp_tan_tu`, `tp_dao_tong`, `tp_thuong_nhan`, `tg_chien_su`), 20 chặng, lint sạch 15 tuyến và 47 chặng, `run-tests` lọc "Truyện" 11 đạt; toàn bộ 169 đạt, 2 lỗi có sẵn từ trước N1 (không do gói này: "Sửa lõi (8B2)" khi hoac, "Nhịp quyết định" 7,11 hộp/phút, đều lỗi ở commit trước N1). Life-sim 101-103 (80 năm, số hộp truyện trên cả đời): trước 13 / 14 / 18, sau 16 / 14 / 18. W1 đã chạy hết chuỗi trong đời 101 (mở ở 65 tuổi). **Chưa mở được**: T1, T2, T5, vì điều kiện nghề, tông, không tông chưa có trong `condOk` (chỉ có realm, stage, age, flag, sau, bond, hoac). Cờ tạm `tan_tu`, `dao_tong`, `nghe_thuong` chưa có hệ nào gán. Việc tiếp: thêm điều kiện `job`, `sect` (hoặc gán cờ từ `TT.sect`/nghề), rồi kiểm lại số hộp. `tools/story-lint.js` đã đọc cả thư mục nên không cần đổi.
 - 2026-10-20: đọc báo cáo N1 (T1, T2, T5 không mở được vì engine chưa đọc nghề/tông; 2 bài đỏ; vai chưa dùng ký ức chung); thêm chặng **N1b** (Sonnet) làm trước N2: điều kiện thân phận cho `condOk`, hạ điều kiện mở T1, T2, T5, W1, vai `ky_uc`, sửa 2 bài đỏ.
+- 2026-10-21: sau Cổng chơi thử 7 (lựa chọn thiếu sức nặng), lập cẩm nang [Q-giong-truyen](Q-giong-truyen.md) (bản 7) và mục 7c: K1 bộ máy kịch bản (gộp N1b), K2 kịch bản "mềm yếu", Cổng 7b, K3 hai kịch bản, K4 tuyến phụ thành nguồn gieo; N2 hoãn.

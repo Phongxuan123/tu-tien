@@ -1,4 +1,4 @@
-# Q-giọng truyện. Cẩm nang kể chuyện (bản 6): dàn định mệnh, gắn bó, cao trào, tàn khốc
+# Q-giọng truyện. Cẩm nang kể chuyện (bản 7): dàn định mệnh, gắn bó, cao trào, tàn khốc
 
 - Trạng thái: **Bản mẫu chờ bạn duyệt** (2026-10-21). Dùng cho MỌI phiên viết chữ truyện (Sonnet và Haiku) sau khi bạn duyệt.
 - Vì sao có file này: sau một lần chơi đủ đời, bạn thấy **không có gì đọng lại**. Đo dữ liệu 15 tuyến: 44 cờ đặt ra nhưng 0 cờ được đọc lại; 5/126 lựa chọn có hậu quả đáng kể; 22/47 chặng chọn gì cũng về cùng một chỗ; mỗi tuyến bốc người lạ rồi bỏ. Chữ không tệ; **cách kể** mới là chỗ yếu.
@@ -163,19 +163,30 @@ Một đời dựng như **một bộ phim nhiều tập**: **mạch lớn** đi
 
 **Nhịp:** mỗi đời **5 đến 7 cao trào** (cảnh lớn) + **6 đến 10 cảnh lớn phụ** (điểm giữa, móc quan trọng); giữa hai cao trào có ít nhất 2 năm yên (khoảnh khắc ấm, thư, gieo). Story Director giữ nhịp; người chơi thụ động thì phần vẫn mở theo tuổi.
 
-### Dàn cảnh mẫu: kịch bản "mềm yếu" (Thanh Khê Tông, 6 phần)
-Câu hỏi trung tâm ở mục 0b. Tên tông dùng tông người chơi đang ở; Thanh Khê chỉ là tên ví dụ. Âm Hồn Giáo là thế lực thật trong mô phỏng (hoặc tông mạnh nhất kề bên).
+### Tám luật chỉnh kịch bản (bạn duyệt 2026-10-21, áp cho mọi kịch bản)
+1. **Nhân vật chính chủ động**: có **một mục tiêu cụ thể tự theo đuổi** (chữa bệnh cho mẹ, cứu thôn, báo thù, lên nội môn để học một môn); phản diện đưa đúng thứ nhân vật cần, nên đồng lõa là **đổi chác**, không chỉ là hèn.
+2. **Phản diện chủ động trói**: cho trước (cứu người thân, dạy công pháp chính, nâng đỡ) rồi mới đòi; có **quá khứ phản chiếu** (từng đứng đúng chỗ của nhân vật).
+3. **Mỗi cao trào một kiểu lựa chọn**: cứu ai, tin ai, bỏ gì, làm gì khi có quyền, đánh hay không, nói hay im; không lặp một kiểu quá hai lần mỗi đời.
+4. **Cả dàn có mặt**: mỗi kịch bản dùng ít nhất 5 người trong dàn; người thương và thân nhân phải bị cuốn vào câu hỏi trung tâm.
+5. **Có thắng và vui thật**: mỗi phần ít nhất một thắng lợi thật hoặc khoảnh khắc vui; hy vọng phải có để mất mát đau.
+6. **Hé lộ theo bậc**: manh mối, nghi ngờ, nghi nhầm người (một mồi giả hợp lý), rồi sự thật ở "chiến thắng giả" hoặc muộn hơn; không lộ phản diện trước giữa đời.
+7. **Sai thì khó chuộc, đúng vẫn đau**: sai sớm làm đường chuộc lỗi khó hơn nhưng không đóng; chọn đúng vẫn trả giá thật trong lối chơi (mất công pháp, mất người đỡ, mất ghế).
+8. **Khuôn có khe để chơi lại**: phản diện, nạn nhân, thế lực ngoài, vật gieo lấy từ khe (★`khe_kb`) theo dàn và mô phỏng; cùng bộ xương, mỗi đời một khuôn mặt. Kết "vĩ đại" **chạm thế giới** (chiến sự, tông mới, tin báo trong mô phỏng).
 
-| Phần | Tuổi | Móc | Điểm giữa / đảo | Cao trào (cảnh lớn, ba lựa chọn) | Treo |
-|---|---|---|---|---|---|
-| **1. Chiếc chăn** | 12 đến 18 | vào ngoại môn; đêm chiếc chăn dày; trưởng lão Hà nhận dạy riêng vì bạn "biết nhường" | thử luyện: bạn nhường cơ hội cho Lục Tam, được Hà khen trước cả ngoại môn (*lời nói dối có lợi*) | **Đêm mất tích đầu tiên**: một đệ tử nghèo cùng phòng "lên nội môn" bỏ quên đôi giày; bạn nhặt được, trong giày có mảnh giấy "cứu". Đưa Hà / giấu đi / hỏi Tần Diệp | Hà cất mảnh giấy, xoa đầu bạn; Tần Diệp nhìn bạn khinh: "Ngươi đưa cho đúng người rồi đấy." |
-| **2. Danh sách** | 18 đến 25 | Âm Hồn Giáo đóng quân ở biên vùng (tin báo, chiến sự thật) | bạn thấy danh sách có son của Hà; tên Lục Tam dòng thứ bảy | **Đêm trước ngày lên nội môn** (mẫu 6): viết thư / kể / trốn cùng | Lục Tam lên bậc đá không về; hoặc trốn và bạn bị nghi |
-| **3. Nhân chứng** | 25 đến 35 | Tần Diệp tìm bạn: hắn có bằng chứng, cần một nhân chứng | **thử thách có hạn**: trong 2 năm gom đủ ba bằng chứng (sổ kho, lời một đệ tử sống sót, dấu ấn), mỗi bằng chứng tốn công thật | **Phiên chấp pháp**: đứng ra làm chứng / im / làm chứng nửa vời (khai đúng nhưng giấu tên Hà) | Tần Diệp bị phế tu vi, đuổi khỏi tông (hoặc thoát nhờ bạn và thành kẻ bị truy) |
-| **4. Hòa khí** (*chiến thắng giả*) | 35 đến 50 | bạn lên nội môn, được Hà chọn làm người kế nhiệm; thôn dưới núi được mùa nhờ tông che chở | Hà nói thật với bạn, bình thản: "Con hiểu ta mà. Ta cũng chưa từng làm ai đau." | **Tờ danh sách đầu tiên của bạn**: Hà đưa bút; trong danh sách có đứa trẻ bạn từng cho ăn. Ký / ký mà đổi tên đứa trẻ bằng tên khác / không ký | Âm Hồn Giáo đòi gấp đôi vì chiến sự (mô phỏng); hoặc Hà bắt đầu tìm người kế nhiệm khác |
-| **5. Tất cả đã mất** | 50 đến 70 | mẹ Lục Tam nhờ bạn đọc lá thư bà cất kỹ nhất: chữ của bạn; gói di vật có tấm chăn (*gặt*) | đêm tối: Tần Diệp, phế nhân, xuất hiện ở cổng sơn môn với đệ tử sống sót cuối cùng | **Đại hội toàn tông**: tố giác trước mọi người (mất tất cả, đối đầu người thầy, thôn dưới núi có thể bị Âm Hồn Giáo trả thù) / kế nhiệm im lặng / giết Hà trong đêm (đường tắt: nhanh, và bạn thành kẻ phản sư) | sơn môn vỡ; hoặc bạn ngồi vào ghế của Hà |
-| **6. Biển** | 70 trở đi | hậu quả của phần 5 đổ xuống: Âm Hồn Giáo tràn tới (nếu tố giác), hoặc một đệ tử trẻ mềm lòng nhìn bạn như bạn từng nhìn Hà (nếu im) | **trận cuối**: bảo vệ thôn bằng chính tu vi của mình / đem tông mới ra đối diện Âm Hồn Giáo / ký thêm một danh sách | **Hình ảnh khép lại**: toàn vẹn: bạn đưa tấm chăn ra biển; đọa: bạn xoa đầu đệ tử trẻ, "đừng làm lớn chuyện"; cô độc: bạn sống, không còn ai để đưa ra biển | (kết đời) |
+### Dàn cảnh mẫu: kịch bản "mềm yếu" (bản 2, áp tám luật; 6 phần)
+**Câu hỏi trung tâm**: "Có nên im lặng trước cái ác để giữ cho nhiều người được yên?" **Mục tiêu của bạn**: học y đạo ở nội môn để chữa bệnh phổi cho mẹ và trị dịch cho thôn dưới núi. **Khe**: {su} (phản diện: sư phụ, trưởng lão, cha ruột hoặc ân nhân), {huynh} (nạn nhân, mặc định Lục Tam), {the_luc} (tông mạnh kề bên trong mô phỏng, ví dụ Âm Hồn Giáo), {vat} (chăn, giày rơm, thư, kiếm gỗ), {thuong} (người thương: cháu hoặc đệ tử ruột của {su}), {ban} (bạn thuở nhỏ ở thôn), {than_nhan} (mẹ), {doi_thu} (Tần Diệp).
+**Quá khứ phản chiếu của {su}**: ba mươi năm trước, cái tên đầu tiên trong danh sách là huynh đệ thân nhất của y; y đã im lặng như bạn sắp im lặng.
 
-Mỗi phần nối phần sau bằng một "vì… nên…": vì đưa mảnh giấy cho Hà nên Hà biết bạn nhìn thấy; vì Hà biết nên chọn bạn làm người kế nhiệm để trói bạn; vì bạn im ở phiên chấp pháp nên Tần Diệp bị phế, và nên ở phần 5 hắn không còn tin bạn... Lựa chọn khác ở phần trước làm **cao trào phần sau đổi hình**, không chỉ đổi số.
+| Phần | Tuổi | Móc | Leo thang / đảo | Cao trào (kiểu lựa chọn) | Thắng hoặc vui | Treo |
+|---|---|---|---|---|---|---|
+| **1. Chiếc chăn** | 12 đến 18 | vào ngoại môn; đêm {vat}; mẹ ho ra máu, thầy lang lắc đầu | {su} nhận dạy riêng, **tự bỏ tiền mua thuốc cho mẹ bạn** (nợ ân); manh mối mơ hồ: một đệ tử "lên nội môn" bỏ quên đôi giày có mảnh giấy "cứu" | **Mảnh giấy** (*tin ai*): đưa {su} / giấu đi / đưa {doi_thu} | mẹ đỡ bệnh; cả phòng ăn Tết, {huynh} diễn trò làm mọi người cười | {su} cất mảnh giấy, bảo là trò đùa của đệ tử nghịch; {doi_thu} nhìn bạn khinh |
+| **2. Danh sách** | 18 đến 25 | dịch quét thôn dưới núi; {the_luc} đóng quân ở biên vùng (mô phỏng) | thấy danh sách, tên {huynh} dòng thứ bảy; son của {su} **nhưng nét son mờ, có thể bị giả**; {doi_thu} cũng đang tìm | **Đêm trước ngày lên nội môn** (*nói hay im*, mẫu 6) | **thử thách có hạn**: học đủ y thuật trong 2 năm, trị được dịch cho một nửa thôn (thắng thật nếu đạt) | {huynh} không về; hoặc trốn, bạn bị nghi |
+| **3. Nhân chứng** | 25 đến 35 | {doi_thu} có bằng chứng, nghi **cha của chính hắn** (chấp sự kho) là kẻ đứng sau (**mồi giả** hợp lý: sổ kho do cha hắn giữ) | thử thách: gom ba bằng chứng; mỗi cái tốn công thật; bạn và {doi_thu} buộc phải tin nhau | **Phiên chấp pháp** (*cứu ai*): làm chứng thì cứu {doi_thu} nhưng cha hắn (vô tội một nửa) bị phế; im thì {doi_thu} bị phế | đêm hai kẻ ghét nhau uống chung một vò rượu, {doi_thu} lần đầu cười | người bị phế rời tông; {thuong} xuất hiện: cháu của {su}, chăm bạn khi bạn ốm |
+| **4. Hòa khí** (*chiến thắng giả*) | 35 đến 50 | bạn vào nội môn, học y đạo, thành danh y; {su} chọn bạn kế nhiệm; bạn và {thuong} định ngày cưới | **sự thật**: {su} tự nói, bình thản, kể cả cái tên đầu tiên ba mươi năm trước. "Con hiểu ta mà." | **Bút son** (*làm gì khi có quyền*): ký danh sách đầu tiên của bạn / ký nhưng đổi tên đứa trẻ bạn từng chữa bằng một cái tên khác / không ký | đám cưới (nếu chưa vỡ); mẹ được thấy bạn mặc áo nội môn | {the_luc} đòi gấp đôi vì chiến sự (mô phỏng); nếu không ký, {su} bắt đầu tìm người kế nhiệm khác và lạnh với {thuong} |
+| **5. Tất cả đã mất** | 50 đến 70 | mẹ {huynh} nhờ bạn đọc lá thư bà cất kỹ nhất: **chữ của bạn**; gói di vật có {vat} | {ban} ở thôn van bạn đừng làm gì: "Cả thôn sống nhờ cái tông ấy." Mẹ bạn mất (thọ), lời cuối: "Con không có lỗi gì." | **Đại hội toàn tông** (*bỏ gì*): tố giác (mất công pháp {su} dạy, mất ghế, phá đời {thuong}, thôn có thể bị {the_luc} trả thù) / kế nhiệm im lặng / giết {su} trong đêm (đường tắt: nhanh, thành kẻ phản sư) | (tùy đường) một đệ tử nghèo được bạn cứu khỏi danh sách cuối cùng | sơn môn vỡ, {thuong} bỏ đi; hoặc bạn ngồi vào ghế của {su} |
+| **6. Biển** | 70 trở đi | hậu quả đổ xuống: {the_luc} tràn tới (đã tố giác) hoặc một đệ tử trẻ mềm lòng nhìn bạn như bạn từng nhìn {su} (đã im) | bạn gom đệ tử nghèo lập tông nhỏ (trận chiến thật trong mô phỏng, tin báo), hoặc ký thêm danh sách | **Trận cuối** (*đánh hay không*, vòng quay): giữ thôn bằng chính tu vi / đưa tông mới ra đối diện {the_luc} / ký | đệ tử đầu tiên của tông mới đậu nội môn của chính bạn | **hình ảnh khép lại**: toàn vẹn: bạn đưa {vat} ra biển; đọa: bạn xoa đầu đệ tử trẻ, "đừng làm lớn chuyện"; cô độc: bạn sống, không còn ai để đưa ra biển |
+
+**Chuỗi "vì… nên…"**: vì {su} cứu mẹ bạn nên bạn nợ y; vì nợ nên đưa y mảnh giấy; vì bạn đưa nên y biết bạn nhìn thấy và chọn bạn làm người kế nhiệm để trói bạn; vì nghi nhầm cha {doi_thu} nên phiên chấp pháp phế một người nửa vô tội; vì bạn ký (hay không ký) ở phần 4 nên phần 5 bạn còn (hay mất) đường lui; vì phần 5 nên phần 6 là trận chiến thật hay là một danh sách mới. **Sai sớm**: không đóng đường; đã ký ở phần 4 thì phần 5 vẫn tố giác được, nhưng phải tự khai cả chữ ký của mình.
 
 ## 5. Bảng tàn khốc (chọn ít nhất một cho mỗi cao trào)
 1. **Hai người, một lối:** chỉ cứu được một trong hai người của dàn.
@@ -377,7 +388,7 @@ c3: {
 
 ## 8. Kiểm tra trước khi nộp (story-lint sẽ kiểm phần đo được)
 - [ ] Có câu hỏi trung tâm; ít nhất ba người trong dàn là ba câu trả lời khác nhau; đám đông đồng lõa và thế giới mô phỏng có mặt (mục 0b).
-- [ ] Đời chia 5 đến 7 phần, mỗi phần đủ năm nhịp và có treo nối phần sau (mục 4b).
+- [ ] Đời chia 5 đến 7 phần, mỗi phần đủ năm nhịp và có treo nối phần sau (mục 4b); đạt tám luật chỉnh kịch bản (mục 4b).
 - [ ] Khung mục 0 đủ bảy mảnh; mỗi chặng trả lời được "vì… nên…"; tai họa lớn do lựa chọn hoặc khuyết điểm gây ra; trở ngại chặn được câu "sao không cứ…?".
 - [ ] Mỗi lựa chọn có `mat` (trừ khoảnh khắc ấm); cảnh lớn đủ 9 điểm ở mục 6c và mỗi lựa chọn có lời dẫn `sau`.
 - [ ] Mỗi tuyến đặt ≥ 2 cờ và đọc lại ≥ 2 cờ.
