@@ -1,4 +1,4 @@
-# Q-giọng truyện. Cẩm nang kể chuyện: dàn định mệnh, gắn bó, cao trào, tàn khốc
+# Q-giọng truyện. Cẩm nang kể chuyện (bản 4): dàn định mệnh, gắn bó, cao trào, tàn khốc
 
 - Trạng thái: **Bản mẫu chờ bạn duyệt** (2026-10-21). Dùng cho MỌI phiên viết chữ truyện (Sonnet và Haiku) sau khi bạn duyệt.
 - Vì sao có file này: sau một lần chơi đủ đời, bạn thấy **không có gì đọng lại**. Đo dữ liệu 15 tuyến: 44 cờ đặt ra nhưng 0 cờ được đọc lại; 5/126 lựa chọn có hậu quả đáng kể; 22/47 chặng chọn gì cũng về cùng một chỗ; mỗi tuyến bốc người lạ rồi bỏ. Chữ không tệ; **cách kể** mới là chỗ yếu.
@@ -10,6 +10,36 @@
 1. Người chơi **nhớ tên** ít nhất 3 người trong đời nhân vật.
 2. Người chơi **tiếc** ít nhất một quyết định ("giá mà hôm ấy…").
 3. Người chơi **kể lại được** đời mình thành 3 câu có cao trào ("Tôi bỏ huynh lại giữa rừng để lên nội môn; hai mươi năm sau hắn là người đốt sơn môn; tôi chết dưới tay hắn ở tuổi 140").
+
+## 0. Khung nhân quả của một đời (bản 4, 2026-10-21: mọi mục sau phải tuân theo khung này)
+**Bài học từ bản thử truyện ngắn đầu tiên** (lỗi nằm ở dàn ý): khuyết điểm ghi "mềm lòng" mà nhân vật lại hành xử ích kỷ; tai họa (mẹ bệnh) là xui rủi, không do nhân vật gây ra; đối thủ chỉ là người giàu nói cay, không đại diện cho mặt tối nào; kết thúc không có trưởng thành. Tức là **vấn đề không thật, nên phát triển không thật.**
+
+**Bảy mảnh của một đời** (bộ máy chọn theo khuyết điểm gốc; mỗi mảnh là dữ liệu):
+| Mảnh | Là gì | Ví dụ (khuyết điểm: nhân hậu đến mềm yếu) |
+|---|---|---|
+| **Vết thương** (tuổi thơ) | chuyện đã dạy nhân vật một điều sai | năm đói, bạn nhường phần gạo cho em; em vẫn chết vì bệnh, mẹ ôm bạn bảo "con ngoan, con không có lỗi gì" |
+| **Lời nói dối nhân vật tin** | điều sai ấy | "Chỉ cần mình không làm ai đau thì mình không có lỗi." |
+| **Điều muốn** | mục tiêu nhân vật nghĩ là đúng | được mọi người quý, giữ hòa khí, lên nội môn yên ổn |
+| **Điều cần** | sự thật phải học (niềm tin, trách nhiệm, vị tha, hy sinh) | **trách nhiệm**: người tốt phải dám làm người khác đau vì điều đúng; im lặng cũng là một lựa chọn |
+| **Bóng tối** (phản diện) | người đã sống trọn lời nói dối ấy, là điểm cuối của con đường nhân vật đang đi; có lý do chính đáng | trưởng lão Hà, người hiền nhất tông, chưa phạt ai bao giờ; vì "giữ hòa khí, tông còn thì ngàn người còn" mà ba mươi năm nay ký vào danh sách đệ tử ngoại môn bị đưa đi làm lò đỉnh |
+| **Gương đối lập** (đối thủ) | người có điều nhân vật thiếu, nhưng méo theo kiểu khác | Tần Diệp: thẳng đến tàn nhẫn, dám làm người khác đau, nhưng không biết thương ai |
+| **Hy sinh** | cái giá để chọn điều cần | mất nội môn, mất người thầy, bị truy, có thể mất tu vi hoặc mạng |
+
+**Luật nhân quả (kiểm từng chặng):**
+1. **Tai họa lớn phải do lựa chọn hoặc khuyết điểm của nhân vật gây ra.** Xui rủi chỉ được *gây rắc rối*, không bao giờ được *giải quyết* rắc rối.
+2. **Mỗi chặng trả lời được câu "vì… nên…"** nối với chặng trước. Không trả lời được thì cắt.
+3. **Hành động phải khớp khuyết điểm**, trừ khi đó là lựa chọn trái tính có giá (và hộp ghi rõ như vậy).
+4. **Ai biết gì, vì sao không làm cách dễ hơn**: mỗi trở ngại phải chặn được câu hỏi "sao không cứ…?" (sao không báo lên trên, sao không bỏ trốn, sao không nhờ người khác).
+5. **Phản diện thắng ở hồi III bằng chính lời nói dối của nhân vật** (hắn dùng sự mềm lòng, kiêu hãnh hay lòng tham của bạn để thắng bạn).
+6. **Trưởng thành là hành động, không phải câu ngộ ra**: hồi IV nhân vật làm điều mà ở hồi I nó không làm nổi, và trả giá thật.
+7. **Kết "đọa" là bi kịch hợp lý**: không chọn điều cần thì nhân vật **thành chính bóng tối** (kế nhiệm trưởng lão Hà, ngồi ký danh sách).
+8. **Người tốt trong dàn không được đúng mọi lúc, kẻ xấu không được sai mọi lúc.**
+
+**Bốn hồi theo khung này:**
+- **I. Lời nói dối có lợi**: mềm lòng giúp nhân vật được quý, được trưởng lão Hà thương. Gieo: Lục Tam, tấm chăn, ước muốn thấy biển.
+- **II. Lời nói dối bắt đầu tốn**: đệ tử ngoại môn nghèo "được tuyển lên nội môn" rồi bặt tin; Lục Tam được tuyển. Bạn nghi, hỏi trưởng lão Hà; ông bảo "đừng làm lớn chuyện, sư môn khó xử". Bạn nghe theo. **Lục Tam không về nữa.** (Nếu bạn trái tính mà điều tra: có thể cứu được hắn, nhưng thầy bắt đầu lạnh với bạn.)
+- **III. Sụp đổ, đánh đúng khuyết điểm**: Tần Diệp, người bạn ghét vì tàn nhẫn, đã điều tra riêng và tố giác; cần một nhân chứng, chỉ có bạn từng thấy danh sách. Bạn im để giữ hòa khí; Tần Diệp bị vu tội, bị phế tu vi. Trong đồ di vật "đệ tử nội môn" gửi về thôn, mẹ Lục Tam nhận lại **tấm chăn dày**. Trưởng lão Hà nói thật với bạn, bình thản: "Con hiểu ta mà. Ta cũng chưa từng làm ai đau."
+- **IV. Chọn điều cần, hoặc thành bóng tối**: tố giác trước toàn tông (mất nội môn, đối đầu người thầy nuôi mình, bị truy; phải **tin** Tần Diệp, phải **gánh** phần lỗi của chính mình) → đường dài để thành người vĩ đại (cứu những đệ tử còn lại, lập lại sơn môn hoặc lập tông mới); hoặc im lặng → kế nhiệm trưởng lão Hà.
 
 ## 1b. Trục nhân vật: khuyết điểm, sỉ nhục, phản chiếu (bạn gửi 2026-10-21, từ một video phân tích kịch bản)
 Nguyên lý rút ra: *sỉ nhục là thuốc đặc trị của kiêu hãnh*; *phản diện đại diện cho mặt tối mà chính diện phải vượt qua*; *nhân vật học mình là ai, niềm tin, trách nhiệm, vị tha, hy sinh để từ khiếm khuyết thành toàn vẹn*; *món quà quá lớn thành lời nguyền*. Và các lỗi phải tránh: kiêu ngạo mà không bao giờ bị sỉ nhục; làm tổn thương người khác mà không trả giá; chấn thương quá khứ chỉ là hồi tưởng, không có hậu quả; không có thời gian để lớn; kế thừa di sản mà không có gắn bó với người để lại; trở ngại không phải trở ngại thật nên trưởng thành không phải trưởng thành thật; lời giải là đường tắt; nhân vật phụ chỉ để làm nền.
@@ -252,6 +282,7 @@ c4: {
 Ba đường đều có giá thật: **công sức và thời gian** (thử thách đo bằng vàng thật trong túi, có thể trượt), **sĩ diện** (sỉ nhục, nợ ghi sổ), **thiện ác** (nhanh nhưng chắc chắn bị đòi). Không đường nào được kể như "khôn".
 
 ## 8. Kiểm tra trước khi nộp (story-lint sẽ kiểm phần đo được)
+- [ ] Khung mục 0 đủ bảy mảnh; mỗi chặng trả lời được "vì… nên…"; tai họa lớn do lựa chọn hoặc khuyết điểm gây ra; trở ngại chặn được câu "sao không cứ…?".
 - [ ] Mỗi lựa chọn có `mat` (trừ khoảnh khắc ấm).
 - [ ] Mỗi tuyến đặt ≥ 2 cờ và đọc lại ≥ 2 cờ.
 - [ ] ≥ 50% chặng có rẽ; ≥ 2 kết cục.
