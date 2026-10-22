@@ -1,6 +1,7 @@
 // Chơi thử một đời bằng đọc (Z "Đặc tả 8B"): chạy một đời với hạt giống cho trước ở chế độ Tự động (Playwright như baseline.js),
 // in nhật ký người chơi, tuổi thơ, "Truyện của đời bạn", tính cách đầu/cuối và khí vận kiếm/tiêu ra tệp văn bản.
 //   node tools/life-sim.js --seed=101 [--years=80] [--dao=tu_luyen|auto]      ra tools/life-sim/101.txt
+//   --kb=mem_long   ép khuyết điểm gốc (khóa) và đăng ký kịch bản của khuyết điểm đó (mem_long -> kb_mem_yeu; kb_mau cho khung mẫu: --kb=mem_long --kbid=kb_mau); bật D.STORY.kbOn
 //   --nhay=bb_a3:c1   nhảy tới một chặng ngay đầu đời (TT.story.jump) để xem các mốc xa; ghi rõ ở đầu tệp
 //   node tools/life-sim.js --batch=101-140 [--years=60]   đo 40 hạt giống bật/tắt truyện (D.STORY.on): chiến tranh, diệt vong, đổi chủ của thế giới và nhịp hộp quyết định
 //   của người chơi (chế độ Cân bằng, chọn mặc định), in ra màn hình, không ghi tệp.
@@ -14,10 +15,10 @@ for (const p of ['playwright', '/opt/node-tools/node_modules/playwright']) { try
 if (!playwright) { console.error('Không tìm thấy Playwright.'); process.exit(2); }
 
 const arg = k => { const a = process.argv.find(x => x.indexOf('--' + k + '=') === 0); return a ? a.slice(a.indexOf('=') + 1) : null; };
-const BATCH = arg('batch'), SEED = +(arg('seed') || 101), YEARS = +(arg('years') || 80), DAO = arg('dao') || 'tu_luyen', NHAY = arg('nhay') || '';
+const BATCH = arg('batch'), SEED = +(arg('seed') || 101), YEARS = +(arg('years') || 80), DAO = arg('dao') || 'tu_luyen', NHAY = arg('nhay') || '', KB = arg('kb') || '', KBID = arg('kbid') || 'kb_mem_yeu';
 
 // Chạy trong trang: trả về dữ liệu thuần của một đời.
-function inPage(seed, years, dao, nhay) {
+function inPage(seed, years, dao, nhay, kd, kbid) {
   TT.config.autosaveMonths = 1e12; TT.config.persistMeta = false;
   // Gom toàn bộ nhật ký người chơi (nhật ký trong game bị cắt ở vài trăm dòng) và đếm hộp quyết định theo loại (Tự động xử lý ngay trong request).
   const all = [], boxes = { story: 0, wheel: 0, other: 0 }, lg = TT.log, rq = TT.decisions.request;
@@ -25,8 +26,10 @@ function inPage(seed, years, dao, nhay) {
   TT.decisions.request = function (d) { boxes[d.type === 'story' || d.type === 'wheel' ? d.type : 'other']++; return rq.apply(this, arguments); };
   if (window.__memOff) TT.data.BOND.mem = false; // --mem=off: đo khi chưa có ký ức chung (9K)
   if (window.__gomOff) TT.data.STORY.logGom.on = false; // --gom=off: đo nhật ký khi chưa gom (8B2)
+  if (kd) { TT.data.STORY.kbOn = true; TT.data.STORY.kb[kd] = kbid; }
   TT.life.createWorld(seed);
   const p = TT.player(); TT.world.settings = TT.world.settings || {}; TT.world.settings.auto = 'tu_dong';
+  if (kd) { TT.story.ensure(p); p.story.kd = kd; p.story.kd_khoa = 1; }
   if (dao !== 'auto') { TT.path.set(p, dao, 'life-sim'); p.pathAsked = true; }
   if (nhay) { const a = nhay.split(':'); TT.world.pending = null; TT.story.jump(a[0], a[1]); }
   const kv = { earned: 0, spent: 0 }, note = TT.kv.note;
@@ -105,7 +108,7 @@ async function batch() {
   await page.goto(pathToFileURL(path.join(__dirname, '..', 'sim.html')).href);
   if (arg('gom') === 'off') await page.evaluate('window.__gomOff = true');
   if (arg('mem') === 'off') await page.evaluate('window.__memOff = true');
-  const o = await page.evaluate(`(${inPage.toString()})(${SEED}, ${YEARS}, '${DAO}', '${NHAY}')`);
+  const o = await page.evaluate(`(${inPage.toString()})(${SEED}, ${YEARS}, '${DAO}', '${NHAY}', '${KB}', '${KBID}')`);
   await browser.close();
   if (errs.length) { console.error(errs.join('\n')); process.exit(2); }
 
