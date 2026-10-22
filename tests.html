@@ -4040,6 +4040,7 @@ test('Xuất thân (9A): tuổi thơ bốc sự kiện theo xuất thân (chỉ 
 });
 
 test('Xuất thân (9A): A4 đến A6 mở đúng điều kiện (cảnh giới hoặc tuổi) và nhảy chặng ra hộp truyện, với mọi xuất thân', () => {
+  D.STORY.kb = {}; // kịch bản khuyết điểm (K2) thay xương sống A từ A2; bài này kiểm xương sống A
   D.ORIGINS2.forEach((o, k) => {
     const p = forceOrigin(o.id, () => storyWorld(70 + k)), T = TT.story, w = TT.world;
     T.tick(p); clearPending();

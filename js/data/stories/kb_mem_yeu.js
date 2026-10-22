@@ -1,7 +1,5 @@
-// Kịch bản khuyết điểm "Đạo đức dương (nhân hậu, mềm yếu)", 6 phần theo dàn cảnh bản 2 (Q-giong-truyen mục 4b). Chạm K2a (khung + chặng nhỏ); K2b viết chữ 6 cảnh cao trào.
-// CÒN TODO K2b: 6 cảnh lớn (lon: true): a4 (Mảnh giấy), b4 (Đêm trước ngày lên nội môn), c4 (Phiên chấp pháp), d4 (Bút son), e4 (Đại hội toàn tông), f4 (Trận cuối).
-//   Mỗi cảnh: d: 'TODO K2b: <tóm tắt>' và mọi lựa chọn có sau: 'TODO K2b' (không wheel). Cấu trúc (khi, can_gan_bo, canh, lc, key, label, kind, ax, fx, mat, toi, tre, wheel) đã đủ.
-// CHƯA ĐĂNG KÝ vào D.STORY.kb.mem_long (để người chơi thật không gặp chữ TODO). K2b: khi hết TODO thì thêm dòng D.STORY.kb.mem_long = 'kb_mem_yeu' ở cuối tệp.
+// Kịch bản khuyết điểm "Đạo đức dương (nhân hậu, mềm yếu)", 6 phần theo dàn cảnh bản 2 (Q-giong-truyen mục 4b). K2a dựng khung và chặng nhỏ, K2 viết chữ 6 cảnh cao trào (a4, b4, c4, d4, e4, f4) và soát toàn kịch bản.
+// Đã đăng ký ở cuối tệp: D.STORY.kb.mem_long = 'kb_mem_yeu' (người chơi có khuyết điểm Đạo đức dương dùng kịch bản này thay xương sống A từ bb_a2).
 //
 // Câu hỏi trung tâm: "Có nên im lặng trước cái ác để giữ cho nhiều người được yên?" Mục tiêu của bạn: học y đạo ở nội môn để chữa bệnh phổi cho {than_nhan} và trị dịch cho thôn dưới núi.
 // Dàn: {su} = bóng tối (người hiền ký danh sách, ba mươi năm trước từng im như bạn sắp im); {doi_thu} = gương đối lập (đúng mà không biết thương); {huynh} = nạn nhân tin hệ thống;
@@ -64,7 +62,7 @@
         khi: { sau: 6 }, han: 6, mac: 'nhan_on',
         lc: [
           { key: 'nhan_on', label: 'Nhận thuốc, cúi đầu tạ ơn', kind: 'safe', ax: { xuthe: 1 }, fx: { gan_bo: { dan: 'su', d: 2 }, no: { dan: 'su', d: 3 }, flag: 'nhan_on_su' }, mat: 'Một món nợ ân. Người cho không đòi, nhưng người nhận biết.', toi: 'a3' },
-          { key: 'tu_lo', label: 'Từ chối, tự tìm cách', kind: 'pay', ax: { tudung: 1 }, fx: { daoTam: -1, flag: 'tu_lo_thuoc' }, mat: 'Mẹ bạn có thể không đợi được.', toi: 'a2b' }
+          { key: 'tu_lo', label: 'Từ chối, tự tìm cách', kind: 'pay', ax: { tudung: 1 }, fx: { daoTam: -1, flag: 'tu_lo_thuoc' }, mat: '{than_nhan} có thể không đợi được.', toi: 'a2b' }
         ]
       },
       a2b: {
@@ -73,7 +71,7 @@
         khi: { sau: 1 }, han: 6, mac: 'quay_lai',
         lc: [
           { key: 'quay_lai', label: 'Đến xin gói thuốc hôm trước', kind: 'safe', ax: { xuthe: 1 }, fx: { gan_bo: { dan: 'su', d: 2 }, no: { dan: 'su', d: 3 }, flag: 'nhan_on_su' }, mat: 'Lời từ chối ban đầu, và một chút tự trọng.', toi: 'a3' },
-          { key: 'chiu', label: 'Viết thư bảo mẹ cố nhịn, chờ bạn học xong', kind: 'safe', ax: { tudung: 1 }, fx: { daoTam: -2, flag: 'tu_lo_thuoc' }, mat: 'Thêm một mùa đông cho {than_nhan}.', toi: 'a3' }
+          { key: 'chiu', label: 'Viết thư bảo {than_nhan} cố nhịn, chờ bạn học xong', kind: 'safe', ax: { tudung: 1 }, fx: { daoTam: -2, flag: 'tu_lo_thuoc' }, mat: 'Thêm một mùa đông cho {than_nhan}.', toi: 'a3' }
         ]
       },
       a3: {
@@ -87,12 +85,16 @@
       },
       a4: {
         t: 'Mảnh giấy', lon: true, canh: { gio: 'dem', thoi_tiet: 'mua' },
-        d: 'TODO K2b: Đêm mưa đầu mùa, bạn cầm mảnh giấy "cứu" và phải chọn tin ai: đưa {su} (người vừa cứu mẹ bạn), giấu đi chờ xem, hay đưa {doi_thu}, kẻ bạn ghét nhưng đang âm thầm tìm chuyện này. Đồng hồ: sáng mai có đợt "lên nội môn" mới.',
+        d: 'Mưa đầu mùa gõ trên mái ngoại môn, từng hạt rơi như đếm. Mảnh giấy nằm trong lòng bàn tay bạn đã nhàu, chữ "cứu" mực loang, nét cuối kéo dài như người viết bị ai gọi giật lại. Bảy đệ tử "lên nội môn" trong ba năm qua, và chưa ai gửi về một dòng thư. Ngoài hành lang có hai ngọn đèn: ngọn của {su} ở thư phòng, ngọn của {doi_thu} ở chái kho, hắn đã hỏi quanh về những đôi giày bỏ quên từ mùa thu. Sáng mai nội môn xuống nhận đợt mới, và bạn không biết tên ai trong đợt ấy. Bạn chỉ đủ can đảm đưa mảnh giấy này cho một người.',
+        d_neu: [{ flag: 'nhan_on_su', d: 'Mưa đầu mùa gõ trên mái ngoại môn, từng hạt rơi như đếm. Mảnh giấy nằm trong lòng bàn tay bạn đã nhàu, chữ "cứu" mực loang, nét cuối kéo dài như người viết bị ai gọi giật lại. Dưới chân giường là gói thuốc thứ hai của {su}, chưa mở, và {than_nhan} đang ăn được cháo nhờ gói đầu. Ngoài hành lang có hai ngọn đèn: ngọn của {su} ở thư phòng, ngọn của {doi_thu} ở chái kho, hắn đã hỏi quanh về những đôi giày bỏ quên từ mùa thu. Sáng mai nội môn xuống nhận đợt mới, bảy đệ tử trước chưa ai gửi về một dòng thư. Bạn chỉ đủ can đảm đưa mảnh giấy này cho một người.' }],
         khi: { sau: 18 }, han: 6, mac: 'giau',
         lc: [
-          { key: 'dua_su', label: 'Đưa {su}', kind: 'safe', ax: { xuthe: 1 }, fx: { gan_bo: { dan: 'su', d: 1 }, flag: 'dua_giay' }, mat: 'Mảnh giấy này, và niềm tin duy nhất bạn có vào người đã cứu mẹ bạn.', sau: 'TODO K2b', toi: 'a4w' },
-          { key: 'giau', label: 'Giấu đi, chờ xem', kind: 'safe', ax: { tinh: 1 }, fx: { flag: 'giau_giay' }, mat: 'Thời gian, và có thể một người trong danh sách.', sau: 'TODO K2b', toi: 'a4w' },
-          { key: 'dua_doi_thu', label: 'Đưa {doi_thu}', kind: 'risk', ax: { daoduc: 1, xuthe: -2 }, fx: { gan_bo: { dan: 'doi_thu', d: 2 }, flag: 'dua_doi_thu', rel: { vai: 'su', d: -5 } }, mat: 'Người ơn của bạn sẽ coi đó là phản bội.', sau: 'TODO K2b', toi: 'a5' }
+          { key: 'dua_su', label: 'Đưa {su}', kind: 'safe', ax: { xuthe: 1 }, fx: { gan_bo: { dan: 'su', d: 1 }, flag: 'dua_giay' }, mat: 'Mảnh giấy đi khỏi tay bạn, và không còn cách nào lấy lại.',
+            sau: 'Ông xem mảnh giấy dưới ngọn đèn, lâu hơn một chữ cần. "Con làm đúng." Giọng ông ấm như bàn tay đặt lên vai bạn, và bạn thấy nhẹ cả người. Ông gấp mảnh giấy làm tư, cất vào tay áo, rồi hỏi thăm bệnh của {than_nhan}. Bạn ra đến hành lang mới nhận ra mưa đã tạnh, và ông chưa nói chữ ấy là của ai.', toi: 'a4w' },
+          { key: 'giau', label: 'Giấu đi, chờ xem', kind: 'safe', ax: { tinh: 1 }, fx: { flag: 'giau_giay' }, mat: 'Ba đứa trẻ sẽ lên bậc đá sáng nay, và bạn đã biết điều có thể cứu chúng.',
+            sau: 'Bạn nhét mảnh giấy vào lót áo, chỗ sát da. Ngọn đèn thư phòng tắt trước, ngọn đèn chái kho tắt sau. Nửa đêm bạn nghe tiếng chân đi qua dãy phản, dừng ở đầu giường bạn một nhịp, rồi đi tiếp. Sáng ra nội môn xuống nhận người; bạn đếm, có ba đứa, và đứa nhỏ nhất còn đang ngái ngủ.', toi: 'a4w' },
+          { key: 'dua_doi_thu', label: 'Đưa {doi_thu}', kind: 'risk', ax: { daoduc: 1, xuthe: -2 }, fx: { gan_bo: { dan: 'doi_thu', d: 2 }, flag: 'dua_doi_thu', rel: { vai: 'su', d: -5 } }, mat: '{su} là người đã cứu {than_nhan}, và bạn vừa đưa bằng chứng cho kẻ nghi ngờ ông.',
+            sau: '{doi_thu} cầm mảnh giấy, đọc một lần, không hỏi bạn lấy ở đâu. "Ngươi biết bao lâu rồi?" Bạn không trả lời được. Hắn gấp nó cẩn thận hơn bạn tưởng một người như hắn biết làm. "Đừng nói với {su}. Ngươi nợ ông ấy, ta biết. Cho nên đừng." Cửa chái kho khép lại, và bạn nghe rõ tiếng mưa như chưa từng nghe.', toi: 'a5' }
         ]
       },
       a4w: {
@@ -106,7 +108,7 @@
       },
       a5: {
         t: 'Một trò đùa của đệ tử nghịch',
-        d: 'Mảnh giấy không còn trong tay bạn. Nếu {su} đã nhận, ông cười: "Trò đùa của đệ tử nghịch." Từ hôm ấy {doi_thu} nhìn bạn bằng nửa con mắt, như nhìn một người đã chọn xong.',
+        d: 'Mảnh giấy đã đi khỏi tay bạn, hoặc còn nằm trong ngực áo. Từ hôm ấy {doi_thu} nhìn bạn bằng nửa con mắt, như nhìn một người đã chọn xong.',
         d_neu: [
           { flag: 'dua_giay', d: '{su} xem mảnh giấy, cười nhẹ: "Trò đùa của đệ tử nghịch." Ông cất vào tay áo. Từ hôm ấy {doi_thu} nhìn bạn bằng nửa con mắt, như nhìn một người đã chọn xong.' },
           { flag: 'dua_doi_thu', d: '{doi_thu} cầm mảnh giấy, không cảm ơn. {su} gọi bạn lên, hỏi rất nhẹ: "Con có điều gì muốn nói với thầy không?"' },
@@ -170,15 +172,21 @@
       b4: {
         t: 'Đêm trước ngày lên nội môn', lon: true, canh: { gio: 'dem', thoi_tiet: 'mua' },
         can_gan_bo: { dan: 'huynh', min: 3 },
-        d: 'TODO K2b: Mưa đầu mùa, đêm cuối ở ngoại môn. {huynh} gói đồ (đôi giày rơm mẹ hắn đan, cái lược gãy răng) và nhờ bạn viết thư về cho mẹ hắn; chiều nay bạn đã thấy tên hắn ở dòng thứ bảy, sáu cái tên bên trên chưa ai gửi thư về. Chọn nói hay im; sáng mai hắn đi.',
+        d: 'Mưa đầu mùa. Dầu trong đèn sắp cạn, ngọn lửa co lại bằng hạt đậu. {huynh} gói đồ vào tay nải: cái lược gãy răng, mấy củ khoai khô mẹ hắn gửi lên, đôi guốc hắn chưa nỡ đi. Chiều nay trong thư phòng bạn đã thấy tên hắn ở dòng thứ bảy, có son của {su}; sáu cái tên bên trên chưa ai gửi thư về. "Ta nhờ ngươi viết cho mẹ ta mấy dòng. Ta đọc, ngươi viết." Bạn mài mực, tay vững một cách lạ. "Ghi là con được ăn cơm trắng. Sang năm con về đưa mẹ đi xem biển." Gà chưa gáy, nội môn sẽ đón người ở cổng đá lúc trời vừa sáng, và sau đêm nay bạn không còn lúc nào để nói. Người ta có thể sống cả đời trong mấy chữ ấy.',
+        d_neu: [{ flag: 'hua_vat', d: 'Mưa đầu mùa. Dầu trong đèn sắp cạn, ngọn lửa co lại bằng hạt đậu. {huynh} gói đồ vào tay nải: cái lược gãy răng, mấy củ khoai khô mẹ hắn gửi lên. {vat} bạn giữ từ mười năm trước vẫn nằm đầu phản; hắn chưa đòi lại, và sẽ không đòi. Chiều nay trong thư phòng bạn đã thấy tên hắn ở dòng thứ bảy, có son của {su}; sáu cái tên bên trên chưa ai gửi thư về. "Ta nhờ ngươi viết cho mẹ ta mấy dòng. Ta đọc, ngươi viết." Bạn mài mực, tay vững một cách lạ. "Ghi là con được ăn cơm trắng. Sang năm con về đưa mẹ đi xem biển." Gà chưa gáy, nội môn sẽ đón người ở cổng đá lúc trời vừa sáng, và sau đêm nay bạn không còn lúc nào để nói. Người ta có thể sống cả đời trong mấy chữ ấy.' }],
         khi: { sau: 12 }, han: 6, mac: 'viet',
         lc: [
           { key: 'viet', label: 'Viết nốt, gấp thư lại, đưa hắn', kind: 'safe', ax: { daoduc: -1, xuthe: 1 }, fx: { flag: ['thu_chu_ban', 'im_danh_sach'], no: { dan: 'huynh', d: 5 } },
-            mat: 'Giữ hòa khí. Lá thư này sẽ về tới thôn, cùng với một thứ khác.', sau: 'TODO K2b', toi: 'b5' },
+            mat: 'Hòa khí được giữ, và lá thư mang chữ bạn sẽ về tới thôn cùng một thứ khác.',
+            sau: 'Hắn cầm lá thư bằng hai tay, như cầm thứ dễ vỡ, cất vào ngực áo, sát chỗ nóng nhất của người. Sáng ra trời tạnh. Bạn đứng ở cổng ngoại môn nhìn hắn theo người nội môn lên bậc đá, đến bậc thứ một trăm thì không nhìn thấy nữa. Đêm ấy bạn ngủ rất ngon. Đó là điều về sau bạn không tha thứ được cho mình.',
+            sau_neu: [{ flag: 'hua_vat', sau: 'Hắn cầm lá thư bằng hai tay, như cầm thứ dễ vỡ, cất vào ngực áo, sát chỗ nóng nhất của người. Sáng ra trời tạnh. Bạn đứng ở cổng ngoại môn nhìn hắn theo người nội môn lên bậc đá, đến bậc thứ một trăm thì không nhìn thấy nữa. Đêm ấy bạn đắp {vat} và ngủ rất ngon. Đó là điều về sau bạn không tha thứ được cho mình.' }],
+            toi: 'b5' },
           { key: 'ke', label: 'Đặt bút xuống, kể cho hắn về tờ danh sách', kind: 'risk', ax: { daoduc: 2, xuthe: -2 }, fx: { flag: 'ke_danh_sach', gan_bo: { dan: 'huynh', d: 2 }, rel: { vai: 'su', d: -20 } },
-            mat: 'Hắn có thể không tin. {su} sẽ biết là bạn đã nói.', sau: 'TODO K2b', toi: 'b5' },
+            mat: 'Hắn có thể không tin bạn, và {su} sẽ biết người nói là ai.',
+            sau: 'Hắn nghe hết, không ngắt lời. Rồi hắn cười, cái cười của người vừa được mời bát cơm trắng mà người mời bảo cơm có độc. "Ngươi ghen à? Ta lên được, ngươi không lên được." Hắn quay vào vách. Gần sáng bạn nghe hắn trở mình rất lâu; khi gà gáy hắn đã dậy, đeo tay nải, đi ra cổng đá không ngoái lại. Trên phản chỉ còn cây bút bạn đã đặt xuống, mực khô.', toi: 'b5' },
           { key: 'tron', label: 'Xé thư, bảo hắn đêm nay trốn khỏi tông', kind: 'risk', ax: { daoduc: 3, tinh: -2 }, gate: { truc: 'tinh', max: 6, why: 'Bạn quá nhẫn nhịn để làm một việc liều như thế.' },
-            fx: { flag: 'tron_cung', tong: { truy: true }, gan_bo: { dan: 'huynh', d: 3 } }, mat: 'Đào tẩu đệ tử bị truy. Bạn là người cuối cùng thấy hắn.', sau: 'TODO K2b', toi: 'ket:bo_cuoc' }
+            fx: { flag: 'tron_cung', tong: { truy: true }, gan_bo: { dan: 'huynh', d: 3 } }, mat: 'Đào tẩu đệ tử bị truy, và bạn là người cuối cùng thấy hắn.',
+            sau: 'Hai người lội suối trong mưa, hắn tuột mất một chiếc guốc. Đến bìa rừng hắn dừng lại, nhìn về phía thôn: "Mẹ ta thì sao?" Bạn không trả lời được. Hắn ôm bạn một cái rất mạnh, rồi đi về phía núi, một chân đất, một chân guốc. Phía sau, tiếng chuông sơn môn bắt đầu điểm, từng hồi, như đếm.', toi: 'ket:bo_cuoc' }
         ]
       },
       b5: {
@@ -232,15 +240,19 @@
       c4: {
         t: 'Phiên chấp pháp', lon: true, canh: { gio: 'ngay', thoi_tiet: 'troi_quang' },
         can_gan_bo: { dan: 'doi_thu', min: 3 },
-        d: 'TODO K2b: Phiên chấp pháp toàn tông. {doi_thu} bị buộc tội vu cáo cha mình; chỉ bạn từng thấy danh sách và đủ bằng chứng để làm chứng. Làm chứng thì cứu {doi_thu} nhưng cha hắn (vô tội một nửa) bị phế; im thì {doi_thu} bị phế tu vi. Chọn cứu ai.',
+        d: 'Đại sảnh chấp pháp đông kín người, quạt lá đưa phần phật trong cái nóng cuối hè. Giữa sảnh, cuốn sổ kho mở ở trang bạn đã thuộc: dòng thứ bảy, chữ ký của chấp sự kho, cha của {doi_thu}. Bạn biết điều {doi_thu} không biết: chiều qua bạn thấy cha hắn ngồi một mình trong kho, run đến nỗi không cầm nổi chén nước, mà chữ ký trong sổ lại chắc hơn mọi nét tay ông ấy từng viết. Chấp pháp trưởng hỏi ai từng thấy cuốn danh sách. {doi_thu} đứng thẳng, lưng như tấm ván, không quay lại nhìn bạn: "Ta không cần ai thương hại." {su} ngồi hàng ghế đầu, hai tay lồng trong tay áo, mắt nhìn xuống sàn như người nghe giảng kinh. Chuông ngọ sắp điểm; qua chuông, phiên sẽ khép và tội vu cáo thuộc về người đã mở nó.',
+        d_neu: [{ flag: 'nghi_cha', d: 'Đại sảnh chấp pháp đông kín người, quạt lá đưa phần phật trong cái nóng cuối hè. Giữa sảnh, cuốn sổ kho mở ở trang bạn đã thuộc: dòng thứ bảy, chữ ký của chấp sự kho, cha của {doi_thu}. Bạn từng nói với hắn rằng bằng chứng chưa đủ, và giờ bạn biết thêm điều hắn không biết: chiều qua cha hắn ngồi một mình trong kho, run đến nỗi không cầm nổi chén nước, mà chữ ký trong sổ lại chắc hơn mọi nét tay ông ấy từng viết. Chấp pháp trưởng hỏi ai từng thấy cuốn danh sách. {doi_thu} đứng thẳng, lưng như tấm ván, không quay lại nhìn bạn: "Ta không cần ai thương hại." {su} ngồi hàng ghế đầu, hai tay lồng trong tay áo, mắt nhìn xuống sàn như người nghe giảng kinh. Chuông ngọ sắp điểm; qua chuông, phiên sẽ khép và tội vu cáo thuộc về người đã mở nó.' }],
         khi: { sau: 12 }, han: 6, mac: 'im',
         lc: [
           { key: 'lam_chung', label: 'Làm chứng, nói hết điều bạn thấy', kind: 'risk', ax: { daoduc: 2, xuthe: -2 }, fx: { gan_bo: { dan: 'doi_thu', d: 3 }, flag: 'lam_chung_doi_thu', rel: { vai: 'su', d: -8 } },
-            mat: 'Cha {doi_thu}, vô tội một nửa, sẽ bị phế. {su} sẽ biết bạn đứng về phía nào.', sau: 'TODO K2b', toi: 'c4w' },
+            mat: 'Cha {doi_thu}, vô tội một nửa, bị phế tu vi, và {su} sẽ nhớ bạn đã đứng về phía nào.',
+            sau: 'Bạn đứng lên; ghế sau lưng kêu một tiếng rất to trong sảnh im. Bạn nói hết: danh sách, dòng thứ bảy, bảy cái tên chưa ai gửi thư về, cả chuyện người chấp sự kho run không cầm nổi chén. Cha của {doi_thu} ngẩng đầu nhìn bạn, không giận, chỉ như người vừa nghe tên mình được gọi sau nhiều năm. {su} không nhìn bạn lần nào cho đến khi phiên kết thúc, rồi ông gật đầu, rất nhẹ, như người ghi thêm một dòng vào sổ.', toi: 'c4w' },
           { key: 'im', label: 'Im lặng, nhìn xuống chân', kind: 'safe', ax: { daoduc: -1 }, fx: { roi: { dan: 'doi_thu' }, no: { dan: 'doi_thu', d: 6 }, flag: 'im_phien' },
-            mat: '{doi_thu} bị phế tu vi và rời tông. Hắn sẽ biết bạn đã không nói.', sau: 'TODO K2b', toi: 'c5' },
+            mat: '{doi_thu} bị phế tu vi và rời tông, và hắn biết bạn đã không nói.',
+            sau: 'Bạn nhìn xuống chân mình, đôi giày ngoại môn đã mòn đế, và đếm các vết nứt trên nền gạch. Chuông ngọ điểm. Chấp pháp trưởng đọc bản án bằng giọng người đọc giá chợ; {doi_thu} nhận nó đứng thẳng, cho đến lúc người ta lấy thẻ đệ tử khỏi cổ hắn. Hắn quay lại, chỉ một lần, nhìn bạn, và không nói gì. Cái nhìn ấy bạn sẽ nhận lại nhiều lần, ở những nơi bạn không ngờ.', toi: 'c5' },
           { key: 'noi_nua', label: 'Nói một nửa sự thật', kind: 'safe', ax: { xuthe: 1 }, fx: { no: { dan: 'doi_thu', d: 3 }, flag: 'noi_nua' },
-            mat: 'Cả hai đều mất một nửa, và không ai thật sự biết bạn đứng ở đâu.', sau: 'TODO K2b', toi: 'c5' }
+            mat: 'Cả hai đều mất một nửa, và không ai biết bạn đứng ở đâu.',
+            sau: 'Bạn nói về cuốn sổ và dòng thứ bảy, nhưng không nhắc cột duyệt hay những đôi giày. Giọng bạn đều, đủ để người nghe tưởng đó là toàn bộ. Cha của {doi_thu} bị đình chức, còn {doi_thu} bị phạt nhẹ vì tội nghi oan, một cái giá vừa tay cho cả hai bên. Ra khỏi sảnh, {su} đi ngang, vỗ vai bạn: "Cân nhắc thế là phải." Bạn không biết đó là lời khen.', toi: 'c5' }
         ]
       },
       c4w: {
@@ -294,21 +306,24 @@
       },
       d4: {
         t: 'Bút son', lon: true, canh: { gio: 'hoang_hon' },
-        d: 'TODO K2b: {su} đặt trước bạn cuốn danh sách đệ tử và cây bút son; tên đầu tiên trong danh sách kỳ này là một đứa trẻ bạn từng chữa dịch. {the_luc} đóng quân ở biên vùng, tông cần hứa với họ một số người ("tông còn thì ngàn người còn"). Chọn làm gì khi có quyền: ký / ký nhưng đổi tên / không ký.',
+        d: 'Hoàng hôn tắt dần trên thư phòng, bụi bay trong vạt nắng cuối. {su} đặt trước mặt bạn cuốn danh sách và cây bút son, chấm sẵn mực, giọt son tròn đọng ở đầu ngòi. Dòng đầu là tên một đứa trẻ bạn từng bắt mạch trong mùa dịch; bạn còn nhớ cái bát mẻ nó cầm. Ngoài hiên, sứ giả của {the_luc} ngồi uống trà nguội, họ đang đóng quân ở đèo, và kho thóc tông chỉ đủ nuôi chừng ấy người đến hết đông. "Canh ba họ lên đường. Ta già rồi, ký không còn vững." Ông nói như người nhờ một việc vặt. "Tông còn thì ngàn người còn, con hiểu ta mà." Bạn nghe tiếng bút son khẽ chạm thành nghiên, và nhận ra tay mình đã cầm nó từ lúc nào.',
         khi: { sau: 12 }, han: 6, mac: 'ky',
         lc: [
-          { key: 'ky', label: 'Ký', kind: 'safe', ax: { daoduc: -2 }, fx: { flag: 'da_ky', gan_bo: { dan: 'su', d: 2 }, vat: { mat: '@vat' } }, mat: 'Một cái tên, và vật bạn giữ từ thuở nhỏ.', sau: 'TODO K2b', toi: 'd4w' },
-          { key: 'doi_ten', label: 'Ký, nhưng đổi tên đứa trẻ bạn từng chữa bằng một cái tên khác', kind: 'risk', ax: { daoduc: 2, xuthe: -1 }, fx: { flag: 'doi_ten_tre', tong: { giang: true }, gan_bo: { dan: 'thuong', d: 1 } }, mat: 'Ghế nội môn. Và một người khác sẽ thế chỗ đứa trẻ.', sau: 'TODO K2b', toi: 'd4w' },
-          { key: 'khong_ky', label: 'Đặt bút xuống', kind: 'risk', ax: { daoduc: 3, xuthe: -2 }, fx: { flag: 'khong_ky', tong: { truc_xuat: true } }, mat: 'Tông, ghế, và người thầy nuôi bạn.', sau: 'TODO K2b', toi: 'd5' }
+          { key: 'ky', label: 'Ký', kind: 'safe', ax: { daoduc: -2 }, fx: { flag: 'da_ky', gan_bo: { dan: 'su', d: 2 }, vat: { mat: '@vat' } }, mat: 'Một cái tên, và vật bạn giữ từ thuở nhỏ.',
+            sau: 'Bạn ký. Nét son khô nhanh hơn bạn nghĩ, và cái tên ấy đứng yên trên giấy như chưa từng là một đứa trẻ. {su} thổi nhẹ lên trang giấy, gật đầu; bàn tay ông không run chút nào. Đêm ấy bạn đặt {vat} lên bậu cửa sổ, sáng ra nó bám sương, lạnh như bàn tay người khác.', toi: 'd4w' },
+          { key: 'doi_ten', label: 'Ký, nhưng đổi tên đứa trẻ bạn từng chữa bằng một cái tên khác', kind: 'risk', ax: { daoduc: 2, xuthe: -1 }, fx: { flag: 'doi_ten_tre', tong: { giang: true }, gan_bo: { dan: 'thuong', d: 1 }, rel: { vai: 'su', d: -4 } }, mat: 'Một đứa trẻ khác sẽ thế chỗ, và ghế của bạn không còn vững.',
+            sau: 'Bạn viết một tên khác, tay run vừa đủ để nét cuối nghiêng đi. {su} nhìn bạn rất lâu, rồi nhìn cái tên, rồi lại nhìn bạn. Ông không nói gì; ông khép cuốn danh sách lại, và ở cuối thư phòng có ai đó khẽ thở ra. Đứa trẻ mang cái tên kia cũng có người thân, và bạn không dám nghĩ nó là ai.', toi: 'd4w' },
+          { key: 'khong_ky', label: 'Đặt bút xuống', kind: 'risk', ax: { daoduc: 3, xuthe: -2 }, fx: { flag: 'khong_ky', tong: { giang: true }, rel: { vai: 'su', d: -15 } }, mat: 'Ghế kế nhiệm, và niềm tin của người thầy nuôi bạn.',
+            sau: 'Cây bút son lăn khỏi mép bàn, vạch một đường đỏ trên nền gạch, và không ai nhặt. {su} không giận; ông nhìn đường đỏ như nhìn một vết bẩn sẽ phải lau. "Con hiểu ta mà." Cửa mở, gió từ hiên thổi vào mang mùi khói biên giới. Bạn bước ra khi canh hai vừa điểm, và nghe sau lưng tiếng nghiên mài trở lại, đều, như chưa có chuyện gì.', toi: 'd5' }
         ]
       },
       d4w: {
-        t: 'Áo mới của mẹ', am: true,
-        d: 'Ngày về thôn, {than_nhan} sờ lên vạt áo nội môn của bạn, cười hiền: "Ừ, áo này ấm." Bà không hỏi bạn làm gì ở trên ấy, chỉ rót nước sôi pha nước mật ong.',
+        t: 'Chiếc áo ấm', am: true,
+        d: 'Ngày về thôn, {than_nhan} sờ lên vạt áo nội môn của bạn, cười hiền: "Ừ, áo này ấm." Người không hỏi bạn làm gì ở trên ấy, chỉ rót nước sôi pha mật ong.',
         khi: { sau: 1 }, han: 6, mac: 'ngoi',
         lc: [
-          { key: 'ngoi', label: 'Ngồi cạnh bà đến khi bà ngủ', kind: 'help', ax: { daoduc: 1 }, fx: { gan_bo: { dan: 'than_nhan', d: 2 } }, toi: 'd5' },
-          { key: 'ke', label: 'Kể bà nghe về {thuong}', kind: 'safe', ax: { tinh: 1 }, fx: { gan_bo: { dan: 'than_nhan', d: 1 }, daoTam: 1 }, toi: 'd5' }
+          { key: 'ngoi', label: 'Ngồi cạnh {than_nhan} đến khi ngủ thiếp', kind: 'help', ax: { daoduc: 1 }, fx: { gan_bo: { dan: 'than_nhan', d: 2 } }, toi: 'd5' },
+          { key: 'ke', label: 'Kể {than_nhan} nghe về {thuong}', kind: 'safe', ax: { tinh: 1 }, fx: { gan_bo: { dan: 'than_nhan', d: 1 }, daoTam: 1 }, toi: 'd5' }
         ]
       },
       d5: {
@@ -349,7 +364,7 @@
       },
       e2: {
         t: 'Cả thôn sống nhờ cái tông',
-        d: '{ban} từ thôn lên, ngồi trước mặt bạn rất lâu. "Cả thôn sống nhờ cái tông ấy. Ngươi đừng làm gì." Mùa đông ấy {than_nhan} mất; lời cuối của bà bạn còn nghe rõ: "Con không có lỗi gì."',
+        d: '{ban} từ thôn lên, ngồi trước mặt bạn rất lâu. "Cả thôn sống nhờ cái tông ấy. Ngươi đừng làm gì." Mùa đông ấy {than_nhan} mất; lời cuối của người ấy bạn còn nghe rõ: "Con không có lỗi gì."',
         khi: { sau: 18 }, han: 6, mac: 'hua',
         lc: [
           { key: 'hua', label: 'Hứa với {ban} sẽ không làm gì', kind: 'safe', ax: { daoduc: -1 }, fx: { gan_bo: { dan: 'ban', d: 2 }, daoTam: -2, flag: 'hua_ban' }, mat: 'Một lời hứa với người thân nhất. Bạn biết mình sắp phá nó.', toi: 'e3' },
@@ -368,16 +383,22 @@
       e4: {
         t: 'Đại hội toàn tông', lon: true, canh: { gio: 'ngay', thoi_tiet: 'giong_bao' },
         can_gan_bo: [{ dan: 'thuong', min: 3 }, { dan: 'su', min: 3 }],
-        d: 'TODO K2b: Đại hội toàn tông ngày ký danh sách cuối. Bạn là người kế nhiệm của {su}, đứng trước cả sơn môn. Có thể đứng lên tố giác (mất công pháp {su} dạy, mất ghế, phá đời {thuong}, thôn có thể bị {the_luc} trả thù), im lặng kế nhiệm, hoặc vào phòng {su} trong đêm (đường tắt: nhanh, thành kẻ phản sư). Chọn bỏ gì.',
+        d: 'Đại hội toàn tông họp giữa sân, trước cơn giông, hai trăm đệ tử xếp hàng theo bậc áo, gió giật cờ phần phật. Trên bàn đá: cuốn danh sách kỳ này, cây bút son, và chiếc ghế trống ở đầu bàn, ghế của {su}. Ông ngồi bên cạnh, tay lồng trong tay áo, gật đầu với bạn như người trao một việc nhà. Trong ngực áo bạn là cuốn sổ chép tên bảy đứa trẻ, và lá thư năm xưa mang chữ bạn. {the_luc} đòi người trước khi trời tối; chuông điểm bảy hồi, hồi cuối là hồi ký. Ở hàng sau, {thuong} nhìn bạn, không nói, như người đã biết câu trả lời mà vẫn đợi nghe. Sáng nay thôn dưới núi gửi lên mấy rổ rau, quà cho kỳ đại hội, như mọi năm. Bạn nghe hồi chuông thứ nhất.',
+        d_neu: [{ flag: 'khong_ky', d: 'Đại hội toàn tông họp giữa sân, trước cơn giông, hai trăm đệ tử xếp hàng theo bậc áo, gió giật cờ phần phật. Trên bàn đá: cuốn danh sách kỳ này, cây bút son, và chiếc ghế trống ở đầu bàn. Ghế ấy đã thuộc về người khác từ mùa trước, nhưng đêm qua {su} gọi bạn vào thư phòng, rót trà: "Đứng về phía ta hôm nay, chỗ ấy vẫn là của con." Trong ngực áo bạn là cuốn sổ chép tên bảy đứa trẻ, và lá thư năm xưa mang chữ bạn. {the_luc} đòi người trước khi trời tối; chuông điểm bảy hồi, hồi cuối là hồi ký. Ở hàng sau, {thuong} nhìn bạn, không nói, như người đã biết câu trả lời mà vẫn đợi nghe. Sáng nay thôn dưới núi gửi lên mấy rổ rau, quà cho kỳ đại hội, như mọi năm. Bạn nghe hồi chuông thứ nhất.' }],
         khi: { sau: 12 }, han: 6, mac: 'ke_nhiem',
         lc: [
           { key: 'to_giac', label: 'Đứng lên tố giác', kind: 'risk', ax: { daoduc: 3, xuthe: -2 }, fx: { flag: 'to_giac', tong: { truc_xuat: true }, roi: { dan: 'thuong' }, gan_bo: { dan: 'ban', d: -2 } },
-            mat: 'Công pháp {su} dạy, ghế của bạn, và có thể {thuong}. Thôn dưới núi có thể bị {the_luc} trả thù.', sau: 'TODO K2b', toi: 'e4w' },
+            mat: 'Công pháp {su} dạy, ghế của bạn và có thể cả {thuong}; thôn dưới núi có thể bị {the_luc} trả thù.',
+            sau: 'Bạn đứng lên; ghế sau lưng đổ, tiếng nó rơi to hơn mọi tiếng nói trong sân. Bạn đọc từng cái tên trong cuốn sổ nhỏ, bảy tên, rồi đọc thêm những cái tên của ba mươi năm trước mà bạn chép từ thư phòng. Gió lật trang danh sách trên bàn đá, và không ai đưa tay giữ lại. {su} không ngăn bạn; ông nhìn bạn bằng đôi mắt người đọc sổ chợ cho đến dòng cuối. Hồi chuông thứ bảy không điểm.',
+            sau_neu: [{ flag: 'da_ky', sau: 'Bạn đứng lên; ghế sau lưng đổ, tiếng nó rơi to hơn mọi tiếng nói trong sân. Bạn đọc từng cái tên trong cuốn sổ nhỏ, bảy tên, rồi đọc thêm những cái tên của ba mươi năm trước. Rồi bạn đọc một cái tên cuối, cái tên bạn đã ký bằng chính tay mình ở thư phòng, và chữ ký ấy cũng của bạn. Gió lật trang danh sách trên bàn đá, và không ai đưa tay giữ lại. {su} nhìn bạn, không giận, như nhìn người học trò cuối cùng trả bài. Hồi chuông thứ bảy không điểm.' }],
+            toi: 'e4w' },
           { key: 'ke_nhiem', label: 'Im lặng, nhận ghế kế nhiệm', kind: 'safe', ax: { daoduc: -2, xuthe: 1 }, fx: { flag: 'ke_nhiem_im', gan_bo: { dan: 'su', d: 2 }, rep: { chinh: -2 } },
-            mat: 'Bảy cái tên trong danh sách, và con người cũ của bạn.', sau: 'TODO K2b', toi: 'e5' },
-          { key: 'giet_su', label: 'Vào phòng {su} trong đêm', kind: 'fight', ax: { daoduc: -2, tinh: -2 }, gate: { truc: 'daoduc', max: 4, why: 'Tay bạn không làm nổi việc ấy.' },
+            mat: 'Bảy cái tên trong danh sách, và con người cũ của bạn.',
+            sau: 'Ông đứng dậy nhường ghế; bạn ngồi xuống, nó vừa với bạn hơn bạn tưởng, như áo may sẵn cho người vừa vóc. Bạn cầm bút son, chấm, và ký trước những cái tên chưa đọc kịp. Mưa bắt đầu rơi lúc bạn đặt bút xuống, từng hạt lên mặt giấy, lên chữ ký, lên bảy cái tên. Cuối sân, {thuong} quay đi trước khi hồi chuông cuối kịp điểm.', toi: 'e5' },
+          { key: 'giet_su', label: 'Đợi đến đêm, vào phòng {su}', kind: 'fight', ax: { daoduc: -2, tinh: -2 }, gate: { truc: 'daoduc', max: 4, why: 'Tay bạn không làm nổi việc ấy.' },
             fx: { flag: 'giet_su', chet: { dan: 'su', ngoai_khung: true }, roi: { dan: 'thuong' }, nghiep: 3 },
-            mat: 'Nhanh, và bạn thành kẻ phản sư trong mắt cả tông; {thuong} sẽ không ở lại.', sau: 'TODO K2b', toi: 'e5' }
+            mat: 'Chuyện xong nhanh, bạn thành kẻ phản sư trong mắt cả tông, và {thuong} sẽ không ở lại.',
+            sau: 'Đêm ấy giông tới thật. Bạn gõ cửa thư phòng; ông ngẩng lên, không ngạc nhiên, chỉ nói: "Ngồi xuống, trà còn nóng." Bạn không ngồi. Khi tiếng sấm kế tiếp đi qua mái ngói, cửa đã khép lại và cây bút son lăn xuống nền gạch. Sáng ra cả tông nhìn bạn theo một cách khác, và {thuong} không có mặt ở hàng sau.', toi: 'e5' }
         ]
       },
       e4w: {
@@ -439,14 +460,16 @@
       },
       f4: {
         t: 'Trận cuối', lon: true, canh: { gio: 'hoang_hon', thoi_tiet: 'chien_loan' },
-        d: 'TODO K2b: {the_luc} đã tới chân núi, thôn dưới núi ở ngay đường họ tiến. Bạn đã ngoài bảy mươi. Chọn đánh hay không: giữ thôn bằng chính tu vi của bạn (vòng quay), đưa tông mới ra đối diện {the_luc}, hoặc ký danh sách để họ rút quân.',
+        d: 'Chiều tà, lửa của {the_luc} kéo dọc sườn đèo, cách thôn dưới núi chừng một canh giờ đi bộ. Bạn đứng ở nơi cao nhất còn đi được, đã quá bảy mươi, mỗi hơi thở mang mùi thuốc sắc. Dưới kia khói bếp vẫn lên, từng sợi mảnh, như chưa ai báo cho thôn biết. Bạn biết điều thôn không biết: sứ giả của họ đã gửi lời, họ chỉ cần một danh sách, và danh sách ấy bạn ký được. Bạn nhớ cái lạnh của {vat} ngày xưa, trong căn phòng chật mười đứa trẻ. Trời tối thì họ vào, và đêm nay không còn ai khác để hỏi. Có tiếng ai hỏi trong đầu bạn, giọng {ban} hay giọng chính bạn ba mươi năm trước: "Ngươi còn làm được gì?"',
         khi: { sau: 12 }, han: 6, mac: 'ky_danh_sach',
         lc: [
           { key: 'giu_thon', label: 'Giữ thôn bằng chính tu vi của bạn', kind: 'fight', ax: { daoduc: 2, tinh: 1 }, mat: 'Phần còn lại của đời bạn.',
             wheel: { vung: [ { w: 55, n: 'Thôn mất một nửa', fx: { daoTam: -2 }, toi: 'f5' }, { w: 45, n: 'Thôn vẫn còn', fx: { daoTam: 2, gan_bo: { dan: 'ban', d: 3 } }, toi: 'f4w' } ],
               yeu_to: { loai: 'stat', chi_so: 'realm', tran: 12 }, gia: 3 } },
-          { key: 'dua_tong_moi', label: 'Đưa tông mới ra đối diện {the_luc}', kind: 'risk', ax: { daoduc: 2, xuthe: -1 }, can: 'lap_tong', fx: { flag: 'tong_moi_ra' }, mat: 'Những đứa trẻ bạn đã gom lại.', sau: 'TODO K2b', toi: 'f4w' },
-          { key: 'ky_danh_sach', label: 'Ký danh sách để {the_luc} rút quân', kind: 'safe', ax: { daoduc: -3 }, fx: { flag: 'ky_cuoi', vat: { mat: '@vat' } }, mat: 'Thêm một danh sách, và vật bạn giữ từ thuở nhỏ.', sau: 'TODO K2b', toi: 'f5' }
+          { key: 'dua_tong_moi', label: 'Đưa tông mới ra đối diện {the_luc}', kind: 'risk', ax: { daoduc: 2, xuthe: -1 }, can: 'lap_tong', fx: { flag: 'tong_moi_ra' }, mat: 'Mười ba đứa trẻ bạn gom lại, đứng trước quân của {the_luc}.',
+            sau: 'Bạn gọi cả mười ba đứa ra sân, đứa lớn nhất mười lăm, đứa nhỏ nhất còn chưa thay răng. Bạn không nói đạo lý; bạn chia cho mỗi đứa một nắm thuốc, một lá bùa, và dặn đứng sau lưng bạn. Khi {the_luc} tới chân núi, hàng người trước mặt họ là một ông già và mười ba đứa trẻ mặc áo vải. Họ dừng lại, lâu hơn bạn dám hy vọng.', toi: 'f4w' },
+          { key: 'ky_danh_sach', label: 'Ký danh sách để {the_luc} rút quân', kind: 'safe', ax: { daoduc: -3 }, fx: { flag: 'ky_cuoi', vat: { mat: '@vat' } }, mat: 'Một danh sách nữa, và vật bạn giữ từ thuở nhỏ.',
+            sau: 'Bạn ký trên lưng một đứa trẻ cầm giúp tấm ván, vì tay bạn run không đỡ nổi giấy. Sứ giả đọc lướt, gấp lại, vui như người nhận đủ tiền hàng. Lửa trên đèo tắt dần, từng đốm, thôn dưới núi vẫn lên khói, và sáng mai sẽ có người hỏi vì sao bảy nhà vắng đứa con. Bạn không muốn nghe câu trả lời của mình.', toi: 'f5' }
         ]
       },
       f4w: {
@@ -461,19 +484,22 @@
       f5: {
         t: 'Hình ảnh khép lại',
         d: 'Chiều tà. Bạn đứng ở nơi cao nhất còn đi được, nhìn xuống con đường mình đã đi. Gió mang theo mùi muối, hoặc là bạn tưởng thế.',
+        d_neu: [{ flag: 'mang_vat', d: 'Chiều tà. Bạn đứng ở nơi cao nhất còn đi được, nhìn xuống con đường mình đã đi. Gió mang theo mùi muối, hoặc là bạn tưởng thế, và ký ức về {vat} lạnh ở cổ tay như hôm nào.' }],
         khi: { sau: 4 }, han: 6, mac: 'doa',
         lc: [
-          { key: 'tron', label: 'Mang {vat} ra bờ biển', kind: 'help', ax: { daoduc: 2 }, can: 'to_giac', mat: 'Cuộc đời cũ, và sự yên tâm của kẻ không làm gì.', toi: 'ket:tron' },
+          { key: 'tron', label: 'Ra bờ biển, như lời hứa với {huynh}', kind: 'help', ax: { daoduc: 2 }, can: 'to_giac', mat: 'Cuộc đời cũ, và sự yên tâm của kẻ không làm gì.', toi: 'ket:tron' },
           { key: 'co_doc', label: 'Ngồi một mình ở cổng núi', kind: 'safe', ax: { tinh: 1 }, can: 'giet_su', mat: 'Người cuối cùng còn chờ bạn.', toi: 'ket:co_doc' },
           { key: 'doa', label: 'Xoa đầu một đệ tử trẻ: "Đừng làm lớn chuyện."', kind: 'safe', ax: { daoduc: -2 }, mat: 'Chính con người cũ của bạn.', toi: 'ket:doa' }
         ]
       }
     },
     ket: {
-      tron: { t: 'Toàn vẹn', kv: 2, log: 'Bạn đưa {vat} ra bờ biển, một mình, nhẹ như người vừa trả xong món nợ lớn nhất. Sóng không hỏi gì cả.' },
+      tron: { t: 'Toàn vẹn', kv: 2, log: 'Bạn ra bờ biển, một mình, mang theo lời hứa với {huynh}, nhẹ như người vừa trả xong món nợ lớn nhất. Sóng không hỏi gì cả.' },
       doa: { t: 'Đọa', kv: 0, xau: true, log: 'Bạn xoa đầu một đứa trẻ và nói: đừng làm lớn chuyện. Cây bút son nằm trong tay áo bạn từ lúc nào, bạn không nhớ.' },
       co_doc: { t: 'Cô độc', kv: 1, xau: true, log: 'Bạn sống, còn lại một mình, và không còn ai để đưa {vat} ra biển.' },
       bo_cuoc: { t: 'Bỏ cuộc', kv: 0, xau: true, log: 'Bạn rời tông, mang theo những điều chưa kịp nói với {huynh}.' }
     }
   });
+
+  D.STORY.kb.mem_long = 'kb_mem_yeu';
 })();
