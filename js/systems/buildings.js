@@ -149,7 +149,7 @@
     },
     // Cửa hàng này có thu mua món này không?
     buys(id, itemId) {
-      const d = D.ITEMS[itemId]; if (!d || d.cat === 'ls') return false;
+      const d = D.ITEMS[itemId]; if (!d || d.cat === 'ls' || d.ky) return false; // d.ky: vật kỷ niệm (K1) không bán được
       switch (id) {
         case 'cho': return d.cat === 'dan' || d.cat === 'bua' || d.cat === 'lieu' || (d.cat === 'khi' && !d.relic && d.tier === 0);
         case 'dan': return d.cat === 'dan' || itemId === 'linh_thao';

@@ -4,7 +4,6 @@ Tất cả đều là CC0 (Creative Commons Zero, dùng được cho mục đíc
 
 | Thư mục | Gói | Tác giả | Nguồn | Giấy phép | Ngày tải |
 |---|---|---|---|---|---|
-| `assets/cc0/kenney-pixel-platformer/` | Pixel Platformer 1.2 | Kenney (kenney.nl) | https://kenney.nl/assets/pixel-platformer | CC0 1.0 | 2026-10-15 |
 | `assets/cc0/oga-platformer-pixel-edition/` | Platformer Art Deluxe (Pixel) | Kenney Vleugels (kenney.nl) | https://opengameart.org/content/platformer-art-pixel-edition | CC0 1.0 | 2026-10-15 |
 
-Hai tệp zip gốc giữ ở `assets/cc0/_zips/`. Đang dùng: ô cây thông, xương rồng, nấm, đèn, biển báo, nhánh cỏ và người tuyết từ gói Kenney Pixel Platformer (js/ui/scene.js, cảnh pixel đầu cột giữa), được nhuộm màu theo giờ trong ngày. Gói Platformer Art Deluxe (Pixel) chưa dùng.
+Cảnh pixel đầu cột giữa (js/ui/scene/) vẽ hoàn toàn bằng mã, không dùng tài nguyên ngoài. Gói Kenney Pixel Platformer đã dùng cho cảnh cũ được gỡ khỏi repo ở chặng T-D (2026-10-20), nguồn gốc: https://kenney.nl/assets/pixel-platformer (CC0 1.0), tải 2026-10-15. Gói Platformer Art Deluxe (Pixel) chưa dùng.

@@ -3,6 +3,7 @@
 // Mỗi lựa chọn: key, label, kind (risk liều, safe an toàn, fight đánh, flee chạy, help giúp, pay tốn tiền),
 //   ax (dịch trục tinh, xuthe, daoduc, tudung; ±1 đến ±3, 1 hoặc 2 trục), fx (1 đến 2 hiệu ứng: atk, nl, hp, gold, luck,
 //   daoTam, tuchat, kv, wake, bad = id tật ở traits.js, ban = thiện cảm với bạn thuở nhỏ), r (kết quả một câu).
+// Trường origin: ['p1', ...] (9A-d) đánh dấu sự kiện riêng của xuất thân (id ở origins2.js); không có origin là sự kiện chung. Bộ bốc chặng 9A phải lọc theo origin.
 // tuchat và kv chỉ xuất hiện ở tối đa 3 lựa chọn mỗi loại trong cả bộ. Trần cộng dồn nằm ở cap, kẹp khi áp (js/systems/childhood.js).
 (function () {
   const TT = window.TT = window.TT || {};
@@ -234,6 +235,200 @@
         ch: [
           { key: 'hetsuc', label: 'Chạy hết sức', kind: 'risk', ax: { tudung: 2, tinh: -1 }, fx: { atk: 2, kv: 1 }, r: 'Bạn về thứ hai, mệt rũ rượi. Ai cũng thấy bạn bền bỉ.' },
           { key: 'cham', label: 'Chạy đều, giữ hơi', kind: 'safe', ax: { tudung: 1 }, fx: { luck: 1 }, r: 'Bạn về giữa đoàn, chẳng ai để ý và bạn cũng không bị ngã.' }
+        ]
+      },
+
+      // ---------------- Theo xuất thân (9A-d): mỗi xuất thân 3 sự kiện, trường origin ----------------
+      {
+        id: 'th_p1_nam_han', hoi: 1, w: 2, origin: ['p1'], t: 'Năm ruộng nứt nẻ',
+        d: 'Năm bạn lên hai, trời hạn suốt mấy tháng, ruộng nứt như mai rùa. Cha ngồi bên bờ ruộng hút điếu thuốc lào, mẹ bế bạn đi xin nước từng nhà.',
+        ch: [
+          { key: 'ngoan', label: 'Nằm yên trong lòng mẹ', kind: 'safe', ax: { tudung: 1 }, fx: { hp: 3 }, r: 'Bạn không quấy khóc, và cả nhà qua mùa đói bằng nửa bát cháo loãng.' },
+          { key: 'khoc', label: 'Khóc đòi nước', kind: 'risk', ax: { tinh: -2 }, fx: { nl: 1, hp: -2 }, r: 'Hàng xóm nghe tiếng khóc, đưa sang một gáo nước mát. Mẹ rơm rớm nước mắt.' }
+        ]
+      },
+      {
+        id: 'th_p1_gat_lua', hoi: 2, w: 3, origin: ['p1'], t: 'Mùa gặt đầu tiên',
+        d: 'Năm sáu tuổi, bạn được cha đưa ra đồng gặt lúa lần đầu. Lưỡi liềm sắc, tay bạn nhỏ, mà bông lúa chín thì nặng trĩu.',
+        ch: [
+          { key: 'gat', label: 'Gặt cho hết luống', kind: 'safe', ax: { tudung: 2 }, fx: { atk: 1, hp: 2 }, r: 'Tay bạn rớm máu mà luống lúa gọn gàng. Cha xoa đầu bạn mà không nói gì.' },
+          { key: 'nho', label: 'Nhặt thóc rơi cho gà', kind: 'help', ax: { daoduc: 1, tudung: -1 }, fx: { daoTam: 2 }, r: 'Bạn gặt chậm hơn cha mong, nhưng bầy gà nhà được no suốt tuần.' }
+        ]
+      },
+      {
+        id: 'th_p1_sach_cu', hoi: 3, w: 2, origin: ['p1'], t: 'Cuốn sách ngoài bờ ruộng',
+        d: 'Trong bụi tre cạnh bờ ruộng, bạn nhặt được một cuốn sách ố vàng, chữ nhỏ li ti. Cha mẹ bạn không biết chữ, còn thầy đồ làng thì ở tận xã bên.',
+        ch: [
+          { key: 'giu', label: 'Giấu đi, tự đoán chữ', kind: 'risk', ax: { tudung: 2, xuthe: -1 }, fx: { nl: 3 }, r: 'Bạn xem hình vẽ mà đoán nghĩa, từng chữ một. Có điều gì trong đó khiến bạn thấy hơi thở dài ra.' },
+          { key: 'dem', label: 'Mang tới hỏi thầy đồ', kind: 'help', ax: { xuthe: 1, daoduc: 1 }, fx: { daoTam: 2, gold: -3 }, r: 'Thầy đồ đọc vài dòng rồi cười, bảo chỉ là sách dưỡng sinh. Bạn vẫn nhớ nằm lòng.' }
+        ]
+      },
+      {
+        id: 'th_p2_tieng_bua', hoi: 1, w: 2, origin: ['p2'], t: 'Tiếng búa ru ngủ',
+        d: 'Nhà bạn ở sát lò, tiếng búa gõ đe vang suốt ngày. Trẻ khác nghe sẽ khóc, riêng bạn lại ngủ say như được ru.',
+        ch: [
+          { key: 'nghe', label: 'Nằm yên nghe nhịp búa', kind: 'safe', ax: { tinh: 1 }, fx: { nl: 2 }, r: 'Nhịp búa vào giấc mơ bạn lúc nào không hay, và bạn lớn lên với đôi tai tinh nhạy.' },
+          { key: 'bo', label: 'Bò lại gần lò xem lửa', kind: 'risk', ax: { tinh: -2 }, fx: { hp: -2, atk: 1 }, r: 'Cha vội bế bạn ra, tay bạn đã ấm bỏng. Từ đó bạn sợ lửa mà cũng mê lửa.' }
+        ]
+      },
+      {
+        id: 'th_p2_nghe_cha', hoi: 2, w: 3, origin: ['p2'], t: 'Món nghề của cha',
+        d: 'Cha bạn đặt vào tay bạn một cái búa nhỏ, bảo cứ gõ thử lên mảnh sắt vụn. Mỗi nhà thợ đều có điều kiêng kỵ, và cha bắt đầu kể cho bạn nghe từng điều một.',
+        ch: [
+          { key: 'go', label: 'Gõ đến chai tay', kind: 'safe', ax: { tudung: 2 }, fx: { atk: 2 }, r: 'Tay bạn chai đi, nhưng mỗi nhát búa đã có chút lực. Cha gật đầu hài lòng.' },
+          { key: 'hoi', label: 'Hỏi vì sao phải kiêng', kind: 'risk', ax: { xuthe: -1, tinh: -1 }, fx: { daoTam: 2, nl: 1 }, r: 'Cha ngập ngừng rồi kể chuyện lò từng nổ năm xưa. Bạn hiểu lễ nghĩa của nghề hơn đứa bé nào cùng tuổi.' }
+        ]
+      },
+      {
+        id: 'th_p2_no_chu_hang', hoi: 3, w: 2, origin: ['p2'], t: 'Chủ hàng tới đòi nợ',
+        d: 'Chủ hàng tới nhà cuối tháng, đứng giữa sân nói to chuyện nợ. Cha cúi đầu hứa hẹn, mẹ lặng lẽ dọn chén nước mời khách.',
+        ch: [
+          { key: 'rinh', label: 'Rót nước mời, nói đỡ cho cha', kind: 'help', ax: { xuthe: 2, daoduc: 1 }, fx: { daoTam: 2 }, r: 'Chủ hàng nhìn bạn một lúc rồi gia hạn thêm một tháng. Cha không nói, chỉ siết vai bạn.' },
+          { key: 'lom', label: 'Lườm ông ta từ sau cánh cửa', kind: 'risk', ax: { xuthe: -2, tinh: -1 }, fx: { atk: 1, daoTam: -1 }, r: 'Ông ta liếc thấy, cười nhạt. Bạn nhớ cái cười đó rất lâu.' }
+        ]
+      },
+      {
+        id: 'th_p3_ban_tinh', hoi: 1, w: 2, origin: ['p3'], t: 'Tiếng bàn tính',
+        d: 'Bên giường bạn lúc nào cũng có tiếng lách cách của bàn tính, cha mẹ đếm sổ tới khuya. Một hạt gỗ lăn rơi vào nôi, bạn nắm chặt không chịu buông.',
+        ch: [
+          { key: 'nam', label: 'Nắm chặt hạt gỗ', kind: 'safe', ax: { tudung: 1 }, fx: { luck: 1 }, r: 'Cả nhà cười rộ, bảo bạn có số làm ăn. Hạt gỗ đó được xỏ vào sợi chỉ đeo cổ cho bạn.' },
+          { key: 'nem', label: 'Ném đi cho vui', kind: 'risk', ax: { tinh: -1, tudung: -1 }, fx: { nl: 1 }, r: 'Hạt gỗ lăn xuống gầm giường, cha phải bò vào nhặt. Bạn cười như nắc nẻ.' }
+        ]
+      },
+      {
+        id: 'th_p3_tra_gia', hoi: 2, w: 3, origin: ['p3'], t: 'Khách mặc cả',
+        d: 'Trong cửa hàng, một người khách mặc cả tới khi cha bạn chịu bán hòa vốn. Bạn đứng sau quầy, thấy rõ ông ta liếc mắt ra hiệu cho đồng bọn.',
+        ch: [
+          { key: 'bao', label: 'Kéo áo cha báo nhỏ', kind: 'help', ax: { xuthe: 1, daoduc: 1 }, fx: { gold: 4 }, r: 'Cha đổi giá ngay. Khách bỏ đi lầm bầm, còn cha nhìn bạn bằng ánh mắt khác hẳn.' },
+          { key: 'im', label: 'Im lặng đứng nhìn', kind: 'safe', ax: { xuthe: 2 }, fx: { nl: 1 }, r: 'Cha bán hòa vốn, tối về mới nhận ra mình bị lừa. Bạn thấy hơi áy náy.' }
+        ]
+      },
+      {
+        id: 'th_p3_chuyen_dau', hoi: 3, w: 2, origin: ['p3'], t: 'Chuyến buôn đầu tiên',
+        d: 'Cha cho bạn theo đoàn xe qua thị trấn bên, lần đầu bạn ra khỏi vùng quen. Trên đường nghỉ chân, có người rủ bạn chơi xóc đĩa, bảo thắng thì lời gấp bội.',
+        ch: [
+          { key: 'tu', label: 'Từ chối, trông hàng', kind: 'safe', ax: { tudung: 2 }, fx: { daoTam: 3 }, r: 'Cha nghe chuyện, xoa đầu bạn bảo đã biết giữ vốn thì biết giữ người.' },
+          { key: 'thu', label: 'Đặt thử một đồng', kind: 'risk', ax: { tudung: -2, tinh: -1 }, fx: { gold: -3, luck: 1 }, r: 'Bạn thua sạch đồng bạc lẻ, mà lại quen mặt vài người buôn đường xa.' }
+        ]
+      },
+      {
+        id: 'th_p5_cua_chua', hoi: 1, w: 3, origin: ['p5'], t: 'Trước cửa chùa',
+        d: 'Sáng sớm, bà bán bánh dưới chân chùa nghe tiếng khóc yếu ớt trong cái giỏ tre. Bà bế bạn lên, nhìn quanh không thấy ai.',
+        ch: [
+          { key: 'bam', label: 'Bám chặt áo bà', kind: 'safe', ax: { daoduc: 1 }, fx: { hp: 3 }, r: 'Bà thở dài, quấn bạn vào tấm khăn cũ rồi mang về. Bạn lớn lên nhờ nồi cháo của bà.' },
+          { key: 'khoc', label: 'Khóc to cho người nghe', kind: 'risk', ax: { tinh: -1, xuthe: 1 }, fx: { luck: 1 }, r: 'Tiếng khóc vang tới tận sân chùa, sư thầy bước ra cho thêm bình sữa dê. Bạn sống sót nhờ chút may mắn đó.' }
+        ]
+      },
+      {
+        id: 'th_p5_an_cap', hoi: 2, w: 3, origin: ['p5'], t: 'Cái bánh nóng',
+        d: 'Bạn đói lả ba ngày liền, đứng nhìn cái bánh nóng hổi trên sạp bánh. Chủ sạp quay đi nói chuyện với khách, chiếc bánh nằm sát tay bạn.',
+        ch: [
+          { key: 'chop', label: 'Chộp lấy rồi chạy', kind: 'flee', ax: { daoduc: -2, xuthe: 1 }, fx: { hp: 4, luck: -1 }, r: 'Bạn chạy thoát, bụng no, lòng thì cứ nhói lên mỗi lần nhớ tiếng quát đuổi.' },
+          { key: 'xin', label: 'Chìa tay xin', kind: 'safe', ax: { xuthe: -1, daoduc: 1 }, fx: { daoTam: 2, hp: -1 }, r: 'Chủ sạp nhìn bạn rồi ném cho nửa cái bánh cháy cạnh. Bạn ăn mà thấy ngon hơn bất cứ thứ gì.' }
+        ]
+      },
+      {
+        id: 'th_p5_bang_nhom', hoi: 3, w: 3, origin: ['p5'], t: 'Bọn trẻ gầm cầu',
+        d: 'Một nhóm trẻ lang thang dưới gầm cầu mời bạn vào bọn, bảo có đứa lớn dẫn đầu sẽ che chở. Đứa cầm đầu ánh mắt sắc lạnh, nhìn bạn từ đầu đến chân.',
+        ch: [
+          { key: 'vao', label: 'Nhập bọn', kind: 'risk', ax: { xuthe: 2, daoduc: -1 }, fx: { atk: 2, luck: 1 }, r: 'Bạn có chỗ ngủ, có miếng ăn, và học được cách đọc mặt người từ sớm.' },
+          { key: 'doc', label: 'Đi một mình', kind: 'safe', ax: { tudung: 2, tinh: 1 }, fx: { nl: 2, hp: -2 }, r: 'Bạn bị đuổi khỏi gầm cầu nhưng không phải nợ ai. Đêm lạnh mà lòng nhẹ.' }
+        ]
+      },
+      {
+        id: 'th_t1_hoi_tho', hoi: 1, w: 3, origin: ['t1'], t: 'Hơi thở bên nôi',
+        d: 'Mỗi tối, cha hoặc mẹ ngồi xếp bằng bên nôi, hơi thở kéo dài đều như sóng. Bạn nằm nghe, bất giác thở theo nhịp ấy.',
+        ch: [
+          { key: 'theo', label: 'Thở theo nhịp', kind: 'safe', ax: { tudung: 1 }, fx: { nl: 3 }, r: 'Cha mẹ nhìn nhau, không nói gì, nhưng ngày sau ngồi thiền gần bạn hơn.' },
+          { key: 'ngu', label: 'Ngủ say mặc kệ', kind: 'safe', ax: { tinh: 1 }, fx: { hp: 3 }, r: 'Bạn ngủ ngon lành. Hơi thở của người lớn trở thành tiếng ru quen thuộc.' }
+        ]
+      },
+      {
+        id: 'th_t1_ke_thu', hoi: 2, w: 3, origin: ['t1'], t: 'Khách lạ gõ cửa',
+        d: 'Đêm nọ có người lạ mặc áo đen gõ cửa hỏi thăm cha mẹ bạn. Cha ra mở cửa, nụ cười cứng đờ, còn mẹ vội đưa bạn vào buồng trong.',
+        ch: [
+          { key: 'nghe', label: 'Nép sau cửa nghe lỏm', kind: 'risk', ax: { tinh: -1, xuthe: -1 }, fx: { daoTam: 2, nl: 1 }, r: 'Bạn nghe được vài chữ về một món nợ cũ. Từ đó bạn để ý đến bóng người qua lại đầu ngõ.' },
+          { key: 'ngu', label: 'Trùm chăn giả vờ ngủ', kind: 'safe', ax: { tinh: 1 }, fx: { hp: 2 }, r: 'Sáng ra người lạ đã đi. Cha mẹ không nhắc gì, chỉ khóa cửa kỹ hơn.' }
+        ]
+      },
+      {
+        id: 'th_t1_day_cong', hoi: 3, w: 3, origin: ['t1'], t: 'Câu quyết đầu tiên',
+        d: 'Cha hoặc mẹ gọi bạn ngồi xuống sân, truyền cho một câu khẩu quyết nhập môn. Người dặn đây chỉ là bước đầu, đừng khoe với ai, kể cả bạn thân nhất.',
+        ch: [
+          { key: 'chep', label: 'Học thuộc rồi ngồi tập', kind: 'safe', ax: { tudung: 2 }, fx: { nl: 3, daoTam: 1 }, r: 'Bạn tập mỗi tối, tiến chậm mà chắc. Cha mẹ bảo bạn có phần hơn mình thuở trẻ.' },
+          { key: 'khoe', label: 'Khoe với bạn bè', kind: 'risk', ax: { tinh: -2, xuthe: -1 }, fx: { daoTam: -2, luck: -1 }, r: 'Bọn trẻ cười bảo bạn bịa chuyện. Cha biết được, buồn ra mặt.' }
+        ]
+      },
+      {
+        id: 'th_t3_mui_thuoc', hoi: 1, w: 3, origin: ['t3'], t: 'Mùi thuốc sắc',
+        d: 'Nhà bạn lúc nào cũng nghi ngút khói thuốc, bà nội ngồi canh lửa suốt ngày. Mùi thuốc đắng nồng nặc, nhưng bạn lại hay bò tới ngồi cạnh lò.',
+        ch: [
+          { key: 'ngoi', label: 'Ngồi yên cạnh bà', kind: 'safe', ax: { tinh: 1 }, fx: { nl: 2 }, r: 'Bà vừa quạt vừa lẩm bẩm tên các vị thuốc. Bạn thuộc cả chục tên trước khi biết nói sõi.' },
+          { key: 'nem', label: 'Với tay vơ nắm lá', kind: 'risk', ax: { tinh: -1 }, fx: { hp: -2, luck: 1 }, r: 'Bạn nhai nắm lá đắng, nhăn mặt khóc. Bà vội cho uống nước, kinh ngạc vì bạn không bị ngộ độc.' }
+        ]
+      },
+      {
+        id: 'th_t3_nhan_thao', hoi: 2, w: 3, origin: ['t3'], t: 'Luống thuốc sau nhà',
+        d: 'Cha dẫn bạn ra luống thảo dược sau nhà, chỉ từng cây từng lá để bạn nhận mặt. Trong luống có một cây úa vàng, cha bảo đoán xem nó bệnh gì.',
+        ch: [
+          { key: 'doan', label: 'Đoán là thiếu nước', kind: 'risk', ax: { tudung: 1, xuthe: -1 }, fx: { nl: 3 }, r: 'Cha tưới thử, đúng là thiếu nước. Từ đó cha giao bạn tưới luống thuốc mỗi sáng.' },
+          { key: 'hoi', label: 'Hỏi cha cách chữa', kind: 'safe', ax: { daoduc: 1, xuthe: 1 }, fx: { daoTam: 2 }, r: 'Cha cười và kể bạn nghe cả buổi về tính từng loại cây. Bạn nhớ không sót chữ nào.' }
+        ]
+      },
+      {
+        id: 'th_t3_dan_phuong', hoi: 3, w: 3, origin: ['t3'], t: 'Người của tông tới hỏi',
+        d: 'Một người mặc áo tông môn tới nhà, đặt lên bàn túi bạc, hỏi mua đan phương. Cha mẹ nhìn nhau, im lặng rất lâu, còn bạn đứng sau cánh cửa nghe hết.',
+        ch: [
+          { key: 'noi', label: 'Nói với cha mẹ đừng bán', kind: 'risk', ax: { daoduc: 1, xuthe: -2 }, fx: { daoTam: 3 }, r: 'Cha mẹ ngạc nhiên rồi từ chối. Người tông môn đi, để lại ánh nhìn khó đoán.' },
+          { key: 'im', label: 'Lặng lẽ để người lớn quyết', kind: 'safe', ax: { xuthe: 2 }, fx: { gold: 4 }, r: 'Cha mẹ bán một phần phương lấy bạc trả nợ. Bạn thấy nhẹ lòng, nhưng cũng mất một thứ gì đó.' }
+        ]
+      },
+      {
+        id: 'th_t6_ao_tong', hoi: 1, w: 2, origin: ['t6'], t: 'Chiếc áo đệ tử',
+        d: 'Cha hoặc mẹ về nhà vào dịp lễ, áo đệ tử tông còn thoảng mùi trầm. Bạn bò tới sờ thử lớp vải mịn, người lớn cười bảo sau này con cũng sẽ mặc.',
+        ch: [
+          { key: 'so', label: 'Ôm chặt vạt áo', kind: 'safe', ax: { daoduc: 1 }, fx: { daoTam: 2 }, r: 'Người ôm bạn thật lâu. Hương trầm ấy ở lại trong trí nhớ bạn nhiều năm.' },
+          { key: 'keo', label: 'Kéo áo xuống đất', kind: 'risk', ax: { tinh: -2 }, fx: { nl: 1, hp: 1 }, r: 'Người lớn la nhẹ rồi cười. Bạn biết mình vừa làm điều gì đó không nên.' }
+        ]
+      },
+      {
+        id: 'th_t6_ke_ghen', hoi: 2, w: 3, origin: ['t6'], t: 'Lời chế giễu của bạn bè',
+        d: 'Bọn trẻ trong xóm gọi bạn là cậu ấm nhà tông, chê bạn chỉ dựa hơi cha mẹ. Đứa lớn nhất xô bạn ngã giữa đường và thách đánh nhau.',
+        ch: [
+          { key: 'danh', label: 'Đứng dậy đánh lại', kind: 'fight', ax: { tinh: -2, xuthe: -1 }, fx: { atk: 2, hp: -3 }, r: 'Bạn thua nhưng không khóc. Từ hôm đó chẳng đứa nào chê bạn dựa hơi nữa.' },
+          { key: 'bo', label: 'Phủi áo bỏ đi', kind: 'flee', ax: { tinh: 2, tudung: 1 }, fx: { daoTam: 3 }, r: 'Bạn bỏ đi, nghe tiếng cười sau lưng mà không quay lại. Lòng bạn chai hơn một chút.' }
+        ]
+      },
+      {
+        id: 'th_t6_thu_nhe', hoi: 3, w: 3, origin: ['t6'], t: 'Thử luyện đầu tiên',
+        d: 'Một vị trưởng lão quen cha mẹ bạn mời bạn lên núi thử đi vòng quanh sân luyện. Ông nói không ép, chỉ muốn xem bạn có hợp không.',
+        ch: [
+          { key: 'di', label: 'Đi hết một vòng', kind: 'risk', ax: { tudung: 2, xuthe: 1 }, fx: { atk: 2, nl: 1 }, r: 'Bạn mệt nhoài nhưng đi hết vòng. Vị trưởng lão gật đầu, ghi tên bạn vào một cuốn sổ nhỏ.' },
+          { key: 'tu', label: 'Xin để lần sau', kind: 'safe', ax: { tudung: -1, tinh: 1 }, fx: { daoTam: 2 }, r: 'Ông cười, bảo con đường tu hành không vội. Cha mẹ bạn hơi thất vọng nhưng không trách.' }
+        ]
+      },
+      {
+        id: 'th_t10_dem_chay', hoi: 1, w: 3, origin: ['t10'], t: 'Đêm chạy trốn',
+        d: 'Một đêm mưa, cha mẹ bế bạn chạy ra cửa sau khi nghe tiếng chân người dồn dập ngoài ngõ. Bạn không hiểu chuyện gì, chỉ biết vòng tay mẹ run rẩy.',
+        ch: [
+          { key: 'im', label: 'Nín bặt trong lòng mẹ', kind: 'safe', ax: { tinh: 1 }, fx: { hp: 2, daoTam: 1 }, r: 'Bạn không khóc, và cả nhà thoát được. Sau này mẹ nói, bạn là đứa trẻ biết nghe lời nhất.' },
+          { key: 'khoc', label: 'Khóc ré lên vì sợ', kind: 'risk', ax: { tinh: -2 }, fx: { hp: -3, luck: 1 }, r: 'Tiếng khóc suýt làm lộ cả nhà, may có người hàng xóm lén đánh lạc hướng truy binh.' }
+        ]
+      },
+      {
+        id: 'th_t10_giau_ho', hoi: 2, w: 3, origin: ['t10'], t: 'Cái họ phải giấu',
+        d: 'Mẹ dạy bạn rằng ai hỏi họ thì nói họ của ngoại, tuyệt đối không nhắc đến họ cha. Hôm nay có người lạ trong chợ hỏi bạn đúng câu ấy, giọng thân thiện.',
+        ch: [
+          { key: 'doi', label: 'Nói dối trơn tru', kind: 'safe', ax: { xuthe: 2, daoduc: -1 }, fx: { luck: 1, daoTam: -1 }, r: 'Người lạ cười rồi đi. Bạn thở phào, và thấy mình giỏi nói dối hơn mình tưởng.' },
+          { key: 'lang', label: 'Im lặng bỏ đi', kind: 'flee', ax: { tinh: 1, tudung: 1 }, fx: { daoTam: 2, nl: 1 }, r: 'Người lạ nhìn theo hồi lâu. Mẹ nghe chuyện, siết tay bạn thật chặt.' }
+        ]
+      },
+      {
+        id: 'th_t10_di_vat', hoi: 3, w: 3, origin: ['t10'], t: 'Chiếc ngọc bội dưới ván',
+        d: 'Bạn vô tình bật được một tấm ván lỏng trong nhà, thấy một chiếc ngọc bội nằm trong mảnh vải cũ. Cha dặn chuyện trong nhà phải giữ kín, mà ánh ngọc ấy lại làm bạn nhớ mãi.',
+        ch: [
+          { key: 'bao', label: 'Đưa ngay cho cha', kind: 'help', ax: { daoduc: 2, xuthe: 1 }, fx: { daoTam: 3 }, r: 'Cha sững người, rồi kể sơ về nguồn gốc của nó. Từ đó cha tin bạn hơn.' },
+          { key: 'giu', label: 'Giấu đi, tự giữ', kind: 'risk', ax: { xuthe: -1, tudung: 1 }, fx: { luck: 1, nl: 1 }, r: 'Bạn giấu ngọc dưới gối. Mỗi đêm cầm lên, bạn thấy một luồng ấm nhè nhẹ chạy vào lòng bàn tay.' }
         ]
       }
     ]

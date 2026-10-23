@@ -26,6 +26,7 @@
       <button id="btn-export">Xuất</button>
       <button id="btn-import">Nhập</button>
       <button id="btn-new">Thế giới mới</button>
+      <label class="lbl" title="Công cụ thử nghiệm: bảng chỉnh nhân vật (🛠). Bật/tắt sẽ tải lại trang."><input id="chk-dev" type="checkbox"> Thử nghiệm</label>
       <input id="file-input" type="file" accept=".json,application/json" hidden>
     </div>
     <span id="msg" class="small"></span>
@@ -37,7 +38,7 @@
   <section class="col" id="col-left">
     <div id="scene-ph" class="floatph" style="display:none">Màn hình nhân vật đang tách ra · <span class="lnk" id="scene-dock">gắn lại</span></div>
     <div class="panel scene" id="scene-wrap">
-      <div class="fgrip" id="scene-grip"><span class="cap">⋮⋮ Màn hình nhân vật</span><span class="cap"><span class="lnk" id="scene-size" title="Đổi cỡ">to / nhỏ</span> <span class="lnk" id="scene-detach">tách ra</span></span></div>
+      <div class="fgrip" id="scene-grip"><span class="cap">⋮⋮ Màn hình nhân vật</span><span class="cap"><span class="lnk" id="scene-fx" title="Giảm hạt, bỏ rung, chớp và gió mạnh">giảm hiệu ứng</span> <span class="lnk" id="scene-size" title="Đổi cỡ">to / nhỏ</span> <span class="lnk" id="scene-detach">tách ra</span></span></div>
       <canvas id="scene" aria-label="Cảnh nơi bạn đang ở"></canvas><div id="scene-cap" class="scene-cap"></div>
     </div>
     <div class="panel" id="side-body"></div>

@@ -10,7 +10,7 @@
   const sgn = v => (v > 0 ? '+' : '') + v;
 
   function specOf(arcId, chId, lcKey) {
-    const arc = D.STORY.arcById[arcId], ch = arc && arc.chang[chId], lc = ch && ch.lc.find(x => x.key === lcKey);
+    const arc = TT.story.arcOf(arcId), ch = arc && arc.chang[chId], lc = ch && ch.lc.find(x => x.key === lcKey);
     return lc && lc.wheel ? { arc, ch, lc, wh: lc.wheel } : null;
   }
 

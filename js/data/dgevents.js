@@ -23,6 +23,7 @@
       const pool = D.MONSTERS.filter(m => m.tier <= Math.min(2, Math.floor(depth / 2)) && !m.boss && !m.guard);
       const def = rng.pick(pool), mon = TT.combat.makeMonster(def, Math.min(5, c.realm + (depth >= 3 ? 1 : 0)), D.DG.mob);
       const res = TT.combat.run(c, mon, { lethal: false, tacticA: 'thu', important: true });
+      TT.bond.assist(c, res, null, def.n);
       if (!res.win) { const nm = d.name; TT.dungeon.finish(c, 'bai'); return B('Trên đường lui, ' + def.n + ' bất ngờ chặn lại. Bạn thua và phải bỏ chạy khỏi ' + nm + '.'); }
       TT.dungeon.finish(c, 'rut'); return G('Đường lui bị ' + def.n + ' chặn, bạn phải đánh một trận (sinh lực -' + res.dmgA + ') rồi mới thoát ra được.');
     }
@@ -41,6 +42,7 @@
     if (!n) return GONE;
     const def = D.monsterById[n.m], mon = TT.combat.makeMonster(def, n.r, n.f);
     const res = TT.combat.run(c, mon, { lethal: n.lethal, tacticA: tactic === 'chay' ? 'thu' : tactic, flee: tactic === 'chay', important: true });
+    TT.bond.assist(c, res, null, def.n); // 9K: bạn đồng hành có thể xoay trận hoặc chết thay
     if (res.fled) { const nm = c.dungeon.name; TT.dungeon.finish(c, 'chay'); return G('Bạn thoát khỏi ' + def.n + ' và chạy ra khỏi ' + nm + '.'); }
     const note = res.notes.length ? ' (' + res.notes.join(', ') + ')' : '';
     if (res.win) {

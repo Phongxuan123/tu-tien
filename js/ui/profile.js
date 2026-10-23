@@ -60,6 +60,17 @@
       chips);
     box.appendChild(h('div', { class: 'pf-card' }, avatar(c), info));
 
+    // xuất thân và cha mẹ (9A): tên, còn sống hay đã mất; bí mật còn ẩn thì chỉ hiện dấu hỏi
+    const o2 = TT.origin.get(c);
+    if (o2) {
+      box.appendChild(h('div', { class: 'pf-sec' }, 'Xuất thân · ' + o2.n));
+      box.appendChild(h('div', { class: 'small' }, o2.d));
+      const ps = TT.origin.parents(c);
+      box.appendChild(h('div', { class: 'small' }, h('b', null, 'Cha mẹ: '), ...(ps.length ? ps.map((x, i) => h('span', { class: x.alive ? '' : 'bad-txt' }, (i ? ', ' : '') + x.role + ' ' + (x.c ? x.c.name : '(không rõ)') + (x.alive ? ' (còn sống)' : ' (đã mất)'))) : [o2.cha_me.co ? 'không còn trong thế giới' : 'không có'])));
+      box.appendChild(h('div', { class: 'small' }, h('b', null, 'Gánh nặng: '), o2.gom));
+      if (c.flags && c.flags.biMat) box.appendChild(h('div', { class: 'small' }, h('b', null, 'Bí mật: '), '?'));
+    }
+
     // tính cách bốn trục và khí vận (8A): bấm một thanh để xem lịch sử đổi
     if (D.NATURE.on) {
       box.appendChild(h('div', { class: 'pf-sec' }, 'Tính cách · ' + TT.nature.summary(c)));
