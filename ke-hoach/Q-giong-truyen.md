@@ -1,4 +1,4 @@
-# Q-giọng truyện. Cẩm nang kể chuyện (bản 7): dàn định mệnh, gắn bó, cao trào, tàn khốc
+# Q-giọng truyện. Cẩm nang kể chuyện (bản 8): dàn định mệnh, gắn bó, cao trào, tàn khốc
 
 - Trạng thái: **Bản mẫu chờ bạn duyệt** (2026-10-21). Dùng cho MỌI phiên viết chữ truyện (Sonnet và Haiku) sau khi bạn duyệt.
 - Vì sao có file này: sau một lần chơi đủ đời, bạn thấy **không có gì đọng lại**. Đo dữ liệu 15 tuyến: 44 cờ đặt ra nhưng 0 cờ được đọc lại; 5/126 lựa chọn có hậu quả đáng kể; 22/47 chặng chọn gì cũng về cùng một chỗ; mỗi tuyến bốc người lạ rồi bỏ. Chữ không tệ; **cách kể** mới là chỗ yếu.
@@ -250,6 +250,34 @@ Không chép câu văn của hai nhà văn; học **cách nhìn và cách kể**
 - Mỗi lựa chọn của cảnh lớn có lời dẫn riêng (`lc.sau`); có thể có biến thể theo cờ (`sau_neu`).
 - Lời dẫn tính vào nhịp hộp (bài "Nhịp quyết định"); cảnh lớn thưa nên không vượt 6 hộp/phút.
 
+## 6d. Case study 1: kịch bản "mềm yếu" (K2, 2026-10-23); giữ nguyên tệp, rút bài học cho mọi kịch bản sau
+**Bạn nhận xét:** nhập nhằng; muốn **cao trào, kịch tính, thẳng thắn, độc ác hơn**.
+**Chẩn đoán** (đọc `js/data/stories/kb_mem_yeu.js`, các cảnh "Phiên chấp pháp", "Đại hội toàn tông"):
+1. **Đoạn cao trào quá dày**: 8 đến 10 câu, nhiều chi tiết cài (sổ kho, cột duyệt, chén nước run, rổ rau, chuông bảy hồi); người chơi phải tự gỡ mới hiểu chuyện gì đang xảy ra.
+2. **Phản diện thụ động**: {su} "tay lồng trong tay áo", "nhìn xuống sàn", "gật đầu rất nhẹ"; không làm điều ác nào trước mặt người chơi, không đe dọa, không ra tay.
+3. **Cao trào là phát biểu, không phải đối đầu**: đứng lên nói hay im; không nguy hiểm thân thể, không mặt đối mặt, không ai ra đòn.
+4. **Một nhịp rồi tắt**: chọn xong là lời dẫn êm ("Hồi chuông thứ bảy không điểm"); phản diện không đánh trả, không leo thang trong cảnh.
+5. **Nhãn và cái giá mờ**: "Nói một nửa sự thật", "Cả hai đều mất một nửa".
+6. **Hàm ý quá tay**: học Bảo Ninh thành mơ hồ; người chơi không chắc mình vừa mất gì.
+
+**Mười luật cường độ (áp cho mọi kịch bản từ K3; ưu tiên hơn mục 6b khi mâu thuẫn):**
+1. **Rõ trước, đẹp sau.** Đoạn cao trào **tối đa 6 câu**; **câu đầu nói thẳng** chuyện gì đang xảy ra và ai sắp mất gì; tối đa **một** chi tiết gợi hình. Hồi ức và ẩn ý để ở lời dẫn và chặng gặt, không để ở chỗ người chơi phải quyết.
+2. **Phản diện ác trước mặt người chơi.** Mỗi cao trào, phản diện **làm một việc ác thấy được**: đe dọa thẳng mặt, bắt người thân làm con tin, sỉ nhục công khai, ra lệnh phế hoặc giết, ép người chơi tự tay làm điều ác. Câu thoại của hắn **trực diện, lạnh, có lý lẽ** ("Ký đi. Không ký thì tên mẹ con sẽ thay vào dòng ấy.").
+3. **Lý lẽ chính đáng, cách làm tàn bạo.** Giữ tính đại diện (mục 0b) nhưng không làm mềm phản diện: hắn có lý, và hắn sẵn sàng giẫm lên bất kỳ ai vì lý ấy.
+4. **Cao trào là đối đầu.** Mặt đối mặt hoặc hành động (cứu, đánh, chạy, giết, cướp lại), có **nguy hiểm thân thể** (vòng quay chiến đấu, thương tật, chết). Phát biểu chỉ là mở màn.
+5. **Cao trào hai nhịp.** Người chơi chọn → **phản diện đánh trả** ngay trong lời dẫn (không êm) → **lựa chọn thứ hai** hoặc vòng quay. Cảnh lớn nhất (phần 5, 6) có thể ba nhịp.
+6. **Nhãn là động từ mạnh, giá là sự thật cụ thể.** "Tố giác Hà trước toàn tông", "Ký tên đứa trẻ", "Đâm hắn"; `mat`: "{thuong} bị trục xuất cùng bạn", không "mất một nửa".
+7. **Kết cảnh bằng hậu quả rõ.** Câu cuối lời dẫn nói **đã mất gì, ai đã chết, ai đã quay lưng**; không kết bằng hình ảnh lấp lửng ở cao trào.
+8. **Leo thang.** Mỗi phần ác hơn phần trước; trước trận cuối, phản diện **đã ra tay với ít nhất hai người trong dàn**; người chơi phải **căm** hắn chứ không chỉ buồn.
+9. **Có khoảnh khắc người chơi thắng phản diện một keo** (lật được một đòn, cứu được một người) trước khi bị đánh gục, để cú gục đau và trận cuối có hy vọng.
+10. **Giới hạn giữ nguyên**: việc ác **kể thẳng trong một câu** (giết, phế, đốt thôn, bắt con tin) nhưng **không tả chi tiết thương tích hay tra tấn**, không tình dục, trẻ con không bị tả bạo lực.
+
+**Ví dụ viết lại (chỉ minh họa, không sửa K2): "Đại hội toàn tông", hai nhịp**
+- *Đoạn*: "{su} đẩy cây bút son sang trước mặt bạn, giữa hai trăm đệ tử. 'Ký đi. {the_luc} đòi bảy đứa trước khi trời tối.' Bạn không cầm bút. Ông giơ tay; hai chấp pháp lôi {than_nhan} từ hàng khách ra giữa sân, quỳ xuống đá. 'Bảy đứa, hoặc sáu đứa và mẹ con. Ta để con chọn, vì ta thương con.'"
+- *Nhịp 1*: **Ký tên bảy đứa** / **Đọc to danh sách ba mươi năm của {su} trước toàn tông** / **Rút kiếm lao vào {su}**.
+- *Phản đòn (lời dẫn của "Đọc to")*: "Sân im phăng phắc. Rồi {su} cười, lần đầu tiên bạn thấy ông cười to. 'Ai trong các ngươi chưa ăn gạo của bảy đứa ấy?' Không ai nói gì. Ông phẩy tay; chấp pháp kéo {than_nhan} đi về phía cổng {the_luc}."
+- *Nhịp 2* (vòng quay chiến đấu, yếu tố: tu vi so với chấp pháp; vùng thấp: {than_nhan} chết, bạn trọng thương): **Đuổi theo cướp lại {than_nhan}** / **Quỳ xuống xin ký** / **Để bà đi, giữ lấy đám đệ tử vừa đứng lên sau lưng bạn**.
+
 ## 7. Mẫu (định dạng đề xuất; các khóa mới đánh dấu ★ sẽ do phiên Sonnet thêm vào bộ máy)
 Khóa mới: ★`dan` (vai lấy từ dàn định mệnh: `than_nhan`, `ban`, `su`, `doi_thu`, `huynh`, `thuong`, `ke_thu`, `ke_thua`), ★`gan_bo` (cộng gắn bó; và điều kiện tối thiểu), ★`mat` (chữ cái mất, hiện trên hộp), ★`d_neu` (chữ thay theo cờ), ★`can` (lựa chọn chỉ hiện khi có cờ), ★`fx.chet` / `fx.roi` / `fx.thu` (người trong dàn chết, bỏ đi, thành kẻ thù), ★`fx.tong` (đổi bậc tông), ★`fx.vat` (vật kỷ niệm hoặc bảo vật), ★`tre.chang` (hậu quả trễ mở một chặng gặt).
 
@@ -402,6 +430,7 @@ c3: {
 - [ ] Không phần thưởng lớn nào "bấm là được" (phải kèm `mat`, thử thách, hoặc hậu quả trễ chắc chắn); đường tắt bất lương không được kể như khôn.
 - [ ] Vượt khuyết điểm cần ≥ 3 lựa chọn trái tính có giá; đạo đức giả bị một người trong dàn gọi tên.
 - [ ] Giọng văn theo mục 6b; không dùng từ cấm.
+- [ ] Đạt mười luật cường độ (mục 6d): cao trào ≤ 6 câu, câu đầu nói thẳng; phản diện làm việc ác thấy được; đối đầu có nguy hiểm thân thể; hai nhịp; nhãn động từ mạnh; kết bằng hậu quả rõ; leo thang.
 - [ ] Không máu me chi tiết, không tình dục, trẻ con không bị tả bạo lực.
 
 ## 9. Việc tiếp theo (sau khi bạn duyệt)
