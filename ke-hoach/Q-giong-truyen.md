@@ -1,4 +1,4 @@
-# Q-giọng truyện. Cẩm nang kể chuyện (bản 11): dàn định mệnh, gắn bó, cao trào, tàn khốc
+# Q-giọng truyện. Cẩm nang kể chuyện (bản 12): dàn định mệnh, gắn bó, cao trào, tàn khốc
 
 - Trạng thái: **Bản mẫu chờ bạn duyệt** (2026-10-21). Dùng cho MỌI phiên viết chữ truyện (Sonnet và Haiku) sau khi bạn duyệt.
 - Vì sao có file này: sau một lần chơi đủ đời, bạn thấy **không có gì đọng lại**. Đo dữ liệu 15 tuyến: 44 cờ đặt ra nhưng 0 cờ được đọc lại; 5/126 lựa chọn có hậu quả đáng kể; 22/47 chặng chọn gì cũng về cùng một chỗ; mỗi tuyến bốc người lạ rồi bỏ. Chữ không tệ; **cách kể** mới là chỗ yếu.
@@ -336,6 +336,41 @@ Không chép câu văn của hai nhà văn; học **cách nhìn và cách kể**
 24. **Thoại đời thường mang hai nghĩa** thay cho mệnh lệnh: "Còn nóng." (trà còn nóng, thôn đang cháy, vẫn còn kịp?) mạnh hơn "Uống đi."
 25. **Dừng ở câu thứ nhất khi nó đã đủ**: "nhìn rất giống một người bạn của tôi" là đủ đau; câu giải thích thêm ("chắc chết lâu rồi") làm loãng.
 26. **Tôn trọng thang sức mạnh của thế giới** (bạn bắt lỗi ví dụ 8): ở thế giới này Trúc Cơ đã hiếm (2 đến 18% NPC), **hai mươi năm lên Kim Đan là thiên tài hiếm có**, nên không thể "từng thua mọi trận". Mọi con số trong truyện (cảnh giới, số năm, số người) phải khớp mô phỏng; mức "mạnh" ở trấn phàm nhân là Luyện Khí hậu kỳ hoặc Trúc Cơ, Kim Đan là bậc huyền thoại một vùng. Đối thủ "vượt lên" phải vượt **hợp lý** (từ kém hơn một chút thành hơn một bậc).
+
+**Chốt sau lượt 4 (2026-10-23):** hài phải là **hài đen** (lượt 4 còn ấm; tạm dùng làm mẫu, sẽ chỉnh tối hơn); **giữ lựa chọn tâm ma 🜏** (chỉ hiện khi đạo tâm thấp hoặc tâm ma nặng); **mỗi đời có ít nhất một cao trào không có kẻ ác** (thời gian, thọ nguyên, lời hứa).
+
+## 6e. Cách dựng kịch bản (setup) để không rối (2026-10-23)
+**Case study K2:** 6 phần nhưng **40 chặng, 93 lựa chọn, 66 cờ, 18 biến thể chữ**; nhiều sợi cùng chạy (thuốc của mẹ, đôi giày, danh sách, dịch, sổ kho, cha của đối thủ, người thương); người chơi không còn tóm được mình đang ở đâu trong câu chuyện.
+
+**Ngân sách mỗi kịch bản:** 6 phần × **4 chặng** (móc, leo thang hoặc thử thách, cao trào, treo) ≈ **24 chặng**, tối đa 30; **≤ 25 cờ** (chỉ cờ được đọc lại); **1 sợi chính + tối đa 2 sợi phụ**, mỗi sợi một vật; **1 hoặc 2 địa điểm chính**; **tối đa 1 người mới ra mắt mỗi phần**.
+
+**Mười luật dựng:**
+1. **Logline một câu trước khi viết gì khác**: "[Nhân vật có khuyết điểm] muốn [mục tiêu cụ thể], nhưng [phản diện] [trói bằng gì], buộc phải chọn giữa [A] và [B]."
+2. **Một sợi chính**: mọi cao trào đều thuộc sợi chính hoặc kéo sợi phụ vào nó.
+3. **Mỗi phần chỉ một câu hỏi** và **chỉ tiết lộ một điều mới**; người chơi luôn tóm được "chuyện đang là gì" trong một câu.
+4. **Ra mắt nhân vật bằng một hành động + một câu thoại + một đặc điểm gắn tên** (Lục Tam: con tiều phu, giọng quê, đẩy chăn sang).
+5. **Phản diện có mặt ở mọi phần** (ít nhất một cảnh), không chỉ hiện ở hồi lật.
+6. **Rẽ trong phần, hội ở đầu phần sau**: lựa chọn đổi hướng trong phần; phần sau mở cùng một móc nhưng **cao trào đổi hình** theo cờ (dùng `d_neu` ở cao trào, không nhân bản cả nhánh).
+7. **Mồi giả một lớp**: một manh mối giả rõ ràng, không chồng nhiều lớp nghi ngờ.
+8. **Bối cảnh rõ ngay câu đầu mỗi chặng** (nơi, lúc, ai); không cần người chơi nhớ chặng trước mới hiểu.
+9. **Giao diện nhắc người chơi**: mục "Truyện của đời bạn" hiện cho kịch bản đang chạy: **câu hỏi đang treo**, **điều bạn biết** (mỗi phần thêm một dòng), **người trong cuộc** (tên, một đặc điểm, còn sống hay không) (★, phiên code làm).
+10. **Viết theo bốn bước, duyệt từng bước**: (a) **một trang** (logline, câu hỏi trung tâm, bảy mảnh, dàn, sợi, vật, địa điểm, bảng 6 phần một dòng mỗi phần) → bạn duyệt; (b) **dàn cảnh** (24 chặng, mỗi chặng một dòng) → duyệt; (c) **6 cao trào** viết đủ chữ → bạn sửa (như các lượt mẫu); (d) chặng nhỏ, lời dẫn, khoảnh khắc ấm → story-lint. Không bỏ bước.
+
+### Mẫu "một trang": kịch bản "kiêu hãnh" (Bát cơm thừa), chờ bạn sửa
+- **Logline:** Đệ nhất đệ tử Kim Phong Môn muốn thành kiếm tôn trẻ nhất thiên hạ, nhưng mỗi bậc hắn leo đều giẫm lên một người; khi rơi xuống đáy, kẻ duy nhất có thể kéo hắn lên là người hắn từng giẫm nặng nhất, và kẻ đó đã học được cách giẫm từ chính hắn.
+- **Câu hỏi trung tâm:** Giá trị của một người nằm ở thứ hắn có, hay ở cách hắn đối xử với kẻ không có gì?
+- **Bảy mảnh:** vết thương: mười tuổi, con nhà nghèo, bị con nhà giàu bắt quỳ trước cổng học đường → lời nói dối: "Chỉ kẻ mạnh mới không bị giẫm" → muốn: đứng trên tất cả → cần: **khiêm nhường** (sỉ nhục là thuốc) → bóng tối: **Mạc Tử Quân**, tạp dịch bạn sỉ nhục, leo lên bằng đúng lời nói dối ấy và giẫm bạn như bạn từng giẫm hắn → gương đối lập: **Lâm Uyển**, sư muội nhường nhịn đến mức tự hạ mình → hy sinh: kiếm tâm, danh, và có thể cả mạng.
+- **Sợi chính:** bạn và Mạc Tử Quân (vật: **chiếc bát sứ mẻ**). **Sợi phụ:** Lâm Uyển (vật: **dải lụa buộc chuôi kiếm**); sư phụ Thẩm Hàn, kiếm tôn già lạnh lùng, chỉ coi trọng kẻ thắng.
+- **Địa điểm:** Kim Phong Môn (sân luyện kiếm, Hình đường), Kiếm trủng.
+
+| Phần | Câu hỏi của phần | Cao trào | Cái mất | Điều bạn biết thêm |
+|---|---|---|---|---|
+| 1. Bậc thang (12 đến 20) | Bạn có leo lên đỉnh được không? | **Bát cơm**: bắt Mạc liếm bát trước sơn môn / tha / bắt hắn quỳ thay | Mạc nhặt chiếc bát mẻ mang về | Mạc không quên |
+| 2. Kiếm trủng (20 đến 30) | Ai xứng cầm danh kiếm? | **Thiên kiêu chiến** với Lâm Uyển: thắng bằng đòn hiểm / để nàng thắng / bỏ trận | dải lụa của nàng, hoặc ngôi đệ nhất | Lâm Uyển thương bạn |
+| 3. Cấm thuật (30 đến 40) | Bạn đổi gì để không bao giờ thua? | **Đêm Kiếm trủng**: học cấm thuật của tiền bối tà kiếm / từ chối và thua trận tông chiến / để Lâm Uyển đi thay | tuổi thọ, hoặc danh | Mạc đã lên chấp sự Hình đường, bằng cách gì không ai rõ |
+| 4. Kiếm tôn (40 đến 50) *(chiến thắng giả)* | Đứng trên đỉnh thì thấy gì? | **Đại điển phong kiếm tôn**: cấm thuật phản phệ giữa đại điển, đan điền vỡ trước toàn thiên hạ | tất cả | Mạc là người duy nhất không bất ngờ |
+| 5. Bát cơm thừa (50 đến 60) | Bạn còn lại gì khi không còn gì? | **Bát cơm thừa** (bản bạn viết): liếm / cướp / đứng thẳng | Lâm Uyển, hoặc phần còn lại của sĩ diện | Mạc đã học tất cả từ bạn |
+| 6. Kiếm cuối (60 trở đi) | Kẻ đã mất hết có thể cho đi gì? | **Trận vây sơn môn**: Mạc giữ trận và sắp chết; cứu kẻ đã hành hạ bạn bằng chút tu vi cuối / để hắn chết / giành lấy trận | (ba kết cục) | (kết) |
 
 ## 7. Mẫu (định dạng đề xuất; các khóa mới đánh dấu ★ sẽ do phiên Sonnet thêm vào bộ máy)
 Khóa mới: ★`dan` (vai lấy từ dàn định mệnh: `than_nhan`, `ban`, `su`, `doi_thu`, `huynh`, `thuong`, `ke_thu`, `ke_thua`), ★`gan_bo` (cộng gắn bó; và điều kiện tối thiểu), ★`mat` (chữ cái mất, hiện trên hộp), ★`d_neu` (chữ thay theo cờ), ★`can` (lựa chọn chỉ hiện khi có cờ), ★`fx.chet` / `fx.roi` / `fx.thu` (người trong dàn chết, bỏ đi, thành kẻ thù), ★`fx.tong` (đổi bậc tông), ★`fx.vat` (vật kỷ niệm hoặc bảo vật), ★`tre.chang` (hậu quả trễ mở một chặng gặt).
