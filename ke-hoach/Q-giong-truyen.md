@@ -1,4 +1,4 @@
-# Q-giọng truyện. Cẩm nang kể chuyện (bản 8): dàn định mệnh, gắn bó, cao trào, tàn khốc
+# Q-giọng truyện. Cẩm nang kể chuyện (bản 9): dàn định mệnh, gắn bó, cao trào, tàn khốc
 
 - Trạng thái: **Bản mẫu chờ bạn duyệt** (2026-10-21). Dùng cho MỌI phiên viết chữ truyện (Sonnet và Haiku) sau khi bạn duyệt.
 - Vì sao có file này: sau một lần chơi đủ đời, bạn thấy **không có gì đọng lại**. Đo dữ liệu 15 tuyến: 44 cờ đặt ra nhưng 0 cờ được đọc lại; 5/126 lựa chọn có hậu quả đáng kể; 22/47 chặng chọn gì cũng về cùng một chỗ; mỗi tuyến bốc người lạ rồi bỏ. Chữ không tệ; **cách kể** mới là chỗ yếu.
@@ -260,7 +260,7 @@ Không chép câu văn của hai nhà văn; học **cách nhìn và cách kể**
 5. **Nhãn và cái giá mờ**: "Nói một nửa sự thật", "Cả hai đều mất một nửa".
 6. **Hàm ý quá tay**: học Bảo Ninh thành mơ hồ; người chơi không chắc mình vừa mất gì.
 
-**Mười một luật cường độ (áp cho mọi kịch bản từ K3; ưu tiên hơn mục 6b khi mâu thuẫn):**
+**Luật cường độ (1 đến 11 ở đây, 12 đến 17 ở "Bộ chuẩn ba cảnh" bên dưới; áp cho mọi kịch bản từ K3; ưu tiên hơn mục 6b khi mâu thuẫn):**
 1. **Rõ trước, đẹp sau.** Đoạn cao trào **tối đa 6 câu**; **câu đầu nói thẳng** chuyện gì đang xảy ra và ai sắp mất gì; tối đa **một** chi tiết gợi hình. Hồi ức và ẩn ý để ở lời dẫn và chặng gặt, không để ở chỗ người chơi phải quyết.
 2. **Phản diện ác trước mặt người chơi.** Mỗi cao trào, phản diện **làm một việc ác thấy được**: đe dọa thẳng mặt, bắt người thân làm con tin, sỉ nhục công khai, ra lệnh phế hoặc giết, ép người chơi tự tay làm điều ác. Câu thoại của hắn **trực diện, lạnh, có lý lẽ** ("Ký đi. Không ký thì tên mẹ con sẽ thay vào dòng ấy.").
 3. **Lý lẽ chính đáng, cách làm tàn bạo.** Giữ tính đại diện (mục 0b) nhưng không làm mềm phản diện: hắn có lý, và hắn sẵn sàng giẫm lên bất kỳ ai vì lý ấy.
@@ -284,6 +284,26 @@ Không chép câu văn của hai nhà văn; học **cách nhìn và cách kể**
 - *Nhịp 1*: **Ký tên bảy đứa** / **Đọc to danh sách ba mươi năm của {su} trước toàn tông** / **Rút kiếm lao vào {su}**.
 - *Phản đòn (lời dẫn của "Đọc to")*: "Sân im phăng phắc. Rồi {su} cười, lần đầu tiên bạn thấy ông cười to. 'Ai trong các ngươi chưa ăn gạo của bảy đứa ấy?' Không ai nói gì. Ông phẩy tay; chấp pháp kéo {than_nhan} đi về phía cổng {the_luc}."
 - *Nhịp 2* (vòng quay chiến đấu, yếu tố: tu vi so với chấp pháp; vùng thấp: {than_nhan} chết, bạn trọng thương): **Đuổi theo cướp lại {than_nhan}** / **Quỳ xuống xin ký** / **Để bà đi, giữ lấy đám đệ tử vừa đứng lên sau lưng bạn**.
+
+### Bộ chuẩn ba cảnh cao trào (bạn viết lại, 2026-10-23): dùng làm mẫu giọng cho mọi cao trào
+**1. Kiêu hãnh, "Bát cơm thừa"** (bạn từng bắt tạp dịch Mạc Tử Quân liếm bát cơm thừa; ba mươi năm sau bạn bị phế, sư muội Lâm Uyển trúng hàn độc, hắn là trưởng lão Hình đường giữ giải dược):
+> Mạc Tử Quân vứt viên giải dược vào bát cơm thừa, rồi hất bát cơm xuống nền đá trước mặt bạn. Cả Hình đường đứng xem, có cả những đệ tử ngày xưa từng cười theo bạn. "Ba mươi năm. Kẻ kiêu hãnh nhất nội môn giờ đâu rồi?" Hắn không cười. "Hèn mọn đi. Liếm sạch đi."
+>
+> *Phản đòn (nếu quỳ)*: Bạn liếm đến hạt cuối cùng. Mạc Tử Quân dùng thần niệm thu lại viên thuốc, nhìn bạn rất lâu, rồi hắn cười. "Vứt tên đó ra ngoài." Ngoài cửa, tiếng Lâm Uyển ho từng cơn.
+
+**2. Tàn nhẫn, "Vật tế thứ ba trăm lẻ một"** (bạn đồ sát thôn Thạch Khê luyện Huyết Đan; A Liên, đứa trẻ sống sót, làm thị nữ cho bạn mười năm mà không biết):
+> Huyết Thủ lão tổ túm tóc A Liên lôi vào giữa động, ném nàng nằm trước lò đan đang đỏ. Nàng mười sáu tuổi. "Thêm nàng nữa là đủ tế nguyện Kim Đan. Ngươi giết ba trăm người rồi, thêm một đứa thì khác gì?" Lão đẩy con dao tế sang phía bạn. "Tự tay ngươi làm. Không thì ta kể cho nó biết về năm đó."
+
+**3. Khắc kỷ, "Cửa quan"** (bạn bế quan đột phá Nguyên Anh, còn bảy ngày; con trai mười bảy tuổi dưới núi; sư tôn Băng Lạc giữ cửa quan):
+> Phù cầu cứu của con trai bạn cháy sáng trên vách băng: hắn bị Liệt Hỏa Tông bắt làm con tin, bọn chúng không nói gì cả. Sư tôn Băng Lạc bóp nát lá phù trước mặt bạn, tro rơi lả tả xuống chiếu thiền. Bà cũng không nói gì, chỉ ngồi xuống chắn trước cửa quan. "Bảy ngày nữa ngươi thành Nguyên Anh." Tâm trí bạn réo lên liên hồi; bạn không rõ đó là ý chí của mình hay tâm ma quấy nhiễu nữa.
+
+**Bài học rút ra từ bản bạn sửa (thêm vào luật cường độ):**
+12. **Gắn thứ người chơi cần vào chính hành động sỉ nhục**: viên thuốc nằm trong bát cơm phải liếm; muốn cứu thì phải nuốt nhục, không tách được.
+13. **Câu thoại đánh thẳng vào khuyết điểm của nhân vật** ("Kẻ kiêu hãnh nhất nội môn giờ đâu rồi?"), không vào hoàn cảnh.
+14. **Phản diện nói ít, không giải thích ở cao trào.** Lý lẽ của hắn đã gieo ở các phần trước; tại cao trào chỉ còn hành động, một câu mệnh lệnh, hoặc **im lặng**. Im lặng của kẻ mạnh đáng sợ hơn mọi lời.
+15. **Phản đòn tối giản và khinh miệt**: một hành động và một lệnh biến người chơi thành đồ vật ("Vứt tên đó ra ngoài."); không có câu "ta chỉ muốn biết…".
+16. **Đe dọa bằng ẩn ngữ khi nạn nhân đứng ngay đó** ("kể cho nó biết về năm đó"): chỉ người chơi hiểu; nạn nhân không hiểu, nên càng ngột ngạt.
+17. **Kết đoạn bằng nội tâm hỗn loạn**, không bằng lời giải thích: người chơi không chắc đâu là ý chí, đâu là tâm ma; quyết định được đẩy trọn vào tay họ.
 
 ## 7. Mẫu (định dạng đề xuất; các khóa mới đánh dấu ★ sẽ do phiên Sonnet thêm vào bộ máy)
 Khóa mới: ★`dan` (vai lấy từ dàn định mệnh: `than_nhan`, `ban`, `su`, `doi_thu`, `huynh`, `thuong`, `ke_thu`, `ke_thua`), ★`gan_bo` (cộng gắn bó; và điều kiện tối thiểu), ★`mat` (chữ cái mất, hiện trên hộp), ★`d_neu` (chữ thay theo cờ), ★`can` (lựa chọn chỉ hiện khi có cờ), ★`fx.chet` / `fx.roi` / `fx.thu` (người trong dàn chết, bỏ đi, thành kẻ thù), ★`fx.tong` (đổi bậc tông), ★`fx.vat` (vật kỷ niệm hoặc bảo vật), ★`tre.chang` (hậu quả trễ mở một chặng gặt).
