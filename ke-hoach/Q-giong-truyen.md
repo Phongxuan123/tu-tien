@@ -260,7 +260,7 @@ Không chép câu văn của hai nhà văn; học **cách nhìn và cách kể**
 5. **Nhãn và cái giá mờ**: "Nói một nửa sự thật", "Cả hai đều mất một nửa".
 6. **Hàm ý quá tay**: học Bảo Ninh thành mơ hồ; người chơi không chắc mình vừa mất gì.
 
-**Mười luật cường độ (áp cho mọi kịch bản từ K3; ưu tiên hơn mục 6b khi mâu thuẫn):**
+**Mười một luật cường độ (áp cho mọi kịch bản từ K3; ưu tiên hơn mục 6b khi mâu thuẫn):**
 1. **Rõ trước, đẹp sau.** Đoạn cao trào **tối đa 6 câu**; **câu đầu nói thẳng** chuyện gì đang xảy ra và ai sắp mất gì; tối đa **một** chi tiết gợi hình. Hồi ức và ẩn ý để ở lời dẫn và chặng gặt, không để ở chỗ người chơi phải quyết.
 2. **Phản diện ác trước mặt người chơi.** Mỗi cao trào, phản diện **làm một việc ác thấy được**: đe dọa thẳng mặt, bắt người thân làm con tin, sỉ nhục công khai, ra lệnh phế hoặc giết, ép người chơi tự tay làm điều ác. Câu thoại của hắn **trực diện, lạnh, có lý lẽ** ("Ký đi. Không ký thì tên mẹ con sẽ thay vào dòng ấy.").
 3. **Lý lẽ chính đáng, cách làm tàn bạo.** Giữ tính đại diện (mục 0b) nhưng không làm mềm phản diện: hắn có lý, và hắn sẵn sàng giẫm lên bất kỳ ai vì lý ấy.
@@ -269,11 +269,18 @@ Không chép câu văn của hai nhà văn; học **cách nhìn và cách kể**
 6. **Nhãn là động từ mạnh, giá là sự thật cụ thể.** "Tố giác Hà trước toàn tông", "Ký tên đứa trẻ", "Đâm hắn"; `mat`: "{thuong} bị trục xuất cùng bạn", không "mất một nửa".
 7. **Kết cảnh bằng hậu quả rõ.** Câu cuối lời dẫn nói **đã mất gì, ai đã chết, ai đã quay lưng**; không kết bằng hình ảnh lấp lửng ở cao trào.
 8. **Leo thang.** Mỗi phần ác hơn phần trước; trước trận cuối, phản diện **đã ra tay với ít nhất hai người trong dàn**; người chơi phải **căm** hắn chứ không chỉ buồn.
-9. **Có khoảnh khắc người chơi thắng phản diện một keo** (lật được một đòn, cứu được một người) trước khi bị đánh gục, để cú gục đau và trận cuối có hy vọng.
-10. **Giới hạn giữ nguyên**: việc ác **kể thẳng trong một câu** (giết, phế, đốt thôn, bắt con tin) nhưng **không tả chi tiết thương tích hay tra tấn**, không tình dục, trẻ con không bị tả bạo lực.
+9. **Phục tùng phải là sỉ nhục thấy được** (quỳ, nhặt, cúi, tự tay trao); **xưng hô đổi** khi quan hệ vỡ; **không lời ngọt giả** ở cao trào (xem ví dụ bản bạn viết bên dưới).
+10. **Có khoảnh khắc người chơi thắng phản diện một keo** (lật được một đòn, cứu được một người) trước khi bị đánh gục, để cú gục đau và trận cuối có hy vọng.
+11. **Giới hạn giữ nguyên**: việc ác **kể thẳng trong một câu** (giết, phế, đốt thôn, bắt con tin) nhưng **không tả chi tiết thương tích hay tra tấn**, không tình dục, trẻ con không bị tả bạo lực.
 
 **Ví dụ viết lại (chỉ minh họa, không sửa K2): "Đại hội toàn tông", hai nhịp**
-- *Đoạn*: "{su} đẩy cây bút son sang trước mặt bạn, giữa hai trăm đệ tử. 'Ký đi. {the_luc} đòi bảy đứa trước khi trời tối.' Bạn không cầm bút. Ông giơ tay; hai chấp pháp lôi {than_nhan} từ hàng khách ra giữa sân, quỳ xuống đá. 'Bảy đứa, hoặc sáu đứa và mẹ con. Ta để con chọn, vì ta thương con.'"
+- *Đoạn* (**bản bạn viết, 2026-10-23, dùng làm chuẩn**): "Ông giơ tay; hai chấp pháp lôi mẹ bạn ra giữa sân, quỳ xuống đá. 'Bảy đứa trẻ này và mẹ ngươi. Ta để ngươi lựa chọn.' {su} ném cây bút son xuống dưới chân bạn, giữa hai trăm đệ tử. 'Quỳ xuống nhặt lên và ký đi.'"
+  - *Vì sao bản này mạnh hơn bản của mình* (thêm vào luật):
+    1. **Đe dọa trước, đòi sau**: người thân bị lôi ra trước, lời đòi đến sau, nên câu đòi rơi vào lúc người chơi đã bị nắm cổ.
+    2. **Phục tùng là sỉ nhục thấy được**: muốn làm theo phải **quỳ xuống nhặt bút trước mặt hai trăm người**; cái giá sĩ diện nằm ngay trong động tác.
+    3. **Bỏ lời ngọt giả** ở cao trào ("vì ta thương con"): phản diện lạnh và thẳng thì đáng sợ hơn phản diện vờ hiền.
+    4. **Đổi xưng hô khi quan hệ vỡ**: "con" thành "ngươi"; một chữ đánh dấu người thầy đã chết trong mắt nhau.
+    5. **Lựa chọn trần trụi trong một câu**: "Bảy đứa trẻ này và mẹ ngươi." Không giải thích, không con số thừa.
 - *Nhịp 1*: **Ký tên bảy đứa** / **Đọc to danh sách ba mươi năm của {su} trước toàn tông** / **Rút kiếm lao vào {su}**.
 - *Phản đòn (lời dẫn của "Đọc to")*: "Sân im phăng phắc. Rồi {su} cười, lần đầu tiên bạn thấy ông cười to. 'Ai trong các ngươi chưa ăn gạo của bảy đứa ấy?' Không ai nói gì. Ông phẩy tay; chấp pháp kéo {than_nhan} đi về phía cổng {the_luc}."
 - *Nhịp 2* (vòng quay chiến đấu, yếu tố: tu vi so với chấp pháp; vùng thấp: {than_nhan} chết, bạn trọng thương): **Đuổi theo cướp lại {than_nhan}** / **Quỳ xuống xin ký** / **Để bà đi, giữ lấy đám đệ tử vừa đứng lên sau lưng bạn**.
