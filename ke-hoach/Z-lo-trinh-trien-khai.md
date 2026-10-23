@@ -455,7 +455,7 @@ Sáu khuyết điểm còn lại tạm dùng xương sống A cũ; viết dần 
 **Chốt bổ sung (2026-10-23, lượt sau):**
 - **Khuôn + kịch bản cụ thể lúc chơi**: mỗi khuyết điểm một **khuôn** viết tay, duyệt một lần (câu hỏi trung tâm, kiểu phản diện và gương, chức năng 6 phần, **kiểu** cao trào mỗi phần kèm cơ chế cố định, các phương án twist). Ở mốc A1, **Sonnet** sinh **bảng một trang cụ thể** của đời này từ khuôn + trạng thái thật, qua story-lint rồi mới dùng.
 - **Kế hoạch cuộn**: mở mỗi phần thì Sonnet viết trọn 4 chặng của phần (kèm nhánh) theo những gì đã xảy ra, và chỉnh các phần sau nếu đời đã rẽ.
-- **Nhà cung cấp (bạn chốt c)**: **Sonnet** viết kịch bản cụ thể, kế hoạch phần, cao trào, ký ức; **Gemini Flash** viết chặng nhỏ và hồ sơ dàn. Lớp chuyển đổi để đổi bằng một dòng cài đặt. Khóa của từng nhà cung cấp lưu localStorage.
+- **Nhà cung cấp (bạn chốt c, sửa ngay sau đó)**: xem dòng "Nhà cung cấp (sửa 2026-10-23)" bên dưới: mặc định Gemini cả bộ, Claude tùy chọn. Lớp chuyển đổi để đổi bằng một dòng cài đặt. Khóa của từng nhà cung cấp lưu localStorage.
 - **Viết theo phần** (một lượt gọi cho cả 4 chặng) + một lượt "chỉnh" nhỏ trước cao trào; **chỉ dừng chờ ở cao trào**, chặng nhỏ chưa xong thì dùng dòng dự phòng (2 đến 3 câu, viết tử tế).
 - **Bảng xưng hô** mỗi cặp trong dàn, bộ máy tự đổi khi quan hệ đổi; AI bắt buộc theo.
 - **AI không đẻ sự thật thế giới**: chỉ dùng tên thế lực, nơi, người có trong danh sách gửi kèm; người mới chỉ là người qua đường không tên; kiểm chữ chặn tên lạ.
@@ -463,6 +463,15 @@ Sáu khuyết điểm còn lại tạm dùng xương sống A cũ; viết dần 
 - **Tự chấm cao trào**: một lượt gọi nhỏ soát theo danh sách kiểm, không đạt thì viết lại một lần.
 - Lưu kèm mỗi đoạn chữ **phiên bản model và mã lời gửi**; nút "đạt / viết lại" ở 🛠 **xuất được ra tệp**; người khác chơi trang GitHub phải nhập khóa của chính họ.
 - **Bỏ**: người chơi tự gõ chữ (bạn chốt).
+**Nhà cung cấp (sửa 2026-10-23):** gói Claude Pro **không** gồm API, nên **mặc định Gemini cho cả bộ** (Flash cho chặng nhỏ và hồ sơ dàn; bản Pro của Gemini cho kịch bản cụ thể, cao trào, ký ức); Claude (Sonnet) là **tùy chọn** khi bạn nạp tiền API Anthropic và thấy văn Gemini chưa đạt (đổi bằng cài đặt, lớp chuyển đổi giữ nguyên).
+**Các tuyến khác (chốt 2026-10-23):**
+- **Một xương sống theo khuôn mỗi đời** (khuôn chính, 6 phần); **tuyến phụ** thành **khuôn phụ**: 2 đến 3 phần, mỗi phần 3 chặng, cùng thư viện kiểu lựa chọn, AI cụ thể hóa lúc chơi như khuôn chính.
+- **Ba loại tuyến phụ**: *thân phận* (tán tu, đệ tử tông, thương nhân, đan sư, báo thù...: mở theo điều kiện thân phận của N1b), *thế giới* (chiến sự, dịch, hạn, tông bị diệt...: mở khi mô phỏng có biến cố thật; AI viết từ dữ liệu biến cố), *quan hệ* (đạo lữ, kết nghĩa 9K, sư đồ: lấy vai và ký ức chung từ dàn).
+- **Nhiệm vụ của tuyến phụ**: gieo gắn bó, vật, hạt cho người trong dàn; **đổ về cao trào của xương sống** (mỗi tuyến phụ khai báo nó nối vào phần nào của khuôn chính); không tự kết lỏng lẻo.
+- **Nhịp**: tối đa một tuyến phụ đang nóng; Story Director xếp tuyến phụ vào khoảng yên giữa hai cao trào chính; không cao trào phụ nào trùng năm với cao trào chính.
+- **Tuyến viết tay hiện có** (bb_a, T1, T2, T5, W1, đạo lữ, kết nghĩa, kb_mem_yeu): giữ chạy khi tắt AI; K4 chuyển dần thành khuôn phụ (chữ cũ thành dòng dự phòng).
+- **Nội dung mục 24 của Q** (T15 đến T22, W13 đến W25, cụm 11 đến 24, 36 sự kiện nghịch lý) và các tuyến T3, T4, T6 đến T14 ở Q mục 11, 12: **chuyển thành khuôn phụ bằng Haiku** (chỉ cần chuyển mô tả có sẵn thành dữ liệu khuôn, không viết văn), nhờ AI viết chữ lúc chơi nên kế hoạch nội dung lớn trở nên làm được trong ngân sách.
+- **85 sự kiện lẻ cũ**: giữ làm việc thường ngày; khi có tuyến đang mở thì tự xử lý theo tính cách (như đã chốt).
 **Ảnh hưởng kế hoạch:** K3 chỉ viết **khuôn** (không còn bộ xương cụ thể) cho 9 khuyết điểm, ưu tiên "kiêu hãnh" và "tàn nhẫn", kèm dòng dự phòng; 6 cao trào vẫn viết đủ chữ để bạn sửa làm **mẫu giọng**. Thêm chặng **AI1** (Sonnet): lớp Gemini, hàng đợi viết trước, bộ soạn lời gửi (cẩm nang rút gọn, mẫu, hồ sơ dàn, hạt, ký ức, trạng thái), kiểm chữ, lưu chữ vào bản lưu, dừng chờ, Cài đặt khóa và hạn mức, công tắc tắt.
 
 **Cắt hoặc để vô thời hạn:** Đợt 10 (F5, S9); xương sống B đến E; R4 dây duyên; Q9 AI; S10, S11; phần lớn mục 24 (chỉ lấy vài tuyến vào gói N); tuyến V hình ảnh (assets).
