@@ -335,7 +335,7 @@ Không chép câu văn của hai nhà văn; học **cách nhìn và cách kể**
 **Bài học lượt 3:**
 24. **Thoại đời thường mang hai nghĩa** thay cho mệnh lệnh: "Còn nóng." (trà còn nóng, thôn đang cháy, vẫn còn kịp?) mạnh hơn "Uống đi."
 25. **Dừng ở câu thứ nhất khi nó đã đủ**: "nhìn rất giống một người bạn của tôi" là đủ đau; câu giải thích thêm ("chắc chết lâu rồi") làm loãng.
-26. **Tôn trọng thang sức mạnh của thế giới** (bạn bắt lỗi ví dụ 8): ở thế giới này Trúc Cơ đã hiếm (2 đến 18% NPC), **hai mươi năm lên Kim Đan là thiên tài hiếm có**, nên không thể "từng thua mọi trận". Mọi con số trong truyện (cảnh giới, số năm, số người) phải khớp mô phỏng; mức "mạnh" ở trấn phàm nhân là Luyện Khí hậu kỳ hoặc Trúc Cơ, Kim Đan là bậc huyền thoại một vùng. Đối thủ "vượt lên" phải vượt **hợp lý** (từ kém hơn một chút thành hơn một bậc).
+26. **Tôn trọng thang sức mạnh của thế giới** (bạn bắt lỗi ví dụ 8): ở thế giới này Trúc Cơ đã hiếm (2 đến 18% NPC), **hai mươi năm lên Kim Đan là thiên tài hiếm có**, nên không thể "từng thua mọi trận". **Nhịp thật (bạn nhắc 2026-10-23): khoảng 50 tuổi mới Luyện Khí, khoảng 130 tuổi mới Trúc Cơ; thọ phàm 70, Luyện Khí 130, Trúc Cơ 260.** Mọi con số trong truyện (cảnh giới, số năm, số người) phải khớp mô phỏng; mức "mạnh" ở trấn phàm nhân là Luyện Khí hậu kỳ hoặc Trúc Cơ, Kim Đan là bậc huyền thoại một vùng. Đối thủ "vượt lên" phải vượt **hợp lý** (từ kém hơn một chút thành hơn một bậc).
 
 **Chốt sau lượt 4 (2026-10-23):** hài phải là **hài đen** (lượt 4 còn ấm; tạm dùng làm mẫu, sẽ chỉnh tối hơn); **giữ lựa chọn tâm ma 🜏** (chỉ hiện khi đạo tâm thấp hoặc tâm ma nặng); **mỗi đời có ít nhất một cao trào không có kẻ ác** (thời gian, thọ nguyên, lời hứa).
 

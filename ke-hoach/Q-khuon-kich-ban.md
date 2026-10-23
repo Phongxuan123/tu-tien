@@ -64,20 +64,25 @@ khuon {
 - **Sợi phụ:** `thuong` (vật: dải lụa buộc chuôi kiếm, hoặc chiếc lược gỗ); `su` (vật: thanh kiếm gỗ đầu tiên thầy đưa).
 - **Nơi:** tông hoặc học đường của người chơi (sân luyện, Hình đường hoặc nơi xử phạt), một nơi cấm (Kiếm trủng, cấm địa, mộ cổ) trong vùng.
 
-### 2.4 Thang sức mạnh (luật 26)
-"Đỉnh" luôn **tương đối với cảnh giới thật của người chơi lúc ấy**: phàm nhân hoặc Luyện Khí sơ kỳ → đứng đầu ngoại môn hoặc học đường; Luyện Khí trung, hậu kỳ → đệ nhất nội môn, chân truyền; Trúc Cơ → chân truyền kế vị, đứng đầu bảng thiên kiêu vùng; Kim Đan → huyền thoại một vùng. `ke_thu` luôn **cao hơn người chơi đúng một bậc** ở phần 5, không hơn. Tuổi các phần lấy theo mốc "cảnh giới hoặc tuổi" của 8B2.
+### 2.4 Thang sức mạnh và nhịp đời (luật 26; số liệu từ `js/data/realms.js`, bạn nhắc 2026-10-23)
+**Nhịp thật của thế giới:** người bình thường khoảng **50 tuổi mới vào Luyện Khí**, khoảng **130 tuổi mới Trúc Cơ**; thọ nguyên **phàm nhân 70, Luyện Khí 130, Trúc Cơ 260, Kim Đan 520**. Hệ quả cho kịch bản:
+- **Gần nửa đời đầu là phàm nhân** (12 đến 50): ngoại môn, tạp dịch, học đường, trấn; cao trào ở đây là chuyện của người phàm có giấc mơ tu tiên.
+- **Người phàm trong dàn chết già khi bạn khoảng 50 đến 70** (cha mẹ sớm hơn): cao trào "không có kẻ ác" tự nhiên rơi vào khoảng này.
+- **Trúc Cơ là cuộc chạy đua với cái chết**: thọ Luyện Khí là 130, đúng lúc người thường mới chạm Trúc Cơ; phần cuối luôn có **đồng hồ thọ nguyên** (đột phá hay chết) gắn vào kịch bản.
+- "Đỉnh" luôn **tương đối với cảnh giới thật lúc ấy**: phàm nhân → đứng đầu ngoại môn, học đường, trấn; Luyện Khí sơ, trung kỳ → đệ tử nội môn có tiếng; Luyện Khí hậu kỳ → đệ nhất nội môn, chân truyền; Trúc Cơ → trưởng lão, người đứng đầu một vùng nhỏ; Kim Đan → huyền thoại.
+- `ke_thu` luôn **cao hơn người chơi đúng một bậc** (một giai đoạn hoặc một cảnh giới) ở phần 5, không hơn.
 
-### 2.5 Sáu phần
-| Phần | Chức năng | Tuổi | Câu hỏi | Kiểu cao trào | Cái mất (loại) | Thắng hoặc vui | Treo |
+### 2.5 Sáu phần (tuổi theo nhịp thật ở 2.4; mỗi phần mở theo "cảnh giới HOẶC tuổi", cái nào đến trước)
+| Phần | Chức năng | Mở khi | Câu hỏi | Kiểu cao trào | Cái mất (loại) | Thắng hoặc vui | Treo |
 |---|---|---|---|---|---|---|---|
-| 1. Bậc thang | biến cố khởi đầu; lời nói dối có lợi | 12 đến 20 | Bạn có leo lên được không? | **Sỉ nhục kẻ yếu trước đám đông**: `dung_khuyet_diem` (bắt hắn làm điều nhục) / `hy_sinh` nhỏ (tha, mất mặt trước đám đông) / `chong` với người bênh hắn | danh của kẻ yếu; mầm thù | lần đầu đứng đầu kỳ khảo hạch; cả phòng cõng bạn về | `ke_thu` nhặt lại vật |
-| 2. Ngôi đầu | đối thủ ngang tài; gương xuất hiện | 20 đến 30 | Ai xứng đứng đầu? | **Trận tranh ngôi với người thương bạn**: thắng bằng đòn hiểm (`duong_tat`) / để nàng thắng (`hy_sinh`) / bỏ trận (`dao_thoat`) | ngôi đầu, hoặc lòng tin của gương | đêm hai người ngồi mài kiếm chung | `ke_thu` đã lên chức (không ai rõ bằng cách nào) |
-| 3. Cấm địa | đổi gì để không bao giờ thua | 30 đến 40 | Bạn đổi gì để không bao giờ thua? | **Đêm ở nơi cấm**: học cấm thuật (`duong_tat`) / từ chối và thua trận lớn của tông (`hy_sinh`) / để gương đi thay (`im_lang`) | tuổi thọ, danh, hoặc gương | thắng trận tông chiến (nếu học), cả tông mở tiệc | gương giấu một điều |
-| 4. Đỉnh *(chiến thắng giả)* | lên đỉnh; cấm thuật phản phệ | 40 đến 50 | Đứng trên đỉnh thì thấy gì? | **Đại điển phong chức**: phản phệ giữa đại điển (bộ máy ép, không chọn né); chọn: giấu bằng mọi giá (`duong_tat`) / thú nhận trước toàn tông (`phuc_tung`) / đổ cho người khác (`tam_ma` 🜏 nếu đủ điều kiện) | đan điền, ghế, hoặc lương tâm | sáng hôm đại điển, `ban` ở quê gửi lên một gói quà | `ke_thu` là người duy nhất không bất ngờ |
-| 5. Bát cơm thừa | tất cả đã mất; đảo vai | 50 đến 60 | Bạn còn gì khi không còn gì? | **Cảnh chuẩn số 1** (bản bạn viết): `phuc_tung` (liếm) / `chong` (cướp) / `hy_sinh` (đứng thẳng, xin hắn giết mình thay) | gương, hoặc phần còn lại của sĩ diện | (không có; phần tối nhất) | thế lực ngoài vây tông |
-| 6. Trận cuối | kẻ mất hết cho đi được gì | 60 trở đi | Kẻ đã mất hết còn cho đi được gì? | **`ke_thu` giữ trận và sắp chết**: cứu kẻ đã hành hạ bạn bằng chút tu vi cuối (`hy_sinh`) / để hắn chết (`im_lang`) / giành lấy trận và danh (`dung_khuyet_diem`) | (kết cục) | đệ tử nhỏ nhất của tông nhận ra bạn và cúi chào | (kết đời) |
+| 1. Bậc thang | biến cố khởi đầu; lời nói dối có lợi | 12 tuổi (phàm, ngoại môn hoặc học đường) | Bạn có leo lên được không? | **Sỉ nhục kẻ yếu trước đám đông**: `dung_khuyet_diem` (bắt hắn làm điều nhục) / `hy_sinh` nhỏ (tha, mất mặt) / `chong` với người bênh hắn | danh của kẻ yếu; mầm thù | lần đầu đứng đầu kỳ khảo hạch ngoại môn; cả phòng cõng bạn về | `ke_thu` nhặt lại vật |
+| 2. Ngôi đầu | đối thủ ngang tài; gương xuất hiện; chạy đua vào Luyện Khí | 30 tuổi | Ai xứng đứng đầu? | **Trận tranh suất nhập nội môn với người thương bạn** (chỉ một suất): đòn hiểm (`duong_tat`) / nhường (`hy_sinh`) / bỏ trận (`dao_thoat`) | suất nội môn, hoặc lòng tin của gương | đêm hai người ngồi mài kiếm chung | `ke_thu` đã vào Luyện Khí trước bạn (không ai rõ bằng cách nào) |
+| 3. Cấm địa | đổi gì để không bao giờ thua; người phàm trong dàn bắt đầu chết già | Luyện Khí hoặc 55 tuổi | Bạn đổi gì để không bao giờ thua? | **Đêm ở nơi cấm**: học cấm thuật (`duong_tat`) / từ chối và thua trận lớn của tông (`hy_sinh`) / để gương đi thay (`im_lang`) | tuổi thọ, danh, hoặc gương | thắng trận tông chiến (nếu học), cả tông mở tiệc | gương giấu một điều |
+| 4. Đỉnh *(chiến thắng giả)* | lên đỉnh; cấm thuật phản phệ | Luyện Khí hậu kỳ hoặc 85 tuổi | Đứng trên đỉnh thì thấy gì? | **Đại điển phong chân truyền**: phản phệ giữa đại điển (bộ máy ép); chọn: giấu bằng mọi giá (`duong_tat`) / thú nhận trước toàn tông (`phuc_tung`) / đổ cho người khác (`tam_ma` 🜏) | đan điền, ghế, hoặc lương tâm | sáng hôm đại điển, `ban` (đã già) gửi lên một gói quà | `ke_thu` là người duy nhất không bất ngờ |
+| 5. Bát cơm thừa | tất cả đã mất; đảo vai | 100 tuổi | Bạn còn gì khi không còn gì? | **Cảnh chuẩn số 1** (bản bạn viết): `phuc_tung` (liếm) / `chong` (cướp) / `hy_sinh` (đứng thẳng, xin hắn giết mình thay) | gương, hoặc phần còn lại của sĩ diện | (không có; phần tối nhất) | thế lực ngoài vây tông |
+| 6. Trận cuối | kẻ mất hết cho đi được gì; **đồng hồ thọ nguyên** | 115 tuổi (hoặc thọ còn 15%) | Kẻ đã mất hết còn cho đi được gì? | **`ke_thu` giữ trận và sắp chết**: cứu kẻ đã hành hạ bạn bằng chút tu vi cuối, mất cơ hội Trúc Cơ (`hy_sinh`) / để hắn chết (`im_lang`) / giành lấy trận và danh (`dung_khuyet_diem`) | (kết cục) | đệ tử nhỏ nhất của tông nhận ra bạn và cúi chào | (kết đời; nếu người chơi vẫn Trúc Cơ được thì sang **phần hậu truyện** 130 đến 260 tuổi, viết sau) |
 
-- **Cao trào không có kẻ ác** (bắt buộc một lần mỗi đời): phần 5 hoặc 6, nếu `than_nhan` hoặc `ban` chết già trong khoảng ấy: "Người cũ ở quê không nhận ra bạn" (mẫu "Viên Diên Thọ Đan").
+- **Cao trào không có kẻ ác** (bắt buộc một lần mỗi đời): **phần 3** là chỗ tự nhiên (người phàm trong dàn chết già khi bạn 50 đến 70), ví dụ "Người cũ ở quê không nhận ra bạn" (mẫu "Viên Diên Thọ Đan"); nếu `ban` hoặc `than_nhan` đã chết sớm thì dời sang phần khác.
 - **Tâm ma 🜏**: phần 4 (đổ tội cho người khác) và phần 5 (lựa chọn giết `ke_thu` trong đêm), chỉ khi đạo tâm thấp.
 
 ### 2.6 Ba phương án lật (bốc một mỗi đời; nổ ở phần 4 hoặc 5)
