@@ -1,4 +1,4 @@
-# Q-giọng truyện. Cẩm nang kể chuyện (bản 10): dàn định mệnh, gắn bó, cao trào, tàn khốc
+# Q-giọng truyện. Cẩm nang kể chuyện (bản 11): dàn định mệnh, gắn bó, cao trào, tàn khốc
 
 - Trạng thái: **Bản mẫu chờ bạn duyệt** (2026-10-21). Dùng cho MỌI phiên viết chữ truyện (Sonnet và Haiku) sau khi bạn duyệt.
 - Vì sao có file này: sau một lần chơi đủ đời, bạn thấy **không có gì đọng lại**. Đo dữ liệu 15 tuyến: 44 cờ đặt ra nhưng 0 cờ được đọc lại; 5/126 lựa chọn có hậu quả đáng kể; 22/47 chặng chọn gì cũng về cùng một chỗ; mỗi tuyến bốc người lạ rồi bỏ. Chữ không tệ; **cách kể** mới là chỗ yếu.
@@ -324,6 +324,18 @@ Không chép câu văn của hai nhà văn; học **cách nhìn và cách kể**
 21. **Phản diện mạnh nhất không đòi gì**: "quà ra mắt" chỉ để bạn thấy hắn **biết hết** và **nắm được người của bạn**; người chơi tự hiểu mình đang bị đặt vào đâu.
 22. **Người chơi nhận ra muộn hơn nạn nhân, hoặc nhận nửa vời** ("nhìn rất quen mà khó nhận ra"): đặt người chơi ở thế chậm một nhịp làm cảnh ngột hơn.
 23. **Nội tâm chỉ khi cần**: dùng đoạn nội tâm ở cảnh có tâm ma, tự lừa dối hoặc mất kiểm soát (ví dụ 3, 4); ở cảnh khác để **một chi tiết bên ngoài** nói thay ("Sau lưng bạn có người thì thầm tên bạn.").
+
+### Bộ chuẩn lượt 3 (bạn viết lại, 2026-10-23)
+**7. Thờ ơ, "Ba chén trà"**:
+> Dưới chân núi, đèn của thôn Hạ Khê tắt dần từng ngọn, và mặt đất dưới hậu sơn đỏ lên như than. Sư tổ Vô Vi không nhìn xuống, chỉ rót trà. Trên bàn có ba chén: hai chén đã nguội từ lâu, mỗi chén úp một tờ lá vàng khô. Ông đẩy chén thứ ba sang cho bạn. "Còn nóng. Năm nay trà ngon."
+
+**9. Không có kẻ ác, "Viên Diên Thọ Đan"**:
+> Cháu nội của A Mộc quỳ ở cổng động phủ từ ba hôm trước, gọi bạn là "tiên trưởng", không biết bạn là ai. Ông nội nó đã không ăn được bảy ngày. Bạn xuống núi. A Mộc nằm trên phản, nhìn bạn rất lâu, rồi cười móm mém: "Tiên trưởng nhìn rất giống một người bạn của tôi."
+
+**Bài học lượt 3:**
+24. **Thoại đời thường mang hai nghĩa** thay cho mệnh lệnh: "Còn nóng." (trà còn nóng, thôn đang cháy, vẫn còn kịp?) mạnh hơn "Uống đi."
+25. **Dừng ở câu thứ nhất khi nó đã đủ**: "nhìn rất giống một người bạn của tôi" là đủ đau; câu giải thích thêm ("chắc chết lâu rồi") làm loãng.
+26. **Tôn trọng thang sức mạnh của thế giới** (bạn bắt lỗi ví dụ 8): ở thế giới này Trúc Cơ đã hiếm (2 đến 18% NPC), **hai mươi năm lên Kim Đan là thiên tài hiếm có**, nên không thể "từng thua mọi trận". Mọi con số trong truyện (cảnh giới, số năm, số người) phải khớp mô phỏng; mức "mạnh" ở trấn phàm nhân là Luyện Khí hậu kỳ hoặc Trúc Cơ, Kim Đan là bậc huyền thoại một vùng. Đối thủ "vượt lên" phải vượt **hợp lý** (từ kém hơn một chút thành hơn một bậc).
 
 ## 7. Mẫu (định dạng đề xuất; các khóa mới đánh dấu ★ sẽ do phiên Sonnet thêm vào bộ máy)
 Khóa mới: ★`dan` (vai lấy từ dàn định mệnh: `than_nhan`, `ban`, `su`, `doi_thu`, `huynh`, `thuong`, `ke_thu`, `ke_thua`), ★`gan_bo` (cộng gắn bó; và điều kiện tối thiểu), ★`mat` (chữ cái mất, hiện trên hộp), ★`d_neu` (chữ thay theo cờ), ★`can` (lựa chọn chỉ hiện khi có cờ), ★`fx.chet` / `fx.roi` / `fx.thu` (người trong dàn chết, bỏ đi, thành kẻ thù), ★`fx.tong` (đổi bậc tông), ★`fx.vat` (vật kỷ niệm hoặc bảo vật), ★`tre.chang` (hậu quả trễ mở một chặng gặt).
