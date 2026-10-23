@@ -1,4 +1,4 @@
-# Q-giọng truyện. Cẩm nang kể chuyện (bản 12): dàn định mệnh, gắn bó, cao trào, tàn khốc
+# Q-giọng truyện. Cẩm nang kể chuyện (bản 13): dàn định mệnh, gắn bó, cao trào, tàn khốc
 
 - Trạng thái: **Bản mẫu chờ bạn duyệt** (2026-10-21). Dùng cho MỌI phiên viết chữ truyện (Sonnet và Haiku) sau khi bạn duyệt.
 - Vì sao có file này: sau một lần chơi đủ đời, bạn thấy **không có gì đọng lại**. Đo dữ liệu 15 tuyến: 44 cờ đặt ra nhưng 0 cờ được đọc lại; 5/126 lựa chọn có hậu quả đáng kể; 22/47 chặng chọn gì cũng về cùng một chỗ; mỗi tuyến bốc người lạ rồi bỏ. Chữ không tệ; **cách kể** mới là chỗ yếu.
@@ -371,6 +371,40 @@ Không chép câu văn của hai nhà văn; học **cách nhìn và cách kể**
 | 4. Kiếm tôn (40 đến 50) *(chiến thắng giả)* | Đứng trên đỉnh thì thấy gì? | **Đại điển phong kiếm tôn**: cấm thuật phản phệ giữa đại điển, đan điền vỡ trước toàn thiên hạ | tất cả | Mạc là người duy nhất không bất ngờ |
 | 5. Bát cơm thừa (50 đến 60) | Bạn còn lại gì khi không còn gì? | **Bát cơm thừa** (bản bạn viết): liếm / cướp / đứng thẳng | Lâm Uyển, hoặc phần còn lại của sĩ diện | Mạc đã học tất cả từ bạn |
 | 6. Kiếm cuối (60 trở đi) | Kẻ đã mất hết có thể cho đi gì? | **Trận vây sơn môn**: Mạc giữ trận và sắp chết; cứu kẻ đã hành hạ bạn bằng chút tu vi cuối / để hắn chết / giành lấy trận | (ba kết cục) | (kết) |
+
+## 6f. Plot twist (2026-10-23)
+**Mỗi đời:** **một cú lật lớn** (ở phần 4 "chiến thắng giả" hoặc phần 5 "tất cả đã mất") + **tối đa một cú lật nhỏ mỗi phần** (nhịp "đảo"). Không lật liên tục, kẻo người chơi thôi tin vào bất cứ điều gì.
+
+**Tám kiểu lật hợp với game này:**
+| Kiểu | Ví dụ | Hợp khuyết điểm |
+|---|---|---|
+| **Chính bạn là thủ phạm** (mạnh nhất) | mảnh giấy "cứu" bạn đưa cho thầy năm mười lăm tuổi là thứ đã giết người viết nó | mọi khuyết điểm |
+| **Người tốt là kẻ ác** | người thầy hiền là người ký danh sách | nhân hậu, ba phải |
+| **Kẻ ác có lý do bạn không biết** | phản diện làm mọi chuyện để giữ mạng một người bạn cũng thương | tàn nhẫn, cương trực |
+| **Danh tính thật** | sư phụ là cha ruột; kẻ thù là em ruột thất lạc | kiêu hãnh, khắc kỷ |
+| **Đồng minh là tay trong** | huynh đệ kết nghĩa báo tin cho phản diện từ đầu | mưu mô, nhân hậu |
+| **Nạn nhân thành kẻ ác** | kẻ bạn từng giẫm lên học cách giẫm từ chính bạn | kiêu hãnh, tàn nhẫn |
+| **Kẻ đứng sau kẻ đứng sau** | phản diện chỉ là quân cờ; người sắp đặt là người bạn không ngờ | mưu mô |
+| **Lời hứa, lời tiên tri hiểu sai** | "con sẽ cứu cả tông" hóa ra là cứu bằng cách để tông bị diệt | điềm tĩnh, khắc kỷ |
+
+**Bảy luật lật công bằng:**
+1. **Gieo ít nhất ba manh mối thấy được** trước cú lật lớn, rải qua ít nhất hai phần; đọc lại thì thấy hợp lý ("à, hóa ra…"), không phải bịa thêm.
+2. **Cú lật đổi nghĩa một cảnh người chơi nhớ** (dùng hạt đã gieo: chiếc bát, lá thư, câu "còn nóng"), không đổi nghĩa thứ người chơi chưa từng thấy.
+3. **Cú lật phải đổi lựa chọn tiếp theo**: sau khi biết, người chơi phải quyết một việc khác đi; lật mà không ảnh hưởng gì là lật thừa.
+4. **Không xóa ý nghĩa lựa chọn cũ** ("mọi thứ chỉ là giấc mơ", "số đã định") bị cấm; cú lật làm lựa chọn cũ **nặng thêm**, không nhẹ đi.
+5. **Ưu tiên kiểu "chính bạn là thủ phạm"**: hợp luật tai họa do nhân vật gây ra; khiến người chơi tự dằn vặt.
+6. **Mồi giả một lớp** (mục 6e): có thể nghi nhầm một người, nhưng không chồng nhiều lớp nghi ngờ.
+7. **Khuôn có hai đến ba phương án lật**, bốc theo đời, để chơi lại không đoán trước được.
+
+**Cơ chế (★, phiên code làm):**
+- Kịch bản cụ thể (sinh ở A1) có **kế hoạch lật ẩn**: kiểu lật, phần nổ, danh sách manh mối và phần cài từng manh mối; người chơi không thấy.
+- Khi viết từng phần, AI **bắt buộc cài** manh mối đã định vào chữ (ghi thành hạt loại `manh_moi`); story-lint kiểm đủ ít nhất ba manh mối trước phần nổ.
+- **"Nhìn lại"**: sau cú lật, tab Nhật ký và "Truyện của đời bạn" **đánh dấu những dòng cũ đã từng là manh mối** (chữ đổi màu, kèm "giờ bạn đã hiểu"); "điều bạn biết" thêm một dòng đổi nghĩa.
+
+**Ví dụ cho khuôn "kiêu hãnh" (ba phương án lật, bốc một):**
+- (a) **Thẩm Hàn tạo ra cả hai**: sư phụ cố ý để bạn sỉ nhục Mạc Tử Quân năm ấy để rèn Mạc thành thanh kiếm thứ hai của tông; bạn chỉ là đá mài. Manh mối: Thẩm Hàn có mặt ở sân hôm bát cơm mà không ngăn; Mạc được nhận vào Hình đường dù không linh căn; dải lụa của Lâm Uyển do Thẩm Hàn tặng.
+- (b) **Lâm Uyển đưa cấm thuật cho bạn**, vì nàng biết bạn sẽ không bao giờ chịu thua, và thà để bạn mạnh mà chết sớm còn hơn để bạn sống mà nhục. Manh mối: nàng biết đường vào Kiếm trủng; nàng khóc trước khi bạn thắng trận, không phải sau; dải lụa có mùi nhang của Kiếm trủng.
+- (c) **Chính bạn là thủ phạm**: người bắt bạn quỳ trước cổng học đường năm mười tuổi đã chết vì một câu nói đùa của bạn lan đi khắp làng; Mạc là em trai người ấy, vào tông để tìm bạn. Manh mối: Mạc biết tên làng bạn; hắn hỏi bạn có còn nhớ cổng học đường không; chiếc bát mẻ có khắc chữ của làng ấy.
 
 ## 7. Mẫu (định dạng đề xuất; các khóa mới đánh dấu ★ sẽ do phiên Sonnet thêm vào bộ máy)
 Khóa mới: ★`dan` (vai lấy từ dàn định mệnh: `than_nhan`, `ban`, `su`, `doi_thu`, `huynh`, `thuong`, `ke_thu`, `ke_thua`), ★`gan_bo` (cộng gắn bó; và điều kiện tối thiểu), ★`mat` (chữ cái mất, hiện trên hộp), ★`d_neu` (chữ thay theo cờ), ★`can` (lựa chọn chỉ hiện khi có cờ), ★`fx.chet` / `fx.roi` / `fx.thu` (người trong dàn chết, bỏ đi, thành kẻ thù), ★`fx.tong` (đổi bậc tông), ★`fx.vat` (vật kỷ niệm hoặc bảo vật), ★`tre.chang` (hậu quả trễ mở một chặng gặt).

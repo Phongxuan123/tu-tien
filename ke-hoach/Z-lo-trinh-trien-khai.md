@@ -452,7 +452,18 @@ Sáu khuyết điểm còn lại tạm dùng xương sống A cũ; viết dần 
 **Nhà cung cấp:** **Gemini** (bạn chốt) qua một lớp chuyển đổi để sau này đổi được nhà cung cấp; model nhỏ (Flash) cho chặng nhỏ và hồ sơ, model lớn (Pro) cho cao trào và ký ức; tên bản cụ thể chọn lúc làm. **Khóa**: GitHub Pages là trang tĩnh nên không có proxy; khóa nhập trong Cài đặt, lưu **localStorage của trình duyệt người chơi**, không bao giờ ghi vào repo hay bản lưu xuất ra; nên giới hạn khóa theo tên miền `*.github.io` trong bảng điều khiển của Google. Có bộ đếm lượt gọi và hạn mức mỗi đời.
 **Kiểm chữ AI trước khi hiện**: độ dài (cao trào ≤ 6 câu), từ cấm, không có số liệu hay phần thưởng lạ, đủ nhãn cho đúng số lựa chọn, có dùng hạt khi được yêu cầu; sai thì viết lại một lần rồi mới dùng dự phòng.
 **Mẫu giọng gửi kèm**: cẩm nang rút gọn (luật cường độ 1 đến 26, giọng 6b) + 3 đến 6 cảnh chuẩn bạn đã sửa; trong chế độ thử nghiệm (🛠) bạn bấm "đạt" hoặc "viết lại", các đoạn "đạt" thành mẫu cho lần sau.
-**Ảnh hưởng kế hoạch:** K3 chỉ viết **bộ xương** (bước 1 và 2 của mục 6e cẩm nang) cho "kiêu hãnh" và "tàn nhẫn", kèm dòng dự phòng; 6 cao trào vẫn viết đủ chữ để bạn sửa làm **mẫu giọng**. Thêm chặng **AI1** (Sonnet): lớp Gemini, hàng đợi viết trước, bộ soạn lời gửi (cẩm nang rút gọn, mẫu, hồ sơ dàn, hạt, ký ức, trạng thái), kiểm chữ, lưu chữ vào bản lưu, dừng chờ, Cài đặt khóa và hạn mức, công tắc tắt.
+**Chốt bổ sung (2026-10-23, lượt sau):**
+- **Khuôn + kịch bản cụ thể lúc chơi**: mỗi khuyết điểm một **khuôn** viết tay, duyệt một lần (câu hỏi trung tâm, kiểu phản diện và gương, chức năng 6 phần, **kiểu** cao trào mỗi phần kèm cơ chế cố định, các phương án twist). Ở mốc A1, **Sonnet** sinh **bảng một trang cụ thể** của đời này từ khuôn + trạng thái thật, qua story-lint rồi mới dùng.
+- **Kế hoạch cuộn**: mở mỗi phần thì Sonnet viết trọn 4 chặng của phần (kèm nhánh) theo những gì đã xảy ra, và chỉnh các phần sau nếu đời đã rẽ.
+- **Nhà cung cấp (bạn chốt c)**: **Sonnet** viết kịch bản cụ thể, kế hoạch phần, cao trào, ký ức; **Gemini Flash** viết chặng nhỏ và hồ sơ dàn. Lớp chuyển đổi để đổi bằng một dòng cài đặt. Khóa của từng nhà cung cấp lưu localStorage.
+- **Viết theo phần** (một lượt gọi cho cả 4 chặng) + một lượt "chỉnh" nhỏ trước cao trào; **chỉ dừng chờ ở cao trào**, chặng nhỏ chưa xong thì dùng dòng dự phòng (2 đến 3 câu, viết tử tế).
+- **Bảng xưng hô** mỗi cặp trong dàn, bộ máy tự đổi khi quan hệ đổi; AI bắt buộc theo.
+- **AI không đẻ sự thật thế giới**: chỉ dùng tên thế lực, nơi, người có trong danh sách gửi kèm; người mới chỉ là người qua đường không tên; kiểm chữ chặn tên lạ.
+- **Bộ lọc an toàn** của nhà cung cấp chỉnh cho hợp mức tàn khốc (vẫn giữ giới hạn của cẩm nang); bị chặn thì dùng dự phòng và ghi lại.
+- **Tự chấm cao trào**: một lượt gọi nhỏ soát theo danh sách kiểm, không đạt thì viết lại một lần.
+- Lưu kèm mỗi đoạn chữ **phiên bản model và mã lời gửi**; nút "đạt / viết lại" ở 🛠 **xuất được ra tệp**; người khác chơi trang GitHub phải nhập khóa của chính họ.
+- **Bỏ**: người chơi tự gõ chữ (bạn chốt).
+**Ảnh hưởng kế hoạch:** K3 chỉ viết **khuôn** (không còn bộ xương cụ thể) cho 9 khuyết điểm, ưu tiên "kiêu hãnh" và "tàn nhẫn", kèm dòng dự phòng; 6 cao trào vẫn viết đủ chữ để bạn sửa làm **mẫu giọng**. Thêm chặng **AI1** (Sonnet): lớp Gemini, hàng đợi viết trước, bộ soạn lời gửi (cẩm nang rút gọn, mẫu, hồ sơ dàn, hạt, ký ức, trạng thái), kiểm chữ, lưu chữ vào bản lưu, dừng chờ, Cài đặt khóa và hạn mức, công tắc tắt.
 
 **Cắt hoặc để vô thời hạn:** Đợt 10 (F5, S9); xương sống B đến E; R4 dây duyên; Q9 AI; S10, S11; phần lớn mục 24 (chỉ lấy vài tuyến vào gói N); tuyến V hình ảnh (assets).
 **Cách tiết kiệm (mọi phiên):** mỗi chặng một phiên mới (không kéo dài phiên); prompt ghi sẵn file và dòng cần đọc; chạy kiểm thử lọc theo từ khóa, chạy đầy đủ một lần cuối; Playwright chỉ chụp 1 đến 2 ảnh cần thiết; không dùng Opus; phiên thiết kế kết thúc sau khi viết xong prompt.
