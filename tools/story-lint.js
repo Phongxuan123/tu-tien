@@ -15,12 +15,29 @@ const load = f => vm.runInContext(fs.readFileSync(path.join(root, f), 'utf8'), c
 load('js/data/nature.js'); load('js/data/story.js'); load('js/data/bonds.js'); try { load('js/data/jobs.js'); } catch (e) { /* không có thì bỏ qua kiểm id nghề */ }
 const dir = path.join(root, 'js/data/stories');
 fs.readdirSync(dir).filter(f => /\.js$/.test(f)).sort().forEach(f => load('js/data/stories/' + f));
-load('js/systems/story.js');
+const kdir = path.join(root, 'js/data/khuon');
+if (fs.existsSync(kdir)) fs.readdirSync(kdir).filter(f => /\.js$/.test(f)).sort().forEach(f => load('js/data/khuon/' + f));
+load('js/systems/story.js'); load('js/systems/kb.js'); load('js/systems/khuon.js');
 
 const arcs = ctx.TT.data.STORY.arcs, errs = ctx.TT.story.lint();
+// AI1a: khuôn chính, khuôn phụ và kịch bản cụ thể (cụ thể hóa thử bằng nhân vật giả, đủ các xuất thân và mọi phương án lật)
+const S = ctx.TT.data.STORY, KB = ctx.TT.kb; let nKhuon = 0, nPhu = 0, nKbc = 0;
+Object.keys(S.khuon).forEach(id => {
+  nKhuon++; KB.lintKhuon(S.khuon[id]).forEach(e => errs.push('khuôn ' + e));
+  const kh = S.khuon[id];
+  ['p1', 'p2', 'p3', 'p5', 't1', 't6', 't10'].forEach((xt, i) => {
+    for (let k = 1; k <= 6; k++) {
+      ctx.TT.bond = { main: () => (k % 2 ? {} : null) };
+      const c = { id: i * 10 + k, birthMonth: k * 7, origin2: xt, sect: xt === 't6' ? { id: 'x' } : null, gender: 'nam', realm: 0, kind: 'player', story: { kd: kh.khuyet_diem } };
+      const kbc = KB.cuThe(c, kh); nKbc++;
+      KB.lintKbc(kbc).forEach(e => errs.push('kbc ' + xt + '#' + k + ' ' + e));
+    }
+  });
+});
+Object.keys(S.phu).forEach(id => { nPhu++; KB.lintPhu(S.phu[id]).forEach(e => errs.push('khuôn phụ ' + e)); });
 const chang = arcs.reduce((a, x) => a + Object.keys(x.chang).length, 0);
 const warns = ctx.TT.story.warn();
 if (process.argv.includes('--warn')) warns.forEach(w => console.log('CẢNH BÁO ' + w));
 else if (warns.length) console.log(warns.length + ' tuyến cũ chưa đạt luật mục 8 (cảnh báo, chạy với --warn để xem).');
 if (errs.length) { errs.forEach(e => console.log('LỖI ' + e)); console.log(errs.length + ' lỗi trong ' + arcs.length + ' tuyến.'); process.exit(1); }
-console.log('story-lint sạch: ' + arcs.length + ' tuyến, ' + chang + ' chặng.');
+console.log('story-lint sạch: ' + arcs.length + ' tuyến, ' + chang + ' chặng; ' + nKhuon + ' khuôn, ' + nPhu + ' khuôn phụ, ' + nKbc + ' kịch bản cụ thể thử.');

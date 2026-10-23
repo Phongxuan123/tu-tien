@@ -47,7 +47,7 @@
 
   D.STORY.reg({
     id: 'bb_a2', n: 'Ngưỡng cửa', loai: 'bb',
-    mo: { sau: 'bb_a1', hoac: [{ realm: 1 }, { age: 18 }] }, // Luyện Khí hoặc 18 tuổi, cái nào trước
+    mo: { sau: 'bb_a1', hoac: [{ realm: 1 }, { age: 30 }] }, // Luyện Khí hoặc 30 tuổi, cái nào trước (nhịp thật: khoảng 50 tuổi mới vào Luyện Khí, AI1a)
     vai: { ban: { pick: 'gan', dung_moi: true } },
     dau: 'c1',
     chang: {
@@ -88,7 +88,7 @@
 
   D.STORY.reg({
     id: 'bb_a3', n: 'Nền móng', loai: 'bb',
-    mo: { sau: 'bb_a2', hoac: [{ realm: 1, stage: 1 }, { age: 35 }] }, // Luyện Khí trung kỳ hoặc 35 tuổi, cái nào trước
+    mo: { sau: 'bb_a2', hoac: [{ realm: 1, stage: 1 }, { age: 55 }] }, // Luyện Khí trung kỳ hoặc 55 tuổi, cái nào trước
     vai: { dich: { pick: 'dong_ky', dung_moi: true } },
     dau: 'c1',
     chang: {
@@ -142,7 +142,7 @@
   // A4 Vị thế (Q 9.1): biến cố thế giới kéo vào. Trúc Cơ hoặc 55 tuổi.
   D.STORY.reg({
     id: 'bb_a4', n: 'Vị thế', loai: 'bb',
-    mo: { sau: 'bb_a3', hoac: [{ realm: 2 }, { age: 55 }] }, // Trúc Cơ hoặc 55 tuổi, cái nào trước
+    mo: { sau: 'bb_a3', hoac: [{ realm: 2 }, { age: 85 }] }, // Trúc Cơ hoặc 85 tuổi, cái nào trước
     vai: { quen: { pick: 'gan', dung_moi: true } },
     dau: 'c1',
     chang: {
@@ -191,7 +191,7 @@
   // A5 Đạo quả (Q 9.1): thu đồ, lập nghiệp, đồng kỳ trở lại. Tuổi 75 hoặc Kim Đan.
   D.STORY.reg({
     id: 'bb_a5', n: 'Đạo quả', loai: 'bb',
-    mo: { sau: 'bb_a4', hoac: [{ age: 75 }, { realm: 3 }] }, // 75 tuổi hoặc Kim Đan, cái nào trước
+    mo: { sau: 'bb_a4', hoac: [{ age: 100 }, { realm: 3 }] }, // 100 tuổi hoặc Kim Đan, cái nào trước
     vai: { tro: { pick: 'gan', dung_moi: true }, cu: { pick: 'dong_ky', dung_moi: true } },
     dau: 'c1',
     chang: {

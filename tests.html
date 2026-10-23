@@ -3873,17 +3873,17 @@ test('Sửa lõi (8B2): điều kiện stage và "cảnh giới HOẶC tuổi" c
   const open = (seed, setup) => { const p = storyWorld(seed); T.tick(p); clearPending(); T.go(p, D.STORY.arcById.bb_a1, 'ket:vung'); setup(p); T.tick(p); return p.story.arcs; };
   // stage
   const q = storyWorld(201); q.realm = 1; q.xp = 0; eq(TT.stats.stage(q), 0, 'sơ kỳ'); q.xp = D.NEED[1] * 0.4; eq(TT.stats.stage(q), 1, 'trung kỳ'); q.xp = D.NEED[1] * 0.9; eq(TT.stats.stage(q), 2, 'hậu kỳ'); q.realm = 0; eq(TT.stats.stage(q), 0, 'phàm nhân là 0');
-  // A2: Luyện Khí hoặc 18 tuổi
-  ok(!open(202, p => { p.realm = 0; ageTo(p, 17); }).bb_a2, 'phàm nhân 17 tuổi: A2 chưa mở');
-  ok(open(203, p => { p.realm = 0; ageTo(p, 18); }).bb_a2, 'phàm nhân 18 tuổi: A2 mở');
+  // A2: Luyện Khí hoặc 30 tuổi (nhịp thật, AI1a: khoảng 50 tuổi mới vào Luyện Khí)
+  ok(!open(202, p => { p.realm = 0; ageTo(p, 29); }).bb_a2, 'phàm nhân 29 tuổi: A2 chưa mở');
+  ok(open(203, p => { p.realm = 0; ageTo(p, 30); }).bb_a2, 'phàm nhân 30 tuổi: A2 mở');
   ok(open(204, p => { p.realm = 1; ageTo(p, 14); }).bb_a2, 'Luyện Khí lúc 14 tuổi: A2 mở');
-  // A3: Luyện Khí trung kỳ hoặc 35 tuổi
+  // A3: Luyện Khí trung kỳ hoặc 55 tuổi
   const a3 = (seed, f) => { const p = storyWorld(seed); T.tick(p); clearPending(); T.go(p, D.STORY.arcById.bb_a1, 'ket:vung'); p.realm = 1; ageTo(p, 20); T.tick(p); clearPending(); T.go(p, D.STORY.arcById.bb_a2, 'ket:vung'); f(p); T.tick(p); return !!p.story.arcs.bb_a3; };
   ok(!a3(205, p => { p.realm = 1; p.xp = 0; ageTo(p, 20); }), 'Luyện Khí sơ kỳ, 20 tuổi: A3 chưa mở');
   ok(a3(206, p => { p.realm = 1; p.xp = D.NEED[1] * 0.4; ageTo(p, 20); }), 'Luyện Khí trung kỳ: A3 mở');
   ok(a3(207, p => { p.realm = 2; p.xp = 0; ageTo(p, 20); }), 'Trúc Cơ sơ kỳ (cảnh giới cao hơn): A3 mở');
-  ok(!a3(208, p => { p.realm = 0; ageTo(p, 34); }), 'phàm nhân 34 tuổi: A3 chưa mở');
-  ok(a3(209, p => { p.realm = 0; ageTo(p, 35); }), 'phàm nhân 35 tuổi: A3 mở');
+  ok(!a3(208, p => { p.realm = 0; ageTo(p, 54); }), 'phàm nhân 54 tuổi: A3 chưa mở');
+  ok(a3(209, p => { p.realm = 0; ageTo(p, 55); }), 'phàm nhân 55 tuổi: A3 mở');
   // chặng: khi dùng hoac/stage được kiểm cùng cách
   const r = storyWorld(210); T.tick(r); clearPending(); const arc = D.STORY.arcById.bb_a1, st = r.story.arcs.bb_a1, ch = arc.chang.c1, k0 = ch.khi, h0 = ch.han;
   try { ch.khi = { sau: 0, hoac: [{ realm: 1, stage: 1 }, { age: 60 }] }; ch.han = 999; st.ready = null; r.realm = 0; ageTo(r, 20); TT.world.months += 2; T.tick(r); const own = () => !!(TT.world.pending && TT.world.pending.type === 'story' && TT.world.pending.arc === 'bb_a1'); ok(!own(), 'khi hoac chưa đủ: chưa có hộp của bb_a1 (hộp tuyến khác như dl_gap không tính)');
@@ -4047,7 +4047,7 @@ test('Xuất thân (9A): A4 đến A6 mở đúng điều kiện (cảnh giới 
     ['bb_a1', 'bb_a2', 'bb_a3'].forEach(id => { p.realm = 2; T.tick(p); clearPending(); T.go(p, D.STORY.arcById[id], 'ket:' + Object.keys(D.STORY.arcById[id].ket)[0]); });
     p.realm = 2; p.birthMonth = w.months - 12 * 30; T.tick(p); ok(p.story.arcs.bb_a4, o.id + ': A4 mở ở Trúc Cơ'); clearPending();
     T.go(p, D.STORY.arcById.bb_a4, 'ket:danh'); p.realm = 2; T.tick(p); ok(!p.story.arcs.bb_a5, 'A5 chưa mở ở Trúc Cơ khi 30 tuổi'); clearPending();
-    p.birthMonth = w.months - 12 * 76; p.realm = 2; T.tick(p); ok(p.story.arcs.bb_a5, o.id + ': A5 mở ở 75 tuổi'); clearPending();
+    p.birthMonth = w.months - 12 * 101; p.realm = 2; T.tick(p); ok(p.story.arcs.bb_a5, o.id + ': A5 mở ở 100 tuổi'); clearPending();
     T.go(p, D.STORY.arcById.bb_a5, 'ket:lap_nghiep'); p.realm = 4; p.birthMonth = w.months - 12 * 80; T.tick(p); ok(!p.story.arcs.bb_a6, 'A6 chưa mở ở Nguyên Anh 80 tuổi'); clearPending();
     p.realm = 5; T.tick(p); ok(p.story.arcs.bb_a6, o.id + ': A6 mở ở Hóa Thần'); clearPending();
     ['bb_a4', 'bb_a5', 'bb_a6'].forEach(id => ['c1', 'c2'].forEach(ch => { clearPending(); ok(T.jump(id, ch), id + ':' + ch + ' nhảy được'); eq(w.pending.type, 'story', id + ':' + ch + ' ra hộp truyện'); }));
@@ -4056,7 +4056,7 @@ test('Xuất thân (9A): A4 đến A6 mở đúng điều kiện (cảnh giới 
   // mở theo tuổi
   const q = storyWorld(75), T = TT.story, w = TT.world; T.tick(q); clearPending();
   ['bb_a1', 'bb_a2', 'bb_a3'].forEach(id => { q.realm = 2; T.tick(q); clearPending(); T.go(q, D.STORY.arcById[id], 'ket:' + Object.keys(D.STORY.arcById[id].ket)[0]); });
-  q.realm = 1; q.birthMonth = w.months - 12 * 56; T.tick(q); ok(q.story.arcs.bb_a4, 'A4 mở ở 55 tuổi dù chưa Trúc Cơ');
+  q.realm = 1; q.birthMonth = w.months - 12 * 86; T.tick(q); ok(q.story.arcs.bb_a4, 'A4 mở ở 85 tuổi dù chưa Trúc Cơ');
 });
 
 test('Xuất thân (9A): lưu/tải giữ xuất thân và cha mẹ; bản lưu cũ (không có c.origin2) không vỡ', () => {
@@ -4765,7 +4765,7 @@ test('Bộ máy kịch bản (K1): khuyết điểm gốc suy ra ở A1 theo tr�
   p.story.phanMax = 2; TT.nature.set(p, { tinh: 0, xuthe: 0, daoduc: 10, tudung: 0 }); TT.world.months = Math.ceil((TT.world.months + 1) / 12) * 12; T.tick(p); eq(p.story.kd_khoa, 1, 'vào phần ba thì khóa'); eq(p.story.kd, 'kieu_hanh', 'không đổi nữa');
   // chỉ kịch bản được gán cho khuyết điểm mới mở; có kịch bản thì xương sống A cũ (từ A2) nhường chỗ; chưa gán thì dùng A cũ
   D.STORY.kb = {}; const a = storyWorld(422); TT.nature.set(a, { tinh: 0, xuthe: 0, daoduc: 8, tudung: 0 }); for (let i = 0; i < 4; i++) { TT.world.months++; T.tick(a); clearPending(); } ok(!a.story.arcs.kb_mau, 'chưa gán thì không mở kb_mau');
-  a.birthMonth = TT.world.months - 18 * 12; a.story.arcs.bb_a1.st = null; a.story.arcs.bb_a1.ket = 'vung'; a.story.done.push('bb_a1'); TT.world.months++; T.tick(a); ok(a.story.arcs.bb_a2, 'chưa gán kịch bản: xương sống A cũ chạy tiếp');
+  a.birthMonth = TT.world.months - 30 * 12; a.story.arcs.bb_a1.st = null; a.story.arcs.bb_a1.ket = 'vung'; a.story.done.push('bb_a1'); TT.world.months++; T.tick(a); ok(a.story.arcs.bb_a2, 'chưa gán kịch bản: xương sống A cũ chạy tiếp');
   D.STORY.kb = { mem_long: 'kb_mau' }; const b = storyWorld(423); TT.nature.set(b, { tinh: 0, xuthe: 0, daoduc: 8, tudung: 0 }); b.birthMonth = TT.world.months - 18 * 12;
   for (let i = 0; i < 5; i++) { TT.world.months++; T.tick(b); clearPending(); } ok(b.story.arcs.kb_mau, 'khuyết điểm có kịch bản: mở kb_mau'); T.go(b, D.STORY.arcById.bb_a1, 'ket:vung'); for (let i = 0; i < 3; i++) { TT.world.months++; T.tick(b); clearPending(); } ok(!b.story.arcs.bb_a2, 'A2 nhường chỗ cho kịch bản');
 }));
@@ -4960,6 +4960,261 @@ test('Bộ máy kịch bản (K1): story-lint bắt các luật đo được c�
   // đang trong bí cảnh hoặc độ kiếp: luôn hỏi
   TT.world.nhipTok = 0; TT.world.nhipM = TT.world.months; TT.decisions.request({ type: 'event', evId: 'dg_fight', charId: p.id, tier: 2, title: 't', text: 't', choices: [{ key: 'a', label: 'a' }, { key: 'b', label: 'b' }], def: 0 }); ok(TT.world.pending, 'dg_* luôn hỏi'); clearPending();
 }));
+
+// ---------------- Khuôn và kịch bản cụ thể (AI1a) ----------------
+const KH = D.STORY.khuon.kieu_hanh;
+function khDone(fn) { const k0 = D.STORY.khuonOn, p0 = D.STORY.phuOn; try { return kbDone(fn); } finally { D.STORY.khuonOn = k0; D.STORY.phuOn = p0; D.STORY.nhip.on = true; } }
+function khAge(p, a) { p.birthMonth = TT.world.months - a * 12 - 1; }
+function khW(seed, xt, keep) { // người chơi kiêu hãnh, tắt khoảnh khắc ấm và ngân sách hộp, kịch bản cụ thể đã dựng, các tuyến khác coi như xong
+  D.STORY.kbOn = true; D.STORY.khuonOn = true; D.STORY.nhip.on = false; D.STORY.kbc.pAm = 0; D.STORY.kb = {};
+  const p = storyWorld(seed); TT.nature.set(p, { tinh: 0, xuthe: -8, daoduc: 0, tudung: 0 }); if (xt) p.origin2 = xt;
+  TT.story.ensure(p); p.story.kd = 'kieu_hanh'; p.daoTam = 80; khAge(p, 12);
+  for (let i = 0; i < 3; i++) { TT.world.months++; TT.story.tick(p); clearPending(); }
+  const S = p.story; ok(S.kbc, 'kịch bản cụ thể đã dựng ở mốc A1');
+  if (!keep) D.STORY.arcs.forEach(a => { S.arcs[a.id] = S.arcs[a.id] || { st: null, ket: Object.keys(a.ket)[0], log: [], vai: {} }; S.arcs[a.id].st = null; });
+  delete S.arcs[S.kbc.arc]; S.box = -99; return p;
+}
+function khGb(p) { const R = p.story.kbc.roleDan; Object.keys(R).forEach(r => TT.dan.gain(p, R[r], 6)); }
+function khStep(p) { // một tháng: giữ tuổi đúng phần hiện tại để chặng mở theo tuổi
+  const S = p.story, st = S.arcs[S.kbc.arc], arc = TT.story.arcOf(S.kbc.arc);
+  if (st && st.st && arc) { const pm = TT.kb.phanOf(arc, st.st); if (pm && arc.phan[pm.i].tuoi != null) khAge(p, arc.phan[pm.i].tuoi); }
+  TT.world.months++; TT.story.tick(p); return st;
+}
+function khRun(p, o) { // chạy tuyến chính bằng dòng dự phòng; o.pick(d) chọn khóa; o.stop(d) dừng khi hộp thỏa; trả { seen, ket, box }
+  o = o || {}; const S = p.story, id = S.kbc.arc, seen = {}; khGb(p);
+  for (let it = 0; it < 6000; it++) {
+    const st = S.arcs[id]; if (st && st.ket) return { seen, ket: st.ket };
+    if (st && st.st) seen[st.st] = 1;
+    khStep(p); const d = TT.world.pending; if (S.arcs[id] && S.arcs[id].st) seen[S.arcs[id].st] = 1; if (!d) continue;
+    if (d.type === 'story' && d.arc === id) {
+      if (o.stop && o.stop(d)) return { seen, box: d };
+      const want = o.pick && o.pick(d), i = want ? d.choices.findIndex(x => x.key === want && !x.disabled) : -1;
+      TT.decisions.resolve(i >= 0 ? i : Math.max(0, d.choices.findIndex(x => !x.disabled)));
+    } else if (d.type === 'story_sau') TT.decisions.resolve(0); else if (d.type === 'wheel') TT.decisions.resolveDefault(); else clearPending();
+  }
+  throw new Error('khRun: không kết thúc, đang ở ' + (S.arcs[id] && S.arcs[id].st));
+}
+function khAt(p, chId) { // đưa tuyến chính tới một chặng và hiện hộp
+  const S = p.story, id = S.kbc.arc; if (!S.arcs[id]) { for (let i = 0; i < 4; i++) { khStep(p); clearPending(); } }
+  const arc = TT.story.arcOf(id); TT.story.go(p, arc, chId); clearPending(); S.box = -99; S.ct_at = null; khGb(p);
+  for (let i = 0; i < 60; i++) { khStep(p); if (TT.world.pending) break; }
+  return TT.world.pending;
+}
+function khKbc(p, latId) { // đổi kịch bản cụ thể của p sang phương án lật cần thử (vẫn là cụ thể hóa thật của khuôn)
+  for (let i = 0; i < 80; i++) { const k = TT.kb.cuThe(Object.assign({}, p, { birthMonth: i }), KH); if (k.lat.id === latId) { k.arc = p.story.kbc.arc; p.story.kbc = k; return k; } }
+  throw new Error('không tìm được phương án lật ' + latId);
+}
+
+test('Khuôn và kịch bản cụ thể (AI1a): thư viện kiểu lựa chọn, khuôn "kiêu hãnh" đủ trường và story-lint khuôn bắt lỗi', () => khDone(() => {
+  const K = D.STORY.kieu; eq(Object.keys(K).sort().join(','), 'chong,dao_thoat,dung_khuyet_diem,duong_tat,hy_sinh,im_lang,phuc_tung,tam_ma,tin', '9 kiểu đúng bảng mục 0');
+  Object.keys(K).forEach(k => { const b = K[k].ap({ p: '3', n: 3, truc: 'xuthe', dau: -1, doi: 'ke_thu', cuu: 'huynh', slot: 'ke_thu' }); ok(b.kind && b.fx, k + ' có kind và fx'); });
+  ok(K.tam_ma.tm, 'tam_ma đánh dấu tm');
+  eq(D.STORY.khuonKd.kieu_hanh, 'kieu_hanh'); eq(TT.kb.lintKhuon(KH).join(' | '), '', 'khuôn thật sạch'); eq(KH.phan.length, 6);
+  KH.phan.forEach(P => { O4 = ['moc', 'leo', 'cao_trao', 'treo']; O4.forEach(o => { ok(P.chang[o].d.length > 40, P.id + '/' + o + ' có dòng dự phòng'); }); const ks = P.chang.cao_trao.kieu; ok(ks.some(k => k.vt === 'nguoc') && ks.some(k => k.vt === 'dkd'), P.id + ': ngược khuyết điểm và dung khuyết điểm'); });
+  ok(KH.lat.length === 3 && KH.lat.every(l => l.manh_moi.length >= 3 && l.manh_moi.every(m => m.phan < l.phan_no)), 'ba phương án lật, mỗi cái ≥ 3 manh mối trước phần nổ');
+  eq(KH.khong_ke_ac.phan, 3); eq(KH.ket.toan_ven.dk.p6, 'hy_sinh');
+  // mở theo cảnh giới HOẶC tuổi
+  eq(JSON.stringify(KH.phan.map(P => P.tuoi)), '[12,30,55,85,100,115]'); eq(JSON.stringify(D.STORY.tuoiPhan), '[12,30,55,85,100,115]'); ok(KH.phan[2].canh.realm === 1 && KH.phan[3].canh.stage === 2 && KH.phan[5].tho === 0.15);
+  // lint bắt lỗi trên khuôn hỏng
+  const bad = f => { const k = JSON.parse(JSON.stringify(KH)); f(k); return TT.kb.lintKhuon(k).join(' | '); };
+  ok(/cần đúng 6 phần/.test(bad(k => k.phan.pop())), 'bắt thiếu phần');
+  ok(/thiếu kiểu dung_khuyet_diem/.test(bad(k => { k.phan[0].chang.cao_trao.kieu.forEach(x => { if (x.vt === 'dkd') x.vt = 'khac'; }); })), 'bắt cao trào thiếu dkd');
+  ok(/thiếu kiểu đi ngược khuyết điểm/.test(bad(k => { k.phan[1].chang.cao_trao.kieu.forEach(x => { if (x.vt === 'nguoc') x.vt = 'khac'; }); })), 'bắt cao trào thiếu ngược');
+  ok(/cần ít nhất 3 manh_moi/.test(bad(k => { k.lat[0].manh_moi.pop(); })), 'bắt lật thiếu manh mối');
+  ok(/phải trước phần nổ/.test(bad(k => { k.lat[1].manh_moi[0].phan = 5; })), 'bắt manh mối sau phần nổ');
+  ok(/rải qua ít nhất 2 phần/.test(bad(k => { k.lat[2].manh_moi.forEach(m => { m.phan = 1; }); })), 'bắt manh mối không rải qua hai phần');
+  ok(/không còn là cảnh không kẻ ác/.test(bad(k => { k.phan[2].chang.leo.kieu[0].kieu = 'chong'; })), 'bắt cảnh không kẻ ác có kẻ ác');
+  ok(/dòng dự phòng cần 2 đến/.test(bad(k => { k.phan[0].chang.moc.d = 'Một câu.'; })), 'bắt dòng dự phòng quá ngắn');
+  ok(/kiểu không có trong D.STORY.kieu/.test(bad(k => { k.phan[0].chang.cao_trao.kieu[0].kieu = 'la'; })), 'bắt kiểu lạ');
+  ok(/khe \{la\} lạ/.test(bad(k => { k.phan[0].chang.moc.d += ' {la}'; })), 'bắt khe lạ');
+  ok(/tam_ma phải có vt dkd/.test(bad(k => { k.phan[3].chang.cao_trao.kieu[2].vt = 'nguoc'; })), 'tam_ma là kiểu dkd');
+}));
+
+test('Khuôn và kịch bản cụ thể (AI1a): cụ thể hóa xác định theo hạt giống bằng băm (không rng), chọn phương án theo xuất thân, thuần dữ liệu', () => khDone(() => {
+  const p = khW(601, 'p1'), c1 = TT.kb.cuThe(p), r0 = TT.rng.getState(); const c2 = TT.kb.cuThe(p); eq(TT.rng.getState(), r0, 'cụ thể hóa không rút rng');
+  eq(JSON.stringify(c1), JSON.stringify(c2), 'cùng nhân vật, cùng kịch bản');
+  const q = khW(601, 'p1'); eq(JSON.stringify(q.story.kbc), JSON.stringify(p.story.kbc), 'cùng hạt giống ra cùng kịch bản cụ thể');
+  const seen = {}; for (let s = 0; s < 10; s++) { const k = TT.kb.cuThe(Object.assign({}, p, { id: 50 + s, birthMonth: s * 13 }), KH); seen[k.chon.lat + k.chon.vat + k.chon.ra_mat] = 1; } ok(Object.keys(seen).length >= 3, 'hạt giống khác cho kịch bản khác');
+  // theo xuất thân
+  const xt = { p1: 'a', p2: 'a', p5: 'b', p3: 'c', t10: 'c' }; Object.keys(xt).forEach(o => { for (let s = 0; s < 4; s++) eq(TT.kb.cuThe(Object.assign({}, p, { origin2: o, birthMonth: s * 9 }), KH).chon.vet, xt[o], 'xuất thân ' + o + ' chọn vết thương ' + xt[o]); });
+  ok(/xuất thân p1 hợp/.test(c1.chon.ly.vet), 'ghi lý do một dòng');
+  eq(TT.kb.cuThe(Object.assign({}, p, { origin2: 't6' }), KH).chon.muon, 'a', 'con đệ tử tông muốn thành đệ nhất'); eq(TT.kb.cuThe(Object.assign({}, p, { origin2: 't1' }), KH).chon.muon, 'c', 'con tán tu muốn không ai dám động');
+  // cấu trúc: 6 phần × 4 chặng, mỗi chặng có dòng dự phòng, đủ trường
+  eq(c1.phan.length, 6); c1.phan.forEach(P => { eq(P.chang.length, 4, 'phần ' + P.i + ' có 4 chặng'); P.chang.forEach(x => { ok(x.d.length > 40 && x.lc.length >= 2, x.id); ok(!/\{(vet_canh|vet|muon|vat_canh|vat_treo|ke_thu_ra_mat|noi_cam|guong_dd)\}/.test(x.d), x.id + ' đã thay chữ tĩnh'); }); });
+  eq(c1.lat.manh_moi.length >= 3, true); eq(c1.chon.vat === 'bat_su_me' || c1.chon.vat === 'dep_rom' || c1.chon.vat === 'dong_xu', true);
+  eq(JSON.stringify(JSON.parse(JSON.stringify(c1))), JSON.stringify(c1), 'thuần dữ liệu (JSON)');
+  // gán vai từ dàn: gương là người thương nếu có đạo lữ, không thì huynh đệ; kẻ bóng tối ra mắt từ phần 1
+  eq(c1.guong, 'huynh'); const sv = TT.bond.main; TT.bond.main = () => ({}); try { eq(TT.kb.cuThe(p, KH).guong, 'thuong'); } finally { TT.bond.main = sv; }
+  const S = p.story; ok(S.dan.ke_thu && TT.world.chars[S.dan.ke_thu].kind === 'npc', 'ke_thu được dựng ngay'); eq(S.kd_khoa, 1, 'khóa khuyết điểm'); ok(Array.isArray(S.manhMoi) && S.xung, 'khởi tạo muộn');
+  // tuyến dựng ra qua story-lint, không nằm trong D.STORY.arcs
+  const arc = TT.story.arcOf(c1.arc); ok(arc && arc.dyn && !D.STORY.arcs.some(a => a.id === arc.id)); eq(TT.kb.lintKbc(c1).join(' | '), '', 'kịch bản cụ thể sạch'); eq(Object.keys(arc.chang).length, 24, '24 chặng');
+  const bad = JSON.parse(JSON.stringify(c1)); bad.phan[0].chang[2].lc[0].kieu = 'tin';
+  const e = TT.kb.lintKbc(bad).join(' | '); ok(/kiểu cao trào/.test(e), 'lint bắt kiểu sai bảng: ' + e);
+  const bad2 = JSON.parse(JSON.stringify(c1)); bad2.lat.manh_moi.pop(); ok(/ít hơn 3 manh mối/.test(TT.kb.lintKbc(bad2).join(' | ')), 'lint bắt thiếu manh mối');
+  const bad3 = JSON.parse(JSON.stringify(c1)); bad3.lat.manh_moi[0].t = 'Câu lạ không có trong chữ.'; ok(/chưa được cài/.test(TT.kb.lintKbc(bad3).join(' | ')), 'lint bắt manh mối chưa cài vào chữ');
+  const flagsOf = k => { const a = TT.kb.arcFrom(k), f = {}; Object.keys(a.chang).forEach(id => a.chang[id].lc.forEach(l => { [l.fx].concat((l.tre || []).map(t => t.fx), l.wheel ? l.wheel.vung.map(z => z.fx) : []).forEach(fx => { if (fx && fx.flag) [].concat(fx.flag).forEach(x => { f[x] = 1; }); }); })); return Object.keys(f).length; };
+  ['a', 'b', 'c'].forEach(l => ok(flagsOf(khKbc(p, l)) <= 25, 'phương án lật ' + l + ' dùng ≤ 25 cờ'));
+}));
+
+test('Khuôn và kịch bản cụ thể (AI1a): đủ 24 chặng chạy được bằng dòng dự phòng tới kết cục, lưu/tải giữa chừng', () => khDone(() => {
+  const p = khW(602); const S = p.story, id = S.kbc.arc, all = []; S.kbc.phan.forEach(P => P.chang.forEach(x => all.push(x.id)));
+  eq(all.length, 24);
+  // chạy nửa đường rồi lưu/tải
+  const half = khRun(p, { stop: d => d.ch === 'p3c' }); ok(half.box && half.box.lon, 'tới cao trào phần 3');
+  ok(half.box.text.length > 60 && !/\{[a-z_]+\}/.test(half.box.text), 'hộp có dòng dự phòng đã thay khe: ' + half.box.text); ok(half.box.choices.every(x => x.mat), 'mọi lựa chọn có mat');
+  const kb0 = JSON.stringify(S.kbc), snap = TT.save.snapshot(); TT.life.createWorld(9); eq(TT.story.arcOf(id), null, 'sang đời khác thì tuyến sinh từ kịch bản biến mất'); TT.save.restore(snap);
+  const p2 = TT.player(); eq(JSON.stringify(p2.story.kbc), kb0, 'kịch bản cụ thể giữ nguyên sau khi tải'); ok(TT.story.arcOf(id) && TT.story.arcOf(id).chang.p3c, 'tuyến dựng lại từ dữ liệu'); eq(TT.world.pending.ch, 'p3c', 'hộp giữ nguyên');
+  const run = khRun(p2); eq(['toan_ven', 'doa', 'co_doc'].indexOf(run.ket) >= 0, true, 'kết cục thuộc khuôn: ' + run.ket);
+  all.forEach(c => ok(run.seen[c] || half.seen[c], 'đã qua chặng ' + c));
+  const kbc = p2.story.kbc; eq(Object.keys(kbc.chuoi).length, 6, 'ghi chuỗi kiểu của 6 cao trào'); ok(p2.story.arcs[id].ket, 'tuyến đã xong'); ok(p2.story.done.indexOf(id) >= 0);
+  const k = D.STORY.khuon.kieu_hanh.ket[run.ket]; ok(TT.world.chars[p2.id] && p2.log.some(e => e.t.indexOf(TT.story.fmt(p2, p2.story.arcs[id], k.log).slice(0, 25)) >= 0), 'nhật ký ghi kết cục');
+  // luật 5 cờ: đặt và đọc lại
+  const arc = TT.story.arcOf(id), rd = {}; Object.keys(arc.chang).forEach(c => (arc.chang[c].d_neu || []).forEach(x => { rd[x.flag] = 1; })); ok(Object.keys(rd).length >= 3, 'cao trào đổi hình theo cờ (d_neu)');
+}));
+
+test('Khuôn và kịch bản cụ thể (AI1a): kiểu lựa chọn áp đúng cơ chế mặc định; tam_ma ẩn khi đạo tâm cao, hiện khi đạo tâm thấp hoặc tâm ma nặng', () => khDone(() => {
+  const p = khW(603); const S = p.story; kbMode('can_bang');
+  // tam_ma ở phần 4 (cao trào đại điển)
+  p.daoTam = 80; let d = khAt(p, 'p4c'); ok(d && d.lon && d.ch === 'p4c', 'cao trào phần 4'); eq(d.choices.map(x => x.key).sort().join(','), 'duong_tat,phuc_tung', 'đạo tâm cao: tam_ma ẩn');
+  clearPending(); p.daoTam = 10; d = khAt(p, 'p4c'); eq(d.choices.map(x => x.key).sort().join(','), 'duong_tat,phuc_tung,tam_ma', 'đạo tâm thấp: tam_ma hiện');
+  clearPending(); p.daoTam = 80; p.traitIds.push('tam_ma'); d = khAt(p, 'p4c'); ok(d.choices.some(x => x.key === 'tam_ma'), 'tâm ma nặng: tam_ma hiện dù đạo tâm cao'); p.traitIds = p.traitIds.filter(t => t !== 'tam_ma');
+  ok(!TT.kb.tamMaHien(p) && TT.kb.tamMaHien(Object.assign({}, p, { daoTam: 20 })), 'hàm đọc tamMaHien');
+  const mat = d.choices.find(x => x.key === 'tam_ma').mat; ok(mat && !/vàng|đạo tâm|nghiệp/.test(mat), 'tam_ma không báo hết giá: ' + mat);
+  // phuc_tung: danh -, cờ nhuc_p4, trục ngược khuyết điểm +, phản phệ (ep) ép hp
+  clearPending(); p.hp = 100; p.rep.danh = 30; const x0 = TT.nature.get(p, 'xuthe'), danh0 = p.rep.danh; d = khAt(p, 'p4c'); kbPick('phuc_tung');
+  ok(p.flags.nhuc_p4, 'cờ nhuc_p4'); ok((p.rep.danh || 0) < danh0, 'danh giảm'); ok(TT.nature.get(p, 'xuthe') > x0, 'trục ngược khuyết điểm tăng: ' + x0 + ' -> ' + TT.nature.get(p, 'xuthe')); ok(p.hp < 100, 'phản phệ ép hp');
+  ok(TT.world.pending && TT.world.pending.type === 'story_sau' && /quỳ trên bậc đá/.test(TT.world.pending.text), 'lời dẫn sau lựa chọn'); clearPending();
+  // duong_tat: nghiệp +, nợ, hậu quả trễ chắc chắn
+  const q = khW(604); kbMode('can_bang'); q.nghiep = 0; d = khAt(q, 'p2c'); kbPick('duong_tat'); ok(q.nghiep >= 2, 'nghiệp +'); ok(q.story.no.some(n => n.vai === q.story.kbc.guong), 'nợ với người đối diện'); ok(q.story.due.some(t => t.fx && t.fx.daoTam < 0), 'hậu quả trễ chắc chắn'); ok(q.flags.p2_duong_tat);
+  ok(q.story.gb[q.story.kbc.guong] < 6, 'gắn bó với gương giảm (fx_them)'); clearPending();
+  // hy_sinh: mất tu vi, gắn bó với người được cứu +
+  const r = khW(605); kbMode('can_bang'); r.xp = 500; d = khAt(r, 'p2c'); const gb0 = r.story.gb[r.story.kbc.guong] || 0; kbPick('hy_sinh'); ok(r.xp < 500, 'mất tu vi'); ok(r.story.gb[r.story.kbc.guong] > gb0, 'gắn bó người được cứu +'); ok(r.flags.p2_hy_sinh); clearPending();
+  // chong: vòng quay chiến đấu, hậu quả trễ phản diện trả đòn
+  const w = khW(606); kbMode('can_bang'); d = khAt(w, 'p1c'); kbPick('chong'); ok(TT.world.pending && TT.world.pending.type === 'wheel', 'chống lại → vòng quay'); ok(w.flags.p1_chong); ok(w.story.due.some(t => t.fx && t.fx.hp < 0), 'phản diện trả đòn ở phần sau'); clearPending();
+  // dung_khuyet_diem: thuận tay, trục khuyết điểm đi sâu hơn, kẻ yếu thành kẻ thù (mầm thù)
+  const z = khW(607); kbMode('can_bang'); const x1 = TT.nature.get(z, 'xuthe'); d = khAt(z, 'p1c'); kbPick('dung_khuyet_diem'); ok(TT.nature.get(z, 'xuthe') < x1, 'khuyết điểm sâu thêm'); ok(z.flags.p1_dung_khuyet_diem); eq(z.story.sp.ke_thu, 'thu', 'mầm thù: ke_thu thành kẻ thù'); clearPending();
+  // im_lang, dao_thoat, tin: dựng thử từ thư viện
+  const L = D.STORY.kieu, P0 = { p: '3', n: 3, truc: 'xuthe', dau: -1, doi: 'ke_thu', cuu: 'huynh', slot: 'ke_thu' };
+  ok(L.im_lang.ap(P0).fx.no.d >= 1 && L.im_lang.ap(P0).tre.length === 1, 'im_lang: nợ và cờ cho chặng gặt'); ok(L.dao_thoat.ap(Object.assign({ truy: true }, P0)).fx.tong.truy, 'dao_thoat: bị truy'); ok(L.dao_thoat.ap(P0).fx.no.d === 3, 'dao_thoat: người ở lại chịu thay (nợ)');
+  ok(L.tin.ap(P0).fx.gan_bo.d === 2, 'tin: gắn bó +'); ok(L.hy_sinh.ap(Object.assign({}, P0, { n: 6 })).fx.xp < L.hy_sinh.ap(Object.assign({}, P0, { n: 1 })).fx.xp, 'hy_sinh tham số hóa theo phần');
+  // kết cục theo chuỗi kiểu (Q 2.7)
+  const kb = TT.kb, mk = ch => { const o = khW(610 + Math.floor(Math.random() * 3)); o.story.kbc.chuoi = ch; return kb.ketKhuon(o, TT.story.arcOf(o.story.kbc.arc)); };
+  eq(mk({ 3: { vt: 'nguoc' }, 4: { vt: 'nguoc' }, 5: { vt: 'khac' }, 6: { vt: 'nguoc', kieu: 'hy_sinh' } }), 'ket:toan_ven', '≥ 3 ngược khuyết điểm, phần 6 hy sinh → toàn vẹn');
+  eq(mk({ 1: { vt: 'nguoc' }, 4: { vt: 'dkd' }, 6: { vt: 'dkd', kieu: 'dung_khuyet_diem' } }), 'ket:doa', 'phần 4 và 6 dung khuyết điểm → đọa');
+  eq(mk({ 4: { vt: 'dkd' }, 6: { vt: 'nguoc', kieu: 'hy_sinh' } }), 'ket:co_doc', 'còn lại → cô độc');
+  eq(mk({ 3: { vt: 'nguoc' }, 4: { vt: 'nguoc' }, 5: { vt: 'nguoc' }, 6: { vt: 'khac', kieu: 'im_lang' } }), 'ket:co_doc', 'phần 6 không hy sinh thì không toàn vẹn');
+}));
+
+test('Khuôn và kịch bản cụ thể (AI1a): bảng xưng hô khởi tạo theo quan hệ, tự đổi khi phản bội, phế sư, kết nghĩa, thành thù', () => khDone(() => {
+  const p = khW(620), S = p.story, K = TT.kb; ['su', 'huynh', 'ban', 'doi_thu', 'than_nhan'].forEach(v => TT.dan.dung(p, v)); K.xungSync(p);
+  eq(K.xung(p, 'su').qh, 'su_tro'); ok(/sư phụ/.test(K.xung(p, 'su').goi), 'gọi thầy'); eq(K.xung(p, 'su').goi_lai, 'con'); eq(K.xung(p, 'huynh').qh, 'huynh_de'); ok(/sư (huynh|tỷ)/.test(K.xung(p, 'huynh').goi)); eq(K.xung(p, 'ke_thu').qh, 'ke_thu'); eq(K.xung(p, 'ban').qh, 'ban');
+  ok(S.xung.su && S.xung.su.qh === 'su_tro' && S.xung.huynh, 'khởi tạo c.story.xung[vai] theo quan hệ');
+  // phản bội
+  const so = JSON.stringify(S.xung.su); p.flags.phan_su = 1; const n = K.xungSync(p); ok(n >= 1, 'đổi quan hệ'); eq(K.xung(p, 'su').qh, 'phan_boi'); eq(K.xung(p, 'su').goi, 'ngươi'); eq(S.xung.su.truoc, 'su_tro', 'nhớ quan hệ trước');
+  // phế sư
+  delete p.flags.phan_su; p.flags.phe_su = 1; K.xungSync(p); eq(K.xung(p, 'su').qh, 'phe_su'); ok(/lão|bà ta/.test(K.xung(p, 'su').goi));
+  // thành thù
+  S.sp.huynh = 'thu'; K.xungSync(p); eq(K.xung(p, 'huynh').qh, 'ke_thu', 'huynh đệ thành thù'); eq(K.xung(p, 'huynh').ta, 'ta');
+  // kết nghĩa (quan hệ thật)
+  const ban = TT.dan.get(p, 'ban'); TT.rel.setKind(p, ban, 'ket_nghia'); K.xungSync(p); eq(K.xung(p, 'ban').qh, 'ket_nghia'); ok(/huynh|tỷ/.test(K.xung(p, 'ban').goi)); eq(K.xung(p, 'ban').goi_lai, 'hiền đệ');
+  // đạo lữ: cách gọi theo giới của người chơi
+  const th = TT.dan.get(p, 'doi_thu'); TT.rel.setKind(p, th, 'dao_lu'); K.xungSync(p); eq(K.xung(p, 'doi_thu').qh, 'dao_lu');
+  ok(K.xung(p, 'doi_thu').goi_lai === (p.gender === 'nu' ? 'nương tử' : 'phu quân'), 'goi_lai theo giới người chơi');
+  // hàm đọc không ghi
+  const snap = JSON.stringify(S.xung); p.flags.phan_ban = 1; K.xung(p, 'ban'); eq(JSON.stringify(S.xung), snap, 'TT.kb.xung chỉ đọc'); delete p.flags.phan_ban;
+  delete p.flags.phe_su; eq(K.xung(Object.assign({}, p, { story: null }), 'su').qh, 'su_tro', 'chưa khởi tạo vẫn suy ra được');
+}));
+
+test('Khuôn và kịch bản cụ thể (AI1a): manh mối được đánh dấu, "Nhìn lại" và mục "Truyện của đời bạn" hiện sau cú lật (cả ba phương án lật)', () => khDone(() => {
+  ['a', 'b', 'c'].forEach((lat, ix) => {
+    const p = khW(630 + ix), S = p.story; const kbc = khKbc(p, lat); const arc = TT.story.arcOf(kbc.arc); kbMode('can_bang');
+    const no = kbc.lat.phan_no, treoId = 'p' + no + 't'; ok(kbc.phan[no - 1].chang[3].lat, 'chặng treo của phần nổ mang sự thật');
+    // trước cú lật
+    const r = khRun(p, { stop: d => d.ch === treoId }); ok(r.box, 'tới chặng nổ ' + treoId);
+    ok(S.manhMoi.length >= 3, lat + ': đã đánh dấu ≥ 3 manh mối trước cú lật (' + S.manhMoi.length + ')'); ok(S.manhMoi.every(m => m.phan < no), 'manh mối đều ở phần trước phần nổ');
+    ok(new Set(S.manhMoi.map(m => m.phan)).size >= 2, 'rải qua ít nhất hai phần');
+    S.manhMoi.forEach(m => { const e = p.log.find(x => x.m === m.m && x.t === m.t); ok(e, 'có dòng nhật ký manh mối: ' + m.t); eq(TT.kb.nhinLai(p, e), '', 'chưa lật thì chưa "giờ bạn đã hiểu"'); });
+    const tt0 = TT.kb.tomTat(p); ok(tt0 && !tt0.lat && tt0.cau_hoi && tt0.nguoi.length >= 4, 'có khối câu hỏi đang treo và người trong cuộc'); const rows0 = TT.story.rows(p).find(x => x.id === kbc.arc); ok(rows0.logx.every(x => !x.hieu));
+    eq(r.box.choices.length, 2); ok(r.box.choices.every(x => x.mat));
+    // cú lật nổ
+    ok(!TT.kb.latNo(p)); TT.decisions.resolve(0); ok(TT.kb.latNo(p), 'cú lật đã nổ'); clearPending();
+    S.manhMoi.forEach(m => { const e = p.log.find(x => x.m === m.m && x.t === m.t); ok(TT.kb.nhinLai(p, e).length > 8, 'sau cú lật dòng nhật ký ' + m.id + ' có "giờ bạn đã hiểu": ' + TT.kb.nhinLai(p, e)); });
+    const rows1 = TT.story.rows(p).find(x => x.id === kbc.arc); ok(rows1.logx.some(x => x.hieu), 'mục "Truyện của đời bạn" tô màu chặng từng là manh mối');
+    const tt1 = TT.kb.tomTat(p); ok(tt1.lat && tt1.biet.some(x => x.lat), '"điều bạn biết" thêm một dòng đổi nghĩa'); ok(tt1.biet.length >= 4, 'mỗi phần một dòng (đã qua ' + tt1.biet.length + ')');
+    ok(p.log.some(e => e.t.indexOf('Bạn đã hiểu ra') === 0), 'nhật ký ghi lúc hiểu ra');
+    // cú lật đổi lựa chọn tiếp theo: phần 6 đổi hình theo cờ phản ứng
+    const flag = KH.lat.find(l => l.id === lat).no.lc.map(x => x.flag); ok(flag.some(f => p.flags[f]), 'đặt cờ phản ứng với cú lật'); ok(kbc.phan[5].chang[2].bien.some(b => flag.indexOf(b.khi.flag) >= 0), 'cao trào phần 6 có biến thể theo cờ');
+    const r2 = khRun(p, { stop: d => d.ch === 'p6c' }); ok(r2.box, 'tới cao trào phần 6');
+    ok(kbc.phan[5].bien_chon != null, 'mở phần 6 chọn biến thể theo cờ (mo_phan)'); ok(r2.box.text.indexOf('nén hương') > 0 && r2.box.text !== TT.story.fmt(p, S.arcs[kbc.arc], KH.phan[5].chang.cao_trao.d), 'chữ cao trào đã đổi theo cờ');
+    clearPending();
+  });
+}));
+
+test('Khuôn và kịch bản cụ thể (AI1a): người then chốt theo kịp nhịp đời (kẻ bóng tối cao hơn đúng một bậc, dựng lại khi đã mất), tên được nhớ khi người bị xóa khỏi thế giới', () => khDone(() => {
+  const p = khW(645), S = p.story, id = S.kbc.arc; kbMode('can_bang'); khGb(p); khAt(p, 'p2t'); clearPending(); const st = S.arcs[id];
+  const ke = TT.dan.get(p, 'ke_thu'); eq(ke.realm, 0, 'kẻ bóng tối dựng ra là phàm nhân'); const ten0 = ke.name; const sId = S.dan.su, su = TT.world.chars[sId]; su.realm = 0;
+  // người chơi phàm nhân: phần 2 mở thì kẻ bóng tối đã vào Luyện Khí trước bạn
+  TT.kb.mo_phan(p, 2); ok(ke.realm >= 1, 'đã vào Luyện Khí trước bạn'); ok(su.realm >= 1, 'thầy theo kịp (thọ nguyên Luyện Khí)');
+  // người chơi Luyện Khí trung kỳ: kẻ bóng tối hậu kỳ (đúng một bậc)
+  p.realm = 1; p.xp = D.NEED[1] * 0.4; eq(TT.stats.stage(p), 1); ke.realm = 1; ke.xp = 0; TT.kb.mo_phan(p, 5); eq(ke.realm, 1); eq(TT.stats.stage(ke), 2, 'cao hơn người chơi đúng một bậc ở phần 5');
+  p.xp = D.NEED[1] * 0.8; eq(TT.stats.stage(p), 2); TT.kb.mo_phan(p, 5); eq(ke.realm, 2, 'người chơi hậu kỳ thì kẻ bóng tối sang Trúc Cơ'); eq(TT.stats.stage(ke), 0);
+  TT.kb.mo_phan(p, 5); eq(ke.realm, 2, 'không đẩy cao thêm'); eq(TT.stats.stage(ke), 0);
+  // tên được nhớ
+  TT.story.bindVai(p, TT.story.arcOf(id), st); eq(TT.story.fmt(p, st, '{ke_thu}'), ten0); eq(st.ten.ke_thu, ten0, 'đã nhớ tên');
+  TT.life.die(ke, 'thử'); delete TT.world.chars[ke.id]; eq(TT.story.fmt(p, st, '{ke_thu} không quên'), ten0 + ' không quên', 'tên vẫn hiện khi người đã bị xóa khỏi thế giới');
+  // đã mất (chưa tới phần cuối) thì dựng người khác cùng vai; phần cuối thì không
+  TT.dan.sync(p); eq(S.sp.ke_thu, 'chet'); eq(TT.kb.tomTat(p).nguoi.find(x => x.vai === 'ke_thu').ten, ten0, 'khối người trong cuộc vẫn hiện tên'); const old = S.dan.ke_thu; TT.kb.mo_phan(p, 3); ok(S.dan.ke_thu && S.dan.ke_thu !== old && TT.dan.alive(p, 'ke_thu'), 'dựng người kế vai kẻ bóng tối'); eq(S.kbc.ke_thu_moi, 1); ok(TT.dan.get(p, 'ke_thu').realm >= 1);
+  const k2 = TT.dan.get(p, 'ke_thu'); TT.life.die(k2, 'thử'); delete TT.world.chars[k2.id]; TT.dan.sync(p); TT.kb.mo_phan(p, 6); ok(!TT.dan.alive(p, 'ke_thu'), 'phần cuối: không dựng lại');
+}));
+
+test('Khuôn và kịch bản cụ thể (AI1a): phần mở theo cảnh giới HOẶC tuổi (cái nào đến trước), mốc tuổi theo nhịp thật, thụ động thì mở theo tuổi', () => khDone(() => {
+  const p = khW(640), S = p.story, id = S.kbc.arc; kbMode('can_bang'); khGb(p); khAt(p, 'p2t'); clearPending();
+  const arc = TT.story.arcOf(id), tryMo = (age, realm, stage) => { // đưa tới móc phần 3 và xem có hộp không
+    clearPending(); p.realm = realm; p.xp = 0; if (stage != null) p.stage = stage; TT.story.go(p, arc, 'p3m'); S.arcs[id].since = TT.world.months - 6; S.arcs[id].ready = null; S.box = -99; S.ct_at = null;
+    for (let i = 0; i < 6; i++) { khAge(p, age); TT.world.months++; TT.story.tick(p); if (TT.world.pending) break; } const d = TT.world.pending; clearPending(); return !!(d && d.ch === 'p3m'); };
+  eq(tryMo(40, 0), false, 'phàm nhân 40 tuổi: chưa mở phần 3'); eq(tryMo(40, 1), true, 'Luyện Khí khi mới 40 tuổi: mở (cảnh giới trước tuổi)'); eq(tryMo(55, 0), true, 'phàm nhân 55 tuổi: mở theo tuổi');
+  const tryMo4 = (age, realm, stage) => { clearPending(); p.realm = realm; TT.stats.stage = TT.stats.stage; const sg = TT.stats.stage; TT.stats.stage = () => stage; try { TT.story.go(p, arc, 'p4m'); S.arcs[id].since = TT.world.months - 6; S.arcs[id].ready = null; S.box = -99; S.ct_at = null;
+    for (let i = 0; i < 6; i++) { khAge(p, age); TT.world.months++; TT.story.tick(p); if (TT.world.pending) break; } } finally { TT.stats.stage = sg; } const d = TT.world.pending; clearPending(); return !!(d && d.ch === 'p4m'); };
+  eq(tryMo4(70, 1, 1), false, 'Luyện Khí trung kỳ 70 tuổi: chưa'); eq(tryMo4(70, 1, 2), true, 'Luyện Khí hậu kỳ: mở khi 70 tuổi'); eq(tryMo4(85, 1, 0), true, '85 tuổi: mở theo tuổi');
+  // phần 6: còn ≤ 15% thọ nguyên
+  const tryMo6 = age => { clearPending(); p.realm = 1; TT.story.go(p, arc, 'p6m'); S.arcs[id].since = TT.world.months - 6; S.arcs[id].ready = null; S.box = -99; S.ct_at = null; for (let i = 0; i < 6; i++) { khAge(p, age); TT.world.months++; TT.story.tick(p); if (TT.world.pending) break; } const d = TT.world.pending; clearPending(); return !!(d && d.ch === 'p6m'); };
+  p.realm = 1; const Lf = TT.stats.lifeSpan(p); eq(tryMo6(Math.floor(Lf * 0.5)), false, 'Luyện Khí giữa đời: thọ còn nhiều'); eq(tryMo6(Math.ceil(Lf * 0.9)), true, 'Luyện Khí khi thọ còn dưới 15%'); ok(TT.story.condOk(Object.assign({}, p, { realm: 1, birthMonth: TT.world.months - 12 * 112 }), { tho: 0.15 }) && !TT.story.condOk(Object.assign({}, p, { realm: 1, birthMonth: TT.world.months - 12 * 90 }), { tho: 0.15 }), 'điều kiện tho');
+  // thụ động: Story Director mở phần kế khi đã quá tuổi 3 năm
+  clearPending(); TT.story.go(p, arc, 'p1l'); S.arcs[id].tt = null; S.box = -99; khAge(p, 34); S.arcs[id].since = TT.world.months - 60; TT.world.months++; TT.story.tick(p); eq(S.arcs[id].st, 'p2m', 'phần 2 tự mở khi người chơi thụ động đến 33 tuổi trở lên'); clearPending();
+  // mốc tuổi mới của xương sống A và mặc định Story Director
+  const A = id => D.STORY.arcById[id].mo.hoac; eq(JSON.stringify(A('bb_a2').map(x => x.age).filter(Boolean)), '[30]'); eq(JSON.stringify(A('bb_a3').map(x => x.age).filter(Boolean)), '[55]'); eq(JSON.stringify(A('bb_a4').map(x => x.age).filter(Boolean)), '[85]'); eq(JSON.stringify(A('bb_a5').map(x => x.age).filter(Boolean)), '[100]');
+  ok(D.STORY.arcById.kb_mem_yeu.phan.map(x => x.tuoi).join() === '12,30,55,85,100,115', 'kịch bản mềm yếu cũng theo nhịp thật');
+}));
+
+test('Khuôn và kịch bản cụ thể (AI1a): khuôn phụ (định dạng, lint, Story Director một tuyến nóng trong khoảng yên) và công tắc khuonOn tắt như sau K2', () => khDone(() => {
+  const ph = D.STORY.phu.phu_chien_su; eq(TT.kb.lintPhu(ph).join(' | '), '', 'khuôn phụ mẫu sạch'); eq(ph.loai, 'the_gioi'); ok(ph.phan.length >= 2 && ph.phan.length <= 3 && ph.phan.every(P => ['moc', 'leo', 'cao_trao'].every(o => P.chang[o])), '2 đến 3 phần × 3 chặng');
+  const arcP = D.STORY.arcById.kbp_phu_chien_su; ok(arcP && arcP.phu && D.STORY.arcs.indexOf(arcP) >= 0, 'khuôn phụ được dựng thành tuyến'); eq(Object.keys(arcP.chang).length, 6); eq(TT.story.lint([arcP]).join(' | '), '');
+  const bad = f => { const k = JSON.parse(JSON.stringify(ph)); f(k); return TT.kb.lintPhu(k).join(' | '); };
+  ok(/cần 2 đến 3 phần/.test(bad(k => k.phan.length = 1)), 'bắt thiếu phần'); ok(/loai phải là/.test(bad(k => { k.loai = 'la'; })), 'bắt loại lạ'); ok(/thiếu mo/.test(bad(k => { k.mo = {}; })), 'bắt thiếu điều kiện mở');
+  ok(/không phải vai của dàn/.test(bad(k => { k.vai.ban = 'la'; })), 'bắt vai ngoài dàn'); ok(/kiểu lạ/.test(bad(k => { k.phan[0].chang.cao_trao.kieu[0].kieu = 'la'; })), 'bắt kiểu lạ'); ok(/do_vao/.test(bad(k => { k.do_vao = {}; })), 'bắt thiếu phần đổ vào');
+  // mặc định tắt: tuyến viết tay W1 vẫn mở, phụ không mở
+  D.STORY.phuOn = false; const p = khW(650, null, true), S = p.story; khAge(p, 20); p.flags.warAt = TT.world.months; p.realm = 1; for (let i = 0; i < 4; i++) { TT.world.months++; TT.story.tick(p); clearPending(); }
+  ok(S.arcs.tg_chien_su && !S.arcs.kbp_phu_chien_su, 'phuOn tắt: W1 mở, khuôn phụ không mở');
+  // bật: khuôn phụ thay W1; chỉ mở trong khoảng yên; tối đa một tuyến phụ nóng
+  D.STORY.phuOn = true; const q = khW(651, null, true), T = q.story; khAge(q, 20); q.realm = 1; q.flags.warAt = TT.world.months; T.ct_at = TT.world.months - 3;
+  TT.world.months++; TT.story.tick(q); clearPending(); ok(!T.arcs.kbp_phu_chien_su, 'vừa có cao trào chính (3 tháng) thì phụ chưa mở'); ok(!T.arcs.tg_chien_su, 'phuOn bật: W1 viết tay nhường chỗ');
+  T.ct_at = TT.world.months - 20; TT.world.months++; TT.story.tick(q); ok(T.arcs.kbp_phu_chien_su && T.arcs.kbp_phu_chien_su.st === 'q1m', 'đủ khoảng yên thì mở'); clearPending();
+  const fake = { id: 'kbp_khac', phu: true }; eq(TT.kb.phuOk(q, fake, T), false, 'đã có một tuyến phụ nóng thì không mở tuyến phụ thứ hai');
+  T.arcs.kbp_phu_chien_su.ket = 'hoa_nghi'; eq(TT.kb.phuOk(q, fake, T), true, 'tuyến phụ xong thì tuyến phụ khác được mở'); T.arcs.kbp_phu_chien_su.ket = null;
+  // chạy hết tuyến phụ: đổ vào khuôn chính (cờ, gắn bó)
+  D.STORY.kbc.pAm = 0; const gb0 = T.gb.ban || 0; let guard = 0; kbMode('can_bang');
+  while (!T.arcs.kbp_phu_chien_su.ket && guard++ < 800) { khAge(q, 20); TT.world.months++; T.ct_at = null; T.box = -99; TT.story.tick(q); const d = TT.world.pending; if (d) { if (d.type === 'story_sau') TT.decisions.resolve(0); else if (d.type === 'story') TT.decisions.resolve(Math.max(0, d.choices.findIndex(x => !x.disabled))); else if (d.type === 'wheel') TT.decisions.resolveDefault(); else clearPending(); } }
+  ok(T.arcs.kbp_phu_chien_su.ket, 'tuyến phụ đã xong: ' + guard); ok(q.flags.phu_chien_su_xong, 'đổ vào khuôn chính: đặt cờ'); ok((T.gb.ban || 0) > gb0, 'gieo gắn bó cho dàn'); eq(T.phuXong[0].phan, 3);
+  // khuôn chính đọc cờ ấy ở phần 3 (biến thể "người cũ ở quê")
+  ok(q.story.kbc.phan[2].chang[1].bien.some(b => b.khi.flag === 'phu_chien_su_xong'), 'phần 3 có biến thể đọc cờ của tuyến phụ'); q.flags.phu_chien_su_xong = 1; TT.kb.mo_phan(q, 3); ok(q.story.kbc.phan[2].bien_chon != null, 'mở phần 3 chọn biến thể');
+  // công tắc khuonOn tắt: như sau K2 (không dựng, không chặn xương sống A)
+  D.STORY.phuOn = false; D.STORY.khuonOn = false; D.STORY.kbOn = true; D.STORY.kb = {}; const o = storyWorld(652); TT.nature.set(o, { tinh: 0, xuthe: -8, daoduc: 0, tudung: 0 }); khAge(o, 40); for (let i = 0; i < 20; i++) { TT.world.months++; TT.story.tick(o); clearPending(); }
+  ok(o.story.kd === 'kieu_hanh', 'vẫn có khuyết điểm gốc'); ok(!o.story.kbc && !o.story.manhMoi && !o.story.xung, 'khuonOn tắt: không có kịch bản cụ thể, manh mối, xưng hô'); eq(TT.story.arcOf('kbc_' + o.id), null); ok(!TT.story.rows(o).some(r => r.dyn), 'không có tuyến sinh từ khuôn');
+  const fin = w => { w.story.arcs.bb_a1.st = null; w.story.arcs.bb_a1.ket = Object.keys(D.STORY.arcById.bb_a1.ket)[0]; w.story.done.push('bb_a1'); khAge(w, 40); TT.world.months++; TT.story.tick(w); clearPending(); };
+  ok(o.story.arcs.bb_a1, 'A1 mở'); fin(o); ok(o.story.arcs.bb_a2, 'khuonOn tắt: xương sống A cũ vẫn chạy (A2 mở sau A1 khi 40 tuổi, quá mốc 30)');
+  D.STORY.khuonOn = true; const m = khW(653, null, true); khAge(m, 40); for (let i = 0; i < 6; i++) { TT.world.months++; TT.story.tick(m); clearPending(); } fin(m); ok(m.story.kbc && !m.story.arcs.bb_a2, 'khuonOn bật và đã có kịch bản cụ thể: xương sống A cũ nhường chỗ');
+}));
+
 
 runNext();
 </script>

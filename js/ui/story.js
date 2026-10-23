@@ -52,7 +52,20 @@
   function build(box, c) {
     box.appendChild(h('h2', { style: 'margin-top:14px' }, 'Truyện của đời bạn'));
     const rows = TT.story.rows(c), dan = TT.story.isKb(c) ? TT.dan.rows(c) : [];
-    if (dan.length) { // K1: người đi cùng đời bạn (dàn định mệnh) và mức gắn bó
+    const tt = TT.story.isKb(c) && TT.kb.tomTat ? TT.kb.tomTat(c) : null;
+    if (tt) { // AI1a (Q 6e luật 9): câu hỏi đang treo, điều bạn biết (mỗi phần một dòng), người trong cuộc
+      const kc = h('div', { class: 'card story-card kbc-card' });
+      kc.appendChild(h('div', { class: 'qtop' }, h('b', null, 'Câu hỏi đang treo')));
+      kc.appendChild(h('div', { class: 'small' }, tt.cau_hoi || tt.cau_hoi_chinh));
+      if (tt.cau_hoi && tt.cau_hoi !== tt.cau_hoi_chinh) kc.appendChild(h('div', { class: 'small kbc-sub' }, 'Câu hỏi lớn của đời bạn: ' + tt.cau_hoi_chinh));
+      kc.appendChild(h('div', { class: 'qtop', style: 'margin-top:6px' }, h('b', null, 'Điều bạn biết')));
+      if (!tt.biet.length) kc.appendChild(h('div', { class: 'small' }, 'Bạn chưa biết gì chắc chắn.'));
+      tt.biet.forEach(x => kc.appendChild(h('div', { class: 'small' + (x.lat ? ' kbc-lat' : '') }, '• Phần ' + x.phan + ': ' + x.t)));
+      kc.appendChild(h('div', { class: 'qtop', style: 'margin-top:6px' }, h('b', null, 'Người trong cuộc')));
+      tt.nguoi.forEach(r => kc.appendChild(h('div', { class: 'dan-row small' + (r.song ? '' : ' mat') }, h('span', null, r.ten + ' · ' + r.ten_vai + (r.dd ? ' · ' + r.dd : '') + (r.sp === 'chet' ? ' (đã mất)' : r.sp === 'roi' ? ' (đã bỏ đi)' : r.sp === 'thu' ? ' (kẻ thù)' : '')))));
+      box.appendChild(kc);
+    }
+    if (dan.length && !tt) { // K1: người đi cùng đời bạn (dàn định mệnh) và mức gắn bó
       const dc = h('div', { class: 'card story-card' });
       dc.appendChild(h('div', { class: 'qtop' }, h('b', null, 'Người đi cùng bạn')));
       dan.forEach(r => dc.appendChild(h('div', { class: 'dan-row' + (r.alive ? '' : ' mat') }, h('span', null, r.n + ': ' + r.ten + (r.sp === 'chet' ? ' (đã mất)' : r.sp === 'roi' ? ' (đã bỏ đi)' : r.sp === 'thu' ? ' (kẻ thù)' : '')), h('span', null, 'gắn bó ' + r.gb))));
@@ -68,7 +81,11 @@
         card.appendChild(h('div', { class: 'small tt-head' }, 'Thử thách: ' + r.tt.ten + ' · còn ' + r.tt.left + '/' + r.tt.han + ' tháng'));
         r.tt.items.forEach(x => card.appendChild(h('div', { class: 'tt-row small' }, h('span', null, x.n + ': ' + (x.txt || (x.cur + ' / ' + x.can)) + (x.ok ? ' ✓' : '')), h('div', { class: 'timer' }, h('i', { style: 'width:' + Math.max(0, Math.min(100, x.cur / x.can * 100)) + '%' })))));
       }
-      r.log.forEach(t => card.appendChild(h('div', { class: 'small' }, '• ' + t)));
+      (r.logx || r.log.map(t => ({ t, hieu: '' }))).forEach(x => {
+        const row = h('div', { class: 'small' + (x.hieu ? ' kbc-mm' : '') }, '• ' + x.t);
+        if (x.hieu) row.appendChild(h('div', { class: 'kbc-hieu' }, 'Giờ bạn đã hiểu: ' + x.hieu)); // "Nhìn lại" sau cú lật
+        card.appendChild(row);
+      });
       box.appendChild(card);
     });
     if (TT.story.pendingDue(c) > 0) box.appendChild(h('div', { class: 'small', style: 'margin-top:6px' }, 'Có điều gì đó đang tới...'));

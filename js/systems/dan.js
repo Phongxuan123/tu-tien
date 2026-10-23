@@ -57,6 +57,11 @@
     if (vai === 'ke_thu') {
       let best = null;
       TT.rel.list(c).forEach(x => { if (x.r.k === 'thu' && x.c && x.c.alive && x.c.kind === 'npc' && taken.indexOf(x.c.id) < 0 && (!best || x.r.v < best.r.v)) best = x; });
+      if (!best && c.story && c.story.kbc && c.story.kbc.dung_ke_thu) { // AI1a: kịch bản cụ thể cần kẻ bóng tối ra mắt từ phần 1: dựng người cùng nơi, cùng lứa
+        const n = TT.life.spawnNpc(Math.max(13, TT.age(c) + TT.rng.RI(-2, 3)), c.region);
+        if (n) { n.place = c.place; n.dest = null; n.travel = null; }
+        return n;
+      }
       return best && best.c;
     }
     if (vai === 'ke_thua') return TT.family.disciples(c).filter(o => taken.indexOf(o.id) < 0)[0] || null;

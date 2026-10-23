@@ -253,6 +253,15 @@
     if (ok) dev.mark(p, 'Nhảy tới chặng ' + arcId + '/' + chId);
     return ok;
   };
+  // AI1a: ép khuyết điểm gốc (khóa) để thử kịch bản; có khuôn thì dựng ngay kịch bản cụ thể (TT.kb.make), tuyến chính mở ở tuổi phần 1.
+  dev.setKd = function (kd) {
+    const p = P(); if (!p || !dev.has.story() || !D.STORY.kds[kd]) return false;
+    TT.story.ensure(p); if (!p.story) return false;
+    p.story.kd = kd; p.story.kd_khoa = 1;
+    if (D.STORY.khuonOn && D.STORY.khuonKd[kd] && !p.story.kbc && TT.kb.make) TT.kb.make(p);
+    dev.mark(p, 'Ép khuyết điểm gốc «' + D.STORY.kds[kd].n + '»' + (p.story.kbc ? ' (đã dựng kịch bản cụ thể)' : ''));
+    return true;
+  };
   dev.setFlag = function (name, on) {
     const p = P(); name = String(name || '').trim();
     if (!p || !name) return false;
@@ -488,6 +497,8 @@
       if (!arc.chang[st.ch]) st.ch = arc.dau;
       box.appendChild(row('Tuyến', sel(arcs, st.arc, v => { st.arc = v; st.ch = null; draw(); })));
       box.appendChild(row('Chặng', sel(chs, st.ch, v => { st.ch = v; }), h('button', { onclick: () => act(() => dev.jump(st.arc, st.ch)) }, 'Nhảy tới')));
+      const kdSel = sel(Object.keys(D.STORY.kds).map(k => [k, D.STORY.kds[k].n + (D.STORY.khuonKd[k] ? ' (có khuôn)' : '')]), st.kd || (p.story && p.story.kd) || 'kieu_hanh', v => { st.kd = v; });
+      box.appendChild(row('Khuyết điểm', kdSel, h('button', { onclick: () => act(() => dev.setKd(st.kd || (p.story && p.story.kd) || 'kieu_hanh')) }, 'Ép')));
       const rows = TT.story.rows(p);
       if (rows.length) box.appendChild(h('div', { class: 'sm' }, rows.map(x => x.n + ': ' + (x.state === 'dang' ? x.cur : 'xong')).join(' | ')));
       const fn = h('input', { type: 'text', placeholder: 'tên cờ', style: 'width:130px' });

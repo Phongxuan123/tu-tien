@@ -1,6 +1,7 @@
 # Q-khuôn kịch bản. Khuôn xương sống theo khuyết điểm (cho AI sinh kịch bản cụ thể lúc chơi)
 
 - Trạng thái: **Khuôn mẫu đầu tiên ("kiêu hãnh") chờ bạn duyệt** (2026-10-23). Tám khuôn còn lại viết theo đúng định dạng này (K3).
+- **Đã chép thành dữ liệu (AI1a, 2026-10-23)**: khuôn "kiêu hãnh" ở `js/data/khuon/kieu_hanh.js` (kèm dòng dự phòng 2 đến 3 câu cho cả 24 chặng), thư viện kiểu ở `D.STORY.kieu`, bộ cụ thể hóa ở `js/systems/khuon.js`; định dạng dữ liệu chi tiết xem Z mục 7d "AI1a đã làm". Mục 1 dưới đây là định dạng gốc; bản dữ liệu thêm `bien` (biến thể chặng theo cờ), `ep`, `lc` của móc/leo/treo và `kieu_cao_trao` có nhãn `vt` (nguoc, dkd, khac).
 - Dùng bởi: bộ máy kịch bản (K1) và lớp AI lúc chơi (AI1, Z mục 7d). Ở mốc A1, Sonnet nhận **khuôn + trạng thái thật của đời** và sinh **bảng một trang cụ thể**; khi mở mỗi phần, Sonnet viết 4 chặng của phần theo khuôn và theo những gì đã xảy ra.
 - Luật kể chuyện: [Q-giong-truyen](Q-giong-truyen.md) (bản 13). Khuôn **không** chứa chữ truyện; chữ do AI viết theo cẩm nang và bộ cảnh chuẩn.
 

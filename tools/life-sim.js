@@ -2,6 +2,7 @@
 // in nhật ký người chơi, tuổi thơ, "Truyện của đời bạn", tính cách đầu/cuối và khí vận kiếm/tiêu ra tệp văn bản.
 //   node tools/life-sim.js --seed=101 [--years=80] [--dao=tu_luyen|auto]      ra tools/life-sim/101.txt
 //   --kb=mem_long   ép khuyết điểm gốc (khóa) và đăng ký kịch bản của khuyết điểm đó (mem_long -> kb_mem_yeu; kb_mau cho khung mẫu: --kb=mem_long --kbid=kb_mau); bật D.STORY.kbOn
+//   --kb=kieu_hanh  (AI1a) ép khuyết điểm có khuôn: kịch bản cụ thể sinh từ khuôn (không dùng --kbid); nên thêm --years=150 để thấy hết 6 phần; ghi thêm mục "Khuôn và kịch bản cụ thể" và đuôi _<kb> vào tên tệp
 //   --nhay=bb_a3:c1   nhảy tới một chặng ngay đầu đời (TT.story.jump) để xem các mốc xa; ghi rõ ở đầu tệp
 //   node tools/life-sim.js --batch=101-140 [--years=60]   đo 40 hạt giống bật/tắt truyện (D.STORY.on): chiến tranh, diệt vong, đổi chủ của thế giới và nhịp hộp quyết định
 //   của người chơi (chế độ Cân bằng, chọn mặc định), in ra màn hình, không ghi tệp.
@@ -26,7 +27,7 @@ function inPage(seed, years, dao, nhay, kd, kbid) {
   TT.decisions.request = function (d) { boxes[d.type === 'story' || d.type === 'wheel' ? d.type : 'other']++; return rq.apply(this, arguments); };
   if (window.__memOff) TT.data.BOND.mem = false; // --mem=off: đo khi chưa có ký ức chung (9K)
   if (window.__gomOff) TT.data.STORY.logGom.on = false; // --gom=off: đo nhật ký khi chưa gom (8B2)
-  if (kd) { TT.data.STORY.kbOn = true; TT.data.STORY.kb[kd] = kbid; }
+  if (kd) { TT.data.STORY.kbOn = true; if (!(TT.data.STORY.khuonKd && TT.data.STORY.khuonKd[kd] && TT.data.STORY.khuonOn)) TT.data.STORY.kb[kd] = kbid; }
   TT.life.createWorld(seed);
   const p = TT.player(); TT.world.settings = TT.world.settings || {}; TT.world.settings.auto = 'tu_dong';
   if (kd) { TT.story.ensure(p); p.story.kd = kd; p.story.kd_khoa = 1; }
@@ -53,6 +54,9 @@ function inPage(seed, years, dao, nhay, kd, kbid) {
   o.log = all.filter(e => e.b === p.birthMonth).map(e => ({ age: Math.floor((e.m - e.b) / 12), t: e.t }));
   TT.log = lg; TT.decisions.request = rq;
   o.fx = p.childFx || {};
+  { const S = p.story, K = S && S.kbc; // AI1a: khuôn và kịch bản cụ thể
+    if (K) o.kbc = { khuon: K.khuon, chon: K.chon, guong: K.guong, lat: { id: K.lat.id, kieu: K.lat.kieu, phan_no: K.lat.phan_no, da_no: K.lat.da_no, biet: K.lat.biet }, chuoi: K.chuoi, mo: K.mo, manhMoi: S.manhMoi || [], xung: S.xung || {},
+      tomTat: TT.kb.tomTat(p), phuXong: S.phuXong || [] }; }
   // 9K: ký ức chung của các cặp thân (kể cả người đã mất) và kết nghĩa
   o.pairs = TT.rel.list(p).filter(x => x.r.d && x.r.d.mem && x.r.d.mem.length).map(x => ({ name: x.c ? x.c.name : '?', alive: !!(x.c && x.c.alive), t: x.r.d.t, ks: x.r.d.mem.map(e => '[' + e.a + ' tuổi' + (e.h ? ', hoạn nạn' : '') + '] ' + e.t) }));
   o.memTotal = o.pairs.reduce((n, q) => n + q.ks.length, 0);
@@ -134,6 +138,17 @@ async function batch() {
   o.stories.forEach(s => { L.push(s.n + ' (' + (s.state === 'xong' ? 'xong: ' + s.ket : 'đang đi: ' + s.cur) + ')'); s.log.forEach(t => L.push('  • ' + t)); });
   if (o.due) L.push('Hậu quả còn chờ: ' + o.due + ' (có điều gì đó đang tới)');
   L.push('');
+  if (o.kbc) {
+    const k = o.kbc; L.push('--- Khuôn và kịch bản cụ thể (AI1a) ---');
+    L.push('Khuôn ' + k.khuon + ' · vết thương ' + k.chon.vet + ' · muốn ' + k.chon.muon + ' · vật ' + k.chon.vat + ' · gương là ' + k.guong + ' · phương án lật ' + k.lat.id + ' (' + k.lat.kieu + ', nổ ở phần ' + k.lat.phan_no + ', ' + (k.lat.da_no ? 'ĐÃ NỔ' : 'chưa nổ') + ')');
+    L.push('Lý do: ' + Object.keys(k.chon.ly).map(x => x + ': ' + k.chon.ly[x]).join('; '));
+    L.push('Chuỗi kiểu lựa chọn các cao trào: ' + Object.keys(k.chuoi).map(i => 'P' + i + '=' + k.chuoi[i].kieu + '(' + k.chuoi[i].vt + ')').join(' · ') + ' · mở phần ở tháng: ' + Object.keys(k.mo).map(i => 'P' + i + '=' + k.mo[i]).join(' '));
+    L.push('Manh mối đã gặp (' + k.manhMoi.length + '): ' + k.manhMoi.map(m => 'P' + m.phan + ' ' + m.t).join(' | '));
+    if (k.lat.da_no) L.push('Sự thật: ' + k.lat.biet);
+    L.push('Xưng hô: ' + Object.keys(k.xung).map(v => v + '=' + k.xung[v].qh + (k.xung[v].truoc ? '(trước: ' + k.xung[v].truoc + ')' : '')).join(', '));
+    if (k.tomTat) { L.push('Câu hỏi đang treo: ' + (k.tomTat.cau_hoi || k.tomTat.cau_hoi_chinh)); k.tomTat.biet.forEach(x => L.push('Điều bạn biết (phần ' + x.phan + '): ' + x.t)); k.tomTat.nguoi.forEach(x => L.push('Người trong cuộc: ' + x.ten + ' · ' + x.ten_vai + (x.dd ? ' · ' + x.dd : '') + (x.song ? '' : ' (không còn)'))); }
+    L.push('');
+  }
   L.push('--- Kỷ niệm các cặp thân (9K) ---');
   L.push('Tổng ký ức: ' + o.memTotal + ' · Kết nghĩa: ' + (o.sworn.length ? o.sworn.join(', ') : 'không có'));
   o.pairs.forEach(q => { L.push(q.name + (q.alive ? '' : ' (đã mất)') + ' · loại ' + q.t + ':'); q.ks.forEach(t => L.push('  ' + t)); });
@@ -141,7 +156,7 @@ async function batch() {
   L.push('--- Nhật ký ---');
   o.log.forEach(e => L.push('[' + String(e.age).padStart(3) + ' tuổi] ' + e.t));
   const dir = path.join(__dirname, 'life-sim'); fs.mkdirSync(dir, { recursive: true });
-  const f = path.join(dir, SEED + '.txt'); fs.writeFileSync(f, L.join('\n') + '\n');
+  const f = path.join(dir, SEED + (KB ? '_' + (o.kbc ? KB : 'mem_yeu') : '') + '.txt'); fs.writeFileSync(f, L.join('\n') + '\n');
   console.log('Ký ức: ' + o.memTotal + ', cặp: ' + o.pairs.length + ', kết nghĩa: ' + o.sworn.length);
   console.log('Đã ghi ' + f + ' (' + o.log.length + ' dòng nhật ký, ' + o.boxes.story + ' hộp truyện, ' + o.boxes.wheel + ' hộp vòng quay).');
 })().catch(e => { console.error(e); process.exit(2); });

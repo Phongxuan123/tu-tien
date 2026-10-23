@@ -39,11 +39,11 @@
     dau: 'a1',
     phan: [
       { id: 'p1', n: 'Chiếc chăn', tuoi: 12, moc: 'a1', leo: ['a2'], dao: 'a3', cao_trao: 'a4', treo: 'a5' },
-      { id: 'p2', n: 'Danh sách', tuoi: 18, moc: 'b1', leo: ['b2'], dao: 'b3', cao_trao: 'b4', treo: 'b5' },
-      { id: 'p3', n: 'Nhân chứng', tuoi: 25, moc: 'c1', leo: ['c2'], dao: 'c3', cao_trao: 'c4', treo: 'c5' },
-      { id: 'p4', n: 'Hòa khí', tuoi: 35, moc: 'd1', leo: ['d2'], dao: 'd3', cao_trao: 'd4', treo: 'd5' },
-      { id: 'p5', n: 'Tất cả đã mất', tuoi: 50, moc: 'e1', leo: ['e2'], dao: 'e3', cao_trao: 'e4', treo: 'e5' },
-      { id: 'p6', n: 'Biển', tuoi: 70, moc: 'f1', leo: ['f2'], dao: 'f3', cao_trao: 'f4', treo: 'f5' }
+      { id: 'p2', n: 'Danh sách', tuoi: 30, moc: 'b1', leo: ['b2'], dao: 'b3', cao_trao: 'b4', treo: 'b5' },
+      { id: 'p3', n: 'Nhân chứng', tuoi: 55, moc: 'c1', leo: ['c2'], dao: 'c3', cao_trao: 'c4', treo: 'c5' },
+      { id: 'p4', n: 'Hòa khí', tuoi: 85, moc: 'd1', leo: ['d2'], dao: 'd3', cao_trao: 'd4', treo: 'd5' },
+      { id: 'p5', n: 'Tất cả đã mất', tuoi: 100, moc: 'e1', leo: ['e2'], dao: 'e3', cao_trao: 'e4', treo: 'e5' },
+      { id: 'p6', n: 'Biển', tuoi: 115, moc: 'f1', leo: ['f2'], dao: 'f3', cao_trao: 'f4', treo: 'f5' }
     ],
     chang: {
       // ================= PHẦN 1: CHIẾC CHĂN (12 đến 18) =================

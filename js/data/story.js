@@ -21,6 +21,10 @@
 //   fx mới: gan_bo { dan, d }, no { dan, d 1..10 }, tra_no 'vai', chet { dan, ngoai_khung? }, roi { dan }, thu { dan, why? }, tong { mat_suat | len_noi_mon | giang | truc_xuat | truy: true }, vat 'id' | '@khe' | { mat: 'id' | '@khe' };
 //     cờ 'khinh_giau' | 'khinh_phan' | 'khinh_ta' bật luật gọi tên. Kết cục: xau: true (kết cục xấu hoặc mất mát).
 //   Điều kiện (mo, khi): tong (true | false | id), hoi, nghe { id, lv }, dao, xt, vung, nhan, ke_thu, kd.
+// AI1a (khuôn và kịch bản cụ thể, công tắc D.STORY.khuonOn; chi tiết ở Z 7d "AI1a đã làm", định dạng khuôn ở js/data/khuon/kieu_hanh.js):
+//   D.STORY.kieu (thư viện kiểu lựa chọn → cơ chế fx của K1), D.STORY.khuon / khuonKd (khuôn chính theo khuyết điểm), D.STORY.phu (khuôn phụ), D.STORY.xung (bảng xưng hô).
+//   Tuyến sinh từ khuôn (arc.dyn, id kbc_<id>) có thêm: phan[].canh (điều kiện cảnh giới thay tuổi), phan[].tho (còn ≤ tỉ lệ thọ), khe_kb: { khe: { chu: 'chữ' } },
+//   lựa chọn: tm (chỉ hiện khi tâm ma), kieu, vt; đích 'ket:@khuon' (kết cục chọn theo chuỗi kiểu lựa chọn); điều kiện tho.
 // Chữ có khe {khe} (tên người ở vai, hoặc chữ của khe_kb) và {ten} (tên người chơi). Kiểm bằng tools/story-lint.js (TT.story.lint).
 (function () {
   const TT = window.TT = window.TT || {};
@@ -94,7 +98,14 @@
       giay_rom: { n: 'Đôi giày rơm', desc: 'Đôi giày mẹ ai đó đan bằng tay. Không bán được.' },
       thu_cu: { n: 'Lá thư cũ', desc: 'Nét chữ đã nhòe, giấy gấp đi gấp lại. Không bán được.' },
       kiem_go: { n: 'Thanh kiếm gỗ', desc: 'Thanh kiếm hai đứa trẻ từng giành nhau. Không bán được.' },
-      chuoi_hat: { n: 'Chuỗi hạt sứt', desc: 'Chuỗi hạt thiếu mất một hạt. Không bán được.' }
+      chuoi_hat: { n: 'Chuỗi hạt sứt', desc: 'Chuỗi hạt thiếu mất một hạt. Không bán được.' },
+      // AI1a: vật của khuôn "kiêu hãnh" (sợi chính, sợi phụ gương, sợi phụ thầy)
+      bat_su_me: { n: 'Chiếc bát sứ mẻ', desc: 'Miệng bát mẻ một góc, rửa mãi vẫn còn mùi canh nguội. Không bán được.' },
+      dep_rom: { n: 'Chiếc dép rơm bẹp', desc: 'Chiếc dép rơm bị giẫm bẹp, vuốt phẳng lại cũng không hết nếp. Không bán được.' },
+      dong_xu: { n: 'Đồng xu cũ', desc: 'Một đồng xu bị ném xuống đất, mòn một mặt. Không bán được.' },
+      dai_lua: { n: 'Dải lụa buộc chuôi kiếm', desc: 'Dải lụa phai màu, vẫn còn thơm mùi tay ai. Không bán được.' },
+      luoc_go: { n: 'Chiếc lược gỗ', desc: 'Chiếc lược gỗ gãy một răng. Không bán được.' },
+      kiem_go_su: { n: 'Thanh kiếm gỗ của thầy', desc: 'Thanh kiếm gỗ đầu tiên thầy đưa, cán mòn vì tay người cầm từ trước. Không bán được.' }
     },
     // Khoảnh khắc ấm (t: chữ, {ten} là bạn, {vai} là người ấy; ở: 'gan' cùng nơi, tuoi: [tuổi người chơi từ, đến]) và thư (khác vùng). Mỗi mục +1 gắn bó.
     am: [
@@ -120,7 +131,73 @@
       { id: 'th_dt', vai: 'doi_thu', t: '{vai} gửi thư, chỉ ghi: "Lần sau gặp, ta sẽ thắng." Dưới góc có một vết mực lem, như bàn tay vừa lau vội.' },
       { id: 'th_thuong', vai: 'thuong', t: '{vai} gửi thư và một cánh hoa ép khô: "Ở đây mùa hoa vừa tới."' }
     ],
+
+    // ---------- AI1a: khuôn và kịch bản cụ thể (Q-khuon-kich-ban, Z 7d). khuonOn=false (hoặc kbOn=false): mọi thứ như sau K2 ----------
+    khuonOn: true,
+    khuon: {},                   // id khuôn chính -> khuôn (js/data/khuon/*.js, D.STORY.regKhuon)
+    khuonKd: {},                 // khuyết điểm gốc -> id khuôn chính; chưa có khuôn thì dùng D.STORY.kb (K2) rồi xương sống A cũ
+    phu: {},                     // id khuôn phụ -> khuôn phụ (D.STORY.regPhu)
+    phuOn: false,                // true: khuôn phụ được mở và thay tuyến viết tay cùng chỗ (phu.thay); mặc định tắt cho tới khi K4 chuyển tuyến cũ
+    // Mốc tuổi mở phần mặc định theo nhịp thật (Q-khuon-kich-ban 2.4): phàm nhân đến khoảng 50 tuổi mới vào Luyện Khí, khoảng 130 mới Trúc Cơ; thọ 70/130/260.
+    tuoiPhan: [12, 30, 55, 85, 100, 115],
+    // Tâm ma (kiểu lựa chọn tam_ma): chỉ hiện khi đạo tâm dưới `daoTam` hoặc đang mang đặc điểm tâm ma.
+    tamMa: { daoTam: 35, trait: 'tam_ma' },
+    phuGiaYen: 12,               // khuôn phụ chỉ mở khi cao trào chính gần nhất đã cách ≥ chừng này tháng và cao trào chính kế chưa tới hạn; không cao trào phụ nào trùng năm với cao trào chính
+    // Thư viện kiểu lựa chọn (Q-khuon-kich-ban mục 0). Cơ chế CỐ ĐỊNH, bộ máy áp; AI/dòng dự phòng chỉ viết nhãn, mat, lời dẫn cho đúng kiểu.
+    // ap(P) nhận P = { p (nhãn cờ: '3' cho cao trào phần 3, '3l' cho chặng leo), n (phần 1..6), truc, dau (trục và dấu của khuyết điểm), doi (vai dàn chịu hậu quả), cuu (vai dàn được cứu hoặc gắn bó), slot (vai trong chữ của người chịu hậu quả), truy? }
+    // và trả { kind, ax?, fx, tre?, wheel?, tm? } theo khóa fx của K1. Kiểu "ngược khuyết điểm" đẩy trục sang phía kia bằng fx.ax (không qua khóa trái tính, để luôn còn đường chuộc);
+    // kiểu thuận khuyết điểm dùng lc.ax cùng chiều khuyết điểm (thuận tay, không phí trái tính, nhưng đẩy sâu thêm).
+    kieu: {
+      phuc_tung: { n: 'Phục tùng', mo_ta: 'làm theo, chịu nhục để đạt điều cần', mat: 'Một phần sĩ diện.',
+        ap: P => ({ kind: 'safe', fx: { rep: { danh: -(P.n >= 4 ? 2 : 1) }, flag: 'nhuc_p' + P.p, ax: P.truc ? { [P.truc]: -P.dau } : undefined } }) },
+      chong: { n: 'Chống lại', mo_ta: 'chống lại trực diện', mat: 'Máu, hoặc một người đứng cạnh.',
+        ap: P => ({ kind: 'fight', fx: { flag: 'p' + P.p + '_chong' },
+          tre: [{ sau: [24, 60], fx: { hp: -12, rel: { vai: P.slot, d: -6 } }, log: '{' + P.slot + '} trả lại đòn năm xưa đúng lúc bạn không đề phòng.' }],
+          wheel: { vung: [
+            { w: 30, n: 'Bạn thua, bị thương nặng', fx: { hp: -30, daoTam: -2, no: { dan: P.doi, d: 2 } } },
+            { w: 40, n: 'Hòa, cả hai đều thương tích', fx: { hp: -12 } },
+            { w: 30, n: 'Bạn thắng', fx: { rep: { danh: 1 }, xp: 0.05, no: { dan: P.doi, d: 3 } } }
+          ], yeu_to: { loai: 'stat', chi_so: 'realm', tran: 12 }, gia: 2 } }) },
+      dao_thoat: { n: 'Đào thoát', mo_ta: 'bỏ chạy, trốn, mang người đi', mat: 'Một người ở lại chịu thay bạn.',
+        ap: P => ({ kind: 'flee', fx: Object.assign({ no: { dan: P.doi, d: 3 }, rep: { danh: -1 }, flag: 'p' + P.p + '_dao_thoat' }, P.truy ? { tong: { truy: true } } : {}) }) },
+      hy_sinh: { n: 'Hy sinh', mo_ta: 'đổi thứ mình quý lấy người khác', mat: 'Một thứ bạn quý, không lấy lại được.',
+        ap: P => ({ kind: 'pay', fx: { xp: -Math.min(0.4, 0.1 + 0.05 * (P.n - 1)), gan_bo: { dan: P.cuu, d: 2 }, daoTam: 1, flag: 'p' + P.p + '_hy_sinh', ax: P.truc ? { [P.truc]: -P.dau } : undefined } }) },
+      duong_tat: { n: 'Đường tắt', mo_ta: 'nhanh, bất lương', mat: 'Một món nợ không ghi sổ, nhưng sẽ có người đòi.',
+        ap: P => ({ kind: 'risk', fx: { nghiep: 2, no: { dan: P.doi, d: 2 }, flag: 'p' + P.p + '_duong_tat' },
+          tre: [{ sau: [24, 60], fx: { daoTam: -3, rep: { danh: -2 } }, log: 'Con đường tắt năm nào đòi lại: một lời đồn, một ánh nhìn, và đêm nào bạn cũng nhớ ra.' }] }) },
+      im_lang: { n: 'Im lặng', mo_ta: 'không làm gì, giữ hòa khí', mat: 'Một lời bạn không nói, và một người phải chịu.',
+        ap: P => ({ kind: 'safe', fx: { no: { dan: P.doi, d: 2 }, flag: 'p' + P.p + '_im_lang' },
+          tre: [{ sau: [24, 60], fx: { rel: { vai: P.slot, d: -4 } }, log: 'Điều bạn đã im lặng năm xưa quay lại, nhẹ như một lời hỏi: "Hôm ấy ngươi ở đâu?"' }] }) },
+      tin: { n: 'Tin', mo_ta: 'đặt niềm tin vào một người', mat: 'Một phần cảnh giác; người ấy có thể làm bạn thất vọng.',
+        ap: P => ({ kind: 'help', fx: { gan_bo: { dan: P.cuu, d: 2 }, flag: 'p' + P.p + '_tin' } }) },
+      dung_khuyet_diem: { n: 'Theo khuyết điểm', mo_ta: 'hành xử đúng khuyết điểm gốc', mat: 'Một lần nữa bạn làm đúng điều khiến bạn ra nông nỗi này.',
+        ap: P => ({ kind: 'risk', ax: P.truc ? { [P.truc]: 2 * P.dau } : undefined, fx: { nghiep: 1, flag: 'p' + P.p + '_dung_khuyet_diem' } }) },
+      tam_ma: { n: 'Tâm ma', mo_ta: 'lựa chọn của tâm ma, chỉ hiện khi đạo tâm thấp hoặc tâm ma nặng', mat: 'Điều bạn không dám nói ra.', tm: true,
+        ap: P => ({ kind: 'risk', tm: true, ax: P.truc ? { [P.truc]: 3 * P.dau } : undefined, fx: { nghiep: 3, daoTam: -4, rep: { chinh: -4 }, no: { dan: P.doi, d: 3 }, flag: 'p' + P.p + '_tam_ma' } }) }
+    },
+    // Bảng xưng hô (AI1a, mục 5). qh: quan hệ giữa người chơi và một vai trong dàn. ta: người chơi tự xưng; goi: người chơi gọi người ấy; goi_lai: người ấy gọi người chơi; ve: tả người ấy
+    // (nam/nu). goi và ve có biến thể theo giới của NGƯỜI ẤY, goi_lai theo giới của NGƯỜI CHƠI (n: nam, f: nữ). Quan hệ đổi theo cờ (fx.flag) hoặc trạng thái thật: xem TT.kb.xungSync.
+    xung: {
+      mac_dinh: { su: 'su_tro', huynh: 'huynh_de', thuong: 'nguoi_thuong', doi_thu: 'dong_mon', ke_thu: 'ke_thu', than_nhan: 'than_nhan', ban: 'ban' },
+      qh: {
+        su_tro:       { ta: 'đệ tử', goi: { n: 'sư phụ', f: 'sư phụ' }, goi_lai: 'con', ve: { n: 'ông', f: 'bà' } },
+        huynh_de:     { ta: 'đệ', goi: { n: 'sư huynh', f: 'sư tỷ' }, goi_lai: 'sư đệ', ve: { n: 'huynh ấy', f: 'tỷ ấy' } },
+        nguoi_thuong: { ta: 'ta', goi: { n: 'chàng', f: 'nàng' }, goi_lai: { n: 'chàng', f: 'nàng' }, ve: { n: 'chàng', f: 'nàng' } },
+        dong_mon:     { ta: 'ta', goi: { n: 'ngươi', f: 'ngươi' }, goi_lai: 'ngươi', ve: { n: 'hắn', f: 'nàng' } },
+        ke_thu:       { ta: 'ta', goi: { n: 'ngươi', f: 'ngươi' }, goi_lai: 'ngươi', ve: { n: 'hắn', f: 'ả' } },
+        than_nhan:    { ta: 'con', goi: { n: 'cha', f: 'mẹ' }, goi_lai: 'con', ve: { n: 'ông', f: 'bà' } },
+        ban:          { ta: 'ta', goi: { n: 'cậu', f: 'cậu' }, goi_lai: 'cậu', ve: { n: 'cậu ấy', f: 'cô ấy' } },
+        ket_nghia:    { ta: 'đệ', goi: { n: 'huynh', f: 'tỷ' }, goi_lai: 'hiền đệ', ve: { n: 'huynh ấy', f: 'tỷ ấy' } },
+        phan_boi:     { ta: 'ta', goi: { n: 'ngươi', f: 'ngươi' }, goi_lai: 'ngươi', ve: { n: 'kẻ ấy', f: 'ả ấy' } },
+        phe_su:       { ta: 'ta', goi: { n: 'lão', f: 'bà ta' }, goi_lai: 'ngươi', ve: { n: 'lão', f: 'bà ta' } },
+        dao_lu:       { ta: 'ta', goi: { n: 'phu quân', f: 'nương tử' }, goi_lai: { n: 'phu quân', f: 'nương tử' }, ve: { n: 'chàng', f: 'nàng' } }
+      },
+      // cờ (fx.flag) đổi quan hệ: 'phan_<vai>' phản bội, 'phe_su' phế sư, 'ket_nghia_<vai>' kết nghĩa; sp 'thu' thì ke_thu (xem TT.kb.xungSync)
+      co: { phan: 'phan_boi', phe_su: 'phe_su', ket_nghia: 'ket_nghia' }
+    },
     arcs: [], arcById: {},
-    reg(arc) { D.STORY.arcs.push(arc); D.STORY.arcById[arc.id] = arc; return arc; }
+    reg(arc) { D.STORY.arcs.push(arc); D.STORY.arcById[arc.id] = arc; return arc; },
+    regKhuon(k) { D.STORY.khuon[k.id] = k; D.STORY.khuonKd[k.khuyet_diem] = k.id; return k; },
+    regPhu(k) { D.STORY.phu[k.id] = k; return k; }
   };
 })();

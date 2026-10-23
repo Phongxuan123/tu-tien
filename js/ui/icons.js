@@ -17,7 +17,8 @@
     ho_than_bua: { kind: 'bua', col: '#4a8ed8' }, thoat_than_bua: { kind: 'bua', col: '#58b36a' }, cong_kich_bua: { kind: 'bua', col: '#d8302a' },
     linh_thao: { kind: 'thao' }, quang_thach: { kind: 'khoang', ore: 0 }, tinh_thiet: { kind: 'khoang', ore: 1 }, huyen_thiet: { kind: 'khoang', ore: 2 }, thien_thach: { kind: 'khoang', ore: 3 },
     phu_giay: { kind: 'giay' }, yeu_dan: { kind: 'yeu' },
-    chan_day: { kind: 'tamdac', col: '#b08a5a' }, giay_rom: { kind: 'da', col: '#c9b27a' }, thu_cu: { kind: 'giay' }, kiem_go: { kind: 'kiem', tier: 0 }, chuoi_hat: { kind: 'ngoc', tier: 0 } // vật kỷ niệm (K1)
+    chan_day: { kind: 'tamdac', col: '#b08a5a' }, giay_rom: { kind: 'da', col: '#c9b27a' }, thu_cu: { kind: 'giay' }, kiem_go: { kind: 'kiem', tier: 0 }, chuoi_hat: { kind: 'ngoc', tier: 0 }, // vật kỷ niệm (K1)
+    bat_su_me: { kind: 'da', col: '#d8d2c4' }, dep_rom: { kind: 'tamdac', col: '#c9b27a' }, dong_xu: { kind: 'ngoc', tier: 0 }, dai_lua: { kind: 'tamdac', col: '#b9a3d6' }, luoc_go: { kind: 'tamdac', col: '#9a7447' }, kiem_go_su: { kind: 'kiem', tier: 0 } // vật của khuôn kiêu hãnh (AI1a)
   };
 
   function spec(id) {

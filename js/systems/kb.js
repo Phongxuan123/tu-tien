@@ -10,6 +10,8 @@
   const AXES = ['tinh', 'xuthe', 'daoduc', 'tudung'];
   const NHIP = ['moc', 'leo', 'dao', 'cao_trao', 'treo'];
   const lower = t => t.charAt(0).toLowerCase() + t.slice(1);
+  // Tuổi mở phần: ghi trong phan[i].tuoi, không ghi thì lấy mốc mặc định theo nhịp thật (D.STORY.tuoiPhan: phàm nhân đến khoảng 50 tuổi mới vào Luyện Khí).
+  const tuoiOf = (arc, i) => { const t = arc.phan[i] && arc.phan[i].tuoi; return t != null ? t : (arc.mau || arc.phu ? undefined : (K().tuoiPhan || [])[i]); };
 
   // Chỉ mục chặng -> { i (phần), nhip } của một kịch bản có phan[] (đệm bằng WeakMap, không ghi vào dữ liệu).
   const PM = new WeakMap();
@@ -74,7 +76,7 @@
         if (now - S.ct_at < KC().giaCT) h = Math.max(h, S.ct_at + KC().giaCT);
         if (Math.floor(now / 12) === Math.floor(S.ct_at / 12)) h = Math.max(h, (Math.floor(now / 12) + 1) * 12);
       }
-      if (pm && pm.nhip === 'moc' && TT.age(c) < (arc.phan[pm.i].tuoi || 0)) h = Math.max(h, now + 1);
+      if (pm && pm.nhip === 'moc' && TT.age(c) < (tuoiOf(arc, pm.i) || 0) && !(arc.phan[pm.i].canh && TT.story.condOk(c, arc.phan[pm.i].canh))) h = Math.max(h, now + 1); // mở theo cảnh giới HOẶC tuổi (AI1a)
       return h;
     },
 
@@ -85,29 +87,33 @@
       Object.keys(arc.khe_kb || {}).forEach(slot => {
         const spec = arc.khe_kb[slot];
         if (spec.the_luc) { const f = theLuc(c); if (f) { st.khe[slot] = f.n; st.khe_id[slot] = f.id; } }
+        else if (spec.chu !== undefined) st.khe[slot] = spec.chu; // AI1a: khe chữ (nơi, đỉnh...) do khuon.js làm tươi
         else if (spec.vat) {
           const id = spec.vat[Math.floor(TT.dan.hash('vat:' + c.id + ':' + c.birthMonth + ':' + slot) * spec.vat.length) % spec.vat.length];
           if (D.STORY.vat[id]) { st.khe[slot] = lower(D.STORY.vat[id].n); st.khe_id[slot] = id; }
         }
       });
+      if (TT.kb.khuonOpen) TT.kb.khuonOpen(c, arc, st);
     },
     // Vào chặng: ghi phần và nhịp hiện tại.
     enter(c, arc, st, chId) {
       const pm = arc.phan && phanMap(arc)[chId]; if (!pm) return;
       st.phan = pm.i; st.nhip = pm.nhip;
       const S = c.story; if (pm.i > (S.phanMax || 0)) S.phanMax = pm.i;
+      if (arc.dyn && !arc.phu && TT.kb.dynEnter) TT.kb.dynEnter(c, arc, st, chId); // AI1a: mở phần
     },
     // Đã áp một lựa chọn của chặng: cao trào thì ghi mốc để giữ khoảng cách.
-    applied(c, arc, st, chId, missed) {
+    applied(c, arc, st, chId, missed, lc) {
       const pm = arc.phan && phanMap(arc)[chId];
       if (pm && pm.nhip === 'cao_trao') c.story.ct_at = TT.world.months;
+      if (arc.dyn && !arc.phu && TT.kb.dynApplied) TT.kb.dynApplied(c, arc, st, chId, lc); // AI1a: chuỗi kiểu, manh mối, cú lật
     },
     // Story Director: người chơi thụ động mà đã quá tuổi mở phần kế quá treTuoi năm thì phần kế tự mở. Trả true nếu đã nhảy.
     director(c, arc, st) {
       if (st.tt) return false;
       const pm = phanMap(arc)[st.st]; if (!pm) return false;
-      const nx = arc.phan[pm.i + 1];
-      if (nx && nx.tuoi != null && TT.age(c) >= nx.tuoi + KC().treTuoi) {
+      const nx = arc.phan[pm.i + 1], nt = nx && tuoiOf(arc, pm.i + 1);
+      if (nx && nt != null && TT.age(c) >= nt + KC().treTuoi) {
         TT.log(c, '[' + arc.n + '] Năm tháng trôi qua mà bạn vẫn chưa kịp làm xong chuyện cũ; chuyện mới đã đến.', 'age');
         TT.story.note(c, st, 'Phần mới mở (chuyện cũ bỏ dở)');
         TT.story.go(c, arc, nx.moc);
@@ -205,6 +211,7 @@
           }
         }
       }
+      if (K().khuonOn && TT.kb.khuonTick) TT.kb.khuonTick(c); // AI1a: dựng kịch bản cụ thể ở mốc A1, làm tươi bảng xưng hô
       kb.ttTick(c);
       kb.goiTick(c);
     }

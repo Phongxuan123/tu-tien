@@ -14,7 +14,7 @@
   const AXES = ['tinh', 'xuthe', 'daoduc', 'tudung'];
   const SLOT = /\{([a-z_]+)\}/g;
 
-  const arcOf = id => K().arcById[id];
+  const arcOf = id => (typeof id === 'string' && id.indexOf('kbc_') === 0 ? (TT.kb && TT.kb.dynArc ? TT.kb.dynArc(id) : null) : K().arcById[id]); // AI1a: tuyến sinh từ kịch bản cụ thể không nằm trong D.STORY.arcs
   const stOf = (c, id) => (c.story || EMPTY).arcs[id] || null;
 
   // Thay khe {khe} bằng tên người ở vai (hoặc "người ấy"), {ten} bằng tên người chơi.
@@ -23,7 +23,7 @@
       if (k === 'ten') return c.name;
       if (st && st.khe && st.khe[k]) return st.khe[k]; // K1: khe kịch bản (thế lực, vật)
       const id = st && st.vai && st.vai[k], o = id && TT.world.chars[id];
-      return o ? o.name : 'người ấy';
+      return o ? o.name : (st && st.ten && st.ten[k]) || 'người ấy'; // st.ten (AI1a): tên đã nhớ khi người ở vai mất, bị xóa khỏi thế giới
     });
   }
 
@@ -33,6 +33,7 @@
     if (k.realm != null && c.realm < k.realm) return false;
     if (k.stage != null && k.realm != null && c.realm === k.realm && TT.stats.stage(c) < k.stage) return false; // giai đoạn chỉ tính trong đúng cảnh giới `realm`
     if (k.age != null && TT.age(c) < k.age) return false;
+    if (k.tho != null) { const L = TT.stats.lifeSpan(c); if (!(L !== Infinity && 1 - TT.age(c) / L <= k.tho)) return false; } // AI1a: còn không quá k.tho phần thọ nguyên
     if (k.flag && !c.flags[k.flag]) return false;
     if (k.sau && typeof k.sau === 'string') { const s = stOf(c, k.sau); if (!s || !s.ket) return false; }
     // N1b: điều kiện thân phận. tong (true có tông | false không tông | id tông), hoi (hội viên thương hội), nghe ({ id, lv }), dao (id đường), xt (xuất thân), vung, nhan (có nhẫn), ke_thu (có kẻ thù còn sống), kd (khuyết điểm gốc).
@@ -178,7 +179,7 @@
     const m = isKb(c) && (ch.d_neu || []).find(x => c.flags[x.flag]);
     return m ? m.d : (c.realm === 0 && ch.d_pham ? ch.d_pham : ch.d);
   }
-  const canOk = (c, lc) => !lc.can || [].concat(lc.can).every(f => c.flags[f]); // K1: lựa chọn chỉ hiện khi có cờ
+  const canOk = (c, lc) => (!lc.can || [].concat(lc.can).every(f => c.flags[f])) && (!lc.tm || TT.kb.tamMaHien(c)); // K1: lựa chọn chỉ hiện khi có cờ; AI1a: tam_ma chỉ hiện khi đạo tâm thấp hoặc tâm ma nặng
   // Dữ liệu hộp chặng (thuần dữ liệu để lưu vào w.pending).
   function build(c, arc, chId) {
     const ch = arc.chang[chId], st = stOf(c, arc.id), kb = isKb(c);
@@ -204,6 +205,7 @@
   function go(c, arc, toi) {
     const st = stOf(c, arc.id); if (!st) return;
     st.w = null;
+    if (toi === 'ket:@khuon') toi = TT.kb.ketKhuon(c, arc); // AI1a: kết cục chọn theo chuỗi kiểu lựa chọn
     if (/^ket:/.test(toi)) return finish(c, arc, st, toi.slice(4));
     st.st = toi; st.since = TT.world.months; st.ready = null;
     if (isKb(c)) TT.kb.enter(c, arc, st, toi);
@@ -214,6 +216,7 @@
     TT.log(c, '[' + arc.n + '] ' + fmt(c, st, k.log), 'big');
     note(c, st, k.t);
     if (k.kv > 0) TT.kv.addOnce(c, 'arc_' + arc.id, k.kv, 'truyện ' + arc.n);
+    if (arc.phu && isKb(c)) TT.kb.phuXong(c, arc, st); // AI1a: tuyến phụ đổ vào khuôn chính
     TT.bus.emit('story', { id: c.id, arc: arc.id, ket: x });
   }
 
@@ -236,6 +239,9 @@
   function canOpen(c, arc, S) {
     if (!condOk(c, arc.mo)) return false;
     if (!isKb(c)) return arc.loai !== 'kb';
+    if (arc.phu) return TT.kb.phuOk(c, arc, S); // AI1a: khuôn phụ do Story Director xếp
+    if (K().phuOn && K().khuonOn && Object.keys(K().phu).some(k => K().phu[k].thay === arc.id)) return false; // khuôn phụ thay tuyến viết tay
+    if (K().khuonOn && S.kbc && arc.loai === 'bb' && arc.id !== 'bb_a1') return false; // đã có kịch bản cụ thể: xương sống A cũ nhường chỗ
     const kb = K().kb[S.kd];
     if (arc.loai === 'kb') return !!kb && kb === arc.id;
     if (arc.loai === 'bb' && arc.id !== 'bb_a1' && kb && K().arcById[kb]) return false;
@@ -266,6 +272,7 @@
     if (KB) TT.kb.tick(c);
     // mở tuyến
     K().arcs.forEach(arc => { if (!S.arcs[arc.id] && canOpen(c, arc, S)) openArc(c, arc); });
+    if (KB && K().khuonOn) { const da = TT.kb.openDyn(c, S); if (da) openArc(c, da); } // AI1a: mở tuyến chính sinh từ khuôn
     Object.keys(S.arcs).forEach(id => {
       const arc = arcOf(id), st = S.arcs[id]; if (!arc || !st.st) return;
       if (KB && st.tt) return; // đang làm thử thách: kb.tick xử lý
@@ -322,7 +329,7 @@
     });
     TT.log(c, '[' + arc.n + '] ' + fmt(c, st, ch.t) + ': ' + fmt(c, st, lc.label) + '.', 'age');
     if (!missed) note(c, st, fmt(c, st, ch.t) + ': ' + fmt(c, st, lc.label));
-    if (KB) TT.kb.applied(c, arc, st, chId, missed);
+    if (KB) TT.kb.applied(c, arc, st, chId, missed, lc);
     if (KB && lc.thu_thach) TT.kb.ttStart(c, arc, st, ch, lc);
     else if (lc.wheel) { st.w = lc.key; TT.wheel.begin(c, arc.id, chId, lc.key); } else go(c, arc, fr && fr.refused && lc.toi_tu ? lc.toi_tu : lc.toi);
     if (KB && !missed && !lc.wheel) TT.kb.sau(c, arc, st, ch, lc, rec); // lời dẫn sau lựa chọn của cảnh lớn
@@ -369,12 +376,12 @@
     const nset = Object.keys(set), nread = Object.keys(read).filter(f => set[f]);
     if (noMat.length) out.push('lựa chọn thiếu mat (' + noMat.length + ': ' + noMat.slice(0, 4).join(', ') + (noMat.length > 4 ? '...' : '') + '; chặng ấm cần am: true)');
     if (nset.length < 2 || nread.length < 2) out.push('cờ đặt và đọc lại ít hơn 2 (đặt ' + nset.length + ', đọc lại ' + nread.length + ')');
-    if (ids.length && re / ids.length < 0.5) out.push('chặng rẽ dưới 50% (' + re + '/' + ids.length + ')');
+    if (!arc.dyn && ids.length && re / ids.length < 0.5) out.push('chặng rẽ dưới 50% (' + re + '/' + ids.length + ')'); // tuyến sinh từ khuôn (24 chặng) rẽ bằng cờ, d_neu và chuỗi kiểu thay vì nhân bản chặng
     const ks = Object.keys(arc.ket || {}), xau = ks.filter(k => arc.ket[k].xau).length;
     if (ks.length < 2) out.push('cần ít nhất 2 kết cục (có ' + ks.length + ')');
     if (ks.length && xau * 3 < ks.length) out.push('kết cục xấu dưới 1/3 (' + xau + '/' + ks.length + ')');
     if (tk.length) out.push('nhịp tàn khốc thiếu can_gan_bo (' + tk.join('; ') + ')');
-    if (tt < 1) out.push('chưa có thử thách có hạn nào (thu_thach)');
+    if (tt < 1 && !arc.phu) out.push('chưa có thử thách có hạn nào (thu_thach)');
     if (big.length) out.push('phần thưởng lớn "bấm là được" (' + big.join(', ') + '; cần mat, thu_thach hoặc tre)');
     return out;
   }
@@ -412,7 +419,8 @@
         const ch = st.st && arc.chang[st.st];
         const kb = isKb(c);
         return { id, n: arc.n, loai: arc.loai, state: st.ket ? 'xong' : 'dang', cur: ch ? fmt(c, st, ch.t) : '', log: (st.log || []).slice(), ket: st.ket ? arc.ket[st.ket].t : '',
-          phan: kb && arc.phan && !st.ket ? TT.kb.phanText(arc, st) : '', tt: kb && st.tt ? TT.kb.ttInfo(c, st) : null };
+          phan: kb && arc.phan && !st.ket ? TT.kb.phanText(arc, st) : '', tt: kb && st.tt ? TT.kb.ttInfo(c, st) : null,
+          dyn: !!arc.dyn && !arc.phu, logx: arc.dyn && TT.kb.nhinLaiChang ? (st.log || []).map(t => ({ t, hieu: TT.kb.nhinLaiChang(c, arc, t) })) : null };
       }).filter(Boolean);
     },
     pendingDue: c => (c.story || EMPTY).due.length,
@@ -426,7 +434,7 @@
       arcs = arcs || P.arcs;
       arcs.forEach(a => { ids[a.id] = a; });
       const FX = P.fxKeys, str = v => typeof v === 'string' && v.trim().length > 0;
-      const DAN = (P.dan && P.dan.vai) || [], COND = ['realm', 'stage', 'age', 'hoac', 'tong', 'hoi', 'nghe', 'dao', 'xt', 'vung', 'nhan', 'ke_thu', 'kd'];
+      const DAN = (P.dan && P.dan.vai) || [], COND = ['realm', 'stage', 'age', 'tho', 'hoac', 'tong', 'hoi', 'nghe', 'dao', 'xt', 'vung', 'nhan', 'ke_thu', 'kd'];
       const TONG = ['mat_suat', 'len_noi_mon', 'giang', 'truc_xuat', 'truy'];
       arcs.forEach(arc => {
         const E = m => errs.push(arc.id + ': ' + m);
@@ -450,7 +458,7 @@
           Object.keys(k).forEach(x => {
             const v = k[x];
             if (COND.concat(add).indexOf(x) < 0) return E(where + ' có khóa lạ: ' + x);
-            if (x === 'realm' || x === 'stage' || x === 'age' || (x === 'sau' && where !== 'mo')) { if (!num(v)) E(where + '.' + x + ' không phải số'); }
+            if (x === 'realm' || x === 'stage' || x === 'age' || x === 'tho' || (x === 'sau' && where !== 'mo')) { if (!num(v)) E(where + '.' + x + ' không phải số'); }
             else if (x === 'tong') { if (typeof v !== 'boolean' && !str(v)) E(where + '.tong phải là true, false hoặc id tông'); }
             else if (x === 'hoi' || x === 'nhan' || x === 'ke_thu') { if (typeof v !== 'boolean') E(where + '.' + x + ' phải là true hoặc false'); }
             else if (x === 'nghe') { if (!v || !str(v.id) || !(num(v.lv) && v.lv >= 1)) E(where + '.nghe phải là { id, lv >= 1 }'); else if (D.JOBS && !D.JOBS[v.id]) E(where + '.nghe.id không có: ' + v.id); }
@@ -478,7 +486,7 @@
         Object.keys(khe).forEach(k => {
           const sp = khe[k];
           if (!/^[a-z_]+$/.test(k) || vai[k] || k === 'ten') E('khe_kb ' + k + ': tên không hợp lệ hoặc trùng vai');
-          if (!sp || (!sp.the_luc && !sp.vat)) E('khe_kb ' + k + ': cần the_luc: true hoặc vat: [id, ...]');
+          if (!sp || (!sp.the_luc && !sp.vat && !str(sp.chu))) E('khe_kb ' + k + ': cần the_luc: true, vat: [id, ...] hoặc chu: "chữ"');
           else if (sp.vat && (!Array.isArray(sp.vat) || !sp.vat.length || !sp.vat.every(id => P.vat && P.vat[id]))) E('khe_kb ' + k + ': vat phải là mảng id vật kỷ niệm có trong D.STORY.vat');
         });
         const ch = arc.chang || {}, ket = arc.ket || {};
@@ -487,7 +495,7 @@
         const slotsOk = (t, where) => { String(t).replace(SLOT, (m, k) => { if (k !== 'ten' && !vai[k] && !khe[k]) E(where + ': khe {' + k + '} không có trong vai hoặc khe_kb'); return m; }); };
         const dest = (t, where) => {
           if (!str(t)) return E(where + ': thiếu toi');
-          if (/^ket:/.test(t)) { if (!ket[t.slice(4)]) E(where + ': kết cục không có: ' + t); } else if (!ch[t]) E(where + ': chặng không có: ' + t);
+          if (t === 'ket:@khuon') { if (Object.keys(ket).length < 2) E(where + ': ket:@khuon cần ít nhất 2 kết cục'); } else if (/^ket:/.test(t)) { if (!ket[t.slice(4)]) E(where + ': kết cục không có: ' + t); } else if (!ch[t]) E(where + ': chặng không có: ' + t);
         };
         const danOk = (v, where) => { if (DAN.indexOf(v) < 0) E(where + ': dan không phải vai của dàn: ' + v); };
         const vatOk = (v, where) => { if (!str(v)) return E(where + ': vat phải là id'); if (v.charAt(0) === '@') { if (!khe[v.slice(1)] || !khe[v.slice(1)].vat) E(where + ': vat ' + v + ' không có trong khe_kb'); } else if (!(P.vat && P.vat[v])) E(where + ': vat không có trong D.STORY.vat: ' + v); };
@@ -524,7 +532,7 @@
         const ganOk = (g, where) => {
           if (Array.isArray(g)) { if (!g.length) E(where + ': can_gan_bo mảng rỗng'); return g.forEach(x => ganOk(x, where)); }
           if (g && g.hoac) { if (!Array.isArray(g.hoac) || g.hoac.length < 2) E(where + ': can_gan_bo.hoac cần mảng từ 2 nhánh'); else g.hoac.forEach(x => ganOk(x, where)); return; }
-          if (!g || DAN.indexOf(g.dan) < 0) E(where + ': can_gan_bo.dan không phải vai của dàn'); else if (g.min !== undefined && !(num(g.min) && g.min >= 1 && g.min <= 30)) E(where + ': can_gan_bo.min phải trong 1..30');
+          if (!g || DAN.indexOf(g.dan) < 0) E(where + ': can_gan_bo.dan không phải vai của dàn'); else if (g.min !== undefined && !(num(g.min) && g.min >= 0 && g.min <= 30)) E(where + ': can_gan_bo.min phải trong 0..30 (0: chỉ để khai báo vai chịu hậu quả)');
         };
         const edges = lc => { // mọi nơi một lựa chọn có thể dẫn tới
           const o = [];
@@ -624,7 +632,7 @@
         // phần và nhịp (kịch bản kiểu mới)
         if (arc.phan !== undefined) {
           const ph = arc.phan, KB = P.kbc;
-          if (!Array.isArray(ph) || ph.length < (arc.mau ? 2 : 5) || ph.length > 7) E('phan cần ' + (arc.mau ? '2 (khung mẫu) hoặc 5' : '5') + ' đến 7 phần, có ' + (Array.isArray(ph) ? ph.length : 0));
+          if (!Array.isArray(ph) || ph.length < (arc.mau || arc.phu ? 2 : 5) || ph.length > 7) E('phan cần ' + (arc.mau ? '2 (khung mẫu) hoặc 5' : arc.phu ? '2 (khuôn phụ)' : '5') + ' đến 7 phần, có ' + (Array.isArray(ph) ? ph.length : 0));
           else {
             const seen = {}; let lastAge = -1;
             ph.forEach((p, i) => {
@@ -632,7 +640,7 @@
               if (!str(p.id) || !str(p.n)) E(W + ': cần id và n');
               if (p.tuoi !== undefined) { if (!num(p.tuoi) || p.tuoi < lastAge) E(W + '.tuoi phải là số tăng dần'); else lastAge = p.tuoi; }
               const one = (n, v) => { if (!str(v)) E(W + '.' + n + ': cần id chặng'); else if (!ch[v]) E(W + '.' + n + ': chặng không có: ' + v); else if (seen[v]) E(W + '.' + n + ': chặng ' + v + ' đã thuộc phần/nhịp khác'); else seen[v] = 1; };
-              one('moc', p.moc); one('dao', p.dao); one('cao_trao', p.cao_trao); one('treo', p.treo);
+              one('moc', p.moc); if (!arc.dyn || p.dao !== undefined) one('dao', p.dao); one('cao_trao', p.cao_trao); if (!arc.dyn || p.treo !== undefined) one('treo', p.treo);
               if (!Array.isArray(p.leo) || p.leo.length < 1 || p.leo.length > 2) E(W + '.leo cần 1 đến 2 chặng'); else p.leo.forEach(v => one('leo', v));
               if (ch[p.cao_trao] && !ch[p.cao_trao].lon) E(W + '.cao_trao: chặng ' + p.cao_trao + ' phải là cảnh lớn (lon: true)');
             });
