@@ -1,4 +1,4 @@
-# Q-giọng truyện. Cẩm nang kể chuyện (bản 9): dàn định mệnh, gắn bó, cao trào, tàn khốc
+# Q-giọng truyện. Cẩm nang kể chuyện (bản 10): dàn định mệnh, gắn bó, cao trào, tàn khốc
 
 - Trạng thái: **Bản mẫu chờ bạn duyệt** (2026-10-21). Dùng cho MỌI phiên viết chữ truyện (Sonnet và Haiku) sau khi bạn duyệt.
 - Vì sao có file này: sau một lần chơi đủ đời, bạn thấy **không có gì đọng lại**. Đo dữ liệu 15 tuyến: 44 cờ đặt ra nhưng 0 cờ được đọc lại; 5/126 lựa chọn có hậu quả đáng kể; 22/47 chặng chọn gì cũng về cùng một chỗ; mỗi tuyến bốc người lạ rồi bỏ. Chữ không tệ; **cách kể** mới là chỗ yếu.
@@ -304,6 +304,26 @@ Không chép câu văn của hai nhà văn; học **cách nhìn và cách kể**
 15. **Phản đòn tối giản và khinh miệt**: một hành động và một lệnh biến người chơi thành đồ vật ("Vứt tên đó ra ngoài."); không có câu "ta chỉ muốn biết…".
 16. **Đe dọa bằng ẩn ngữ khi nạn nhân đứng ngay đó** ("kể cho nó biết về năm đó"): chỉ người chơi hiểu; nạn nhân không hiểu, nên càng ngột ngạt.
 17. **Kết đoạn bằng nội tâm hỗn loạn**, không bằng lời giải thích: người chơi không chắc đâu là ý chí, đâu là tâm ma; quyết định được đẩy trọn vào tay họ.
+
+### Bộ chuẩn ba cảnh, lượt 2 (bạn viết lại, 2026-10-23)
+**4. Nóng nảy, "Chín cái tát"**:
+> Triệu Liệt kéo lê Tiểu Đào qua những bậc đá, bàn tay nắm trên vòng cấm chế ở cổ nàng. Hắn bước tới trước mặt bạn, tát một cái, không mạnh. "Chín cái. Đứng yên thì nó sống. Động một ngón tay…" Hắn cười, rồi cái thứ hai rát hơn. "Đáp trả đi. Ngươi giỏi nhất việc đó mà." Máu dồn lên tai bạn thành tiếng ù, và trong tiếng ù có ai đó đang đếm thay bạn.
+
+**5. Mưu mô, "Người hầu rượu"**:
+> Người rót rượu cho bạn đeo xích bạc ở cổ chân, và là Hàn Thất. Hắn gầy rộc, mắt đục như nước giếng; bạn nhìn rất quen mà khó nhận ra. Quỷ Diện đặt lá thư năm xưa lên bàn, rồi đẩy sang giữa hai bên. "Ta trả người, coi như quà ra mắt." Hắn xoay chén, rồi nhìn Hàn Thất.
+>
+> *Sửa logic (bạn bắt lỗi: kẻ mưu mô không để lộ nét chữ)*: lá thư **không có chữ ký, không phải nét chữ của bạn**, chỉ có **mật hiệu mà trên đời chỉ bạn và Hàn Thất biết**. Quỷ Diện có nó nghĩa là: hoặc Hàn Thất đã khai, hoặc người đưa thư của bạn đã bán bạn từ đầu.
+
+**6. Ba phải, "Hai lá cờ"**:
+> Đổng Uy cắm hai lá cờ xuống sân đình: một cờ triều, một cờ nghĩa quân. Ba trăm dân thôn quỳ sau lưng bạn. "Cắm lá nào trước cửa thôn cũng được. Không cắm, ta coi cả thôn là giặc." Hắn liếc về phía nhà bạn. "Kho thóc nhà ngươi năm nay đầy nhỉ." Sau lưng bạn có người thì thầm tên bạn.
+
+**Bài học lượt 2:**
+18. **Lời đe dọa bỏ lửng** ("Động một ngón tay…" rồi cười) đáng sợ hơn lời đe dọa nói hết; người chơi tự điền điều tệ nhất.
+19. **Khiêu khích hành vi, không gọi tên tính từ**: "Đáp trả đi" thay vì "Nóng đi"; nhắm vào khuyết điểm mà không nói tên nó ra.
+20. **Khuyết điểm không làm nhân vật ngu.** Kẻ mưu mô thua vì gặp kẻ giỏi hơn hoặc bị người tin phản, không vì sơ suất ngớ ngẩn (để lộ nét chữ). Kiểm: "người có năng lực này có để chuyện ấy xảy ra không?"
+21. **Phản diện mạnh nhất không đòi gì**: "quà ra mắt" chỉ để bạn thấy hắn **biết hết** và **nắm được người của bạn**; người chơi tự hiểu mình đang bị đặt vào đâu.
+22. **Người chơi nhận ra muộn hơn nạn nhân, hoặc nhận nửa vời** ("nhìn rất quen mà khó nhận ra"): đặt người chơi ở thế chậm một nhịp làm cảnh ngột hơn.
+23. **Nội tâm chỉ khi cần**: dùng đoạn nội tâm ở cảnh có tâm ma, tự lừa dối hoặc mất kiểm soát (ví dụ 3, 4); ở cảnh khác để **một chi tiết bên ngoài** nói thay ("Sau lưng bạn có người thì thầm tên bạn.").
 
 ## 7. Mẫu (định dạng đề xuất; các khóa mới đánh dấu ★ sẽ do phiên Sonnet thêm vào bộ máy)
 Khóa mới: ★`dan` (vai lấy từ dàn định mệnh: `than_nhan`, `ban`, `su`, `doi_thu`, `huynh`, `thuong`, `ke_thu`, `ke_thua`), ★`gan_bo` (cộng gắn bó; và điều kiện tối thiểu), ★`mat` (chữ cái mất, hiện trên hộp), ★`d_neu` (chữ thay theo cờ), ★`can` (lựa chọn chỉ hiện khi có cờ), ★`fx.chet` / `fx.roi` / `fx.thu` (người trong dàn chết, bỏ đi, thành kẻ thù), ★`fx.tong` (đổi bậc tông), ★`fx.vat` (vật kỷ niệm hoặc bảo vật), ★`tre.chang` (hậu quả trễ mở một chặng gặt).
