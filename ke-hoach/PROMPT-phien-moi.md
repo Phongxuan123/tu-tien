@@ -419,7 +419,7 @@ Kiểm: story-lint sạch theo luật K1; run-tests lọc "Truyện|kịch bản
 ---
 
 # Khuôn kịch bản và AI kể chuyện lúc chơi (Z mục 7d, chốt 2026-10-23)
-Thứ tự: **AI1a (Sonnet)** → **K3a (Sonnet)** → **K3b (Sonnet)** → **AI1b (Sonnet)** → Cổng chơi thử → **K4 (Haiku)** → **K5 (Haiku, nhiều lượt)**. Chạy lần lượt (cùng sửa tests.html, js/files.js). Nhánh `add-game-project`. Bản chốt: `ke-hoach/Q-khuon-kich-ban.md`, `ke-hoach/Q-giong-truyen.md`, Z mục 7d.
+Thứ tự: **AI1a (Sonnet)** → **K3a (Haiku)** → **K3b (Haiku)** → **AI1b (Sonnet)** → Cổng chơi thử → **K4 (Haiku)** → **K5 (Haiku, nhiều lượt)**. Chạy lần lượt (cùng sửa tests.html, js/files.js). Nhánh `add-game-project`. Bản chốt: `ke-hoach/Q-khuon-kich-ban.md`, `ke-hoach/Q-giong-truyen.md`, Z mục 7d.
 
 ## AI1a. Sonnet: khuôn thành dữ liệu, thư viện kiểu lựa chọn, kịch bản cụ thể không cần AI
 
@@ -440,31 +440,14 @@ NHIỆM VỤ (chưa gọi AI ở phiên này; mọi thứ chạy được bằng
 Công tắc D.STORY.khuonOn; tắt thì như sau K2 và baseline --check trùng khít. Kiểm thử "Khuôn và kịch bản cụ thể (AI1a)": cụ thể hóa xác định theo hạt giống (băm, không rng), chọn phương án theo xuất thân, đủ 24 chặng chạy được bằng dòng dự phòng, kiểu lựa chọn áp đúng cơ chế, tam_ma ẩn khi đạo tâm cao, xưng hô đổi khi phản bội, manh mối được đánh dấu và "Nhìn lại" hiện sau cú lật, mở phần theo cảnh giới hoặc tuổi mới, lưu/tải. life-sim 3 hạt giống ép khuyết điểm kiêu hãnh (bảng 🛠 hoặc cờ). Trong "AI1a đã làm" mô tả định dạng khuôn dữ liệu để K3 viết theo.
 ```
 
-## K3a. Sonnet: bốn khuôn (tàn nhẫn, nhân hậu, nóng nảy, mưu mô)
+## K3a, K3b. Haiku: chuyển tám khuôn thành dữ liệu (thiết kế đã xong ở Q-khuon-kich-ban mục 3 đến 10)
 
 ```
-Repo: Phongxuan123/tu-tien. Gắn repo, clone nhánh `main`. Trả lời tiếng Việt, ngắn gọn, xưng "mình", gọi tôi là "bạn". Đọc CLAUDE.md trước. Làm trên nhánh `add-game-project` (checkout origin/add-game-project). Điều kiện: Z mục 7d có "AI1a đã làm"; chưa có thì dừng và báo tôi. TIẾT KIỆM: chỉ đọc phần ghi dưới. Cuối phiên ghi "K3a đã làm" vào Z mục 7d, push theo CLAUDE.md, báo ngắn gọn.
-
-Đọc: ke-hoach/Q-khuon-kich-ban.md (cả file, khuôn "kiêu hãnh" là MẪU); Q-giong-truyen.md mục 0, 0b, 1b (bảng khuyết điểm, thuốc, kẻ phản chiếu), 4b (tám luật), 6d (luật cường độ 1 đến 26 và các bộ chuẩn cảnh), 6e, 6f; Z "AI1a đã làm" (định dạng dữ liệu); js/data/khuon/kieu_hanh.js.
-
-NHIỆM VỤ: viết bốn khuôn, mỗi khuôn vừa là một mục trong Q-khuon-kich-ban.md (mục 3, 4, 5, 6, cùng cấu trúc mục 2) vừa là tệp dữ liệu js/data/khuon/<id>.js đúng định dạng AI1a:
-- tan_nhan (Đạo đức âm; thuốc: vị tha; dùng cảnh chuẩn "Vật tế thứ ba trăm lẻ một" ở cao trào phần 5);
-- nhan_hau (Đạo đức dương; thuốc: trách nhiệm; dựa dàn cảnh Thanh Khê bản 2 ở Q-giong-truyen 4b, nhưng gọn theo ngân sách 6e: 6 × 4 chặng, 1 sợi chính);
-- nong_nay (Tính tình âm; thuốc: nhẫn; dùng cảnh chuẩn "Chín cái tát");
-- muu_mo (Xử thế dương; thuốc: niềm tin; dùng cảnh chuẩn "Người hầu rượu" bản đã sửa logic: mật hiệu, không nét chữ).
-Mỗi khuôn đủ: câu hỏi trung tâm; bảy mảnh có 2 đến 3 phương án theo xuất thân; dàn; sợi chính và vật (2 đến 3 phương án); nơi; thang sức mạnh và nhịp đời đúng 2.4 (50 tuổi Luyện Khí, 130 Trúc Cơ, thọ 70/130/260); sáu phần với mở theo cảnh giới hoặc tuổi, kiểu cao trào lấy từ thư viện mục 0 (không lặp một kiểu quá hai lần mỗi đời), thắng hoặc vui, treo; một cao trào không có kẻ ác; tâm ma ở 1 đến 2 phần; ba phương án lật (ưu tiên có một phương án "chính bạn là thủ phạm"), mỗi phương án ≥ 3 manh mối; ba kết cục có hình ảnh khép lại đối lập mở đầu; dòng dự phòng 2 đến 3 câu cho mọi chặng. Khuyết điểm không làm nhân vật ngu (luật 20); phản diện là bóng tối của chính khuyết điểm và có lý do chính đáng.
-Kiểm: story-lint sạch cho cả bốn khuôn; run-tests lọc "Khuôn"; life-sim 1 hạt giống mỗi khuôn (ép khuyết điểm), in ra để tôi đọc.
-```
-
-## K3b. Sonnet: bốn khuôn còn lại (điềm tĩnh, buông thả, khắc kỷ, trung dung)
-
-```
-Như K3a (đọc, định dạng, kiểm), điều kiện: Z có "K3a đã làm". Bốn khuôn:
-- diem_tinh (Tính tình dương; thờ ơ; thuốc: dám; dùng cảnh chuẩn "Ba chén trà");
-- buong_tha (Tu dưỡng âm; thuốc: kỷ luật và hy sinh; tham khảo "Kẻ chạy chậm nhất" nhưng SỬA THANG SỨC MẠNH theo 2.4: đối thủ vượt hợp lý, không phải "hai mươi năm lên Kim Đan");
-- khac_ky (Tu dưỡng dương; thuốc: tình người; dùng cảnh chuẩn "Cửa quan"; cao trào không kẻ ác: "Viên Diên Thọ Đan");
-- trung_dung (không trục nào lệch quá 3; ba phải; thuốc: đứng về một phía; dùng cảnh chuẩn "Hai lá cờ").
-Ghi "K3b đã làm".
+Repo: Phongxuan123/tu-tien. Gắn repo, clone nhánh `main`. Trả lời tiếng Việt, ngắn gọn, xưng "mình", gọi tôi là "bạn". Đọc CLAUDE.md trước. Làm trên nhánh `add-game-project` (checkout origin/add-game-project). Điều kiện: Z mục 7d có "AI1a đã làm". TIẾT KIỆM: chỉ đọc phần ghi dưới. Cuối phiên ghi "K3a đã làm" (hoặc K3b) vào Z mục 7d, push theo CLAUDE.md, báo ngắn gọn.
+Lượt này: K3a = mục 3 (tan_nhan), 4 (nhan_hau), 5 (nong_nay), 6 (muu_mo); K3b = mục 7 (tho_o), 8 (buong_tha), 9 (khac_ky), 10 (ba_phai).
+Đọc: ke-hoach/Q-khuon-kich-ban.md mục 0, 1, 2 (khuôn mẫu), "Quy ước chung cho tám khuôn", và đúng bốn mục của lượt này; Z "AI1a đã làm" (định dạng dữ liệu); js/data/khuon/kieu_hanh.js (mẫu dữ liệu, chép đúng cấu trúc).
+NHIỆM VỤ: chỉ DỮ LIỆU. Mỗi khuôn thành js/data/khuon/<id>.js, chép ĐÚNG nội dung của mục (không tự đổi câu hỏi, phương án, kiểu lựa chọn, manh mối, kết cục); mở phần theo bảng chung; kiểu lựa chọn đúng tên thư viện; "ngược" ghi thành kiểu ghi trong ngoặc (nếu chỉ ghi "ngược" thì chọn kiểu hợp nghĩa nhất trong thư viện và ghi chú); thêm dòng dự phòng 2 đến 3 câu cho mọi chặng (theo giọng Q-giong-truyen mục 6b, cao trào thì bám cảnh chuẩn được nêu). Đăng ký vào js/files.js như kieu_hanh.js.
+Kiểm: story-lint sạch cho các khuôn mới; run-tests lọc "Khuôn"; life-sim 1 hạt giống mỗi khuôn (ép khuyết điểm bằng bảng 🛠 hoặc cờ), in ra để tôi đọc.
 ```
 
 ## AI1b. Sonnet: AI viết kịch bản và chữ lúc chơi (mặc định Gemini cả bộ, Claude tùy chọn)
