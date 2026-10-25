@@ -74,6 +74,7 @@
       const c = TT.world.chars[d.charId];
       if (c && c.alive) TT.story.choose(c, d, d.choices[i].key);
     },
+    story_sau() {}, // lời dẫn sau lựa chọn của cảnh lớn (K1): chỉ để đọc, bấm Tiếp hoặc Đóng (hoặc hết 40 giây) là xong
     wheel(d, i) {
       const c = TT.world.chars[d.charId];
       if (c && c.alive) TT.wheel.act(c, d, d.choices[i].key);
@@ -93,6 +94,12 @@
   }
 
   TT.decisions = {
+    // Ngân sách hộp hiện có (đọc thuần): điểm tích theo thời gian, tối đa NH.max (xem D.STORY.nhip).
+    ngan() {
+      const w = TT.world, NH = D.STORY && D.STORY.nhip; if (!NH || !NH.on) return 99;
+      const tok = w.nhipTok == null ? NH.max : w.nhipTok, m0 = w.nhipM == null ? w.months : w.nhipM;
+      return Math.min(NH.max, tok + (w.months - m0) / NH.moi);
+    },
     // Mức tự động: 'thu_cong' hỏi nhiều, 'can_bang' mặc định, 'tu_dong' chỉ dừng ở việc trọng đại.
     MODES: [['thu_cong', 'Thủ công'], ['can_bang', 'Cân bằng'], ['tu_dong', 'Tự động']],
     mode() { const w = TT.world; return (w && w.settings && w.settings.auto) || 'can_bang'; },
@@ -106,8 +113,12 @@
       const mode = TT.decisions.mode();
       const multi = d.choices.length > 1;
       if (mode === 'thu_cong' && multi && tier < 3) tier++;
+      // Điều nhịp (D.STORY.nhip): sự kiện lẻ tầng 2 và hộp nhiệm vụ xuất hiện quá sát hộp trước thì máy chọn mặc định (như tầng 1), giữ nhịp hỏi người chơi ≤ 6 hộp/phút.
+      const NH = D.STORY && D.STORY.nhip;
+      const cc = w.chars[d.charId], ctx = cc && (cc.dungeon || cc.cross) || /^dg_|^cx_|^tri_phase|^yeu_thu/.test(d.evId || ''); // đang trong bí cảnh, vượt vùng, độ kiếp, đụng yêu thú: luôn hỏi
+      if (NH && NH.on && tier === 2 && !d.giu && !ctx && (d.type === 'event' || d.type === 'qreview') && TT.decisions.ngan() < NH.ev) tier = 1;
       // Máy tự chọn ngay: tầng 1, hoặc tầng 2 ở chế độ tự động, hoặc tầng 3 cho phép tự động ở chế độ tự động.
-      if (tier === 1 || (mode === 'tu_dong' && (tier === 2 || (tier === 3 && d.autoOk)))) {
+      if (!d.giu && (tier === 1 || (mode === 'tu_dong' && (tier === 2 || (tier === 3 && d.autoOk))))) { // d.giu: hộp phải hiện dù ở chế độ Tự động (lời dẫn)
         const i = TT.decisions.safeDefault(d);
         const h = handlers[d.type];
         if (h) h(d, i);
@@ -118,6 +129,7 @@
       const same = d.replace && w.pending && w.pending.type === d.type && w.pending.charId === d.charId;
       if (w.pending && !same && d.type !== 'ascend' && d.type !== 'death') return;
       d.tier = tier;
+      if (NH && NH.on && d.tier === 2 && (d.type === 'event' || d.type === 'qreview' || d.type === 'story')) { w.nhipTok = Math.max(0, TT.decisions.ngan() - 1); w.nhipM = w.months; } // trừ 1 điểm ngân sách hộp
       d.timeout = tier === 2 ? (d.timeout || 12) : 0;
       w.decRev = (w.decRev || 0) + 1; // để giao diện biết hộp quyết định đã đổi nội dung
       d.rev = w.decRev;

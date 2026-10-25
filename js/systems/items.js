@@ -237,7 +237,7 @@
       let n = 0;
       Object.keys(c.inv || {}).forEach(id => {
         const d = D.ITEMS[id];
-        if (!d || d.cat === 'sach' || d.cat === 'dac' || d.cat === 'ls' || d.cat === 'lo' || d.relic) return;
+        if (!d || d.cat === 'sach' || d.cat === 'dac' || d.cat === 'ls' || d.cat === 'lo' || d.relic || d.ky) return;
         const keep = d.cat === 'lieu' ? (d.ore || d.mat ? 12 : 8) : d.cat === 'khi' ? 0 : 3;
         const extra = c.inv[id] - keep;
         if (extra > 0) { const r = market.sell(c, id, extra); if (r.ok) n += r.n; }

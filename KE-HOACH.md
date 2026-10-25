@@ -278,3 +278,13 @@ Gợi ý thứ tự (bạn đổi tùy ý):
 - **2026-10-19** **8A** (Đợt 8) xong: tính cách bốn trục và khí vận v2 cho người chơi (`D.NATURE`, `TT.nature`, `TT.kv`), hộp Đời mới (ngân sách 4 điểm, Bốc lại), khối Tính cách ở Hồ sơ. Tắt `D.NATURE.on` trùng khít 40/40 mốc; 118 bài đạt. Chi tiết: ke-hoach/Z-lo-trinh-trien-khai.md, Đợt 8.
 - **2026-10-20** **8A3** (Đợt 8) xong: tuổi thơ ba hồi cho người chơi (`TT.childhood`), hộp sự kiện và Tổng kết 12 tuổi. Tắt `D.CHILDHOOD.on` trùng khít 40/40 mốc; 127 bài đạt. Chi tiết: ke-hoach/Z-lo-trinh-trien-khai.md, Đợt 8.
 - **2026-10-20** **8B** (Đợt 8) xong: khung truyện `TT.story` và vòng quay `TT.wheel`, tuyến xương sống A1 đến A3, `tools/story-lint.js`, `tools/life-sim.js`. Tắt `D.STORY.on` trùng khít 40/40 mốc; nhịp quyết định 5,83 hộp/phút; 137 bài đạt. Chi tiết: ke-hoach/Z-lo-trinh-trien-khai.md, Đợt 8.
+
+## Bảng chỉnh nhân vật (công cụ thử nghiệm)
+
+Để chơi thử, tự chỉnh chỉ số người chơi (cảnh giới, tu vi, vàng, tư chất, tiên thiên, tính cách, khí vận, tông, thương hội, nghề, đạo, quan hệ, truyện, tua năm, bất tử...).
+- **Bật:** thêm `?dev=1` vào đường dẫn, hoặc tick ô "Thử nghiệm" ở thanh điều khiển (nhớ trong localStorage khóa `tt8b_dev`, tải lại trang). Có nút 🛠 trên thanh điều khiển; bấm mở bảng (kéo được, đóng được).
+- **Tắt:** bỏ tick ô "Thử nghiệm" (và bỏ `?dev=1` khỏi đường dẫn). Tắt thì `js/ui/devpanel.js` không được nạp, không có nút, game y như cũ (`baseline.js --check` trùng khít).
+- Mã: `js/data/dev.js` (`D.DEV.on`), `js/ui/devpanel.js` (`TT.dev`: hàm ghi, chỉ chạy khi bấm nút; vẽ bảng chỉ đọc, không gọi rng). Khối nào thiếu hệ tương ứng (`TT.nature`, `TT.kv`, `TT.story`, `TT.bond`, thương hội...) thì ẩn.
+- Dấu vết: lần chỉnh đầu đặt `TT.world.devUsed = true` (khởi tạo muộn, không đổi `TT.VERSION`), hiện chữ "đã chỉnh" ở góc cột Hồ sơ; mỗi chỉnh sửa ghi một dòng nhật ký loại `dev` ("[Thử nghiệm] ...").
+- Bất tử: bọc `life.die`/`life.dieNow` lúc bật lần đầu (không sửa file hệ thống); chỉ chặn cái chết của người chơi khi cờ `devImmortal` bật.
+- Kiểm thử: tests.html, nhóm "Bảng chỉnh nhân vật".

@@ -362,12 +362,125 @@ NHIỆM VỤ: chỉ DỮ LIỆU: js/data/stories/con_cai.js khoảng 12 chặng 
 Kiểm: story-lint sạch; run-tests lọc "con|9C"; life-sim 101-103 với 120 năm, ghi đời nào có con, kết đời ra sao. Ghi "9C-d đã làm". Push.
 ```
 
+## N1b. (ĐÃ GỘP VÀO K1, không chạy riêng)
+
+```
+Repo: Phongxuan123/tu-tien. Gắn repo, làm theo dòng "Mọi phiên" ở đầu mục Đợt 9 trong ke-hoach/PROMPT-phien-moi.md (nhánh add-game-project).
+Đọc: Z mục 7b dòng "N1b" (bản chốt) và "N1 đã làm"; js/systems/story.js (condOk dòng ~27-40, candidates/pickNpc ~43-60, tick ~190-215); js/data/story.js (chú thích hướng dẫn); bốn tệp js/data/stories/tp_tan_tu.js, tp_dao_tong.js, tp_thuong_nhan.js, tg_chien_su.js; tools/story-lint.js; js/systems/factions.js dòng ~460-470 (warAt); js/systems/jobs.js 1-60 (TT.job, c.job), js/systems/hoi.js 1-12 (c.hoi.m), js/systems/path.js 1-15 (c.path), js/systems/bond.js find và js/systems/bondmem.js (ký ức chung); bài "Sửa lõi (8B2)" và "Nhịp quyết định" trong tests.html.
+
+NHIỆM VỤ: đúng dòng "N1b" trong Z: (1) khóa điều kiện mới tong, hoi, nghe, dao, xt, vung, nhan, ke_thu trong condOk (hàm đọc, không gọi rng) + story-lint + ghi vào chú thích hướng dẫn của js/data/story.js; (2) hạ điều kiện mở T1, T2, T5, W1 và chặng 4-5 như ghi, bỏ cờ tạm; (3) pick 'ky_uc' và đổi vai trong N1; (4) sửa hai bài đỏ (tìm nguyên nhân thật, ghi lý do; nhịp phải dưới 6 hộp/phút); (5) baseline --check trùng khít (nếu sửa factions.js làm lệch thì chỉ áp cho người chơi và chứng minh baseline không bước người chơi), life-sim 101-103.
+Kiểm thử "Điều kiện thân phận (N1b)": từng khóa mới đúng/sai, T1 mở khi không tông lúc 16 tuổi, T2 mở khi vào tông, T5 mở khi hội viên hoặc nghề thương, W1 mở khi chiến sự tới làng lúc 14 tuổi, ky_uc chọn đúng người. Chạy đầy đủ run-tests (phải 0 lỗi). Ghi "N1b đã làm" vào Z mục 7b (số nhịp trước/sau, đời nào mở tuyến nào). Push.
+```
+
 ## N1, N2. Haiku: gói nội dung tuyến (sau Cổng 7)
 
 ```
 Repo: Phongxuan123/tu-tien. Gắn repo, làm theo dòng "Mọi phiên" ở đầu mục Đợt 9 trong ke-hoach/PROMPT-phien-moi.md.
-Gói: N1 = T1 Tán tu, T2 Đệ tử tông, T5 Thương nhân, tuyến thế giới W1 (làng bị phá). N2 = T3 Đan sư, T9 Báo thù, chuỗi Nhẫn (chuyển từ sự kiện cũ c.ring, Q 14.3), tuyến thế giới W3. (Ghi gói đang làm ở dòng đầu khi dán prompt.)
-Đọc: Q mục 11.0 và đúng mục con của từng tuyến trong gói (grep tên tuyến), 12 (tuyến thế giới tương ứng), 7.5 (ví dụ vòng quay), 13.3 (dàn nhân vật); js/data/story.js (hướng dẫn, khóa fx và điều kiện, gồm bond; KHÔNG dùng kid vì 9C hoãn); mẫu bb_a.js, dao_lu.js.
+Gói: N1 = T1 Tán tu, T2 Đệ tử tông, T5 Thương nhân, tuyến thế giới W1 (làng bị phá). N2 = T3 Đan sư (nghe dan), T9 Báo thù (ke_thu), chuỗi Nhẫn (nhan; chuyển từ sự kiện cũ c.ring, Q 14.3), tuyến thế giới W3. N2 chỉ chạy SAU N1b. (Ghi gói đang làm ở dòng đầu khi dán prompt.)
+Đọc: Q mục 11.0 và đúng mục con của từng tuyến trong gói (grep tên tuyến), 12 (tuyến thế giới tương ứng), 7.5 (ví dụ vòng quay), 13.3 (dàn nhân vật); js/data/story.js (hướng dẫn, khóa fx và điều kiện, gồm bond và các khóa thân phận của N1b (tong, hoi, nghe, dao, xt, vung, nhan, ke_thu) cùng vai ky_uc; KHÔNG dùng kid vì 9C hoãn; KHÔNG dùng cờ tạm thay cho điều kiện thân phận (thiếu khóa nào thì ghi rõ trong báo cáo, không tự sửa js/systems)); mẫu bb_a.js, dao_lu.js.
 NHIỆM VỤ: chỉ DỮ LIỆU, mỗi tuyến một tệp js/data/stories/<id>.js, 4 đến 6 chặng, 1 vòng quay ở chặng cuối, ít nhất 2 hậu quả trễ, khóa mềm theo tính cách, khi hợp thì cho bạn đồng hành/huynh đệ kết nghĩa tham gia (vai lấy người có ký ức chung, xem Z "9K"), điều kiện mở theo nghề/đạo/tông/vùng sẵn có (đọc tên trường trong js/data/jobs.js, paths.js, sects.js khi cần); 60 đến 70% chặng mở từ Luyện Khí trung kỳ trở xuống. Tuyến thế giới mở khi biến cố thế giới tương ứng xảy ra (đọc tên sự kiện/cú sốc trong js/data/eco.js hoặc natevents.js; nếu chưa có móc phù hợp thì mở theo điều kiện vùng + xác suất thấp và ghi chú để phiên hoàn thiện nối).
 Kiểm: story-lint sạch; run-tests lọc "Truyện"; life-sim 101-103 (đếm số hộp truyện mỗi đời, mục tiêu tăng rõ so với trước gói; nhịp dưới 6 hộp/phút). Ghi "N1 đã làm" (hoặc N2) vào Z mục 7b. Push.
+```
+
+---
+
+# Kịch bản theo cẩm nang (Z mục 7c, chốt 2026-10-21)
+Thứ tự: **K1 → K2 → Cổng 7b → K3 → K4**. Dùng chung dòng "Mọi phiên" ở đầu mục Đợt 9 (nhánh add-game-project, tiết kiệm). Cẩm nang `ke-hoach/Q-giong-truyen.md` là **bản chốt**, ưu tiên hơn Q và R khi khác nhau.
+
+## K1. Sonnet: bộ máy kịch bản (gộp N1b)
+
+```
+Repo: Phongxuan123/tu-tien. Gắn repo, làm theo dòng "Mọi phiên" ở đầu mục Đợt 9 trong ke-hoach/PROMPT-phien-moi.md.
+Đọc: ke-hoach/Q-giong-truyen.md mục 0, 0b, 2, 3, 4b (tám luật và dàn cảnh), 6c, 7 (các khóa ★ và mẫu 1 đến 6), 8; Z mục 7c và dòng "N1b" ở 7b; js/systems/story.js (cả file), js/systems/wheel.js, js/data/story.js, js/systems/bond.js + bondmem.js (find, ký ức), js/systems/decisions.js (handler story), js/ui/story.js; js/ui/scene/ (hàm xem trước của ui.scene); tools/story-lint.js; bài "Sửa lõi (8B2)", "Nhịp quyết định" trong tests.html.
+
+NHIỆM VỤ (chỉ người chơi; dữ liệu thuần trong c.story, khởi tạo muộn; hàm đọc không gọi rng):
+1. Dàn định mệnh: c.story.dan = { vai: idNPC } cho 6 vai cố định (than_nhan lấy cha mẹ thật của 9A, ban lấy bạn thuở nhỏ, su, doi_thu, huynh, thuong) và 2 vai mở (ke_thu, ke_thua); dựng dần (tuổi thơ, A1, khi tuyến cần); vai chết thì ghi số phận, không bốc lại. Điểm gắn bó mỗi vai; luật ba lần (can_gan_bo); khoảnh khắc ấm và thư (dữ liệu D.STORY.am, tối đa 1 lần/năm/người); vật kỷ niệm là vật phẩm thật không bán được (fx.vat); người trong dàn cùng nơi hiện trên cảnh pixel.
+2. Khuyết điểm gốc c.story.kd suy ra ở A1 (9 dạng, mục 1b, kể cả trung dung); D.STORY.kb[kd] chỉ kịch bản xương sống dùng cho người chơi (chưa có thì dùng xương sống A cũ); khe kịch bản (khe_kb) điền từ dàn và mô phỏng (thế lực mạnh kề bên, vật).
+3. Phần và cao trào: arc kiểu kịch bản có phan[] (5 đến 7), mỗi phần năm nhịp (moc, leo, dao, cao_trao, treo); Story Director: giữa hai cao trào ít nhất 2 năm, phần mở theo tuổi khi người chơi thụ động, không hai cao trào cùng năm.
+4. Cảnh lớn: lon, canh (xem trước ui.scene trong lúc hộp mở, không đổi thế giới); khung lời dẫn sau lựa chọn lc.sau / sau_neu: Thủ công chờ "Tiếp", Cân bằng/Tự động tự đóng sau 40 giây, có nút đóng; thời gian dừng.
+5. Khóa mới: d_neu, can (lựa chọn chỉ hiện khi có cờ), mat (hiện trên hộp), fx.chet/roi/thu (vai trong dàn chết ngoài khung, bỏ đi, thành kẻ thù thật qua TT.social), fx.tong (mất suất, lên nội môn, giáng, trục xuất, bị truy), fx.vat (nhận/mất), fx.no (nợ với vai, đòi ở chặng gặt), tre.chang (hậu quả trễ mở chặng gặt), thu_thach { can: { gold, realm, nghe, cong, xp }, han, dat, truot } (hiện tiến độ ở tab Nhiệm vụ), cờ khinh_* và luật gọi tên.
+6. Gộp N1b: điều kiện thân phận tong, hoi, nghe, dao, xt, vung, nhan, ke_thu trong condOk; vai pick 'ky_uc' và 'dan:<vai>'; sửa hai bài đỏ (Sửa lõi 8B2, Nhịp quyết định dưới 6 hộp/phút).
+7. story-lint kiểm phần đo được của mục 8 cẩm nang (mat ở mọi lựa chọn không phải ấm; cờ đặt và đọc ≥ 2; ≥ 50% chặng rẽ; ≥ 2 kết cục và ≥ 1/3 kết cục xấu; nhịp tàn khốc có can_gan_bo; ≥ 1 thử thách có hạn mỗi kịch bản; không phần thưởng lớn "bấm là được").
+8. Một kịch bản khung mẫu ngắn js/data/stories/kb_mau.js (2 phần, mỗi phần 1 cảnh lớn) dùng đủ khóa mới để kiểm; chưa viết kịch bản thật (để K2).
+Công tắc D.STORY.kbOn; tắt thì mọi thứ như trước K1 và baseline --check trùng khít. Kiểm thử "Bộ máy kịch bản (K1)": dàn dựng đúng và không bốc lại khi chết, gắn bó và luật ba lần, khuyết điểm gốc 9 dạng, phần và nhịp, cảnh lớn + lời dẫn (40 giây, chờ ở Thủ công), từng khóa fx mới, thử thách đạt/trượt, chặng gặt, gọi tên, điều kiện thân phận, ky_uc, lưu/tải giữa cảnh lớn và giữa thử thách, story-lint bắt lỗi. Chạy đầy đủ run-tests (0 lỗi). Playwright 2 ảnh: cảnh lớn có khung lời dẫn; tab Nhiệm vụ có thử thách. Ghi "K1 đã làm" vào Z mục 7c, push.
+```
+
+## K2. Sonnet: kịch bản "mềm yếu" (cần K1)
+
+```
+Repo: Phongxuan123/tu-tien. Gắn repo, làm theo dòng "Mọi phiên" ở đầu mục Đợt 9 trong ke-hoach/PROMPT-phien-moi.md. Điều kiện: K1 đã có trên nhánh.
+Đọc: ke-hoach/Q-giong-truyen.md TOÀN BỘ (đây là bản chốt về cách kể; đặc biệt mục 0, 0b, 4b "Dàn cảnh mẫu bản 2", 6b, 6c, mẫu 6, mục 8); Z "K1 đã làm" (khóa và định dạng); js/data/stories/kb_mau.js.
+NHIỆM VỤ: chỉ DỮ LIỆU js/data/stories/kb_mem_yeu.js: kịch bản khuyết điểm "Đạo đức dương (nhân hậu, mềm yếu)" đúng dàn cảnh 6 phần bản 2: mỗi phần đủ năm nhịp; 6 cao trào là cảnh lớn (5 đến 8 câu, lời dẫn sau lựa chọn 3 đến 6 câu cho mọi lựa chọn); kiểu lựa chọn khác nhau theo bảng; khoảnh khắc ấm và thắng lợi thật mỗi phần; mồi giả ở phần 3; hé lộ ở phần 4; chặng gặt lá thư ở phần 5; ba kết cục; thử thách có hạn ở phần 2 và 3; mọi khe dùng {vai}. Giọng theo mục 6b (Nam Cao, Bảo Ninh; không chép câu văn; từ cấm). Tự kiểm: mỗi phần một câu "vì... nên..." nối phần sau, ghi vào chú thích đầu tệp; liệt kê câu hỏi "sao không cứ...?" và chỗ đã chặn.
+Kiểm: story-lint sạch theo luật K1; run-tests lọc "Truyện|kịch bản"; life-sim 3 hạt giống ép khuyết điểm mềm yếu (dùng trang thử nghiệm hoặc cờ của K1), in ra để tôi đọc. Ghi "K2 đã làm"; push. Sau phiên này là Cổng chơi thử 7b.
+```
+
+## K3, K4 (viết prompt sau Cổng 7b, khi đã biết K2 chơi ra sao)
+
+---
+
+# Khuôn kịch bản và AI kể chuyện lúc chơi (Z mục 7d, chốt 2026-10-23)
+Thứ tự: **AI1a (Sonnet)** → **K3a (Haiku)** → **K3b (Haiku)** → **AI1b (Sonnet)** → Cổng chơi thử → **K4 (Haiku)** → **K5 (Haiku, nhiều lượt)**. Chạy lần lượt (cùng sửa tests.html, js/files.js). Nhánh `add-game-project`. Bản chốt: `ke-hoach/Q-khuon-kich-ban.md`, `ke-hoach/Q-giong-truyen.md`, Z mục 7d.
+
+## AI1a. Sonnet: khuôn thành dữ liệu, thư viện kiểu lựa chọn, kịch bản cụ thể không cần AI
+
+```
+Repo: Phongxuan123/tu-tien. Gắn repo, clone nhánh `main`. Trả lời tiếng Việt, ngắn gọn, xưng "mình", gọi tôi là "bạn". Đọc CLAUDE.md trước. Làm trên nhánh `add-game-project` (checkout origin/add-game-project). TIẾT KIỆM: chỉ đọc phần ghi dưới; kiểm thử lọc theo từ khóa, chạy đầy đủ một lần cuối; Playwright tối đa 1 ảnh. Cuối phiên ghi "AI1a đã làm" vào Z mục 7d, push theo CLAUDE.md, báo ngắn gọn.
+
+Đọc: ke-hoach/Q-khuon-kich-ban.md (cả file); Z mục 7c ("K1 đã làm", "K2 đã làm"), 7d (cả mục) và dòng nhật ký 2026-10-23 về nhịp tuổi; Q-giong-truyen.md mục 4b (năm nhịp), 6e (ngân sách, mười luật dựng), 6f (plot twist, cơ chế); js/systems/story.js, js/data/story.js, js/data/stories/kb_mau.js, kb_mem_yeu.js (chỉ để xem định dạng K1), tools/story-lint.js, js/data/realms.js.
+
+NHIỆM VỤ (chưa gọi AI ở phiên này; mọi thứ chạy được bằng dữ liệu và dòng dự phòng):
+1. Thư viện kiểu lựa chọn (Q-khuon-kich-ban mục 0) trong js/data/story.js: D.STORY.kieu[phuc_tung|chong|dao_thoat|hy_sinh|duong_tat|im_lang|tin|dung_khuyet_diem|tam_ma] → cơ chế mặc định bằng các khóa fx của K1 (tham số hóa theo phần và vai); tam_ma chỉ hiện khi đạo tâm thấp hoặc tâm ma nặng (ngưỡng trong D.STORY).
+2. Khuôn thành dữ liệu: js/data/khuon/kieu_hanh.js (D.STORY.khuon.kieu_hanh) đúng định dạng mục 1, chép đủ khuôn "kiêu hãnh" (bảy mảnh có phương án, dàn, sợi, vật, nơi, thang 2.4, sáu phần 2.5 với mở theo "cảnh giới HOẶC tuổi", không kẻ ác, tâm ma, ba phương án lật 2.6 với manh mối, ba kết cục 2.7). Mỗi chặng của mỗi phần có **dòng dự phòng 2 đến 3 câu** (viết tử tế theo cẩm nang; dùng khi chưa có chữ AI và trong kiểm thử).
+3. Bộ cụ thể hóa không cần AI: TT.kb.make(c) ở mốc A1: chọn khuôn theo c.story.kd (chưa có khuôn thì dùng xương sống A cũ), bốc phương án (vết thương, muốn, vật, lật) bằng băm (không gọi rng), gán vai từ dàn, sinh **kịch bản cụ thể** c.story.kbc = { khuon, chon: {...}, phan: [6 × 4 chặng với kiểu, vai, dòng dự phòng, manh mối cần cài], lat: { kieu, phan_no, manh_moi } } thuần dữ liệu, rồi dựng thành arc của K1 (dùng D.STORY.kieu cho cơ chế). Phần sau có thể được "chỉnh" khi mở phần (TT.kb.mo_phan(c, i): hiện chỉ đọc cờ để chọn biến thể cao trào; AI1b sẽ thay bằng chữ AI).
+4. "Nhìn lại" sau cú lật: các dòng nhật ký và chặng đã là manh mối được đánh dấu (c.story.manhMoi[]), tab Nhật ký và "Truyện của đời bạn" tô màu và ghi "giờ bạn đã hiểu"; mục "Truyện của đời bạn" hiện câu hỏi đang treo, điều bạn biết (mỗi phần một dòng), người trong cuộc.
+5. Bảng xưng hô: c.story.xung[cặp] khởi tạo theo quan hệ (thầy trò, huynh đệ, người thương, kẻ thù...), tự đổi khi quan hệ đổi (kết nghĩa, phản bội, phế sư, thành thù); hàm đọc TT.kb.xung(c, vai).
+6. Sửa nhịp tuổi: mốc tuổi dự phòng của xương sống A (8B2: A2 18, A3 35, A4 55, A5 75) và tuổi mở phần mặc định của Story Director (K1) cho khớp nhịp thật (khoảng 50 tuổi Luyện Khí, 130 tuổi Trúc Cơ, thọ 70/130/260; xem Q-khuon-kich-ban 2.4); ghi số mới vào Z.
+7b. Định dạng **khuôn phụ** (Z mục 7d "Các tuyến khác"): 2 đến 3 phần × 3 chặng, loại (than_phan | the_gioi | quan_he), điều kiện mở (khóa thân phận N1b hoặc biến cố mô phỏng), vai lấy từ dàn, phần nào của khuôn chính nó đổ vào, kiểu lựa chọn từ thư viện, dòng dự phòng; Story Director: tối đa một tuyến phụ nóng, xếp vào khoảng yên giữa hai cao trào chính. Viết một khuôn phụ mẫu (the_gioi: chiến sự tới làng, dựa W1) trong js/data/khuon/phu_chien_su.js.
+7. story-lint: kiểm khuôn (đủ trường, 6 phần, mỗi cao trào có ≥ 1 kiểu ngược khuyết điểm và 1 kiểu dung_khuyet_diem, mỗi phương án lật ≥ 3 manh mối ở trước phần nổ, có không_ke_ac) và kịch bản cụ thể (≈ 24 chặng, ≤ 25 cờ, kiểu lựa chọn đúng bảng).
+Công tắc D.STORY.khuonOn; tắt thì như sau K2 và baseline --check trùng khít. Kiểm thử "Khuôn và kịch bản cụ thể (AI1a)": cụ thể hóa xác định theo hạt giống (băm, không rng), chọn phương án theo xuất thân, đủ 24 chặng chạy được bằng dòng dự phòng, kiểu lựa chọn áp đúng cơ chế, tam_ma ẩn khi đạo tâm cao, xưng hô đổi khi phản bội, manh mối được đánh dấu và "Nhìn lại" hiện sau cú lật, mở phần theo cảnh giới hoặc tuổi mới, lưu/tải. life-sim 3 hạt giống ép khuyết điểm kiêu hãnh (bảng 🛠 hoặc cờ). Trong "AI1a đã làm" mô tả định dạng khuôn dữ liệu để K3 viết theo.
+```
+
+## K3a, K3b. Haiku: chuyển tám khuôn thành dữ liệu (thiết kế đã xong ở Q-khuon-kich-ban mục 3 đến 10)
+
+```
+Repo: Phongxuan123/tu-tien. Gắn repo, clone nhánh `main`. Trả lời tiếng Việt, ngắn gọn, xưng "mình", gọi tôi là "bạn". Đọc CLAUDE.md trước. Làm trên nhánh `add-game-project` (checkout origin/add-game-project). Điều kiện: Z mục 7d có "AI1a đã làm". TIẾT KIỆM: chỉ đọc phần ghi dưới. Cuối phiên ghi "K3a đã làm" (hoặc K3b) vào Z mục 7d, push theo CLAUDE.md, báo ngắn gọn.
+Lượt này: K3a = mục 3 (tan_nhan), 4 (nhan_hau), 5 (nong_nay), 6 (muu_mo); K3b = mục 7 (tho_o), 8 (buong_tha), 9 (khac_ky), 10 (ba_phai).
+Đọc: ke-hoach/Q-khuon-kich-ban.md mục 0, 1, 2 (khuôn mẫu), "Quy ước chung cho tám khuôn", và đúng bốn mục của lượt này; Z "AI1a đã làm" (định dạng dữ liệu); js/data/khuon/kieu_hanh.js (mẫu dữ liệu, chép đúng cấu trúc).
+NHIỆM VỤ: chỉ DỮ LIỆU. Mỗi khuôn thành js/data/khuon/<id>.js, chép ĐÚNG nội dung của mục (không tự đổi câu hỏi, phương án, kiểu lựa chọn, manh mối, kết cục); mở phần theo bảng chung; kiểu lựa chọn đúng tên thư viện; "ngược" ghi thành kiểu ghi trong ngoặc (nếu chỉ ghi "ngược" thì chọn kiểu hợp nghĩa nhất trong thư viện và ghi chú); thêm dòng dự phòng 2 đến 3 câu cho mọi chặng (theo giọng Q-giong-truyen mục 6b, cao trào thì bám cảnh chuẩn được nêu). Đăng ký vào js/files.js như kieu_hanh.js.
+Kiểm: story-lint sạch cho các khuôn mới; run-tests lọc "Khuôn"; life-sim 1 hạt giống mỗi khuôn (ép khuyết điểm bằng bảng 🛠 hoặc cờ), in ra để tôi đọc.
+```
+
+## AI1b. Sonnet: AI viết kịch bản và chữ lúc chơi (mặc định Gemini cả bộ, Claude tùy chọn)
+
+```
+Repo: Phongxuan123/tu-tien. Gắn repo, clone nhánh `main`. Trả lời tiếng Việt, ngắn gọn, xưng "mình", gọi tôi là "bạn". Đọc CLAUDE.md trước. Làm trên nhánh `add-game-project` (checkout origin/add-game-project). Điều kiện: Z mục 7d có "AI1a đã làm" (K3 có thể chưa xong; khuôn nào có thì dùng). TIẾT KIỆM: chỉ đọc phần ghi dưới; kiểm thử dùng giả lập nhà cung cấp, KHÔNG gọi API thật trong kiểm thử. Cuối phiên ghi "AI1b đã làm" vào Z mục 7d, push theo CLAUDE.md, báo ngắn gọn (kèm hướng dẫn tôi nhập khóa và thử).
+
+Đọc: Z mục 7d (cả mục, bản chốt); Z "AI1a đã làm"; Q-giong-truyen.md mục 6b, 6c, 6d, 6f và các bộ chuẩn cảnh (để soạn mẫu giọng); Q-khuon-kich-ban.md mục 0, 1, 2; js/systems/story.js, js/systems/kb (hoặc tệp AI1a tạo), js/ui/story.js, js/ui/devpanel.js (bảng 🛠), js/core/save.js, js/core/time.js (dừng thời gian), chỗ Cài đặt trong giao diện. Tra tài liệu chính thức để lấy đúng cách gọi: Anthropic Messages API từ trình duyệt (tùy chọn; cần header "anthropic-dangerous-direct-browser-access: true"; model mặc định claude-sonnet-5-5) và Gemini API (generateContent; MẶC ĐỊNH cho cả bộ: bản Flash hiện hành cho chặng nhỏ và hồ sơ, bản Pro hiện hành cho kịch bản cụ thể, cao trào, ký ức; cho phép đổi; cấu hình mức lọc an toàn). Gói Claude Pro không gồm API.
+
+NHIỆM VỤ (đúng Z mục 7d):
+1. js/systems/ai.js (TT.aiWriter, đặt tên tránh trùng TT.ai sẵn có): lớp chuyển đổi nhà cung cấp (anthropic, gemini), khóa đọc từ localStorage (bọc try/catch, không bao giờ ghi vào bản lưu hay repo), trả JSON theo lược đồ, đếm lượt gọi và token, hạn mức mỗi đời, thử lại một lần.
+2. Bộ soạn lời gửi: cẩm nang rút gọn (luật cường độ, giọng 6b, giới hạn) + 3 đến 6 cảnh chuẩn làm mẫu + khuôn + trạng thái thật (danh sách tên thế lực, nơi, người được phép dùng; dàn và hồ sơ; bảng xưng hô; hạt; ký ức tích lũy; biến cố vùng gần đây) + yêu cầu cụ thể của lượt gọi.
+3. Các lượt gọi: (a) ở A1: Sonnet cụ thể hóa kịch bản từ khuôn (logline, lựa chọn phương án, bảng 6 phần một dòng, kế hoạch lật ẩn), qua story-lint, lỗi thì dùng bản cụ thể hóa không AI của AI1a; (b) hồ sơ người trong dàn (Gemini Flash) khi dựng vai; (c) mở mỗi phần: viết trọn 4 chặng của phần (cảnh, nhãn theo kiểu, mat, lời dẫn sau cho mọi lựa chọn, biến thể theo cờ), chặng nhỏ dùng tầng nhỏ (Gemini Flash), cao trào dùng tầng lớn (Gemini Pro, hoặc Sonnet nếu bật Claude); khuôn phụ (tuyến phụ) cụ thể hóa và viết theo cùng cách khi mở; (d) trước cao trào: lượt "chỉnh" nhỏ theo biến cố mới; (e) tự chấm cao trào theo danh sách kiểm, không đạt viết lại một lần; (f) cuối phần: cập nhật ký ức tích lũy (≤ 600 chữ) và nhận 1 đến 3 hạt mới; AI bắt buộc cài manh mối của kế hoạch lật và dùng lại ít nhất một hạt cũ ở chặng gặt, cao trào.
+4. Kiểm chữ trước khi hiện: độ dài (cao trào ≤ 6 câu), từ cấm, không số liệu hay phần thưởng lạ, đủ nhãn đúng số lựa chọn và đúng kiểu, không tên ngoài danh sách được phép, xưng hô đúng bảng; sai thì viết lại một lần rồi dùng dòng dự phòng. Bị bộ lọc an toàn chặn thì dùng dự phòng và ghi lại.
+5. Lưu chữ AI vào c.story (kèm model, mã lời gửi), tải lại y nguyên. Hàng đợi: viết chặng kế ngay khi người chơi vừa chọn (trong lúc đọc lời dẫn), viết cao trào từ lúc mở phần; chỉ dừng thời gian chờ ở cao trào (hộp "Thiên Cơ đang chép…" tối đa 15 giây rồi dùng dự phòng); chặng nhỏ chưa có chữ thì dùng dự phòng, không chờ.
+6. Cài đặt: bật/tắt AI kể chuyện (mặc định tắt), ô khóa Anthropic và Gemini, chọn model cho từng tầng, hạn mức, bộ đếm. Bảng 🛠: xem lời gửi và chữ nhận về, nút "đạt" / "viết lại", xuất tệp các đoạn "đạt".
+Công tắc tắt (mặc định) thì game như sau AI1a và baseline --check trùng khít. Kiểm thử "AI kể chuyện (AI1b)" bằng nhà cung cấp giả lập: soạn lời gửi đủ phần, kiểm chữ bắt lỗi (dài, từ cấm, tên lạ, sai xưng hô, thiếu nhãn), rơi về dự phòng khi lỗi hoặc chặn, lưu/tải giữ chữ, hàng đợi đúng thời điểm, chỉ chờ ở cao trào, hạn mức, khóa không lọt vào bản lưu xuất ra. Chạy đầy đủ run-tests. Không gọi API thật trong kiểm thử; nếu có khóa thử thì chỉ chạy tay một đời ngắn và ghi chi phí đo được vào Z.
+```
+
+## K4. Haiku: chuyển tuyến viết tay hiện có thành khuôn phụ
+
+```
+Repo: Phongxuan123/tu-tien. Gắn repo, clone nhánh `main`. Trả lời tiếng Việt, ngắn gọn, xưng "mình", gọi tôi là "bạn". Đọc CLAUDE.md trước. Làm trên nhánh `add-game-project` (checkout origin/add-game-project). Điều kiện: Z mục 7d có "AI1a đã làm" (định dạng khuôn phụ). TIẾT KIỆM. Cuối phiên ghi "K4 đã làm" vào Z mục 7d, push theo CLAUDE.md, báo ngắn gọn.
+Đọc: Z mục 7d ("Các tuyến khác", "AI1a đã làm"); Q-khuon-kich-ban.md mục 0 (thư viện kiểu); js/data/khuon/phu_chien_su.js (mẫu); các tệp js/data/stories/tp_tan_tu.js, tp_dao_tong.js, tp_thuong_nhan.js, tg_chien_su.js, dao_lu.js và sự kiện kết nghĩa của 9K.
+NHIỆM VỤ: chỉ DỮ LIỆU. Mỗi tuyến cũ thành một khuôn phụ js/data/khuon/phu_<id>.js: giữ ý truyện, chia 2 đến 3 phần × 3 chặng, gán kiểu lựa chọn từ thư viện (không tự chế cơ chế), vai lấy từ dàn, khai báo phần khuôn chính mà nó đổ vào, chữ cũ rút gọn thành dòng dự phòng 2 đến 3 câu. Không xóa tệp cũ (bộ máy dùng tệp cũ khi D.STORY.khuonOn tắt).
+Kiểm: story-lint sạch; run-tests lọc "Khuôn"; baseline --check trùng khít.
+```
+
+## K5. Haiku: chuyển mô tả nội dung trong Q thành khuôn phụ (chạy nhiều lượt, mỗi lượt khoảng 6 tuyến)
+
+```
+Repo: Phongxuan123/tu-tien. Gắn repo, clone nhánh `main`. Trả lời tiếng Việt, ngắn gọn, xưng "mình", gọi tôi là "bạn". Đọc CLAUDE.md trước. Làm trên nhánh `add-game-project`. Điều kiện: Z có "K4 đã làm". TIẾT KIỆM: chỉ đọc đúng mục của các tuyến trong lượt này (grep tên tuyến trong ke-hoach/Q-cot-truyen.md rồi đọc theo offset). Cuối phiên ghi "K5 lượt N đã làm" (danh sách tuyến) vào Z mục 7d, push.
+Lượt này: <ghi 6 tuyến, ví dụ lượt 1: T3 Đan sư, T4 Luyện khí, T9 Báo thù, T13 Móc mắt, T14 Đào cốt, W3; lượt 2: T15, T17, T18, W13, W16, W18; lượt 3: cụm 23 Thanh Xà (T22), cụm 24 và W25 Phù Lệnh, W20, cụm 11, 12; lượt 4: 12 sự kiện nghịch lý của chín tông...>.
+NHIỆM VỤ: chỉ DỮ LIỆU. Mỗi tuyến thành một khuôn phụ đúng định dạng AI1a (2 đến 3 phần × 3 chặng, kiểu lựa chọn từ thư viện, điều kiện mở bằng khóa thân phận hoặc biến cố mô phỏng có thật trong mã, vai từ dàn, phần khuôn chính nó đổ vào, dòng dự phòng). Tôn giáo thật viết theo S mục 3 (tôn trọng). Thang sức mạnh và tuổi theo Q-khuon-kich-ban 2.4 (50 tuổi Luyện Khí, 130 tuổi Trúc Cơ). Không viết văn dài (AI lúc chơi viết chữ).
+Kiểm: story-lint sạch; run-tests lọc "Khuôn".
 ```
