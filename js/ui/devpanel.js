@@ -490,9 +490,10 @@
     });
 
     if (dev.has.story()) sec('story', 'Truyện', box => {
-      const arcs = D.STORY.arcs.map(a => [a.id, a.n]);
+      const dyn = p.story && p.story.kbc ? TT.story.arcOf(p.story.kbc.arc) : null; // AI1a: tuyến chính sinh từ khuôn của đời này
+      const arcs = D.STORY.arcs.map(a => [a.id, a.n]).concat(dyn ? [[dyn.id, dyn.n + ' (đời này)']] : []);
       st.arc = st.arc || arcs[0][0];
-      const arc = D.STORY.arcs.find(a => a.id === st.arc);
+      const arc = st.arc === (dyn && dyn.id) ? dyn : (D.STORY.arcs.find(a => a.id === st.arc) || D.STORY.arcs[0]);
       const chs = Object.keys(arc.chang).map(id => [id, id + ' · ' + String(arc.chang[id].t).replace(/\{[a-z]+\}/g, '…').slice(0, 28)]);
       if (!arc.chang[st.ch]) st.ch = arc.dau;
       box.appendChild(row('Tuyến', sel(arcs, st.arc, v => { st.arc = v; st.ch = null; draw(); })));
