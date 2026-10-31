@@ -105,7 +105,16 @@
       dong_xu: { n: 'Đồng xu cũ', desc: 'Một đồng xu bị ném xuống đất, mòn một mặt. Không bán được.' },
       dai_lua: { n: 'Dải lụa buộc chuôi kiếm', desc: 'Dải lụa phai màu, vẫn còn thơm mùi tay ai. Không bán được.' },
       luoc_go: { n: 'Chiếc lược gỗ', desc: 'Chiếc lược gỗ gãy một răng. Không bán được.' },
-      kiem_go_su: { n: 'Thanh kiếm gỗ của thầy', desc: 'Thanh kiếm gỗ đầu tiên thầy đưa, cán mòn vì tay người cầm từ trước. Không bán được.' }
+      kiem_go_su: { n: 'Thanh kiếm gỗ của thầy', desc: 'Thanh kiếm gỗ đầu tiên thầy đưa, cán mòn vì tay người cầm từ trước. Không bán được.' },
+      // K3: vật của bốn khuôn tàn nhẫn, nhân hậu, nóng nảy, mưu mô (chỉ thêm vật thiếu; chăn dày, thư cũ, giày rơm, chuỗi hạt đã có)
+      luoc_bac: { n: 'Chiếc lược bạc', desc: 'Chiếc lược bạc của một người mẹ, nhặt được giữa đống tro của thôn cháy. Không bán được.' },
+      con_dao_te: { n: 'Con dao tế', desc: 'Con dao tế cán khắc hoa văn cũ, lưỡi còn vết gỉ. Không bán được.' },
+      but_son: { n: 'Cây bút son', desc: 'Cây bút son đỏ, đầu bút mòn vì ký tên suốt nhiều năm. Không bán được.' },
+      cay_sao_truc: { n: 'Cây sáo trúc', desc: 'Cây sáo trúc còn tiếng thổi lệch, người thổi đã không còn. Không bán được.' },
+      day_toc_do: { n: 'Sợi dây buộc tóc đỏ', desc: 'Sợi dây buộc tóc đỏ đã phai, còn vương mùi nắng. Không bán được.' },
+      cai_duc_go: { n: 'Cái đục gỗ', desc: 'Cái đục gỗ cán mòn, lưỡi đã mẻ. Không bán được.' },
+      ve_doi: { n: 'Vế câu đối', desc: 'Một vế câu đối làm mật hiệu; mỗi người giữ một vế. Không bán được.' },
+      quan_co_ngoc: { n: 'Quân cờ ngọc đen', desc: 'Quân cờ ngọc đen, mặt dưới có khắc một chữ nhỏ. Không bán được.' }
     },
     // Khoảnh khắc ấm (t: chữ, {ten} là bạn, {vai} là người ấy; ở: 'gan' cùng nơi, tuoi: [tuổi người chơi từ, đến]) và thư (khác vùng). Mỗi mục +1 gắn bó.
     am: [
