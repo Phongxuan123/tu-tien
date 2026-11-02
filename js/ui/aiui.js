@@ -39,6 +39,7 @@
       A.setCfg({ on: on.checked, provider: prov.value, quota: Math.max(1, +quota.value || 150), chuaMax: Math.max(3, Math.min(60, +chua.value || 15)), safety: safety.value, models: { gemini: { nho: m.gemini.nho.value.trim(), lon: m.gemini.lon.value.trim() }, anthropic: { nho: m.anthropic.nho.value.trim(), lon: m.anthropic.lon.value.trim() } } });
       msg.textContent = 'Đã lưu (khóa chỉ nằm trong trình duyệt này).';
     };
+    const nghi = A.nghi(), nghiEl = nghi ? h('div', { style: 'color:#d9a14a;margin:6px 0' }, 'Nhà cung cấp báo hết hạn mức NGÀY: AI tạm nghỉ ' + Math.ceil(nghi / 60000) + ' phút nữa (khóa miễn phí chỉ có vài chục lượt mỗi ngày). Bật thanh toán cho khóa để dùng được cả đời.') : null;
     const counts = h('div', { class: 'small' }, 'Đời này: ' + st.doi.n + '/' + st.quota + ' lượt gọi, ' + st.doi.tin + ' token vào, ' + st.doi.tout + ' token ra. Tổng mọi đời: ' + st.tong.n + ' lượt, ' + st.tong.tin + ' vào, ' + st.tong.tout + ' ra, ' + st.tong.loi + ' lỗi, ' + st.tong.chan + ' lần bị bộ lọc chặn. Hạt: ' + st.hat + '. Hồ sơ dàn: ' + st.hoso + '.');
     dlg = h('div', { style: 'position:fixed;inset:0;z-index:55;background:rgba(10,8,6,.72);display:flex;align-items:center;justify-content:center;overflow:auto' },
       h('div', { style: 'background:#1d1813;border:1px solid #6b5a3c;color:#e8dfd0;padding:16px 20px;border-radius:6px;max-width:640px;width:94%;max-height:92vh;overflow:auto' },
@@ -51,7 +52,7 @@
         row('Claude: tầng nhỏ / lớn', m.anthropic.nho, m.anthropic.lon),
         h('div', { class: 'small', style: 'color:#9a8f7e' }, 'Tầng nhỏ: chặng thường, hồ sơ, chỉnh, chấm. Tầng lớn: kịch bản cụ thể, cao trào, ký ức. Tên model sai (404) thì tự dò bản Flash/Pro mới nhất của khóa.'),
         row('Hạn mức lượt gọi mỗi đời', quota), row('Chờ cao trào tối đa (giây)', chua), row('Mức lọc an toàn Gemini', safety),
-        counts, msg,
+        nghiEl, counts, msg,
         h('div', { style: 'display:flex;gap:8px;margin-top:10px;flex-wrap:wrap' },
           h('button', { onclick: save }, 'Lưu'),
           h('button', { onclick: () => { save(); msg.textContent = 'Đang thử…'; A.thu(r => { msg.textContent = r.msg; }); } }, 'Lưu và thử kết nối (1 lượt gọi nhỏ)'),

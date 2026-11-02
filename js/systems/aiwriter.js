@@ -32,12 +32,21 @@
   function tot() { if (!TOT) TOT = Object.assign({ n: 0, tin: 0, tout: 0, loi: 0, chan: 0 }, lsGet(TOT_KEY) || {}); return TOT; }
   const saveTot = () => lsSet(TOT_KEY, TOT);
   const dat = () => lsGet(DAT_KEY) || [];
+  // Hết hạn mức NGÀY của nhà cung cấp (khóa miễn phí Gemini chỉ vài chục lượt mỗi ngày): nghỉ gọi tới giờ nhà cung cấp báo, không đốt thêm lượt và không chờ vô ích.
+  const NGHI_KEY = 'tt8b_ai_nghi';
+  let NGHI = null;
+  const nghiMs = () => { if (NGHI == null) NGHI = +(lsGet(NGHI_KEY) || 0); return Math.max(0, NGHI - aiw.clock()); };
+  function datNghi(msg) {
+    const m = /retry in (?:(\d+)h)?(?:(\d+)m)?(?:([\d.]+)s)?/i.exec(msg || ''), ms = m && (m[1] || m[2] || m[3]) ? ((+m[1] || 0) * 3600 + (+m[2] || 0) * 60 + (+m[3] || 0)) * 1000 : 6 * 3600 * 1000;
+    NGHI = aiw.clock() + ms; lsSet(NGHI_KEY, NGHI); return ms;
+  }
+  const hetNgay = msg => /per ?day|PerDay|requests per day|daily/i.test(msg || '');
 
   // ---------------------------------------------------------------- điều kiện bật
   const eligibleArc = arc => !!arc && ((arc.id || '').indexOf('kbc_') === 0 || !!arc.phu);
   function on(c) {
     const k = K();
-    return !!(cfg().on && c && c.kind === 'player' && k && k.on && k.kbOn && k.khuonOn && c.story && getKey());
+    return !!(cfg().on && c && c.kind === 'player' && k && k.on && k.kbOn && k.khuonOn && c.story && getKey() && !nghiMs());
   }
   function AI(c, mk) {
     const S = c.story; if (!S) return null;
@@ -127,6 +136,7 @@
   function callProvider(c, tier, sys, user, cb) {
     const A = AI(c, true), pr = cfg().provider, P = PROV[pr], key = getKey(pr);
     if (!P || !key) return cb({ ok: false, err: 'khoa' });
+    if (nghiMs()) return cb({ ok: false, err: 'nghi' });
     if (A.n >= cfg().quota) return cb({ ok: false, err: 'han_muc' });
     let model = cfg().models[pr][tier], tried = 0, ha = false;
     const go = () => {
@@ -135,8 +145,9 @@
       aiw.transport(req, r => {
         const o = P.parse(r); o.model = model; A.tin += o.tin; A.tout += o.tout; tot().tin += o.tin; tot().tout += o.tout;
         if (o.chan) { tot().chan++; saveTot(); return cb(o); }
+        if (!o.ok && o.err === 'tam' && hetNgay(o.msg)) { datNghi(o.msg); tot().loi++; saveTot(); return cb(Object.assign(o, { err: 'nghi' })); }
         if (!o.ok && o.err === 'loi' && pr === 'gemini' && /think/i.test(o.msg || '') && !aiw.noThink) { aiw.noThink = true; return go(); } // model không nhận tham số suy nghĩ: bỏ và gọi lại
-        if (!o.ok && o.err === 'model' && pr === 'gemini' && tried < 1) { tried++; return dimModel(key, tier, nm => { if (nm && nm !== model) { model = nm; setCfg({ models: { gemini: { [tier]: nm } } }); return go(); } tot().loi++; saveTot(); cb(o); }); }
+        if (!o.ok && o.err === 'model' && pr === 'gemini' && tried < 1) { tried++; return dimModel(key, tier, nm => { if (nm && nm !== model) { model = nm; setCfg({ models: { gemini: { [tier]: nm } } }); return go(); } if (tier === 'lon' && !ha && cfg().models[pr].nho !== model) { ha = true; model = cfg().models[pr].nho; return go(); } tot().loi++; saveTot(); cb(o); }); }
         if (!o.ok && o.err === 'tam' && tried < 2) { tried++; return aiw.sleep(900, go); }
         if (!o.ok && tier === 'lon' && !ha && cfg().models[pr].nho !== model) { ha = true; tried = 0; model = cfg().models[pr].nho; o.ha = model; return go(); } // tầng lớn lỗi (ví dụ khóa miễn phí không có hạn mức Pro): hạ xuống model tầng nhỏ một lần
         if (!o.ok) tot().loi++;
@@ -388,7 +399,7 @@
       callProvider(c, tier, cp.sys, cp.user, r => {
         h.fin = true; h.model = r.model || ''; h.raw = r.text || ''; h.err = r.err || r.chan || '';
         if (r.chan) { h.errs = ['bị bộ lọc an toàn chặn: ' + r.chan]; return cb({ ok: false, why: 'chan', pid }); }
-        if (!r.ok) { h.errs = ['lỗi nhà cung cấp: ' + (r.err || '') + (r.msg ? ' ' + r.msg : '')]; return cb({ ok: false, why: r.err === 'han_muc' ? 'han_muc' : r.err === 'khoa' ? 'khoa' : 'loi', pid, errs: [(r.err || '') + ' ' + String(r.msg || '').slice(0, 160)] }); }
+        if (!r.ok) { h.errs = ['lỗi nhà cung cấp: ' + (r.err || '') + (r.msg ? ' ' + r.msg : '')]; return cb({ ok: false, why: r.err === 'han_muc' ? 'han_muc' : r.err === 'khoa' ? 'khoa' : r.err === 'nghi' ? 'nghi' : 'loi', pid, errs: [(r.err || '') + ' ' + String(r.msg || '').slice(0, 160)] }); }
         const out = parseJson(r.text); const E = out ? check(out, cp) : ['đầu ra không phải JSON hợp lệ'];
         h.errs = E;
         if (!E.length) { h.ok = true; return cb({ ok: true, out, model: r.model, pid, cp }); }
@@ -667,12 +678,12 @@
   const aiw = TT.aiw = {
     // cài đặt
     cfg, setCfg, getKey, setKey, hasKey: () => !!getKey(), PROV, parseJson, tot,
-    reset() { CFG = null; KEYS = null; TOT = null; Q.length = 0; running = 0; Object.keys(INFL).forEach(k => delete INFL[k]); HIST.length = 0; release(); },
+    reset() { CFG = null; KEYS = null; TOT = null; NGHI = null; Q.length = 0; running = 0; Object.keys(INFL).forEach(k => delete INFL[k]); HIST.length = 0; release(); },
     transport: fetchTransport, noThink: false,
     sleep: (ms, fn) => setTimeout(fn, ms),
     clock: () => Date.now(),
     // đọc
-    on, view, stats, recOf, hist: () => HIST, dat, exportDat, pending, waiting: () => (WAIT.held ? { key: WAIT.key, left: Math.max(0, cfg().chuaMax - (aiw.clock() - WAIT.t0) / 1000) } : null),
+    on, view, stats, nghi: nghiMs, datNghi, recOf, hist: () => HIST, dat, exportDat, pending, waiting: () => (WAIT.held ? { key: WAIT.key, left: Math.max(0, cfg().chuaMax - (aiw.clock() - WAIT.t0) / 1000) } : null),
     compose: composeChang, composeKichBan, check: checkChang, checkText, unknownNames, allowedWords, checkXung, sentences,
     // ghi
     tick, onChoose, hold, poll, enqueue, danhDau, thu, release, thuLai,
