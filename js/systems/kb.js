@@ -152,6 +152,7 @@
     // Thủ công: chờ bấm "Tiếp"; Cân bằng và Tự động: tự đóng sau 40 giây (giữ hộp, có nút đóng). Thời gian game dừng trong lúc hộp mở.
     sau(c, arc, st, ch, lc, rec) {
       if (!ch.lon) return;
+      if (TT.aiw) { const vc = TT.aiw.view(c, arc, ch); lc = vc.lc.find(x => x.key === lc.key) || lc; } // AI1b: lời dẫn do AI viết (nếu có)
       const m = (lc.sau_neu || []).find(x => c.flags[x.flag]), text = m ? m.sau : lc.sau;
       if (!text) return;
       const manual = TT.decisions.mode() === 'thu_cong';

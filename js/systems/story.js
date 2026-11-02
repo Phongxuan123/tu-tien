@@ -182,7 +182,8 @@
   const canOk = (c, lc) => (!lc.can || [].concat(lc.can).every(f => c.flags[f])) && (!lc.tm || TT.kb.tamMaHien(c)); // K1: lựa chọn chỉ hiện khi có cờ; AI1a: tam_ma chỉ hiện khi đạo tâm thấp hoặc tâm ma nặng
   // Dữ liệu hộp chặng (thuần dữ liệu để lưu vào w.pending).
   function build(c, arc, chId) {
-    const ch = arc.chang[chId], st = stOf(c, arc.id), kb = isKb(c);
+    const ch0 = arc.chang[chId], st = stOf(c, arc.id), kb = isKb(c);
+    const ch = kb && TT.aiw ? TT.aiw.view(c, arc, ch0, chId) : ch0; // AI1b: chữ AI thay chữ dự phòng (không đổi cơ chế)
     const choices = ch.lc.filter(lc => !kb || canOk(c, lc)).map(lc => {
       const k = check(c, st, lc, ch.mac);
       let hint = lc.wheel ? 'Chọn thế này sẽ có vòng quay.' : lc.thu_thach ? 'Chọn thế này là nhận một thử thách có hạn.' : '';
@@ -270,6 +271,7 @@
       TT.log(c, fmt(c, st, d.log), 'age');
     }
     if (KB) TT.kb.tick(c);
+    if (KB && TT.aiw) TT.aiw.tick(c); // AI1b: lên lịch viết chữ (không làm gì khi tắt)
     // mở tuyến
     K().arcs.forEach(arc => { if (!S.arcs[arc.id] && canOpen(c, arc, S)) openArc(c, arc); });
     if (KB && K().khuonOn) { const da = TT.kb.openDyn(c, S); if (da) openArc(c, da); } // AI1a: mở tuyến chính sinh từ khuôn
@@ -291,6 +293,7 @@
         return apply(c, arc, st.st, lc.key, true);
       }
       if (w.pending || S.box === now || now - S.box < K().gap || quiet()) return;
+      if (KB && TT.aiw && TT.aiw.hold(c, arc, st, ch)) return; // AI1b: cao trào chưa có chữ thì dừng thời gian chờ (tối đa vài chục giây); tắt AI thì hàm rỗng
       bindVai(c, arc, st);
       S.box = now;
       TT.decisions.request(build(c, arc, st.st));
@@ -330,6 +333,7 @@
     TT.log(c, '[' + arc.n + '] ' + fmt(c, st, ch.t) + ': ' + fmt(c, st, lc.label) + '.', 'age');
     if (!missed) note(c, st, fmt(c, st, ch.t) + ': ' + fmt(c, st, lc.label));
     if (KB) TT.kb.applied(c, arc, st, chId, missed, lc);
+    if (KB && !missed && TT.aiw) TT.aiw.onChoose(c, arc, st, ch, lc); // AI1b: viết chặng kế ngay khi vừa chọn
     if (KB && lc.thu_thach) TT.kb.ttStart(c, arc, st, ch, lc);
     else if (lc.wheel) { st.w = lc.key; TT.wheel.begin(c, arc.id, chId, lc.key); } else go(c, arc, fr && fr.refused && lc.toi_tu ? lc.toi_tu : lc.toi);
     if (KB && !missed && !lc.wheel) TT.kb.sau(c, arc, st, ch, lc, rec); // lời dẫn sau lựa chọn của cảnh lớn

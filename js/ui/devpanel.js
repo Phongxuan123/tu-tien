@@ -19,6 +19,7 @@
     hoi: () => !!(TT.hoi && TT.fac && D.ECO && D.ECO.hoi),
     story: () => !!(TT.story && D.STORY && D.STORY.on && D.STORY.arcs),
     rel: () => !!TT.rel,
+    ai: () => !!(TT.aiw && TT.aiw.hist),
     bond: () => !!(TT.bond && TT.bond.ensure && D.BOND && D.BOND.on)
   };
   // Danh sách khối đang có (đọc thuần).
@@ -29,6 +30,7 @@
     out.push('identity');
     if (h.rel()) out.push('rel');
     if (h.story()) out.push('story');
+    if (h.ai()) out.push('ai');
     out.push('time', 'life');
     return out;
   };
@@ -507,6 +509,24 @@
       const fl = Object.keys(p.flags).filter(k => p.flags[k]);
       if (fl.length) box.appendChild(h('div', { class: 'sm' }, 'Đang bật: ' + fl.join(', ')));
       box.appendChild(h('button', { onclick: () => act(() => dev.ripen() > 0) }, 'Chín ngay hậu quả trễ (' + TT.story.pendingDue(p) + ')'));
+    });
+
+    if (dev.has.ai()) sec('ai', 'AI kể chuyện (lời gửi và chữ nhận về)', box => { // AI1b: xem lời gửi, "đạt" thành mẫu, "viết lại", xuất tệp
+      const A = TT.aiw, hs = A.hist(), stt = A.stats(p);
+      box.appendChild(h('div', { class: 'sm' }, (A.cfg().on ? 'Đang BẬT' : 'Đang TẮT') + ' · đời này ' + stt.doi.n + '/' + stt.quota + ' lượt · hàng đợi ' + stt.hangDoi + ' · mẫu "đạt" đã lưu: ' + A.dat().length));
+      if (stt.lo.length) box.appendChild(h('div', { class: 'sm' }, 'Dùng dự phòng gần đây: ' + stt.lo.map(x => x.k + ' (' + x.why + ')').join('; ')));
+      box.appendChild(h('button', { onclick: () => {
+        const blob = new Blob([A.exportDat()], { type: 'application/json' }), a = h('a', { href: URL.createObjectURL(blob), download: 'ai-doan-dat.json' });
+        document.body.appendChild(a); a.click(); a.remove(); setTimeout(() => URL.revokeObjectURL(a.href), 1000);
+      } }, 'Xuất các đoạn "đạt"'));
+      hs.slice(-12).reverse().forEach(e => {
+        const i = hs.indexOf(e), det = h('details', null, h('summary', null, (e.ok ? '✓ ' : '✗ ') + e.kind + ' · ' + e.key + ' · ' + (e.model || '?') + ' · ' + e.pid + (e.att ? ' (lần 2)' : '') + (e.dat ? ' · đạt' : '')));
+        det.appendChild(h('pre', { class: 'sm', style: 'white-space:pre-wrap;max-height:160px;overflow:auto' }, 'LỜI GỬI (cuối):\n' + String(e.user).slice(-1800)));
+        det.appendChild(h('pre', { class: 'sm', style: 'white-space:pre-wrap;max-height:160px;overflow:auto' }, 'NHẬN VỀ:\n' + (e.raw || '(trống)') + (e.errs && e.errs.length ? '\nLỖI: ' + e.errs.join('; ') : '')));
+        det.appendChild(h('div', { class: 'r' }, h('button', { onclick: () => act(() => A.danhDau(i, 'dat')) }, 'Đạt'), h('button', { onclick: () => act(() => A.danhDau(i, 'viet_lai')) }, 'Viết lại')));
+        box.appendChild(det);
+      });
+      if (!hs.length) box.appendChild(h('div', { class: 'sm' }, 'Chưa có lượt gọi nào.'));
     });
 
     sec('time', 'Thời gian', box => {

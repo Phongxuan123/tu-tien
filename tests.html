@@ -5215,6 +5215,236 @@ test('Khuôn và kịch bản cụ thể (AI1a): khuôn phụ (định dạng, l
   D.STORY.khuonOn = true; const m = khW(653, null, true); khAge(m, 40); for (let i = 0; i < 6; i++) { TT.world.months++; TT.story.tick(m); clearPending(); } fin(m); ok(m.story.kbc && !m.story.arcs.bb_a2, 'khuonOn bật và đã có kịch bản cụ thể: xương sống A cũ nhường chỗ');
 }));
 
+// ---------------- AI kể chuyện (AI1b): nhà cung cấp GIẢ LẬP, không gọi API thật ----------------
+const AIW = TT.aiw;
+const aiMock = { n: 0, mode: '', defer: null, calls: [], chamFail: 0 };
+function aiSent(n, a) { const L = ['Gió lùa qua sân đá, không ai lên tiếng.', 'Bạn đứng yên, tay buông thõng.', 'Mùi khói bếp lẫn trong sương sớm.', 'Cánh cửa khép lại rất khẽ.', 'Một đứa trẻ nhìn bạn rồi quay đi.', 'Trời sắp mưa.']; return L.slice(0, n).join(' ') + (a ? ' ' + a : ''); }
+function aiMake(user, sys) { // đọc YEU_CAU trong lời gửi rồi sinh đầu ra HỢP LỆ (lỗi cố ý bật bằng aiMock.mode)
+  if (/^Bạn là biên tập viên khó tính/.test(sys)) { if (aiMock.chamFail > 0) { aiMock.chamFail--; return { dat: false, loi: ['phản diện chưa ác trước mặt'] }; } return { dat: true, loi: [] }; }
+  const R = JSON.parse(user.split('YEU_CAU=')[1].split('\n')[0]), md = aiMock.mode;
+  if (R.loai === 'hoso') { const hs = {}; R.vai.forEach(v => { hs[v] = { giong: 'nói chậm, hay ngừng giữa câu', thoi_quen: 'vuốt gấu áo khi nghĩ', uoc: 'một mái nhà không dột', so: 'tiếng chuông khuya', vat: 'chiếc quạt nan' }; }); return { hs }; }
+  if (R.loai === 'kyuc') return { ky_uc: 'Bạn lớn lên trong im lặng. ' + 'Mỗi lần cúi đầu là một lần nhớ. '.repeat(3), hat: [{ t: 'chiếc dép rơm bị giẫm bẹp', tk: 'dép rơm' }] };
+  if (R.loai === 'kich_ban') { const lat = R.lat[1] || R.lat[0]; return { logline: 'Một kẻ cúi đầu trước mọi người để giữ lại mái nhà.', vet: R.vet[0], muon: R.muon[0], vat: R.vat[0], vat_guong: R.vat_guong[0], vat_su: R.vat_su[0], lat, ra_mat: R.ra_mat - 1, noi_cam: R.noi_cam[0], bang6: ['một', 'hai', 'ba', 'bốn', 'năm', 'sáu'].map(x => 'Phần ' + x + ' của một đời lận đận'), ke_hoach: 'Cài manh mối ở ba phần đầu rồi cho nổ.', ly: 'hợp xuất thân và dàn' }; }
+  // chặng
+  const lim = R.nhip === 'cao_trao' ? 6 : R.lon ? 8 : 4;
+  const parts = []; (R.manh_moi || []).forEach(m => parts.push(m.y));
+  const hatTk = 'Bạn vẫn nhớ chiếc dép rơm năm nào.';
+  if (hatTk) parts.push(hatTk);
+  let d = parts.join(' '); let k = 0; while (AIW.sentences(d) < 2) { d += ' ' + aiSent(k + 1).split('. ')[k].replace(/\.$/, '') + '.'; k++; if (k > 5) break; }
+  if (md === 'dai') d = aiSent(6, 'Thêm một câu nữa. Và một câu nữa.');
+  if (md === 'cam') d += ' Bạn đau đớn tột cùng.';
+  if (md === 'ten') d += ' Rồi gặp Hoàng Long ở cổng.';
+  if (md === 'so') d += ' Bạn nhận được phần thưởng.';
+  const out = { d, lc: R.keys.map(k2 => { const o = { key: k2, label: 'Cúi xuống nhặt', mat: 'Bạn mất chút sĩ diện của mình.' }; if (R.can_sau.indexOf(k2) >= 0) o.sau = aiSent(3, 'Sân im phăng phắc.'); return o; }), bien: [], hat: [{ t: 'chiếc dép rơm bị giẫm bẹp', tk: 'dép rơm' }], dung_hat: (R.hat_ids || [])[0] || null, manh_moi: (R.manh_moi || []).map(m => m.id) };
+  if (md === 'dai') out.d = d;
+  if (md === 'thieu') out.lc.pop();
+  if (md === 'xung') { out.lc[0].sau = (out.lc[0].sau || aiSent(3)) + ' "Sư phụ, xin người nghĩ lại."'; }
+  return out;
+}
+function aiGem(text, extra) { return Object.assign({ candidates: [{ content: { parts: [{ text: JSON.stringify(text) }] }, finishReason: 'STOP' }], usageMetadata: { promptTokenCount: 1000, candidatesTokenCount: 200 } }, extra || {}); }
+function aiTransport(req, cb) {
+  aiMock.n++; aiMock.calls.push(req);
+  if (req.method === 'GET') return cb({ status: 200, json: { models: [{ name: 'models/gemini-3.9-pro', supportedGenerationMethods: ['generateContent'] }, { name: 'models/gemini-3.7-flash', supportedGenerationMethods: ['generateContent'] }] } });
+  const run = () => {
+    if (aiMock.mode === 'loi') return cb({ status: 500, json: { error: { message: 'boom' } } });
+    if (aiMock.mode === 'chan') return cb({ status: 200, json: { promptFeedback: { blockReason: 'SAFETY' }, usageMetadata: { promptTokenCount: 10 } } });
+    if (aiMock.mode === 'khoa') return cb({ status: 403, json: { error: { message: 'API key not valid' } } });
+    const b = JSON.parse(req.body), isG = req.url.indexOf('generativelanguage') >= 0;
+    const sys = isG ? b.systemInstruction.parts[0].text : b.system, user = isG ? b.contents[0].parts[0].text : b.messages[0].content;
+    const out = aiMake(user, sys);
+    cb({ status: 200, json: isG ? aiGem(out) : { content: [{ type: 'text', text: JSON.stringify(out) }], usage: { input_tokens: 900, output_tokens: 150 } } });
+  };
+  if (aiMock.defer) aiMock.defer.push(run); else run();
+}
+function aiFlush() { const q = aiMock.defer; aiMock.defer = null; if (q) q.splice(0).forEach(f => f()); aiMock.defer = q ? [] : null; }
+function aiDone(fn) { // bật AI với khóa giả lập, trả lại nguyên trạng sau bài
+  const t0 = AIW.transport, c0 = AIW.cfg().on, k0 = AIW.getKey('gemini'), cl0 = AIW.clock;
+  AIW.reset(); AIW.setKey('gemini', 'TEST-KEY-DO-NOT-LEAK'); AIW.setCfg({ on: true, provider: 'gemini', quota: 150, chuaMax: 15 }); AIW.transport = aiTransport; AIW.sleep = (ms, f) => f();
+  Object.assign(aiMock, { n: 0, mode: '', defer: null, calls: [], chamFail: 0 });
+  try { return khDone(fn); } finally { AIW.transport = t0; AIW.clock = cl0; AIW.release(); AIW.setCfg({ on: c0 }); AIW.setKey('gemini', k0); AIW.reset(); TT.time.hold = false; }
+}
+function aiOpen(seed, xt) { const p = khW(seed, xt || 'p1'); khAge(p, 12); for (let i = 0; i < 6; i++) { khStep(p); clearPending(); } return p; }
+
+test('AI kể chuyện (AI1b): lớp nhà cung cấp (Gemini và Anthropic): tiêu đề, an toàn, không gửi temperature, phân tích chặn/lỗi, khóa chỉ ở localStorage', () => aiDone(() => {
+  const G = AIW.PROV.gemini, A = AIW.PROV.anthropic, rq = G.req('gemini-3.6-flash', 'S', 'U', 'nho', 'KEY'), b = JSON.parse(rq.body);
+  eq(rq.headers['x-goog-api-key'], 'KEY'); ok(rq.url.indexOf('/v1beta/models/gemini-3.6-flash:generateContent') > 0, 'URL generateContent');
+  ok(!('temperature' in b.generationConfig) && b.generationConfig.responseMimeType === 'application/json', 'không temperature, trả JSON');
+  eq(b.safetySettings.length, 4, '4 nhóm an toàn'); ok(b.safetySettings.every(s => s.threshold === 'BLOCK_ONLY_HIGH'), 'mức lọc mặc định');
+  const ra = A.req('claude-sonnet-5-5', 'S', 'U', 'lon', 'K2'), ba = JSON.parse(ra.body);
+  eq(ra.headers['anthropic-dangerous-direct-browser-access'], 'true'); eq(ra.headers['x-api-key'], 'K2'); eq(ra.headers['anthropic-version'], '2023-06-01'); eq(ba.model, 'claude-sonnet-5-5'); ok(ba.max_tokens > 0 && ba.system === 'S' && ba.messages[0].role === 'user');
+  eq(G.parse({ status: 200, json: aiGem({ a: 1 }) }).ok, true); eq(G.parse({ status: 200, json: { promptFeedback: { blockReason: 'SAFETY' } } }).chan, 'SAFETY');
+  eq(G.parse({ status: 200, json: { candidates: [{ finishReason: 'SAFETY' }] } }).chan, 'SAFETY'); eq(G.parse({ status: 500 }).err, 'tam'); eq(G.parse({ status: 404 }).err, 'model'); eq(G.parse({ status: 403, json: {} }).err, 'loi');
+  eq(A.parse({ status: 200, json: { stop_reason: 'refusal', content: [] } }).chan, 'refusal'); eq(A.parse({ status: 200, json: { content: [{ type: 'text', text: '{}' }], usage: { input_tokens: 5, output_tokens: 6 } } }).tout, 6);
+  deepJson(AIW.parseJson('```json\n{"a":1}\n```'), { a: 1 }); eq(AIW.parseJson('không có json'), null);
+  const p = aiOpen(901); const snap = TT.save.snapshot(); ok(snap.indexOf('TEST-KEY-DO-NOT-LEAK') < 0, 'khóa không lọt vào bản lưu');
+  ok(JSON.stringify(TT.world).indexOf('TEST-KEY') < 0, 'khóa không nằm trong trạng thái thế giới');
+}));
+function deepJson(a, b) { eq(JSON.stringify(a), JSON.stringify(b)); }
+
+test('AI kể chuyện (AI1b): bộ soạn lời gửi đủ phần (cẩm nang, mẫu, khuôn, trạng thái thật, xưng hô, hạt, ký ức, yêu cầu máy đọc)', () => aiDone(() => {
+  const p = aiOpen(902), S = p.story, arc = TT.story.arcOf(S.kbc.arc), A = AIW.cfg();
+  AIW.reset(); AIW.setKey('gemini', 'TEST-KEY-DO-NOT-LEAK'); AIW.setCfg({ on: true }); AIW.transport = aiTransport;
+  S.ai.hat = [{ id: 'h1', t: 'chiếc dép rơm bị giẫm bẹp', tk: 'dép rơm' }]; S.ai.ky = 'Bạn lớn lên trong im lặng.'; S.ai.hn = 1;
+  const cp = AIW.compose(p, arc, 'p2c');
+  const U = cp.user, SY = cp.sys;
+  ok(/LUẬT CƯỜNG ĐỘ/.test(SY) && /Nam Cao/.test(SY) && /THANG SỨC MẠNH/.test(SY), 'cẩm nang rút gọn');
+  eq((SY.match(/Cảnh mẫu:/g) || []).length, 6, 'sáu cảnh chuẩn làm mẫu');
+  ok(U.indexOf(KH.cau_hoi_trung_tam) >= 0 && U.indexOf('PHẦN 2/6') >= 0, 'khuôn và phần');
+  ok(U.indexOf('THẾ LỰC ĐƯỢC PHÉP') > 0 && U.indexOf('NƠI ĐƯỢC PHÉP') > 0 && U.indexOf('NGƯỜI ĐƯỢC PHÉP') > 0, 'danh sách được phép');
+  ok(U.indexOf('BẢNG XƯNG HÔ HIỆN TẠI') > 0 && /"vai":"ke_thu"/.test(U), 'bảng xưng hô');
+  ok(U.indexOf('HẠT CŨ') > 0 && U.indexOf('dép rơm') > 0 && U.indexOf('KÝ ỨC TÍCH LŨY') > 0, 'hạt và ký ức');
+  ok(U.indexOf('Cú lật ẨN') > 0 && U.indexOf('KHÔNG tiết lộ') > 0, 'cú lật ẩn dặn không tiết lộ');
+  const R = JSON.parse(U.split('YEU_CAU=')[1].split('\n')[0]);
+  eq(R.nhip, 'cao_trao'); ok(R.lon && R.tran === 6, 'cao trào ≤ 6 câu'); eq(R.keys.length, 3); ok(R.can_hat && R.hat_ids[0] === 'h1', 'cao trào phần ≥ 2 bắt buộc dùng lại hạt');
+  ok(R.can_sau.length >= 2, 'lời dẫn cho mọi lựa chọn không vòng quay');
+  const pm = AIW.compose(p, arc, 'p1m'); const R0 = JSON.parse(pm.user.split('YEU_CAU=')[1].split('\n')[0]); ok(!R0.lon || R0.nhip === 'moc', 'chặng móc'); ok(!R0.can_hat, 'chặng móc không bắt buộc hạt');
+  const mmCh = S.kbc.lat.manh_moi[0], cm = AIW.compose(p, arc, S.kbc.phan[mmCh.phan - 1].chang.find(x => x.nhip === mmCh.o).id);
+  ok(JSON.parse(cm.user.split('YEU_CAU=')[1].split('\n')[0]).manh_moi.length >= 1, 'manh mối của kế hoạch lật được giao cho chặng');
+  ok(AIW.composeKichBan(p).user.indexOf('"lat"') > 0 && /CỤ THỂ HÓA KỊCH BẢN/.test(AIW.composeKichBan(p).user), 'lời gửi cụ thể hóa kịch bản');
+}));
+
+test('AI kể chuyện (AI1b): kiểm chữ bắt dài, từ cấm, số liệu, tên lạ, sai xưng hô, thiếu nhãn, thiếu manh mối, thiếu hạt', () => aiDone(() => {
+  const p = aiOpen(903), S = p.story, arc = TT.story.arcOf(S.kbc.arc);
+  S.ai.hat = [{ id: 'h1', t: 'chiếc dép rơm bị giẫm bẹp', tk: 'dép rơm' }]; S.ai.hn = 1;
+  const cp = AIW.compose(p, arc, 'p2c'), R = cp.req, good = () => aiMake(cp.user, cp.sys);
+  eq(AIW.check(p, cp, good()).length, 0, 'bản hợp lệ qua kiểm: ' + AIW.check(p, cp, good()).join('|'));
+  const has = (mut, re) => { const o = good(); mut(o); const E = AIW.check(p, cp, o); ok(E.some(e => re.test(e)), 'phải bắt ' + re + ' nhưng nhận ' + E.join('|')); };
+  has(o => { o.d = aiSent(6, 'Thêm một câu nữa. Và nữa.'); }, /d: \d+ câu/);
+  has(o => { o.d += ' Bạn vô cùng đau khổ.'; }, /từ cấm/);
+  has(o => { o.lc[0].mat = 'Bạn mất 50 vàng.'; }, /chữ số/);
+  has(o => { o.d += ' Rồi gặp Hoàng Long ở cổng.'; }, /tên ngoài danh sách/);
+  has(o => { o.lc.pop(); }, /cần đúng 3 lựa chọn|thiếu khóa/);
+  has(o => { o.lc[0].key = 'khong_co'; }, /thiếu khóa|khóa lạ/);
+  has(o => { o.lc[0].sau = ''; }, /sau/);
+  has(o => { o.dung_hat = null; }, /chưa dùng lại hạt/);
+  has(o => { o.d = o.d.replace(/dép rơm/g, 'bát sứ'); }, /từ khóa/);
+  has(o => { o.d = ''; }, /trống|thiếu d/);
+  has(o => { o.d += ' {ke_thu} cười.'; }, /khe/);
+  eq(AIW.check(p, cp, null)[0], 'đầu ra không phải JSON đúng mẫu');
+  // xưng hô: người thầy đã bị phế (phe_su) thì không còn gọi "sư phụ" / "con" như cũ trong lời thoại
+  p.flags.phe_su = 1; TT.kb.xungSync(p); const cp2 = AIW.compose(p, arc, 'p2c');
+  const o = aiMake(cp2.user, cp2.sys); o.lc[0].sau = aiSent(3) + ' "Sư phụ, xin người nghĩ lại."';
+  ok(AIW.check(p, cp2, o).some(e => /xưng hô/.test(e)), 'sai xưng hô bị bắt: ' + AIW.check(p, cp2, o).join('|'));
+  // manh mối
+  const mm = S.kbc.lat.manh_moi[0], ch = S.kbc.phan[mm.phan - 1].chang.find(x => x.nhip === mm.o), cm = AIW.compose(p, arc, ch.id), om = aiMake(cm.user, cm.sys);
+  eq(AIW.check(p, cm, om).filter(e => /manh mối/.test(e)).length, 0, 'có cài manh mối thì qua'); om.manh_moi = []; ok(AIW.check(p, cm, om).some(e => /manh mối/.test(e)), 'không khai manh mối bị bắt');
+  const om2 = aiMake(cm.user, cm.sys); om2.d = aiSent(3); ok(AIW.check(p, cm, om2).some(e => /manh mối.*chưa thấy/.test(e)), 'khai mà không cài bị bắt');
+  const un = AIW.unknownNames('Bạn gặp Hoàng Long. "Ngươi là ai?" Hắn tới Thiên Cơ các.', AIW.allowedWords([p.name])); ok(un.indexOf('Hoàng') >= 0 && un.indexOf('Long') >= 0 && un.indexOf('Thiên') < 0, 'tên lạ: ' + un.join(','));
+}));
+
+test('AI kể chuyện (AI1b): chạy cả đời bằng nhà cung cấp giả lập: cụ thể hóa kịch bản, hồ sơ, chữ AI hiện trong hộp, hạt, ký ức, tự chấm, đếm lượt', () => aiDone(() => {
+  const p = aiOpen(904), S = p.story; ok(S.kbc.ai && S.kbc.ai.logline, 'kịch bản được AI cụ thể hóa (logline): ' + JSON.stringify(S.kbc.ai));
+  eq(S.kbc.lat.id, K1lat(), 'AI chọn phương án lật thứ hai'); eq(TT.kb.lintKbc(S.kbc).length, 0, 'kịch bản cụ thể mới qua story-lint');
+  const r = khRun(p, { stop: d => d.ch === 'p1c' }); const box = r.box; ok(box, 'tới được cao trào phần 1');
+  const rec = AIW.recOf(p, S.kbc.arc, 'p1c'); ok(rec && rec.ok, 'cao trào có chữ AI'); eq(box.text, rec.d, 'hộp hiện đúng chữ AI'); ok(box.choices.every(c => c.label === 'Cúi xuống nhặt'), 'nhãn là chữ AI');
+  ok(rec.model === 'gemini-3.9-pro' || rec.model === 'gemini-3.6-pro', 'ghi model: ' + rec.model); ok(/^p[0-9a-z]+$/.test(rec.pid), 'ghi mã lời gửi'); eq(rec.tier, 'lon'); ok(rec.cham === 1, 'tự chấm đạt');
+  const hoso = S.ai.hoso; ok(Object.keys(hoso).length >= 2 && hoso.ke_thu && hoso.ke_thu.giong, 'hồ sơ người trong dàn: ' + Object.keys(hoso));
+  ok(S.ai.hat.length >= 1, 'hạt được ghi'); ok(S.ai.n > 5 && S.ai.tin > 0, 'đếm lượt gọi và token: ' + S.ai.n); ok(AIW.stats(p).tong.n >= S.ai.n);
+  TT.decisions.resolve(box.choices.findIndex(c => !c.disabled));
+  const sau = TT.world.pending; if (sau && sau.type === 'story_sau') { ok(sau.text.length > 20 && sau.text.indexOf('Sân im phăng phắc') >= 0, 'lời dẫn sau lựa chọn là chữ AI'); clearPending(); }
+  // chạy tiếp qua hết phần 1: ký ức tích lũy (≤ 600 chữ) và hạt mới
+  khRun(p, { stop: d => d.ch === 'p2c' }); ok(S.ai.ky && S.ai.ky.split(/\s+/).length <= 600, 'ký ức tích lũy ≤ 600 chữ');
+  const r2 = AIW.recOf(p, S.kbc.arc, 'p2c'); ok(r2 && r2.ok, 'cao trào phần 2 có chữ'); ok(r2.hat.length >= 0);
+  const e2 = AIW.compose(p, TT.story.arcOf(S.kbc.arc), 'p3c'); ok(JSON.parse(e2.user.split('YEU_CAU=')[1].split('\n')[0]).can_hat, 'cao trào sau phải dùng lại hạt cũ');
+  ok(AIW.hist().some(h => h.kind === 'cham') && AIW.hist().some(h => h.kind === 'kyuc') && AIW.hist().some(h => h.kind === 'hoso') && AIW.hist().some(h => h.kind === 'kich_ban'), 'đủ loại lượt gọi');
+}));
+function K1lat() { return KH.lat[1] ? KH.lat[1].id : KH.lat[0].id; }
+
+test('AI kể chuyện (AI1b): sai thì viết lại một lần rồi dùng dự phòng; lỗi mạng, chặn an toàn, khóa sai đều rơi về dự phòng và ghi lại', () => aiDone(() => {
+  const p = aiOpen(905), S = p.story, id = S.kbc.arc, arc = TT.story.arcOf(id);
+  // 1. sai một lần (lần 2 đúng): chấp nhận bản viết lại
+  const orig = aiMake; let first = true; const base = aiTransport;
+  AIW.transport = (req, cb) => { const b = JSON.parse(req.body), user = b.contents[0].parts[0].text; if (first && /"loai":"chang"/.test(user)) { first = false; aiMock.mode = 'dai'; base(req, r => { aiMock.mode = ''; cb(r); }); } else base(req, cb); };
+  delete S.ai.txt[id].p1l; const n0 = aiMock.n;
+  AIW.enqueue(p, 'chang', id + ':p1l', 0, { arc: id, ch: 'p1l' });
+  ok(S.arcs[id] || true); const r = AIW.recOf(p, id, 'p1l'); ok(r && r.ok, 'viết lại lần hai được chấp nhận'); const hl = AIW.hist().filter(h => h.key === id + ':p1l').slice(-2); ok(hl.length === 2 && hl[0].errs.length > 0 && hl[1].ok, 'lần đầu bị bắt lỗi, lần hai đạt');
+  AIW.transport = aiTransport;
+  // 2. sai cả hai lần → dự phòng
+  delete S.ai.txt[id].p1t; aiMock.mode = 'cam'; AIW.enqueue(p, 'chang', id + ':p1t', 0, { arc: id, ch: 'p1t' }); const r2 = AIW.recOf(p, id, 'p1t'); ok(r2 && r2.fb === 'kiem', 'sai hai lần: dùng dự phòng (kiem): ' + JSON.stringify(r2));
+  const chT = arc.chang.p1t; eq(AIW.view(p, arc, chT, 'p1t'), chT, 'view trả chữ dự phòng nguyên vẹn');
+  // 3. mạng lỗi, 4. bộ lọc an toàn, 5. khóa sai
+  [['loi', 'p2m', 'loi'], ['chan', 'p2l', 'chan'], ['khoa', 'p3m', 'loi']].forEach(a => { aiMock.mode = a[0]; if (S.ai.txt[id]) delete S.ai.txt[id][a[1]]; AIW.enqueue(p, 'chang', id + ':' + a[1], 0, { arc: id, ch: a[1] }); const q = AIW.recOf(p, id, a[1]); ok(q && q.fb === a[2], a[0] + ' → dự phòng ' + a[2] + ': ' + JSON.stringify(q)); });
+  ok(S.ai.lo.length >= 4 && S.ai.lo.some(x => x.why.indexOf('chan') >= 0), 'ghi lại các lần dùng dự phòng'); ok(AIW.tot().chan >= 1, 'đếm lần bị chặn');
+  aiMock.mode = ''; ok(AIW.hist().some(h => /chặn/.test((h.errs || []).join())), 'lịch sử ghi lý do chặn');
+}));
+
+test('AI kể chuyện (AI1b): chữ AI lưu trong c.story (kèm model, mã lời gửi), tải lại y nguyên, tắt AI thì về dự phòng, khóa không lọt vào bản lưu xuất ra', () => aiDone(() => {
+  const p = aiOpen(906), S = p.story, id = S.kbc.arc; khRun(p, { stop: d => d.ch === 'p2m' });
+  const arc = TT.story.arcOf(id), v1 = AIW.view(p, arc, arc.chang.p1c, 'p1c'); ok(v1 !== arc.chang.p1c && v1.d === AIW.recOf(p, id, 'p1c').d, 'view dùng chữ AI');
+  const snap = TT.save.snapshot(); ok(snap.indexOf('TEST-KEY-DO-NOT-LEAK') < 0, 'khóa không nằm trong bản lưu xuất ra'); ok(snap.indexOf('"pid"') > 0 && snap.indexOf('"model"') > 0, 'bản lưu có model và mã lời gửi');
+  const before = JSON.stringify(S.ai.txt); TT.save.restore(snap); const p2 = TT.player(), S2 = p2.story;
+  eq(JSON.stringify(S2.ai.txt), before, 'chữ AI tải lại y nguyên'); eq(S2.ai.ky, S.ai.ky); eq(S2.ai.hat.length, S.ai.hat.length);
+  const arc2 = TT.story.arcOf(S2.kbc.arc), v2 = AIW.view(p2, arc2, arc2.chang.p1c, 'p1c'); eq(v2.d, v1.d, 'hộp sau tải lại hiện cùng chữ'); eq(TT.save.snapshot().length > 0, true);
+  AIW.setCfg({ on: false }); eq(AIW.view(p2, arc2, arc2.chang.p1c, 'p1c'), arc2.chang.p1c, 'tắt AI: về dòng dự phòng, chữ AI vẫn nằm trong bản lưu'); eq(AIW.hold(p2, arc2, p2.story.arcs[S2.kbc.arc], arc2.chang.p1c), false);
+}));
+
+test('AI kể chuyện (AI1b): hàng đợi: viết chặng kế ngay khi vừa chọn, cao trào từ lúc mở phần; chỉ dừng thời gian chờ ở cao trào (tối đa 15 giây), chặng nhỏ chưa có chữ thì dự phòng', () => aiDone(() => {
+  const p = aiOpen(907), S = p.story, id = S.kbc.arc, arc = TT.story.arcOf(id);
+  // đã có sẵn chữ cho p1m (đã viết ở tháng trước); kẹt mạng (defer) cho các chặng sau
+  ok(AIW.recOf(p, id, 'p1m') && AIW.recOf(p, id, 'p1m').ok, 'chặng móc đã có chữ');
+  aiMock.defer = []; const stp = S.arcs[id];
+  // 1. người chơi vừa chọn ở p1m → chặng kế (p1l) được xếp ngay, chưa chờ tới tháng sau
+  delete S.ai.txt[id].p1l; delete S.ai.txt[id].p1c; delete S.ai.txt[id].p1t;
+  const lcm = arc.chang.p1m.lc[0]; AIW.onChoose(p, arc, stp, arc.chang.p1m, lcm); ok(AIW.pending(id + ':' + lcm.toi), 'chặng kế được xếp ngay khi vừa chọn: ' + lcm.toi);
+  // 2. chặng nhỏ chưa có chữ thì KHÔNG dừng thời gian, dùng dự phòng và chữ về muộn không đổi hộp
+  stp.st = 'p1l'; TT.time.hold = false; eq(AIW.hold(p, arc, stp, arc.chang.p1l), false, 'chặng nhỏ chưa xong: không chờ'); eq(TT.time.hold, false);
+  eq(AIW.recOf(p, id, 'p1l').fb, 'chua_kip', 'đánh dấu dùng dự phòng'); aiFlush(); eq(AIW.recOf(p, id, 'p1l').fb, 'chua_kip', 'chữ về muộn bị bỏ');
+  // 3. cao trào chưa xong: dừng thời gian, hiện hộp chờ
+  delete S.ai.txt[id].p1c; delete S.ai.txt[id].p1t; aiMock.defer = []; let t = 1000; AIW.clock = () => t; const evs = []; TT.bus.on('aiwait', e => evs.push(e.on));
+  stp.st = 'p1c'; AIW.tick(p); ok(AIW.pending(id + ':p1c'), 'cao trào đã xếp từ lúc mở phần');
+  eq(AIW.hold(p, arc, stp, arc.chang.p1c), true, 'cao trào chưa có chữ: chờ'); eq(TT.time.hold, true, 'thời gian dừng'); ok(evs[evs.length - 1] === true && AIW.waiting(), 'hộp "Thiên Cơ đang chép…" hiện');
+  t += 10000; eq(AIW.poll(), false, 'dưới 15 giây vẫn chờ'); eq(TT.time.hold, true);
+  // 3a. chữ về kịp: thả thời gian
+  aiFlush(); eq(TT.time.hold, false, 'chữ về: thả thời gian'); ok(AIW.recOf(p, id, 'p1c').ok, 'cao trào có chữ'); eq(AIW.waiting(), null); eq(AIW.hold(p, arc, stp, arc.chang.p1c), false);
+  // 3b. quá 15 giây: dùng dự phòng
+  delete S.ai.txt[id].p1c; AIW.release(); aiMock.defer = []; t = 5000; AIW.tick(p); eq(AIW.hold(p, arc, stp, arc.chang.p1c), true); t += 16000; eq(AIW.poll(), true, 'quá 15 giây: bỏ chờ'); eq(TT.time.hold, false);
+  eq(AIW.recOf(p, id, 'p1c').fb, 'het_gio'); aiFlush(); eq(AIW.recOf(p, id, 'p1c').fb, 'het_gio', 'chữ về sau giờ không đè lên'); eq(AIW.hold(p, arc, stp, arc.chang.p1c), false);
+}));
+
+test('AI kể chuyện (AI1b): hạn mức mỗi đời, thử lại một lần khi lỗi tạm, dò lại model khi 404, tự chấm không đạt thì viết lại một lần, lượt chỉnh trước cao trào', () => aiDone(() => {
+  const p = aiOpen(908), S = p.story, id = S.kbc.arc; AIW.setCfg({ quota: S.ai.n + 2 });
+  aiMock.mode = ''; ['p1l', 'p1t', 'p2m'].forEach(k => { delete S.ai.txt[id][k]; AIW.enqueue(p, 'chang', id + ':' + k, 0, { arc: id, ch: k }); });
+  ok(S.ai.n <= AIW.cfg().quota, 'không vượt hạn mức: ' + S.ai.n + '/' + AIW.cfg().quota); ok(['han_muc', undefined].indexOf(AIW.recOf(p, id, 'p2m').fb) >= 0 && AIW.recOf(p, id, 'p2m').fb === 'han_muc', 'hết hạn mức: dự phòng han_muc');
+  // thử lại một lần khi 500 rồi đúng
+  AIW.setCfg({ quota: 150 }); delete S.ai.txt[id].p2m; let k = 0; const base = aiTransport; AIW.transport = (req, cb) => { if (k++ === 0) cb({ status: 500, json: {} }); else base(req, cb); };
+  AIW.enqueue(p, 'chang', id + ':p2m', 0, { arc: id, ch: 'p2m' }); ok(AIW.recOf(p, id, 'p2m').ok, 'lỗi tạm rồi thử lại thành công');
+  // 404: dò model mới
+  let first = true; AIW.transport = (req, cb) => { if (req.method !== 'GET' && first) { first = false; return cb({ status: 404, json: {} }); } base(req, cb); }; delete S.ai.txt[id].p2l;
+  AIW.enqueue(p, 'chang', id + ':p2l', 0, { arc: id, ch: 'p2l' }); ok(AIW.recOf(p, id, 'p2l').ok && /^gemini-3\.7-flash$/.test(AIW.recOf(p, id, 'p2l').model), 'dò lại model Flash mới nhất: ' + AIW.recOf(p, id, 'p2l').model); AIW.transport = aiTransport;
+  // tự chấm không đạt → viết lại một lần (tầng lớn)
+  delete S.ai.txt[id].p2c; aiMock.chamFail = 1; const h0 = AIW.hist().length; AIW.enqueue(p, 'chang', id + ':p2c', 0, { arc: id, ch: 'p2c' });
+  const rc = AIW.recOf(p, id, 'p2c'); eq(rc.viet_lai, 1, 'cao trào không đạt tự chấm được viết lại'); eq(rc.cham, 2); ok(AIW.hist().slice(h0).filter(h => h.kind === 'chang' && h.tier === 'lon').length >= 2, 'có hai lượt viết tầng lớn');
+  // lượt chỉnh theo biến cố mới
+  TT.log(p, 'Tông bị tấn công, một người mất.', 'bad'); const rr = AIW.recOf(p, id, 'p2c'); rr.chinh = 0; delete rr.chinh; AIW.enqueue(p, 'chinh', 'chinh:' + id + ':p2c', 0, { arc: id, ch: 'p2c' });
+  ok(AIW.recOf(p, id, 'p2c').chinh === 1, 'đã chỉnh'); ok(AIW.hist().some(h => h.kind === 'chinh' && /Biến cố mới/.test(h.user) || /biến cố mới/.test(h.user)), 'lời gửi chỉnh mang biến cố mới');
+}));
+
+test('AI kể chuyện (AI1b): khuôn phụ cũng được viết chữ khi mở; model Claude qua cùng lớp chuyển đổi; xuất mẫu "đạt"', () => aiDone(() => {
+  const p = aiOpen(909), S = p.story; D.STORY.phuOn = true;
+  const phu = TT.story.arcOf('kbp_chien_su') || Object.values(D.STORY.arcById).find(a => a.phu); ok(phu, 'có tuyến khuôn phụ');
+  const st = { st: phu.dau, since: TT.world.months, ready: null, w: null, vai: {}, log: [], ket: null, khe: {} }; S.arcs[phu.id] = st; AIW.tick(p);
+  ok(AIW.hist().some(h => h.key.indexOf(phu.id) === 0), 'khuôn phụ được xếp viết'); ok(AIW.recOf(p, phu.id, phu.dau) && AIW.recOf(p, phu.id, phu.dau).fb !== 'chua_kip', 'chặng đầu của khuôn phụ có kết quả');
+  // Claude qua lớp chuyển đổi
+  AIW.setCfg({ provider: 'anthropic' }); AIW.setKey('anthropic', 'TEST-ANT-KEY'); const n0 = aiMock.calls.length; delete S.ai.txt[S.kbc.arc].p1t; AIW.enqueue(p, 'chang', S.kbc.arc + ':p1t', 0, { arc: S.kbc.arc, ch: 'p1t' });
+  const rq = aiMock.calls[n0]; ok(rq && rq.url.indexOf('api.anthropic.com/v1/messages') > 0 && rq.headers['anthropic-dangerous-direct-browser-access'] === 'true', 'gọi Anthropic'); ok(AIW.recOf(p, S.kbc.arc, 'p1t').model === 'claude-sonnet-5-5', 'model mặc định claude-sonnet-5-5');
+  AIW.setCfg({ provider: 'gemini' }); AIW.setKey('anthropic', '');
+  // đánh dấu "đạt" và xuất
+  const hi = AIW.hist().findIndex(h => h.ok && h.kind === 'chang'); ok(AIW.danhDau(hi, 'dat'), 'đánh dấu đạt'); const ex = JSON.parse(AIW.exportDat()); ok(ex.mau.length >= 1 && ex.mau[0].d, 'xuất tệp các đoạn đạt');
+  ok(AIW.compose(p, TT.story.arcOf(S.kbc.arc), 'p2l').sys.indexOf('Đoạn ĐÃ DUYỆT') > 0, 'đoạn đạt thành mẫu cho lần sau');
+  ok(AIW.danhDau(AIW.hist().findIndex(h => h.ok && h.kind === 'chang'), 'viet_lai'), 'viết lại');
+}));
+
+test('AI kể chuyện (AI1b): công tắc tắt (mặc định): không gọi, không ghi dữ liệu, hộp trùng dòng dự phòng của AI1a', () => khDone(() => {
+  const t0 = AIW.transport; let called = 0; AIW.reset(); AIW.transport = () => { called++; };
+  try {
+    eq(AIW.cfg().on, false, 'mặc định tắt'); const p = khW(910, 'p1'); khAge(p, 12);
+    const r = khRun(p, { stop: d => d.ch === 'p1c' }); const arc = TT.story.arcOf(p.story.kbc.arc);
+    eq(called, 0, 'không gọi AI'); ok(!p.story.ai, 'không tạo c.story.ai'); eq(r.box.text, TT.story.fmt(p, p.story.arcs[arc.id], arc.chang.p1c.d), 'hộp là dòng dự phòng của AI1a');
+    AIW.setCfg({ on: true }); AIW.setKey('gemini', ''); eq(AIW.on(p), false, 'bật mà chưa có khóa: vẫn không gọi'); eq(AIW.view(p, arc, arc.chang.p1c), arc.chang.p1c); eq(AIW.hold(p, arc, p.story.arcs[arc.id], arc.chang.p1c), false); AIW.setCfg({ on: false });
+  } finally { AIW.transport = t0; AIW.reset(); }
+}));
+
+
 
 runNext();
 </script>

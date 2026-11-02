@@ -70,20 +70,22 @@
   // tam_ma chỉ hiện khi đạo tâm thấp hoặc đang mang tâm ma (đọc thuần).
   kb.tamMaHien = c => { const T = K().tamMa || {}; return !!c && (c.daoTam < (T.daoTam == null ? 35 : T.daoTam) || (c.traitIds || []).indexOf(T.trait || 'tam_ma') >= 0); };
 
-  function cuThe(c, kh) {
+  function cuThe(c, kh, ov) { // ov (AI1b): AI chọn phương án theo id { vet, muon, vat, vat_guong, vat_su, lat, ra_mat, noi_cam }; không có thì bốc bằng băm
+    ov = ov || EMPTY;
     kh = kh || kb.khuonOf(c); if (!kh) return null;
     const base = 'kbc:' + c.id + ':' + c.birthMonth + ':' + kh.id, B = kh.bay_manh;
     const pick = (list, salt) => list[Math.floor(hash(base + ':' + salt) * list.length) % list.length];
+    const byId = (list, id, salt) => (id && list.find(x => x.id === id)) || pick(list, salt);
     const xt = c.origin2 || '', ly = {};
-    const vetFit = B.vet_thuong.filter(v => (v.xt || []).indexOf(xt) >= 0), vet = pick(vetFit.length ? vetFit : B.vet_thuong, 'vet');
+    const vetFit = B.vet_thuong.filter(v => (v.xt || []).indexOf(xt) >= 0), vet = ov.vet && B.vet_thuong.find(v => v.id === ov.vet) || pick(vetFit.length ? vetFit : B.vet_thuong, 'vet');
     ly.vet = vetFit.length ? 'xuất thân ' + xt + ' hợp phương án ' + vet.id : 'xuất thân ' + xt + ' không khớp phương án nào, bốc theo hạt giống';
     const cho = c.sect || xt === 't6' ? 'tong' : xt === 't1' ? 'tan_tu' : '', muFit = B.muon.filter(m => m.cho === cho);
-    const muon = muFit.length ? muFit[0] : pick(B.muon.filter(m => m.cho !== 'tan_tu'), 'muon');
+    const muon = ov.muon && B.muon.find(m => m.id === ov.muon) || (muFit.length ? muFit[0] : pick(B.muon.filter(m => m.cho !== 'tan_tu'), 'muon'));
     ly.muon = muFit.length ? (cho === 'tong' ? 'đã có tông' : 'tán tu') + ' nên muốn ' + muon.id : 'chưa có tông, bốc theo hạt giống';
-    const vat = pick(kh.soi.chinh.vat, 'vat'), vatG = pick(kh.soi.phu[0].vat, 'vat_g'), vatS = pick(kh.soi.phu[1].vat, 'vat_s');
+    const vat = byId(kh.soi.chinh.vat, ov.vat, 'vat'), vatG = byId(kh.soi.phu[0].vat, ov.vat_guong, 'vat_g'), vatS = byId(kh.soi.phu[1].vat, ov.vat_su, 'vat_s');
     const guongVai = (kh.dan.guong || ['thuong', 'huynh']).find(v => v === 'thuong' ? !!(TT.bond && TT.bond.main && TT.bond.main(c)) : true);
     ly.guong = guongVai === 'thuong' ? 'đã có đạo lữ nên gương là người thương' : 'chưa có người thương nên gương là huynh đệ';
-    const lat = pick(kh.lat, 'lat'), raMat = pick(B.bong_toi.ra_mat, 'ra_mat'), noiCam = pick(kh.noi.cam, 'noi_cam');
+    const lat = byId(kh.lat, ov.lat, 'lat'), raMat = ov.ra_mat != null && B.bong_toi.ra_mat[ov.ra_mat] || pick(B.bong_toi.ra_mat, 'ra_mat'), noiCam = ov.noi_cam && kh.noi.cam.indexOf(ov.noi_cam) >= 0 ? ov.noi_cam : pick(kh.noi.cam, 'noi_cam');
     const vn = id => lower(K().vat[id] ? K().vat[id].n : id);
     // chữ tĩnh (chọn một lần, thay vào dòng dự phòng); khe động ({noi}, {dinh}, vật, thế lực) để bộ máy điền khi chơi
     const S1 = {
