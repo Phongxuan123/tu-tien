@@ -5401,6 +5401,12 @@ test('AI kể chuyện (AI1b): hàng đợi: viết chặng kế ngay khi vừa 
   eq(AIW.recOf(p, id, 'p1c').fb, 'het_gio'); aiFlush(); eq(AIW.recOf(p, id, 'p1c').fb, 'het_gio', 'chữ về sau giờ không đè lên'); eq(AIW.hold(p, arc, stp, arc.chang.p1c), false);
 }));
 
+test('AI kể chuyện (AI1b): nhảy tới chặng bằng 🛠 cũng chờ chữ AI rồi mới ra hộp', () => aiDone(() => {
+  const p = aiOpen(911), S = p.story, id = S.kbc.arc; delete S.ai.txt[id].p1c; clearPending(); aiMock.defer = [];
+  ok(TT.story.jump(id, 'p1c'), 'jump trả true'); ok(!TT.world.pending, 'chưa có hộp, đang chờ chữ'); eq(TT.time.hold, true, 'thời gian dừng'); aiFlush(); eq(TT.time.hold, false, 'chữ về thì thả');
+  ok(AIW.recOf(p, id, 'p1c').ok, 'có chữ AI'); for (let i = 0; i < 6 && !TT.world.pending; i++) khStep(p); ok(TT.world.pending && TT.world.pending.text === AIW.recOf(p, id, 'p1c').d, 'hộp hiện chữ AI');
+}));
+
 test('AI kể chuyện (AI1b): hạn mức mỗi đời, thử lại một lần khi lỗi tạm, dò lại model khi 404, tự chấm không đạt thì viết lại một lần, lượt chỉnh trước cao trào', () => aiDone(() => {
   const p = aiOpen(908), S = p.story, id = S.kbc.arc; AIW.setCfg({ quota: S.ai.n + 2 });
   aiMock.mode = ''; ['p1l', 'p1t', 'p2m'].forEach(k => { delete S.ai.txt[id][k]; AIW.enqueue(p, 'chang', id + ':' + k, 0, { arc: id, ch: k }); });

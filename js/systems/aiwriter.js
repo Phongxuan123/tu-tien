@@ -580,9 +580,9 @@
 
   // Giữ hộp chặng: gọi MỘT lần ngay trước khi dựng hộp. Cao trào chưa có chữ mà việc còn chạy thì dừng thời gian chờ (≤ chuaMax giây).
   // Chặng nhỏ chưa có chữ thì dùng dự phòng ngay (đánh dấu để chữ về muộn không đổi hộp đã hiện).
-  function hold(c, arc, st, ch) {
+  function hold(c, arc, st, ch, force) { // force: lệnh nhảy của 🛠, chặng nào cũng chờ như cao trào
     if (!on(c) || !eligibleArc(arc) || !st.st) return false;
-    const key = arc.id + ':' + st.st, pm = arc.phan && TT.kb.phanOf(arc, st.st), ct = !!(pm && pm.nhip === 'cao_trao');
+    const key = arc.id + ':' + st.st, pm = arc.phan && TT.kb.phanOf(arc, st.st), ct = !!force || !!(pm && pm.nhip === 'cao_trao');
     if (!(WAIT.held && WAIT.key === key)) planArc(c, arc, st, 0); // chưa xếp thì xếp ngay (nhà cung cấp nhanh có thể xong trước khi hộp hiện)
     const rec = recOf(c, arc.id, st.st);
     if (WAIT.held && WAIT.key === key) {
