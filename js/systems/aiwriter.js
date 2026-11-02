@@ -50,6 +50,8 @@
 
   // ---------------------------------------------------------------- lớp nhà cung cấp
   const SAFE_CATS = ['HARM_CATEGORY_HARASSMENT', 'HARM_CATEGORY_HATE_SPEECH', 'HARM_CATEGORY_SEXUALLY_EXPLICIT', 'HARM_CATEGORY_DANGEROUS_CONTENT'];
+  // Giảm "suy nghĩ" của Gemini để trả lời nhanh (viết truyện không cần suy luận dài). 3.x: thinkingLevel; 2.5 Flash: ngân sách 0; 2.5 Pro không tắt được.
+  const thinking = model => (aiw.noThink ? {} : /gemini-3/.test(model) ? { thinkingConfig: { thinkingLevel: 'low' } } : /gemini-2\.5-flash/.test(model) ? { thinkingConfig: { thinkingBudget: 0 } } : {});
   const PROV = {
     gemini: {
       req(model, sys, user, tier, key) { // không gửi temperature/top_p (bản 3.x bỏ các tham số lấy mẫu)
@@ -59,7 +61,7 @@
           body: JSON.stringify({
             systemInstruction: { parts: [{ text: sys }] },
             contents: [{ role: 'user', parts: [{ text: user }] }],
-            generationConfig: { responseMimeType: 'application/json', maxOutputTokens: W().maxTok[tier] },
+            generationConfig: Object.assign({ responseMimeType: 'application/json', maxOutputTokens: W().maxTok[tier] }, thinking(model)),
             safetySettings: SAFE_CATS.map(category => ({ category, threshold: cfg().safety }))
           })
         };
@@ -103,7 +105,8 @@
   function fetchTransport(req, cb) {
     let done = false; const fin = r => { if (!done) { done = true; cb(r); } };
     try {
-      fetch(req.url, { method: req.method || 'POST', headers: req.headers, body: req.method === 'GET' ? undefined : req.body })
+      const ac = typeof AbortController !== 'undefined' ? new AbortController() : null; if (ac) setTimeout(() => ac.abort(), 90000); // quá 90 giây thì coi là lỗi tạm
+      fetch(req.url, { method: req.method || 'POST', headers: req.headers, body: req.method === 'GET' ? undefined : req.body, signal: ac ? ac.signal : undefined })
         .then(r => r.text().then(t => { let j = null; try { j = JSON.parse(t); } catch (e) { /* không phải JSON */ } fin({ status: r.status, json: j, text: t }); }))
         .catch(e => fin({ status: 0, err: String(e && e.message || e) }));
     } catch (e) { fin({ status: 0, err: String(e) }); }
@@ -132,6 +135,7 @@
       aiw.transport(req, r => {
         const o = P.parse(r); o.model = model; A.tin += o.tin; A.tout += o.tout; tot().tin += o.tin; tot().tout += o.tout;
         if (o.chan) { tot().chan++; saveTot(); return cb(o); }
+        if (!o.ok && o.err === 'loi' && pr === 'gemini' && /think/i.test(o.msg || '') && !aiw.noThink) { aiw.noThink = true; return go(); } // model không nhận tham số suy nghĩ: bỏ và gọi lại
         if (!o.ok && o.err === 'model' && pr === 'gemini' && tried < 1) { tried++; return dimModel(key, tier, nm => { if (nm && nm !== model) { model = nm; setCfg({ models: { gemini: { [tier]: nm } } }); return go(); } tot().loi++; saveTot(); cb(o); }); }
         if (!o.ok && o.err === 'tam' && tried < 2) { tried++; return aiw.sleep(900, go); }
         if (!o.ok && tier === 'lon' && !ha && cfg().models[pr].nho !== model) { ha = true; tried = 0; model = cfg().models[pr].nho; o.ha = model; return go(); } // tầng lớn lỗi (ví dụ khóa miễn phí không có hạn mức Pro): hạ xuống model tầng nhỏ một lần
@@ -352,8 +356,9 @@
   function aiwEmitWait(on_) { aiwEmitWait.last = on_; TT.bus.emit('aiwait', { on: on_, left: on_ ? Math.max(0, cfg().chuaMax - (aiw.clock() - WAIT.t0) / 1000) : 0 }); }
 
   function pump() {
-    while (running < MAXRUN && Q.length) {
+    for (;;) {
       Q.sort((a, b) => a.prio - b.prio || a.seq - b.seq);
+      if (!Q.length || !(running < MAXRUN || (Q[0].prio <= 0.5 && running < MAXRUN + 2))) break; // việc gấp (cao trào đang chờ, chặng kế vừa chọn) được chạy vượt hàng
       const job = Q.shift(); running++; INFL[job.key] = job; job.state = 'chay';
       let fin = false;
       const done = () => { if (fin) return; fin = true; running--; delete INFL[job.key]; job.state = 'xong'; releaseIf(job.key); pump(); };
@@ -381,7 +386,7 @@
       const cp = build(loi); const pid = 'p' + (hash32(cp.sys + cp.user) % 1679616).toString(36);
       const h = pushHist({ key: job.key, kind: job.kind, tier, sys: cp.sys, user: cp.user, pid, t: aiw.clock(), att: attempt, raw: '', errs: [], ok: false, model: '', redo: !!job.redo });
       callProvider(c, tier, cp.sys, cp.user, r => {
-        h.model = r.model || ''; h.raw = r.text || ''; h.err = r.err || r.chan || '';
+        h.fin = true; h.model = r.model || ''; h.raw = r.text || ''; h.err = r.err || r.chan || '';
         if (r.chan) { h.errs = ['bị bộ lọc an toàn chặn: ' + r.chan]; return cb({ ok: false, why: 'chan', pid }); }
         if (!r.ok) { h.errs = ['lỗi nhà cung cấp: ' + (r.err || '') + (r.msg ? ' ' + r.msg : '')]; return cb({ ok: false, why: r.err === 'han_muc' ? 'han_muc' : r.err === 'khoa' ? 'khoa' : 'loi', pid, errs: [(r.err || '') + ' ' + String(r.msg || '').slice(0, 160)] }); }
         const out = parseJson(r.text); const E = out ? check(out, cp) : ['đầu ra không phải JSON hợp lệ'];
@@ -663,7 +668,7 @@
     // cài đặt
     cfg, setCfg, getKey, setKey, hasKey: () => !!getKey(), PROV, parseJson, tot,
     reset() { CFG = null; KEYS = null; TOT = null; Q.length = 0; running = 0; Object.keys(INFL).forEach(k => delete INFL[k]); HIST.length = 0; release(); },
-    transport: fetchTransport,
+    transport: fetchTransport, noThink: false,
     sleep: (ms, fn) => setTimeout(fn, ms),
     clock: () => Date.now(),
     // đọc
