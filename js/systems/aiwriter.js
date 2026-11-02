@@ -125,7 +125,7 @@
     const A = AI(c, true), pr = cfg().provider, P = PROV[pr], key = getKey(pr);
     if (!P || !key) return cb({ ok: false, err: 'khoa' });
     if (A.n >= cfg().quota) return cb({ ok: false, err: 'han_muc' });
-    let model = cfg().models[pr][tier], tried = 0;
+    let model = cfg().models[pr][tier], tried = 0, ha = false;
     const go = () => {
       A.n++; tot().n++;
       const req = P.req(model, sys, user, tier, key);
@@ -133,7 +133,8 @@
         const o = P.parse(r); o.model = model; A.tin += o.tin; A.tout += o.tout; tot().tin += o.tin; tot().tout += o.tout;
         if (o.chan) { tot().chan++; saveTot(); return cb(o); }
         if (!o.ok && o.err === 'model' && pr === 'gemini' && tried < 1) { tried++; return dimModel(key, tier, nm => { if (nm && nm !== model) { model = nm; setCfg({ models: { gemini: { [tier]: nm } } }); return go(); } tot().loi++; saveTot(); cb(o); }); }
-        if (!o.ok && o.err === 'tam' && tried < 1) { tried++; return aiw.sleep(900, go); }
+        if (!o.ok && o.err === 'tam' && tried < 2) { tried++; return aiw.sleep(900, go); }
+        if (!o.ok && tier === 'lon' && !ha && cfg().models[pr].nho !== model) { ha = true; tried = 0; model = cfg().models[pr].nho; o.ha = model; return go(); } // tầng lớn lỗi (ví dụ khóa miễn phí không có hạn mức Pro): hạ xuống model tầng nhỏ một lần
         if (!o.ok) tot().loi++;
         saveTot(); cb(o);
       });
@@ -297,6 +298,7 @@
     if (bien.length) P.push('BIẾN THỂ THEO CỜ (tùy chọn nhưng nên có): với mỗi cờ trong ' + JSON.stringify(bien) + ' viết một đoạn "d" khác phản ánh việc cờ đó đã xảy ra.');
     if (opt.chinh) P.push('LƯỢT CHỈNH: bản đã viết trước đó bên dưới. Biến cố mới xảy ra từ lúc viết: ' + JSON.stringify(opt.chinh.moi) + '. Chỉ chỉnh cho khớp biến cố mới (người chết, tin mới, thay đổi vùng), giữ nguyên cấu trúc và cường độ.\nBẢN CŨ: ' + JSON.stringify(opt.chinh.cu));
     if (opt.loi && opt.loi.length) P.push('LỖI CỦA LẦN VIẾT TRƯỚC, PHẢI SỬA: ' + opt.loi.join('; '));
+    P.push('ĐỘ DÀI BẮT BUỘC: đoạn "d" từ ' + (nhip === 'cao_trao' ? W().gioiHan.ct : ch.lon ? W().gioiHan.lon : W().gioiHan.thuong).join(' đến ') + ' câu (mỗi câu kết thúc bằng dấu chấm, hỏi hoặc than; mỗi câu thoại trong ngoặc kép cũng tính một câu). Viết xong hãy đếm lại.');
     P.push('YEU_CAU=' + JSON.stringify(req));
     P.push('MẪU ĐẦU RA (JSON): {"d":"đoạn cảnh","lc":[{"key":"<khóa>","label":"nhãn là động từ mạnh","mat":"một câu sự thật về cái giá"' + (needSau.length ? ',"sau":"lời dẫn sau lựa chọn, 3 đến 6 câu, phản diện đánh trả, kết bằng hậu quả rõ"' : '') + '}],"bien":[{"flag":"<cờ>","d":"..."}],"hat":[{"t":"một câu mô tả chi tiết đáng nhớ mới (câu nói, thói quen, vật, nơi)","tk":"từ khóa ngắn xuất hiện nguyên văn trong d"}],"dung_hat":"<id hạt cũ hoặc null>","manh_moi":["<id đã cài>"]}');
     return { sys: system(nhip), user: P.join('\n\n'), req, st, kind: 'chang', nhip, allowed: allowedFor(c, st, kbc, [fmt(ch.d)].concat(ch.lc.map(l => fmt(l.label)))) };
@@ -381,7 +383,7 @@
       callProvider(c, tier, cp.sys, cp.user, r => {
         h.model = r.model || ''; h.raw = r.text || ''; h.err = r.err || r.chan || '';
         if (r.chan) { h.errs = ['bị bộ lọc an toàn chặn: ' + r.chan]; return cb({ ok: false, why: 'chan', pid }); }
-        if (!r.ok) { h.errs = ['lỗi nhà cung cấp: ' + (r.err || '') + (r.msg ? ' ' + r.msg : '')]; return cb({ ok: false, why: r.err === 'han_muc' ? 'han_muc' : r.err === 'khoa' ? 'khoa' : 'loi', pid }); }
+        if (!r.ok) { h.errs = ['lỗi nhà cung cấp: ' + (r.err || '') + (r.msg ? ' ' + r.msg : '')]; return cb({ ok: false, why: r.err === 'han_muc' ? 'han_muc' : r.err === 'khoa' ? 'khoa' : 'loi', pid, errs: [(r.err || '') + ' ' + String(r.msg || '').slice(0, 160)] }); }
         const out = parseJson(r.text); const E = out ? check(out, cp) : ['đầu ra không phải JSON hợp lệ'];
         h.errs = E;
         if (!E.length) { h.ok = true; return cb({ ok: true, out, model: r.model, pid, cp }); }

@@ -525,7 +525,7 @@
         document.body.appendChild(a); a.click(); a.remove(); setTimeout(() => URL.revokeObjectURL(a.href), 1000);
       } }, 'Xuất các đoạn "đạt"'));
       hs.slice(-12).reverse().forEach(e => {
-        const i = hs.indexOf(e), det = h('details', null, h('summary', null, (e.ok ? '✓ ' : '✗ ') + e.kind + ' · ' + e.key + ' · ' + (e.model || '?') + ' · ' + e.pid + (e.att ? ' (lần 2)' : '') + (e.dat ? ' · đạt' : '')));
+        const i = hs.indexOf(e), det = h('details', null, h('summary', null, (e.ok ? '✓ ' : '✗ ') + e.kind + ' · ' + e.key + ' · ' + (e.model || '?') + ' · ' + e.pid + (e.att ? ' (lần 2)' : '') + (e.dat ? ' · đạt' : '') + (!e.ok && e.errs && e.errs[0] ? ' · ' + e.errs[0].slice(0, 90) : '')));
         det.appendChild(h('pre', { class: 'sm', style: 'white-space:pre-wrap;max-height:160px;overflow:auto' }, 'LỜI GỬI (cuối):\n' + String(e.user).slice(-1800)));
         det.appendChild(h('pre', { class: 'sm', style: 'white-space:pre-wrap;max-height:160px;overflow:auto' }, 'NHẬN VỀ:\n' + (e.raw || '(trống)') + (e.errs && e.errs.length ? '\nLỖI: ' + e.errs.join('; ') : '')));
         det.appendChild(h('div', { class: 'r' }, h('button', { onclick: () => act(() => A.danhDau(i, 'dat')) }, 'Đạt'), h('button', { onclick: () => act(() => A.danhDau(i, 'viet_lai')) }, 'Viết lại')));
