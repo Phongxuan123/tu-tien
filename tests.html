@@ -5402,7 +5402,7 @@ test('AI kể chuyện (AI1b): hàng đợi: viết chặng kế ngay khi vừa 
 }));
 
 test('AI kể chuyện (AI1b): nhảy tới chặng bằng 🛠 cũng chờ chữ AI rồi mới ra hộp', () => aiDone(() => {
-  const p = aiOpen(911), S = p.story, id = S.kbc.arc; delete S.ai.txt[id].p1c; clearPending(); aiMock.defer = [];
+  const p = aiOpen(911), S = p.story, id = S.kbc.arc; S.ai.txt[id].p1c = { fb: 'loi', m: 1 }; clearPending(); aiMock.defer = [];
   ok(TT.story.jump(id, 'p1c'), 'jump trả true'); ok(!TT.world.pending, 'chưa có hộp, đang chờ chữ'); eq(TT.time.hold, true, 'thời gian dừng'); aiFlush(); eq(TT.time.hold, false, 'chữ về thì thả');
   ok(AIW.recOf(p, id, 'p1c').ok, 'có chữ AI'); for (let i = 0; i < 6 && !TT.world.pending; i++) khStep(p); ok(TT.world.pending && TT.world.pending.text === AIW.recOf(p, id, 'p1c').d, 'hộp hiện chữ AI');
 }));

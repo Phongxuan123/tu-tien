@@ -524,6 +524,7 @@
         const blob = new Blob([A.exportDat()], { type: 'application/json' }), a = h('a', { href: URL.createObjectURL(blob), download: 'ai-doan-dat.json' });
         document.body.appendChild(a); a.click(); a.remove(); setTimeout(() => URL.revokeObjectURL(a.href), 1000);
       } }, 'Xuất các đoạn "đạt"'));
+      box.appendChild(h('button', { onclick: () => act(() => A.thuLai(p) > 0, 'Đã xóa các chặng dự phòng; sẽ viết lại khi tới.') }, 'Thử lại các chặng đã rơi về dự phòng'));
       hs.slice(-12).reverse().forEach(e => {
         const i = hs.indexOf(e), det = h('details', null, h('summary', null, (e.ok ? '✓ ' : '✗ ') + e.kind + ' · ' + e.key + ' · ' + (e.model || '?') + ' · ' + e.pid + (e.att ? ' (lần 2)' : '') + (e.dat ? ' · đạt' : '') + (!e.ok && e.errs && e.errs[0] ? ' · ' + e.errs[0].slice(0, 90) : '')));
         det.appendChild(h('pre', { class: 'sm', style: 'white-space:pre-wrap;max-height:160px;overflow:auto' }, 'LỜI GỬI (cuối):\n' + String(e.user).slice(-1800)));

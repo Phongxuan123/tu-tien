@@ -411,6 +411,7 @@
       st.st = chId; st.since = TT.world.months; st.ready = TT.world.months; st.ket = null;
       c.story.done = c.story.done.filter(x => x !== arc.id);
       c.story.box = TT.world.months;
+      if (isKb(c) && TT.aiw) TT.aiw.thuLai(c, arc.id, chId); // lệnh nhảy của 🛠: thử lại nếu lần trước đã rơi về dự phòng
       if (isKb(c) && TT.aiw && TT.aiw.hold(c, arc, st, arc.chang[chId], true)) return true; // AI1b: đợi chữ AI (tối đa vài chục giây) rồi tick tháng kế đưa hộp ra
       TT.decisions.request(build(c, arc, chId));
       return true;

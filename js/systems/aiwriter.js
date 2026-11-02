@@ -643,6 +643,13 @@
     }
     return false;
   }
+  // Xóa các chặng đã bị đánh dấu dùng dự phòng (lỗi mạng, hết giờ, chưa kịp...) để lần sau viết lại; arcId/chId tùy chọn. Trả số chặng đã xóa.
+  function thuLai(c, arcId, chId) {
+    const a = c && AI(c); if (!a) return 0; let n = 0;
+    Object.keys(a.txt).forEach(ar => { if (arcId && ar !== arcId) return; Object.keys(a.txt[ar]).forEach(ch => { if (chId && ch !== chId) return; if (a.txt[ar][ch].fb) { delete a.txt[ar][ch]; n++; } }); });
+    if (n) { const k = c.story.kbc; if (k && k.ai && k.ai.fb && !arcId) delete k.ai; }
+    return n;
+  }
   const exportDat = () => JSON.stringify({ v: 1, mau: dat() }, null, 1);
 
   // Thử kết nối (nút trong Cài đặt, người chơi tự bấm; không dùng trong kiểm thử): trả cb({ ok, msg })
@@ -663,7 +670,7 @@
     on, view, stats, recOf, hist: () => HIST, dat, exportDat, pending, waiting: () => (WAIT.held ? { key: WAIT.key, left: Math.max(0, cfg().chuaMax - (aiw.clock() - WAIT.t0) / 1000) } : null),
     compose: composeChang, composeKichBan, check: checkChang, checkText, unknownNames, allowedWords, checkXung, sentences,
     // ghi
-    tick, onChoose, hold, poll, enqueue, danhDau, thu, release,
+    tick, onChoose, hold, poll, enqueue, danhDau, thu, release, thuLai,
     kyUcChon: (c, i) => enqueue(c, 'kyuc', 'kyuc:' + i, 2, { phan: i })
   };
 })();
