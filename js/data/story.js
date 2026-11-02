@@ -114,7 +114,15 @@
       day_toc_do: { n: 'Sợi dây buộc tóc đỏ', desc: 'Sợi dây buộc tóc đỏ đã phai, còn vương mùi nắng. Không bán được.' },
       cai_duc_go: { n: 'Cái đục gỗ', desc: 'Cái đục gỗ cán mòn, lưỡi đã mẻ. Không bán được.' },
       ve_doi: { n: 'Vế câu đối', desc: 'Một vế câu đối làm mật hiệu; mỗi người giữ một vế. Không bán được.' },
-      quan_co_ngoc: { n: 'Quân cờ ngọc đen', desc: 'Quân cờ ngọc đen, mặt dưới có khắc một chữ nhỏ. Không bán được.' }
+      quan_co_ngoc: { n: 'Quân cờ ngọc đen', desc: 'Quân cờ ngọc đen, mặt dưới có khắc một chữ nhỏ. Không bán được.' },
+      // K3b: vật của bốn khuôn thờ ơ, buông thả, khắc kỷ, ba phải (dùng chung giày rơm, chuỗi hạt, kiếm gỗ, thư cũ đã có)
+      chen_tra: { n: 'Chén trà', desc: 'Chén trà sứ men trắng, còn vương hơi nóng của người rót. Không bán được.' },
+      den_long: { n: 'Đèn lồng giấy', desc: 'Đèn lồng giấy đỏ, khung tre đã cong vì nhiều lần thắp. Không bán được.' },
+      xuc_sac: { n: 'Con xúc xắc', desc: 'Con xúc xắc gỗ, một mặt đã mòn vì tay người lắc. Không bán được.' },
+      chieu_thien_bang: { n: 'Chiếu thiền băng', desc: 'Chiếu thiền bện bằng cỏ băng, lạnh suốt cả mùa hè. Không bán được.' },
+      thuyen_nan: { n: 'Con thuyền nan', desc: 'Con thuyền nan nhỏ, từng cõng một đứa trẻ qua sông mùa lũ. Không bán được.' },
+      dieu_hai_mau: { n: 'Con diều hai màu', desc: 'Con diều giấy đỏ và xanh, hai đứa trẻ làm chung và thả lên đê. Không bán được.' },
+      la_co: { n: 'Hai lá cờ', desc: 'Một lá cờ triều và một lá cờ nghĩa quân, cùng gập lại trong một túi vải. Không bán được.' }
     },
     // Khoảnh khắc ấm (t: chữ, {ten} là bạn, {vai} là người ấy; ở: 'gan' cùng nơi, tuoi: [tuổi người chơi từ, đến]) và thư (khác vùng). Mỗi mục +1 gắn bó.
     am: [
