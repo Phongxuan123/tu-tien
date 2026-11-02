@@ -259,7 +259,12 @@
   dev.setKd = function (kd) {
     const p = P(); if (!p || !dev.has.story() || !D.STORY.kds[kd]) return false;
     TT.story.ensure(p); if (!p.story) return false;
-    p.story.kd = kd; p.story.kd_khoa = 1;
+    const S = p.story, kh0 = S.kbc && D.STORY.khuon[S.kbc.khuon];
+    if (kh0 && kh0.khuyet_diem !== kd) { // đã có kịch bản của khuyết điểm khác (tự dựng ở A1): bỏ để dựng lại đúng khuôn vừa ép
+      const id = S.kbc.arc; delete S.arcs[id]; delete S.kbc; S.manhMoi = []; S.xung = {}; S.done = (S.done || []).filter(x => x !== id);
+      if (S.ai && S.ai.txt) delete S.ai.txt[id];
+    }
+    S.kd = kd; S.kd_khoa = 1;
     if (D.STORY.khuonOn && D.STORY.khuonKd[kd] && !p.story.kbc && TT.kb.make) TT.kb.make(p);
     dev.mark(p, 'Ép khuyết điểm gốc «' + D.STORY.kds[kd].n + '»' + (p.story.kbc ? ' (đã dựng kịch bản cụ thể)' : ''));
     return true;
