@@ -70,13 +70,15 @@
     run(ac, bc, opts) {
       opts = opts || {};
       const A = side(ac, opts.tacticA), B = side(bc, opts.tacticB);
+      const nghe = ac.kind === 'player' || bc.kind === 'player'; // chỉ để giao diện/âm thanh nghe, không đổi kết quả
+      if (nghe && opts.important) TT.bus.emit('chien:bat-dau', { id: (ac.kind === 'player' ? ac : bc).id, quai: bc.kind === 'monster' });
       if (bc.kind === 'monster') { bc.hp = B.max; B.hp = B.max; }
       const notes = [];
       // Bùa của người chơi tự dùng trong trận quan trọng (kẻ thù tìm đến, thủ lĩnh...).
       if (opts.important) [[ac, A], [bc, B]].forEach(x => {
         if (x[0].kind !== 'player') return;
-        if (TT.items.remove(x[0], 'ho_than_bua')) { x[1].t = { dealt: x[1].t.dealt, taken: x[1].t.taken * 0.7 }; notes.push('Hộ Thân Phù bao quanh'); TT.log(x[0], 'Bạn kích hoạt Hộ Thân Phù, một vầng sáng bao quanh.', 'good'); }
-        if (TT.items.remove(x[0], 'cong_kich_bua')) { x[1].t = { dealt: x[1].t.dealt * 1.3, taken: x[1].t.taken }; notes.push('Liệt Diễm Phù bùng cháy'); TT.log(x[0], 'Bạn kích hoạt Liệt Diễm Phù, lửa bùng quanh kiếm.', 'good'); }
+        if (TT.items.remove(x[0], 'ho_than_bua')) { x[1].t = { dealt: x[1].t.dealt, taken: x[1].t.taken * 0.7 }; notes.push('Hộ Thân Phù bao quanh'); TT.bus.emit('chien:bua', { id: x[0].id, loai: 'ho' }); TT.log(x[0], 'Bạn kích hoạt Hộ Thân Phù, một vầng sáng bao quanh.', 'good'); }
+        if (TT.items.remove(x[0], 'cong_kich_bua')) { x[1].t = { dealt: x[1].t.dealt * 1.3, taken: x[1].t.taken }; notes.push('Liệt Diễm Phù bùng cháy'); TT.bus.emit('chien:bua', { id: x[0].id, loai: 'cong' }); TT.log(x[0], 'Bạn kích hoạt Liệt Diễm Phù, lửa bùng quanh kiếm.', 'good'); }
       });
       if (opts.edgeB) B.t = { dealt: B.t.dealt * opts.edgeB, taken: B.t.taken }; // kẻ thù có chuẩn bị trước, ra đòn mạnh hơn
       const mulA = elemMul(ac, bc), mulB = elemMul(bc, ac);
@@ -86,7 +88,7 @@
       if (opts.flee) {
         const spdA = S.nl(ac) + ac.realm * 5 + (mainElem(ac) === 'Phong' ? 6 : 0), spdB = S.nl(bc) + bc.realm * 5 + (mainElem(bc) === 'Phong' ? 6 : 0);
         const p = rng.clamp(0.45 + (spdA - spdB) / Math.max(1, spdA + spdB) * 0.8, 0.1, 0.9);
-        if (rng.P(p)) return { win: false, fled: true, winner: bc, loser: ac, rounds: 0, ended: 'fled', dmgA: 0, dmgB: 0, notes };
+        if (rng.P(p)) { if (nghe) TT.bus.emit('chien:ket-thuc', { win: false, ended: 'fled', player: ac.kind === 'player' }); return { win: false, fled: true, winner: bc, loser: ac, rounds: 0, ended: 'fled', dmgA: 0, dmgB: 0, notes }; }
         A.hp -= hit(B, A); A.t = TACTICS.thu; notes.push('chạy không thoát, bị đánh trúng');
       }
       let rounds = 0, ended = 'time';
@@ -103,6 +105,7 @@
       const floor = opts.lethal ? 0 : 1;
       ac.hp = Math.max(floor, Math.min(ac.hp, A.hp));
       if (bc.kind !== 'monster') bc.hp = Math.max(floor, Math.min(bc.hp, B.hp)); else bc.hp = Math.max(0, B.hp);
+      if (nghe) TT.bus.emit('chien:ket-thuc', { win, ended, player: ac.kind === 'player' });
       return {
         win, winner: win ? ac : bc, loser: win ? bc : ac, rounds, ended, fled: false,
         dmgA: Math.round(startA - ac.hp), dmgB: Math.round(startB - Math.max(0, B.hp)), elemA: mulA, elemB: mulB, notes

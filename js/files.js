@@ -11,7 +11,7 @@
     'js/systems/ai.js', 'js/systems/decisions.js', 'js/systems/world.js', 'js/core/time.js', 'js/core/save.js'
   ];
   var ui = [
-    'js/ui/dom.js', 'js/ui/side.js', 'js/ui/panels.js', 'js/ui/profile.js', 'js/ui/journal.js','js/ui/people.js', 'js/ui/quests.js', 'js/ui/jobs.js', 'js/ui/sect.js', 'js/ui/family.js', 'js/ui/icons.js', 'js/ui/bldart.js', 'js/ui/shop.js', 'js/ui/bag.js', 'js/ui/sectcard.js', 'js/ui/diplo.js', 'js/ui/inter.js', 'js/ui/nation.js', 'js/ui/faith.js', 'js/ui/history.js', 'js/ui/press.js', 'js/ui/dungeon.js', 'js/ui/rules.js', 'js/ui/terrain.js', 'js/ui/map.js', 'js/ui/sprites.js', 'js/ui/scene.js', 'js/ui/dock.js', 'js/ui/lifemap.js', 'js/ui/newlife.js', 'js/ui/childhood.js', 'js/ui/story.js', 'js/ui/controls.js', 'js/main.js'
+    'js/ui/dom.js', 'js/ui/side.js', 'js/ui/panels.js', 'js/ui/profile.js', 'js/ui/journal.js','js/ui/people.js', 'js/ui/quests.js', 'js/ui/jobs.js', 'js/ui/sect.js', 'js/ui/family.js', 'js/ui/icons.js', 'js/ui/bldart.js', 'js/ui/shop.js', 'js/ui/bag.js', 'js/ui/sectcard.js', 'js/ui/diplo.js', 'js/ui/inter.js', 'js/ui/nation.js', 'js/ui/faith.js', 'js/ui/history.js', 'js/ui/press.js', 'js/ui/dungeon.js', 'js/ui/rules.js', 'js/ui/terrain.js', 'js/ui/map.js', 'js/ui/sprites.js', 'js/ui/scene.js', 'js/ui/dock.js', 'js/ui/lifemap.js', 'js/ui/newlife.js', 'js/ui/childhood.js', 'js/ui/story.js', 'js/ui/audio.js', 'js/ui/controls.js', 'js/main.js'
   ];
   window.TT_LOAD = function (withUi) {
     core.concat(withUi ? ui : []).forEach(function (f) { document.write('<script src="' + f + '"><\/script>'); });
