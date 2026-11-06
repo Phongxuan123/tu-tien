@@ -12,6 +12,9 @@
 
   ui.addTab = function (def) { tabs.push(def); };
   ui.activeTab = 'char';
+  ui.tabIds = () => tabs.map(t => t.id);
+  ui.hasTab = id => tabs.some(t => t.id === id);
+  ui.gotoTab = id => { if (!ui.hasTab(id)) return; ui.activeTab = id; lastKey = ''; ui.markDirty(); };
 
   function buildBar() {
     const bar = $('side-tabs');

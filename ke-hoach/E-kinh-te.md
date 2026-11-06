@@ -481,6 +481,7 @@ Cung tiền và lạm phát tự động, vay mượn kiểu ngân hàng độc 
 ## 14. Nhật ký làm việc
 - 2026-10-16: bản 1-3 như trước (đo thế giới: 35 NPC mỗi vùng, NPC không chế tác; mô hình cung cầu; bản mẫu giao diện).
 - 2026-10-16 (bản 4): bạn bảo đưa thương hội lên làm cùng: trung gian giữa tông, quốc gia, tán tu; có thể tự cung nhưng ít; có lực lượng tự bảo vệ nhỏ; có quyền lực chính trị nhưng không có quân đội; đại diện giai cấp tư bản. Viết thành mục 4 (thế lực thứ tư trong `factions`, vai trò, tự cung ≤ 12%, hộ vệ ≤ 30, bảng đòn bẩy chính trị, cú sốc do hội, người chơi gia nhập), cập nhật sơ đồ nguồn - đường - đích, bảng động lực, chặng E3, tiêu chí, câu hỏi; thêm hai biến cố và dòng "đi theo đoàn hội" vào bản mẫu. Chưa code game.
+- 2026-11-07 (đợt T2): hạn dùng đồ trong túi nhân khoảng 7 đến 8 lần (đan 18 thành 120 tháng, bùa 24 thành 180, linh thảo 12 thành 96) vì hỏng quá nhanh. Tự bán/hiến đồ sắp hỏng bắt đầu thử từ 6 tháng cuối (`D.ECO.decay.rescue`), chạy ở mọi mức tự động (trước đây thủ công thì tắt hẳn), tắt được bằng ô "Tự bán đồ sắp hỏng" (`TT.world.settings.autoSell`). Hết hạn mà chưa bán được thì nhật ký nói lý do. Túi đồ và cửa hàng hiện "x năm y tháng" khi còn từ 24 tháng. Xem ke-hoach/U-phim-tat.md mục 3.
 
 ## 15. Kết quả và việc để sau
 (Điền khi xong.)

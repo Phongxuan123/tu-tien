@@ -30,6 +30,7 @@ Trang tổng ở gốc dự án: [KE-HOACH.md](../KE-HOACH.md) (bảng tiến đ
 | [T-canh-pixel-thuy-mac.md](T-canh-pixel-thuy-mac.md) | Đổi cảnh và animation màn hình nhân vật sang pixel thủy mặc kiểu tu tiên (chưa vật phẩm): tách module, nền theo địa hình và giờ, nhân vật, công trình đặc trưng, sự kiện; có hai bản demo | Chờ duyệt, chưa code |
 | [Z-lo-trinh-trien-khai.md](Z-lo-trinh-trien-khai.md) | Lộ trình triển khai tổng thể 13 đợt cho Q, R, S, E (phần tồn), F (phần tồn): thứ tự, phụ thuộc, kiểm thử, cổng chơi thử, chỉ tiêu | Chờ duyệt |
 | [T-am-thanh.md](T-am-thanh.md) | Bảng sự kiện âm thanh cho đột phá, thiên kiếp, giao chiến; sự kiện bus đã thêm; chưa có `audio.js` | Chờ duyệt |
+| [U-phim-tat.md](U-phim-tat.md) | Phím tắt (chọn nhanh, xác nhận, đổi lại, tạm dừng, tốc độ, tab) và sửa tự bán đồ sắp hỏng, kéo dài hạn dùng | Chờ duyệt |
 | [PROMPT-phien-moi.md](PROMPT-phien-moi.md) | Prompt cho các phiên làm việc mới (hiện: Đợt 4 gồm 4A, 4B, 4C) | Dùng được |
 
 Cách đặt tên: chữ cái hoặc ngày + tên ngắn không dấu. Trạng thái: Ý tưởng, Chờ duyệt, Đã duyệt, Đang làm, Xong, Tạm dừng.

@@ -476,3 +476,12 @@ body.has-modal{overflow:hidden}
 #log .jhieu,.kbc-hieu{font-size:12.5px;color:#d9b8ff;font-style:italic;margin-top:2px}
 .kbc-mm{color:#e3d2ff;border-left:3px solid #b983ff;padding-left:6px;margin:2px 0}
 .kbc-card .kbc-sub{color:#8d9aab}.kbc-card .kbc-lat{color:#d9b8ff;font-weight:600}
+
+/* phím tắt (js/ui/keys.js) */
+#decision .mch.kbsel{outline:2px solid var(--gold);outline-offset:1px}
+.kbdhint{margin-left:auto;color:var(--dim)}
+#decision .mfoot{align-items:center}
+#keys-help{position:fixed;inset:0;z-index:60;display:none;align-items:center;justify-content:center;background:rgba(5,8,12,.72);padding:16px}
+#keys-help .kh-card{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:18px 20px;max-width:640px;width:100%;max-height:90vh;overflow:auto}
+#keys-help .kh-rows{display:grid;grid-template-columns:max-content 1fr;gap:6px 14px;align-items:baseline;margin:6px 0 14px}
+#keys-help kbd{font:12px var(--mono);background:#0c1117;border:1px solid #2a3646;border-radius:5px;padding:2px 7px;color:var(--gold);white-space:nowrap}
