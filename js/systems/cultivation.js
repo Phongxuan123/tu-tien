@@ -183,6 +183,7 @@
       const parts = S.breakParts(c).slice().sort((a, b) => Math.abs(b.v) - Math.abs(a.v)).slice(0, 5).map(x => x.n + ' ' + (x.v >= 0 ? '+' : '') + Math.round(x.v * 100) + '%').join(', ');
       c.brkNote = 'Xác suất thành công ' + Math.round(p * 100) + '% (trần ' + Math.round(S.breakCap(c) * 100) + '%). Các phần chính: ' + parts + '.';
       TT.log(c, 'Bạn bắt đầu đột phá lên ' + D.REALM_NAMES[c.realm + 1] + (guard ? ', ' + guard.name + ' hộ pháp bên cạnh' : '') + '...', 'age');
+      if (c.kind === 'player') TT.bus.emit('dotpha:bat-dau', { id: c.id, realm: c.realm + 1 }); // chỉ để giao diện/âm thanh nghe, không đổi trạng thái
       if (rng.P(p)) return cult.breakSuccess(c, cost, guard, false, ho);
       // Thất bại: người chơi còn Thiên cơ điểm thì được đổi lại một lần tung (tầng 3).
       if (c.kind === 'player' && c.tcd >= S.rerollCost(c)) {
@@ -205,6 +206,7 @@
       if (doIt && c.tcd >= S.rerollCost(c)) {
         c.tcd -= S.rerollCost(c);
         TT.log(c, 'Bạn dùng Thiên cơ điểm để đổi lại. Thiên cơ xoay chuyển...', 'big');
+        TT.bus.emit('dotpha:doi-lai', { id: c.id });
         if (rng.P(pb.p)) return cult.breakSuccess(c, pb.cost, guard && guard.alive ? guard : null, false, pb.ho);
       }
       return cult.breakFail(c, pb.cost, pb.ho, guard && guard.alive ? guard : null);
@@ -223,6 +225,7 @@
         c.stuck = false;
         c.hp = S.hpMax(c);
         TT.log(c, 'Đột phá thành công! Bạn đã đạt cảnh giới ' + D.REALM_NAMES[c.realm] + '.', 'big', c.brkNote); c.brkNote = null; TT.report.mark(c, 'realm', 'Đột phá lên ' + D.REALM_NAMES[c.realm]);
+        if (c.kind === 'player') TT.bus.emit('dotpha:thanh-cong', { id: c.id, realm: c.realm });
         TT.rep.add(c, 'danh', c.realm * 6);
         if (c.kind === 'player') { c.tcd += c.realm; TT.log(c, 'Thiên cơ điểm +' + c.realm + '.', 'good'); }
         if (guard) { TT.rel.add(c, guard, 6); TT.log(c, guard.name + ' hộ pháp trọn vẹn, ơn này bạn ghi nhớ.', 'good'); }
@@ -255,6 +258,7 @@
       const dmg = ho ? 12 : 35;
       heal(c, -dmg);
       TT.log(c, 'Đột phá thất bại! Tu vi hao tổn, sinh lực -' + dmg + (burn ? ', mất ' + burn + ' cơ duyên' : '') + (ho ? ' (Hộ Mạch Đan đã giảm bớt tổn thương)' : '') + '.', 'bad', c.brkNote); c.brkNote = null;
+      if (c.kind === 'player') TT.bus.emit('dotpha:that-bai', { id: c.id, realm: c.realm + 1 });
       if (guard) {
         guard.hp = Math.max(1, guard.hp - 15); TT.rel.add(c, guard, 6);
         TT.log(c, guard.name + ' đỡ giúp bạn một phần thiên uy và bị thương.', 'age');
