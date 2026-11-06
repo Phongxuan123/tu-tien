@@ -484,3 +484,32 @@ Lượt này: <ghi 6 tuyến, ví dụ lượt 1: T3 Đan sư, T4 Luyện khí, 
 NHIỆM VỤ: chỉ DỮ LIỆU. Mỗi tuyến thành một khuôn phụ đúng định dạng AI1a (2 đến 3 phần × 3 chặng, kiểu lựa chọn từ thư viện, điều kiện mở bằng khóa thân phận hoặc biến cố mô phỏng có thật trong mã, vai từ dàn, phần khuôn chính nó đổ vào, dòng dự phòng). Tôn giáo thật viết theo S mục 3 (tôn trọng). Thang sức mạnh và tuổi theo Q-khuon-kich-ban 2.4 (50 tuổi Luyện Khí, 130 tuổi Trúc Cơ). Không viết văn dài (AI lúc chơi viết chữ).
 Kiểm: story-lint sạch; run-tests lọc "Khuôn".
 ```
+
+---
+
+# Tiên thiên làm mới (ke-hoach/Q-tien-thien.md, chốt 2026-11-06)
+Thứ tự: **TT-d (Haiku)** → **TT (Sonnet)**. Nhánh `add-game-project`.
+
+## TT-d. Haiku: dữ liệu tiên thiên mới
+
+```
+Repo: Phongxuan123/tu-tien. Gắn repo, clone nhánh `main`. Trả lời tiếng Việt, ngắn gọn, xưng "mình", gọi tôi là "bạn". Đọc CLAUDE.md trước. Làm trên nhánh `add-game-project` (checkout origin/add-game-project). TIẾT KIỆM: chỉ đọc phần ghi dưới. Cuối phiên ghi "TT-d đã làm" vào ke-hoach/Q-tien-thien.md mục 11, push theo CLAUDE.md, báo ngắn gọn.
+Đọc: ke-hoach/Q-tien-thien.md (cả file); js/data/traits.js (kiểu viết dữ liệu cũ); js/systems/stats.js phần S.mod (tên khóa hiệu chỉnh số có sẵn).
+NHIỆM VỤ: chỉ DỮ LIỆU js/data/tienthien.js: D.TIEN_THIEN đúng cấu trúc mục 2, đủ 33 mục của mục 3 (26 chuẩn + 7 tật), chép ĐÚNG tên, ô, phẩm, hiệu ứng, khóa luật, lời nguyền; viết mô tả 1 câu và dấu hiệu khi ẩn 1 câu (mơ hồ, gợi hình, không nói thẳng tên) cho mọi tiên thiên Hiếm trở lên; thẻ xuất thân và vai hợp lý; D.TIEN_THIEN_RULES (tỉ lệ phẩm, giảm một nửa, số lượng, ẩn theo phẩm, cửa thức tỉnh, trần Quý/Thiên = 3, bảng chuyển bản cũ mục 9). Không sửa js/systems. Đăng ký trong js/files.js sau js/data/traits.js.
+Kiểm: bài kiểm thử "Dữ liệu tiên thiên (TT-d)" trong tests.html: đủ 33, id không trùng, mỗi ô có ít nhất một Thường hoặc Hiếm, mọi mục phẩm ≥ Quý có nguyen, mọi khóa m thuộc danh sách S.mod, mọi khóa luat thuộc bảng mục 4, bảng chuyển bản cũ trỏ đúng id; run-tests lọc "tiên thiên"; baseline --check trùng khít.
+```
+
+## TT. Sonnet: cơ chế tiên thiên mới (cần TT-d)
+
+```
+Repo: Phongxuan123/tu-tien. Gắn repo, clone nhánh `main`. Trả lời tiếng Việt, ngắn gọn, xưng "mình", gọi tôi là "bạn". Đọc CLAUDE.md trước. Làm trên nhánh `add-game-project` (checkout origin/add-game-project). Điều kiện: ke-hoach/Q-tien-thien.md mục 11 có "TT-d đã làm". TIẾT KIỆM: chỉ đọc phần ghi dưới; kiểm thử lọc theo từ khóa, chạy đầy đủ một lần cuối; Playwright tối đa 2 ảnh. Cuối phiên ghi "TT đã làm" vào Q-tien-thien.md mục 11 (kèm số đo mục 8), push theo CLAUDE.md, báo ngắn gọn.
+Đọc: ke-hoach/Q-tien-thien.md (cả file, bản chốt); js/data/tienthien.js; js/systems/stats.js (S.mod), js/systems/character.js (rollTraits, createChar), js/systems/childhood.js (wake, bad), js/systems/events.js 60-100 (cộng/xóa tiên thiên), js/systems/fate.js 55-70, js/systems/family.js 90-120, js/systems/story.js (dàn, cảnh lớn, kiểu lựa chọn, tâm ma), js/systems/nature.js (shift), js/systems/kb (kế hoạch lật, manh mối), js/systems/world.js (chết, đầu thai), js/ui/newlife.js, js/ui/panels.js, js/ui/devpanel.js.
+NHIỆM VỤ (chỉ người chơi; NPC giữ D.TRAITS và traitIds cũ):
+1. TT.tt: bốc lúc sinh theo mục 6 bằng băm (không gọi rng), c.tt = [{ id, an, thuc_tinh_luc }], tật riêng; hàm đọc TT.tt.list(c), has(c, id), luat(c, khoa), hieu_ung(c) (chỉ tính tiên thiên đã thức tỉnh). S.mod của người chơi đọc c.tt thay traitIds.
+2. Ẩn và thức tỉnh theo mục 5 (wake của tuổi thơ, Tổng kết 12 tuổi, đột phá, fx.tt_thuc trong story); mất qua fx.tt_mat. Ghi nhật ký, hiện lời nguyền khi thức tỉnh.
+3. Mọi khóa luật mục 4 nối vào đúng chỗ (story, kb, nature, wheel, dàn, đột phá, chết); trường mới của chặng/khuôn: nghe (chặng), thay (phần của khuôn) là tùy chọn, thiếu thì bỏ qua.
+4. Dàn định mệnh: mỗi vai một tiên thiên hiển thị (mục 7), khe {tt_vai} trong chữ truyện.
+5. Chuyển bản lưu cũ (mục 9); các chỗ mã cũ đọc traitIds của người chơi đi qua hàm chung.
+6. Giao diện: Hồ sơ 6 ô + hàng tật, chip màu theo phẩm (trắng, xanh, vàng, đỏ), ô ẩn "???" với dấu hiệu, lời nguyền trong chú thích khi đã thức tỉnh; hộp Đời mới hiện tiên thiên đã lộ, "Bốc lại" bốc lại cả tiên thiên; bảng 🛠 thêm/bớt, ép thức tỉnh.
+Công tắc D.TIEN_THIEN_RULES.on; tắt thì người chơi dùng bộ cũ và baseline --check trùng khít. Kiểm thử "Tiên thiên (TT)" theo mục 8. Đo mục 8 bằng life-sim (40 hạt giống nếu có chế độ hàng loạt, không thì 10) trước và sau, ghi số. Chạy đầy đủ run-tests.
+```
