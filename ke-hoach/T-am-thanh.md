@@ -1,6 +1,6 @@
 # T. Âm thanh: bảng sự kiện cho đột phá, thiên kiếp, giao chiến
 
-Trạng thái: **bảng sự kiện và điểm phát đã có; chưa có `audio.js`** (chưa ai nghe được gì). Nhạc nền chưa làm (xem mục 5).
+Trạng thái: **đã có `js/ui/audio.js`** (nhạc nền theo bối cảnh, hiệu ứng nghe 11 sự kiện bus, nút bật/tắt và âm lượng). Chưa ai nghe thử trên máy thật; cần người chơi kiểm.
 
 ## 1. Nguyên tắc
 - Âm thanh chỉ **nghe** bus, không đổi trạng thái, không gọi `rng`. Dùng `Math.random` riêng.
@@ -46,13 +46,19 @@ Ghi chú: `combat.quick` là bí danh của `run`, nên đánh nhanh cũng phát
 ## 4. Cách tạo tiếng (quyết định)
 Hiệu ứng tạo bằng Web Audio trong trình duyệt, không có file âm thanh. Lý do: không tốn dung lượng, không vướng bản quyền, đúng kiểu "mở `index.html` là chạy". Giới hạn: nghe "nhạc số" hơn là thu thật. Nếu muốn tiếng thật hơn thì dùng file CC0 (xem mục 5) và ghi vào `CREDITS.md`.
 
-## 5. Chưa làm
-- Nhạc nền và chuyển nhạc theo bối cảnh. Bản demo tạo bằng code người dùng thấy chưa đạt, nên hoãn đến khi chọn được nhạc thật.
-- File `js/systems/audio.js` (nghe bus, phát theo bảng trên).
-- Nút bật/tắt tiếng và thanh âm lượng trong giao diện.
-- Âm cho các hệ khác (tông môn, mua bán, chết ngoài thiên kiếp...).
+## 5. Nhạc nền (đã làm)
+- 7 bài `.ogg` ở `assets/audio/nhac/`, nguồn ghi ở `CREDITS.md` (nhạc AI, chỉ phi thương mại).
+- Bối cảnh: **bình** (mặc định), **tông** (người chơi đang ở địa điểm loại `tong_mon`), **chiến** (đang thám hiểm `c.dungeon`, hoặc 30 giây sau `chien:bat-dau`). Thiên kiếp (`c.tri`) giữ nguyên nhạc đang phát; chưa có nhạc riêng.
+- Danh sách phát có trọng số, bài đầu gấp 3 lần mỗi bài kia (bình: 3-1-1; tông, chiến: 3-1), không lặp lại bài vừa phát. Chuyển bài mượt 3 giây, tự sang bài kế khi gần hết.
+- Cài đặt (bật/tắt, âm lượng nhạc, âm lượng hiệu ứng) lưu ở `localStorage` khóa `tt8b_audio`, không nằm trong bản lưu game.
+- Trình duyệt chỉ cho phát sau cú bấm hoặc phím đầu tiên của người chơi. Safari cũ có thể không đọc được `.ogg`.
 
-## 6. Đã làm
-- Thêm 11 sự kiện bus ở 3 file mô phỏng (xem mục 2). Chỉ phát khi có người chơi, không gọi `rng`.
-- Kiểm: `node tools/baseline.js --check` trùng khít đường cơ sở 40 hạt giống; `node tools/run-tests.js`: 138 đạt, 0 lỗi.
-- Việc người chơi thử: chưa có gì để nghe. Cần `audio.js` mới thử được.
+## 6. Chưa làm
+- Nhạc riêng cho Thiên kiếp.
+- Âm cho các hệ khác (tông môn, mua bán, chết ngoài thiên kiếp...).
+- Nghe thử và chỉnh độ to từng hiệu ứng trên máy thật.
+
+## 7. Đã làm
+- Thêm 11 sự kiện bus ở 3 file mô phỏng (xem mục 2), chỉ phát khi có người chơi, không gọi `rng`. `baseline --check` trùng khít 40 hạt giống; `run-tests` 138 đạt.
+- Thêm `js/ui/audio.js` (chỉ nạp cùng giao diện, kiểm thử và mô phỏng không đụng tới), ô `#audio-box` ở thanh điều khiển trong `index.html`, và dòng nạp trong `js/files.js`. `run-tests` vẫn 138 đạt.
+- Kiểm bằng trình duyệt không giao diện (Chromium): trang nạp không lỗi; bấm lần đầu thì nhạc bình bắt đầu phát; phát 11 sự kiện không lỗi; sau `chien:bat-dau` nhạc chuyển sang giao chiến. Chưa kiểm được chất lượng âm thanh bằng tai.
