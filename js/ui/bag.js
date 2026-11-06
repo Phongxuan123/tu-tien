@@ -22,7 +22,7 @@
     const row = h('div', { class: 'card' });
     row.appendChild(h('div', { class: 'ihead' }, ui.icon(id, 36), h('div', { html: '<b>' + ui.esc(d.n) + '</b> x' + n + ' <span class="small">(giá trị ' + TT.ls.fmt(v) + (d.gear ? ', phẩm ' + D.GEAR.TIERS[d.tier] : d.mat || d.ore || d.cat === 'lo' ? ', bậc ' + d.tier : d.tier != null && d.cat !== 'ls' ? ', ' + D.TIER_NAMES[d.tier] : '') + ')</span>' })));
     row.appendChild(h('div', { class: 'small' }, d.desc));
-    if (TT.items.life(id)) { const r = Math.max(1, Math.round(TT.items.remaining(c, id))); row.appendChild(h('div', { class: 'small' + (r <= D.ECO.decay.last ? ' bad' : '') }, 'Còn dùng được ' + r + ' tháng' + (r <= D.ECO.decay.last ? ' (sắp hỏng, bán chỉ còn ' + Math.round(D.ECO.decay.floor * 100) + '% giá)' : '') + '.')); }
+    if (TT.items.life(id)) { const r = Math.max(1, Math.round(TT.items.remaining(c, id))); row.appendChild(h('div', { class: 'small' + (r <= D.ECO.decay.last ? ' bad' : '') }, 'Còn dùng được ' + ui.monthsText(r) + (r <= D.ECO.decay.last ? ' (sắp hỏng, bán chỉ còn ' + Math.round(D.ECO.decay.floor * 100) + '% giá)' : '') + '.')); }
     const bs = h('div', { class: 'btns' });
     if (d.cat === 'khi') {
       const why = TT.items.canEquip(c, id);

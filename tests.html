@@ -2164,16 +2164,24 @@ test('Kinh tế (E): giá theo cung cầu trong khoảng, hạn dùng cộng d�
   const gap = E.groups.map(g => { const a = D.REGIONS.map(r => TT.eco.rel(r.id, g)); return Math.max.apply(null, a) / Math.min.apply(null, a); });
   line('info', '   chênh giá lớn nhất giữa vùng theo nhóm: ' + gap.map(x => x.toFixed(2)).join(', ')); ok(Math.max.apply(null, gap) < 4, 'chênh giá không vọt quá');
   // hạn dùng: cộng dồn theo tỉ lệ, trần là hạn tối đa, hết hạn thì hỏng, bán mất giá
-  const c = shopper('tc_vinh_do', { gold: 5000 }); const L = TT.items.life('hoi_xuan_dan'); eq(L, E.life.dan, 'đan dược hạn 18 tháng'); eq(TT.items.life('kiem_sat'), null, 'pháp khí không hỏng');
+  const c = shopper('tc_vinh_do', { gold: 5000 }); const L = TT.items.life('hoi_xuan_dan'); eq(L, E.life.dan, 'đan dược hạn theo D.ECO.life.dan'); eq(TT.items.life('kiem_sat'), null, 'pháp khí không hỏng');
   TT.items.add(c, 'hoi_xuan_dan', 2); eq(TT.items.remaining(c, 'hoi_xuan_dan'), L);
   for (let i = 0; i < 9; i++) TT.items.tick(c); eq(TT.items.remaining(c, 'hoi_xuan_dan'), L - 9);
-  TT.items.add(c, 'hoi_xuan_dan', 2); near2(TT.items.remaining(c, 'hoi_xuan_dan'), (L - 9) + L * 2 / 4, 'thêm 2 vào chồng 2: cộng L*k/(n+k)');
+  TT.items.add(c, 'hoi_xuan_dan', 2); near2(TT.items.remaining(c, 'hoi_xuan_dan'), Math.min(L, (L - 9) + L * 2 / 4), 'thêm 2 vào chồng 2: cộng L*k/(n+k), không quá hạn tối đa');
   c.invExp.hoi_xuan_dan = 3; ok(TT.eco.fresh(c, 'hoi_xuan_dan') === E.decay.floor, 'còn 3 tháng thì giá trị 40%'); c.invExp.hoi_xuan_dan = L; eq(TT.eco.fresh(c, 'hoi_xuan_dan'), 1);
   c.invExp.hoi_xuan_dan = 1; TT.items.tick(c); ok(!TT.items.has(c, 'hoi_xuan_dan'), 'hết hạn thì hỏng cả chồng');
   // sắp hỏng: hiến tông hoặc tự bán
   const sj = shopper('tc_thanh_van', { gold: 10, realm: 1 }); TT.sect.join(sj, Object.keys(D.SECTS)[0]);
   if (sj.sect) { TT.items.add(sj, 'tu_khi_dan', 30); const c0 = sj.sect.contrib; ok(TT.sect.donateItem(sj, 'tu_khi_dan', 30).ok && sj.sect.contrib > c0 && !TT.items.has(sj, 'tu_khi_dan'), 'hiến đan cho tông đổi cống hiến'); }
   const sl = shopper('tc_vinh_do', { gold: 10, realm: 1 }); TT.items.add(sl, 'hoi_xuan_dan', 3); sl.invExp.hoi_xuan_dan = 3; TT.items.tick(sl); ok(!TT.items.has(sl, 'hoi_xuan_dan') || TT.items.remaining(sl, 'hoi_xuan_dan') <= 2, 'còn 2 tháng ở chợ thì tự bán hoặc giữ nếu hết hạn mức');
+  // đợt T2: tự bán đồ sắp hỏng chạy ở mọi mức tự động (kể cả thủ công), tắt được bằng TT.world.settings.autoSell = false
+  { W.settings = W.settings || {}; const keepMode = W.settings.auto; W.settings.auto = 'thu_cong';
+    const s1 = shopper('tc_vinh_do', { gold: 10, realm: 1 }); TT.items.add(s1, 'hoi_xuan_dan', 3); s1.invExp.hoi_xuan_dan = E.decay.rescue; TT.items.tick(s1);
+    ok(!TT.items.has(s1, 'hoi_xuan_dan'), 'chế độ thủ công vẫn tự bán khi còn ' + E.decay.rescue + ' tháng, ở nơi có cửa hàng');
+    W.settings.autoSell = false;
+    const s2 = shopper('tc_vinh_do', { gold: 10, realm: 1 }); TT.items.add(s2, 'hoi_xuan_dan', 3); s2.invExp.hoi_xuan_dan = E.decay.rescue; TT.items.tick(s2);
+    ok(TT.items.has(s2, 'hoi_xuan_dan'), 'tắt ô "Tự bán đồ sắp hỏng" thì không tự bán');
+    delete W.settings.autoSell; W.settings.auto = keepMode; }
   // mua dồn đẩy giá lên, bán dồn kéo xuống rồi hồi dần
   const g = 'dan', p0 = TT.market.buyPrice(c, 'hoi_xuan_dan', 'cho', 'cho'); for (let i = 0; i < 10; i++) TT.eco.push(c.region, g, E.press.buy); ok(TT.market.buyPrice(c, 'hoi_xuan_dan', 'cho', 'cho') > p0, 'mua dồn đẩy giá');
   for (let i = 0; i < 30; i++) TT.eco.push(c.region, g, -E.press.sell); ok(TT.eco.press(c.region, g) >= -E.press.capDown - 1e-9, 'sức ép có trần dưới');

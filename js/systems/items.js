@@ -30,25 +30,42 @@
       if (c.sus && c.sus[id] && TT.gd) TT.gd.trim(c, id);
       return true;
     },
-    // Chồng sắp hỏng (còn 3 tháng trở xuống, thử mỗi tháng): chế độ Cân bằng và Tự động tự xử lý nếu đang ở nơi làm được: ở tông thì hiến kho tông, ở nơi có cửa hàng thu thì bán.
+    // Chồng sắp hỏng (còn rescue tháng trở xuống, thử mỗi tháng): tự xử lý nếu đang ở nơi làm được: ở tông thì hiến kho tông, ở nơi có cửa hàng thu mua thì bán.
+    // Chạy ở mọi mức tự động, trừ khi người chơi tắt ô "Tự bán đồ sắp hỏng" (TT.world.settings.autoSell === false). items.rescueWhy giữ lý do khi không xử lý được.
+    autoSell() { const w = TT.world; return !(w && w.settings && w.settings.autoSell === false); },
     autoRescue(c, id) {
-      if (TT.decisions && TT.decisions.mode() === 'thu_cong') return false;
+      items.rescueWhy = null;
+      if (!items.autoSell()) return false;
       const d = D.ITEMS[id]; if (!d) return false;
       const pl = TT.map.place(c.place);
-      if (c.sect && pl && pl.type === 'tong_mon' && !c.travel && !c.cross) { const r = TT.sect.donateItem(c, id, c.inv[id]); if (r.ok) return true; }
-      if (market.typeOf(c) && market.buyerOf(c, id)) { const r = market.sell(c, id, c.inv[id]); if (r.ok) { TT.log(c, 'Thấy ' + d.n + ' sắp hỏng, bạn tự bán bớt.', 'age'); return !items.has(c, id); } }
+      if (c.travel || c.cross || c.dungeon) return false;
+      if (c.sect && pl && pl.type === 'tong_mon') {
+        const r = TT.sect.donateItem(c, id, c.inv[id]);
+        if (r.ok) return true;
+        items.rescueWhy = r.text || null;
+      }
+      if (market.typeOf(c)) {
+        if (!market.buyerOf(c, id)) { items.rescueWhy = 'không cửa hàng nào ở đây thu ' + d.n; return false; }
+        const r = market.sell(c, id, c.inv[id]);
+        if (r.ok) { TT.log(c, 'Thấy ' + d.n + ' sắp hỏng, bạn tự bán bớt.', 'age'); return !items.has(c, id); }
+        items.rescueWhy = r.text || null;
+      }
       return false;
     },
-    // Mỗi tháng của người chơi: hạn dùng giảm 1; báo khi còn 3 tháng; hết hạn thì hỏng cả chồng.
+    // Mỗi tháng của người chơi: hạn dùng giảm 1; báo khi vào cửa sổ tự bán và khi còn 3 tháng; hết hạn thì hỏng cả chồng.
     tick(c) {
       c.invExp = c.invExp || {};
+      const E = D.ECO.decay, R = E.rescue || E.last;
       Object.keys(c.inv || {}).forEach(id => {
         if (!items.life(id)) return;
         const r = items.remaining(c, id) - 1; c.invExp[id] = r;
         const nm = D.ITEMS[id].n;
-        if (r <= 0) { TT.log(c, c.inv[id] + ' ' + nm + ' đã hết hạn và hỏng.', 'bad'); delete c.inv[id]; delete c.invExp[id]; }
-        else if (r <= D.ECO.decay.last && items.autoRescue(c, id)) { /* đã tự xử lý */ }
-        else if (r <= D.ECO.decay.last && r + 1 > D.ECO.decay.last) TT.log(c, nm + ' sắp hết hạn (còn ' + D.ECO.decay.last + ' tháng), nên dùng hoặc bán sớm.', 'age');
+        if (r <= 0) { TT.log(c, c.inv[id] + ' ' + nm + ' đã hết hạn và hỏng.', 'bad'); delete c.inv[id]; delete c.invExp[id]; return; }
+        if (r > R) return;
+        if (items.autoRescue(c, id)) return; // đã tự xử lý
+        const cross = x => r <= x && r + 1 > x;
+        if (cross(E.last)) TT.log(c, nm + ' sắp hết hạn (còn ' + E.last + ' tháng)' + (items.rescueWhy ? '; chưa tự bán được: ' + items.rescueWhy : ', nên dùng hoặc bán sớm') + '.', 'age');
+        else if (cross(R)) TT.log(c, nm + ' còn ' + R + ' tháng là hỏng; ' + (items.autoSell() ? 'sẽ tự bán khi bạn ở nơi bán được.' : 'nên dùng hoặc bán sớm.'), 'age');
       });
     },
     // Danh sách trong túi, xếp theo loại.

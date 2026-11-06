@@ -26,5 +26,8 @@
     return el;
   };
 
+  // 14 tháng -> '1 năm 2 tháng'; dưới 24 tháng giữ nguyên số tháng.
+  ui.monthsText = m => { m = Math.round(m); if (m < 24) return m + ' tháng'; const y = Math.floor(m / 12), r = m % 12; return y + ' năm' + (r ? ' ' + r + ' tháng' : ''); };
+
   ui.esc = s => String(s).replace(/[&<>"]/g, ch => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[ch]));
 })();

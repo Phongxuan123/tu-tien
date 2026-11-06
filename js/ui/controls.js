@@ -57,6 +57,11 @@
       if (p) { p.autoMove = e.target.checked; if (p.autoMove) p.dest = p.travel ? p.dest : null; ui.markDirty(); }
     };
 
+    $('auto-sell').onchange = e => {
+      TT.world.settings = TT.world.settings || {};
+      TT.world.settings.autoSell = e.target.checked; ui.markDirty();
+    };
+
     $('btn-save').onclick = () => { $('msg').textContent = TT.save.write() ? 'Đã lưu.' : 'Không lưu được (trình duyệt chặn lưu trữ).'; };
     $('btn-export').onclick = () => TT.save.exportFile();
     $('btn-import').onclick = () => $('file-input').click();
@@ -110,6 +115,7 @@
     }
     if (autoSelect && autoSelect.value !== TT.decisions.mode()) autoSelect.value = TT.decisions.mode();
     if (p && $('auto-move').checked !== p.autoMove) $('auto-move').checked = p.autoMove;
+    if ($('auto-sell').checked !== TT.items.autoSell()) $('auto-sell').checked = TT.items.autoSell();
     const waiting = TT.world && TT.world.pending;
     $('btn-skip').disabled = !!waiting || TT.time.skipping;
     const sc = TT.config.timeScale(p);
