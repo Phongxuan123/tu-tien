@@ -448,6 +448,7 @@
       const s = sect.ensure(c), P = D.SECT_RES;
       if (!s) return { ok: false, text: 'Bạn chưa vào tông môn.' };
       n = Math.min(n || 1, TT.items.count(c, id)); if (n < 1) return { ok: false, text: 'Không có vật phẩm này.' };
+      if (D.ITEMS[id] && D.ITEMS[id].ky) return { ok: false, text: 'Vật kỷ niệm, không hiến được.' };
       const hp = TT.items.value(c, id) * n / D.LS.RATE, room = P.donateCap - (s.donY || 0);
       const gain = Math.min(Math.floor(hp * P.donateRate * 1.2), room);
       if (gain < 1) return { ok: false, text: room < 1 ? 'Năm nay bạn đã quyên đủ trần cống hiến.' : 'Món này giá trị quá nhỏ để quyên.' };

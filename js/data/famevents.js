@@ -22,6 +22,12 @@
         {
           key: 'dong_y', label: (c, ctx) => (ctx.initiator ? 'Ngỏ lời kết đạo lữ' : 'Nhận lời kết đạo lữ'), kind: 'help', ai: 1.5, run: (c, ctx) => {
             const o = other(ctx); if (!o || !o.alive) return GONE;
+            if (TT.bond.owns(c, o)) { // 9B: hành trình đạo lữ. Người kia tỏ tình trước thì bạn gật đầu là xong; bạn ngỏ lời thì người kia có thể từ chối. Lễ kết tới sau (bond_ket).
+              const res = TT.bond.advance(c, o, 'to', { force: !ctx.initiator });
+              if (!res.ok) return B(o.name + ' không nhận lời. Bạn mỉm cười gượng, nhưng lòng chùng xuống.');
+              dao(c, 1);
+              return G('Hai người trao nhau lời thề dưới trăng. Chuyện lễ nghĩa để sau, nhưng từ đây ' + o.name + ' là người thương của bạn.');
+            }
             TT.family.pair(c, o); dao(c, 2);
             return G('Hai người trao nhau lời thề dưới trăng. ' + o.name + ' từ nay là đạo lữ của bạn.');
           }
@@ -29,7 +35,7 @@
         {
           key: 'tu', label: 'Giữ nguyên là tri kỷ', kind: 'safe', ai: 0.5, run: (c, ctx) => {
             const o = other(ctx); if (!o) return GONE;
-            const r = TT.rel.get(c, o); if (r) r.love = Math.max(0, (r.love || 0) - 30);
+            const r = TT.rel.get(c, o); if (r) TT.bond.addLoveRec(r, -30);
             TT.rel.add(c, o, -4);
             return 'Bạn nói lòng mình chưa thể trao đi. ' + o.name + ' mỉm cười gượng, ánh mắt thoáng vẻ chùng xuống.';
           }
@@ -44,7 +50,7 @@
           key: 'giai', label: 'Dịu giọng giải thích', kind: 'help', run: (c, ctx) => {
             const o = other(ctx); if (!o) return GONE;
             if (P(0.55 + (c.daoTam - 50) * 0.004)) { TT.rel.add(c, o, 6); return G(o.name + ' lặng lẽ nghe hết, rồi thở dài, nắm tay bạn. Sóng gió tạm lắng.'); }
-            TT.rel.add(c, o, -12); const r = TT.rel.get(c, o); if (r) r.love = Math.max(0, (r.love || 0) - 15);
+            TT.rel.add(c, o, -12); const r = TT.rel.get(c, o); if (r) TT.bond.addLoveRec(r, -15);
             return B(o.name + ' không nghe lọt tai, quay lưng bỏ đi. Tình cảm rạn nứt.');
           }
         },

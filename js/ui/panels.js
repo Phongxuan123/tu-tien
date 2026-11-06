@@ -101,7 +101,8 @@
     if (d.type === 'break_reroll') return 'Thiên mệnh';
     if (d.type === 'nt_offer') return 'Nghịch Thiên';
     if (d.type === 'qreview') return 'Nhiệm vụ';
-    if (d.type === 'story') return 'Truyện';
+    if (d.type === 'story') return d.lon ? 'Cảnh lớn' : d.goi ? 'Lời nói thẳng' : 'Truyện';
+    if (d.type === 'story_sau') return 'Truyện · lời dẫn';
     if (d.type === 'wheel') return 'Vòng quay vận mệnh';
     if (d.type === 'crossroad') return 'Ngã rẽ';
     if (d.type === 'job') return 'Nghề nghiệp';
@@ -125,6 +126,7 @@
     if (!d) { box.style.display = 'none'; if (back) back.style.display = 'none'; document.body.classList.remove('has-modal'); if (ui.scene) ui.scene.mirror = null; return; }
     box.style.display = 'block';
     box.classList.toggle('t3', d.tier === 3);
+    box.classList.toggle('lon', !!d.lon);
     box.classList.toggle('modal', pop);
     if (back) back.style.display = pop ? 'block' : 'none';
     document.body.classList.toggle('has-modal', pop);
@@ -141,6 +143,7 @@
     // hoàn cảnh hiện tại (để quyết định có cơ sở)
     const S = TT.stats, ctx = ['Sinh lực ' + Math.round(c.hp) + '/' + S.hpMax(c), 'Tu vi ' + Math.floor(c.xp) + '/' + (c.realm < 6 ? D.NEED[Math.min(5, c.realm)] : '∞'), 'Linh thạch ' + (TT.ls ? TT.ls.fmt(TT.ls.wealth(c)) : Math.floor(c.gold))];
     if (TT.loss && TT.loss.active(c)) ctx.push(D.WOUND[c.wound.sev].n + ' còn ' + TT.loss.left(c) + ' tháng');
+    if (d.ghi && d.ghi.length) body.appendChild(h('div', { class: 'mghi' }, d.ghi.join(' · '))); // lời dẫn: các thay đổi số hiện nhỏ ở dưới
     body.appendChild(h('div', { class: 'mctx' }, ctx.join(' · ')));
     if (d.opts) {
       d.opts.forEach(o => {
@@ -164,14 +167,14 @@
       list.appendChild(h('button', {
         class: 'mch' + (isDef && d.timeout ? ' def' : '') + (ch.disabled ? ' off' : ''), disabled: ch.disabled ? 'disabled' : null, title: ch.why || null,
         onclick: () => TT.decisions.resolve(i)
-      }, h('span', { class: 'mn' }, String(i + 1)), h('span', { class: 'mt' }, h('b', null, (d.timeout && isDef ? '★ ' : '') + ch.label), dot, hint ? h('small', null, hint) : null)));
+      }, h('span', { class: 'mn' }, String(i + 1)), h('span', { class: 'mt' }, h('b', null, (d.timeout && isDef && d.type !== 'story_sau' ? '★ ' : '') + ch.label), dot, hint ? h('small', null, hint) : null, ch.mat ? h('small', { class: 'mat' }, 'Mất: ' + ch.mat) : null)));
     });
     body.appendChild(list);
     if (d.timeout) {
       body.appendChild(h('div', { class: 'timer' }, h('i', { id: 'dec-timer-bar' })));
       body.appendChild(h('div', { class: 'small', id: 'dec-timer-txt' }, ''));
     } else {
-      body.appendChild(h('div', { class: 'small' }, 'Trò chơi dừng lại chờ bạn quyết định.'));
+      body.appendChild(h('div', { class: 'small' }, d.type === 'story_sau' ? 'Trò chơi dừng lại; bấm Tiếp khi đọc xong.' : 'Trò chơi dừng lại chờ bạn quyết định.'));
     }
     const foot = h('div', { class: 'mfoot' });
     if (TT.decisions.mode() !== 'thu_cong') foot.appendChild(h('button', { class: 'sm', onclick: () => { TT.decisions.setMode('thu_cong'); state.decKey = ''; ui.markDirty(); } }, 'Tắt tự động quyết định'));
@@ -195,7 +198,7 @@
     if (bar) bar.style.width = Math.max(0, left / d.timeout * 100) + '%';
     if (txt) {
       const ch = d.choices[TT.decisions.safeDefault(d)];
-      txt.textContent = 'Còn ' + Math.max(0, Math.ceil(left)) + ' giây, hết giờ máy sẽ chọn mặc định theo hướng đi: ' + ch.label;
+      txt.textContent = d.type === 'story_sau' ? 'Khung tự đóng sau ' + Math.max(0, Math.ceil(left)) + ' giây (có thể đóng sớm).' : 'Còn ' + Math.max(0, Math.ceil(left)) + ' giây, hết giờ máy sẽ chọn mặc định theo hướng đi: ' + ch.label;
     }
     if (left <= 0) { state.decT0 = 0; TT.decisions.resolveDefault(); ui.markDirty(); }
   }

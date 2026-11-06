@@ -62,7 +62,7 @@
 
   function render() {
     const c = TT.player(); if (!c) return close();
-    const v = vec(), t = c.tuchat, reg = TT.map.region(c.region), pl = TT.map.place(c.place);
+    const v = vec(), t = c.tuchat, reg = TT.map.region(c.region), pl = TT.map.place(c.place), o2 = TT.origin.get(c);
     const attrs = t.attrs.slice().sort((x, y) => y.p - x.p).map(x => x.n + ' ' + x.p).join(', ');
     const traits = c.traitIds.length ? c.traitIds.map(id => { const x = D.traitById[id]; return h('span', { class: 'chip q' + x.q + (x.g ? '' : ' bad'), title: x.d }, (x.g ? '▲ ' : '▼ ') + x.n); }) : [h('span', { class: 'small' }, 'Không có')];
     const left = D.NATURE.budget - used();
@@ -70,7 +70,14 @@
       h('div', { class: 'nl-title' }, 'Đời mới'),
       h('div', { class: 'small' }, mode === 'world' ? 'Thế giới mới đã dựng xong. Đây là người bạn sẽ sống thay.' : 'Bạn đã đầu thai. Đây là kiếp mới của bạn.'),
       h('div', { class: 'nl-who' }, h('b', null, c.name), ' · ' + (c.gender === 'nu' ? 'nữ' : 'nam') + ', ' + TT.age(c) + ' tuổi'),
-      h('div', { class: 'small' }, c.origin + ' · ' + (pl ? pl.n : '') + (reg ? ' · vùng ' + reg.n : '')),
+      h('div', { class: 'small' }, (o2 ? TT.origin.cap(c.origin) : c.origin) + ' · ' + (pl ? pl.n : '') + (reg ? ' · vùng ' + reg.n : '')),
+      ...(o2 ? [
+        h('div', { class: 'nl-sec' }, 'Xuất thân'),
+        h('div', { class: 'small' }, o2.d),
+        h('div', { class: 'small' }, h('b', null, 'Cha mẹ: '), TT.origin.parentsText(c)),
+        h('div', { class: 'small' }, h('b', null, 'Gánh nặng: '), o2.gom),
+        c.flags && c.flags.biMat ? h('div', { class: 'small' }, 'Dường như nhà bạn đang giấu một điều gì đó…') : null
+      ] : []),
       h('div', { class: 'nl-sec' }, 'Tư chất ' + t.total + ' điểm'),
       h('div', { class: 'small' }, attrs),
       h('div', { class: 'nl-sec' }, 'Tiên thiên'), h('div', { class: 'chips' }, ...traits),

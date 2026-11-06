@@ -23,7 +23,7 @@
   function relData(c) {
     return {
       id: c.id, danh: c.rep.danh, chinh: c.rep.chinh, nghiep: c.nghiep,
-      close: TT.rel.close(c, 7).map(x => [x.id, Math.round(x.r.v), x.r.k, x.c.alive, x.c.place, x.c.travel ? x.c.travel.to : '', x.c.realm, TT.age(x.c)]),
+      close: TT.rel.close(c, 7).map(x => [x.id, Math.round(x.r.v), x.r.k, x.c.alive, x.c.place, x.c.travel ? x.c.travel.to : '', x.c.realm, TT.age(x.c), ui.bondKey(c, x.c)]),
       hunters: Object.keys(TT.world.chars).filter(i => { const o = TT.world.chars[i]; return o.alive && o.vows && o.vows.indexOf(c.id) >= 0 && o.region === c.region; }).length
     };
   }
@@ -40,8 +40,9 @@
       const o = x.c, r = x.r;
       const card = h('div', { class: 'card' + (r.k === 'thu' ? ' enemy' : '') });
       card.appendChild(h('div', { html: '<b>' + ui.esc(o.name) + '</b> <span class="small">(' + D.REALM_NAMES[o.realm] + ', ' + TT.age(o) + ' tuổi, ' + D.personalityById[o.personality].n + ')</span>' }));
-      card.appendChild(h('div', { class: 'small', html: '<b class="' + (r.v >= 0 && r.k !== 'thu' ? 'good-txt' : 'bad-txt') + '">' + TT.rel.label(c, o) + '</b> (' + Math.round(r.v) + ') · ' + whereIs(o) + (r.k === 'thu' && r.why ? ' · ' + ui.esc(r.why) : '') }));
-      card.appendChild(h('div', { html: relBar(r.v) }));
+      card.appendChild(h('div', { class: 'small', html: '<b class="' + (r.v >= 0 && r.k !== 'thu' ? 'good-txt' : 'bad-txt') + '">' + TT.bond.label(c, o) + '</b> (' + Math.round(r.v) + ') · ' + whereIs(o) + (r.k === 'thu' && r.why ? ' · ' + ui.esc(r.why) : '') }));
+      const bb = ui.bondBlock(c, o);
+      card.appendChild(bb || h('div', { html: relBar(r.v) }));
       const row = h('div', { class: 'btns' });
       if (o.alive && !o.cross && o.place && !c.travel && !c.cross) {
         row.appendChild(h('button', { onclick: () => { const p = TT.player(); p.autoMove = false; TT.map.startTravel(p, o.travel ? o.travel.to : o.place); ui.markDirty(); } }, 'Tìm gặp'));
@@ -113,7 +114,7 @@
     if (!o || !p) { box.style.display = 'none'; cardKey = ''; return; }
     const near = o.alive && !o.travel && !o.cross && !p.travel && !p.cross && o.region === p.region && o.place === p.place;
     const r = TT.rel.get(p, o);
-    const key = [o.id, o.alive, near, r ? Math.round(r.v) + r.k : '', p.manualMonth === TT.world.months, TT.ls.wealth(p) >= 30, o.travel ? 1 : 0, o.place].join('|');
+    const key = [o.id, o.alive, near, r ? Math.round(r.v) + r.k : '', p.manualMonth === TT.world.months, TT.ls.wealth(p) >= 30, o.travel ? 1 : 0, o.place, ui.bondKey(p, o), TT.bond.asked(p, o) ? 1 : 0].join('|');
     if (key === cardKey) return;
     cardKey = key;
     box.style.display = 'block';
@@ -125,8 +126,9 @@
       D.REALM_NAMES[o.realm] + ' · ' + TT.age(o) + ' tuổi · ' + (o.gender === 'nu' ? 'nữ' : 'nam') + ' · tính ' + D.personalityById[o.personality].n.toLowerCase() +
       ' · ' + TT.rep.alignName(o).toLowerCase() + ' · ' + TT.rep.fameName(o).toLowerCase() + '<br>' + whereIs(o) }));
     if (o.id === p.id) return;
-    box.appendChild(h('div', { html: '<div class="sec">Quan hệ với bạn</div><b class="' + (r && r.v >= 0 && r.k !== 'thu' ? 'good-txt' : 'bad-txt') + '">' + TT.rel.label(p, o) + '</b>' + (r ? ' (' + Math.round(r.v) + ')' + relBar(r.v) : '') +
+    box.appendChild(h('div', { html: '<div class="sec">Quan hệ với bạn</div><b class="' + (r && r.v >= 0 && r.k !== 'thu' ? 'good-txt' : 'bad-txt') + '">' + TT.bond.label(p, o) + '</b>' + (r ? ' (' + Math.round(r.v) + ')' + relBar(r.v) : '') +
       (r && r.k === 'thu' && r.why ? '<div class="small">' + ui.esc(r.why) + '</div>' : '') }));
+    const bb = ui.bondBlock(p, o); if (bb) box.appendChild(bb);
     if (o.alive && o.vows && o.vows.indexOf(p.id) >= 0) box.appendChild(h('div', { class: 'small bad-txt' }, o.name + ' đang nhớ mối thù với bạn.'));
     if (!o.alive) return;
     const row = h('div', { class: 'btns', style: 'margin-top:8px' });
@@ -140,6 +142,10 @@
     const why = TT.family.canRecruit(p, o);
     if (o.tier === 'core' && !why && TT.age(o) <= TT.age(p) - 10) {
       row.appendChild(h('button', { disabled: near ? null : 'disabled', onclick: () => { TT.family.recruit(TT.player(), o); ui.markDirty(); } }, 'Nhận đồ đệ'));
+    }
+    if (TT.bond.memOn() && o.tier === 'core' && o.realm >= 1 && (r ? r.v : 0) >= D.BOND.kn.ally.minV) {
+      const asked = TT.bond.asked(p, o);
+      row.appendChild(h('button', { title: 'Hẹn rủ người này đi cùng chuyến sau (lệnh ưu tiên thấp, hạn ' + D.BOND.kn.ally.askHan + ' tháng)', disabled: asked ? 'disabled' : null, onclick: () => { const q = TT.bond.invite(TT.player(), o); if (!q.ok) TT.log(TT.player(), q.why, 'age'); ui.markDirty(); } }, asked ? 'Đã hẹn đi cùng' : 'Rủ đi cùng'));
     }
     box.appendChild(row);
     if (o.master === p.id) box.appendChild(h('div', { class: 'small good-txt' }, 'Là đồ đệ của bạn.'));

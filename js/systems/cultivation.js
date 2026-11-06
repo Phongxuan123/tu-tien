@@ -41,15 +41,17 @@
       } else if (action === 'dual') {
         // Song tu: cùng đạo lữ tu luyện, nhanh hơn một chút, tăng đạo tâm và đạo điểm, vững thêm tình cảm.
         const q = TT.family.partnerHere(c);
-        const g = trainGain(c, E, false) * 1.3;
+        const bd = TT.bond.dual(c, q); // cặp của người chơi: 1-2 buổi mỗi năm, thưởng giảm dần, tương hợp, NPC có thể từ chối (R 5.3); null thì như cũ
+        const dm = bd ? bd.mult * bd.cf : 1;
+        const g = bd ? trainGain(c, E, false) * (1 + 0.3 * dm) : trainGain(c, E, false) * 1.3;
         c.xp += g; c.yXp += g; c.trainNl += 0.05;
         if (c.kind === 'player') { TT.tech.practice(c, g); TT.ls.autoAbsorb(c, g); }
-        TT.ev.dao(c, 0.25); c.daoDiem += 0.15;
+        TT.ev.dao(c, 0.25 * dm); c.daoDiem += 0.15 * dm;
         const r = TT.rel.get(c, q);
-        if (r) { r.love = Math.min(100, (r.love || 0) + 1); r.v = Math.min(100, r.v + 0.2); }
+        if (r) { if (bd) TT.bond.addLoveRec(r, dm); else r.love = Math.min(100, (r.love || 0) + 1); r.v = Math.min(100, r.v + 0.2 * dm); }
         const m = c.gender === 'nu' ? c : q, f = m === c ? q : c;
         if (m.gender === 'nu' && f.gender === 'nam' && !m.pregnant && TT.age(m) >= 18 && TT.age(m) <= 48 && (m.children || []).length < TT.family.MAX_KIDS &&
-          TT.world.months - (m.lastBirth || -999) > 24 && rng.P(0.018)) {
+          TT.world.months - (m.lastBirth || -999) > 24 && (!bd || bd.conceive) && rng.P(0.018)) {
           TT.family.conceive(m, f);
         }
       } else if (action === 'craft') {

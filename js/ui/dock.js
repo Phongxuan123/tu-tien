@@ -44,6 +44,8 @@
     const card = $('scene-wrap'); if (!card) return;
     $('scene-detach').onclick = () => { st.scene.fl = !st.scene.fl; applyScene(); save(); };
     $('scene-dock').onclick = () => { st.scene.fl = false; applyScene(); save(); };
+    const fx = $('scene-fx'), upd = () => { if (fx) fx.textContent = st.scene.red ? 'đủ hiệu ứng' : 'giảm hiệu ứng'; if (ui.scene && ui.scene.setReduced) ui.scene.setReduced(!!st.scene.red); };
+    if (fx) fx.onclick = () => { st.scene.red = !st.scene.red; upd(); save(); }; upd();
     $('scene-size').onclick = () => { st.scene.fl = true; st.scene.s = (st.scene.s + 1) % SIZES.length; applyScene(); save(); };
     drag(card, $('scene-grip'), (x, y) => { st.scene.x = x; st.scene.y = y; }, save);
     applyScene();

@@ -60,6 +60,7 @@
       if (r && (r.v >= 40 || (r.k && r.k !== 'thu'))) {
         TT.log(pl, TT.rel.label(pl, c) + ' ' + c.name + ' đã qua đời (' + cause + ').', 'bad');
         TT.ev.dao(pl, r.k === 'ket_nghia' || r.v >= 70 ? -3 : -1);
+        TT.bond.farewell(pl, c, cause); // 9K: huynh đệ mất thì thêm ký ức cuối
       }
     }
     if (c.kind === 'player') {
@@ -125,7 +126,7 @@
       return life.die(c, 'thân thể kiệt quệ' + (p ? ' tại ' + p.n : '') + ', gục xuống và không dậy nữa');
     }
     if (!c.travel && !c.cross) {
-      if (c.kind === 'player') TT.story.tick(c); // truyện (8B): chỉ người chơi; hộp truyện được ưu tiên hơn sự kiện lẻ cùng tháng
+      if (c.kind === 'player') { TT.bond.tick(c); TT.story.tick(c); } // quan hệ có chiều sâu (9B) rồi truyện (8B): chỉ người chơi; hộp truyện được ưu tiên hơn sự kiện lẻ cùng tháng
       TT.events.monthly(c);
       if (!c.alive) return;
       TT.ai.considerMove(c);
@@ -170,7 +171,23 @@
         if (c.focus === 'seek') parts.push('rong ruổi tìm cơ duyên');
         if (c.focus === 'travel') parts.push('trên đường di chuyển');
         if (c.focus === 'cross') parts.push('trên đường vượt vùng, tu vi +' + Math.round(c.yXp));
-        TT.log(c, 'Tuổi ' + age + ': ' + parts.join(', ') + '.', 'age');
+        const G = D.STORY && D.STORY.logGom, rep = c.qRumor || [];
+        c.qRumor = null;
+        const empty = !parts.length || parts.every(p => /\+0$/.test(p));
+        if (G && G.on && empty && !rep.length) {
+          c.qYear = c.qYear ? { from: c.qYear.from, n: c.qYear.n + 1 } : { from: age, n: 1 }; // năm trống: dồn lại, ghi một dòng khi chuỗi năm trống kết thúc
+        } else {
+          if (G && G.on && c.qYear) {
+            TT.log(c, c.qYear.n > 1 ? 'Tuổi ' + c.qYear.from + ' đến ' + (age - 1) + ': ' + c.qYear.n + ' năm trôi qua yên ả, không có gì đáng kể.' : 'Tuổi ' + c.qYear.from + ': một năm trôi qua yên ả, không có gì đáng kể.', 'age');
+            c.qYear = null;
+          }
+          let line = 'Tuổi ' + age + ': ' + (G && G.on && empty ? 'một năm yên ả' : parts.join(', '));
+          if (rep.length) {
+            const uniq = rep.filter((x, i) => rep.indexOf(x) === i);
+            line += '; nghe lại ' + rep.length + ' tin đồn cũ (' + uniq.join(', ') + ')';
+          }
+          TT.log(c, line + '.', 'age');
+        }
       }
       if (c.kind === 'player') {
         TT.report.close(c);
@@ -419,7 +436,8 @@
     if (prevRelic && prevRelic.relic) { c.equip = c.equip || {}; c.equip.relic = TT.gear.withLv(prev.equip.relic, Math.floor(prevRelic.lv / 2)); c.relicXp = 0; }
     const reg = TT.map.region(rid), pl = TT.map.place(c.place);
     if (opts.boost) TT.log(c, 'Qua cầu Nại Hà, ký ức kiếp trước tan thành sương, chỉ còn chút phước lành vương lại cho linh hồn.', 'age');
-    TT.log(c, 'Bạn được sinh ra là ' + c.origin + ' tại ' + pl.n + ' (' + pl.faction + '), vùng ' + reg.n + '.', 'big');
+    TT.log(c, c.origin2 ? 'Bạn sinh ra trong hoàn cảnh «' + c.origin + '» tại ' + pl.n + ' (' + pl.faction + '), vùng ' + reg.n + '.'
+      : 'Bạn được sinh ra là ' + c.origin + ' tại ' + pl.n + ' (' + pl.faction + '), vùng ' + reg.n + '.', 'big');
     TT.log(c, 'Môi trường nơi đây: ' + reg.env.name + '. ' + reg.env.desc);
     TT.log(c, 'Tư chất của bạn: ' + c.tuchat.total + ' điểm (' + c.tuchat.attrs.map(a => a.n + ' ' + a.p).join(', ') + ').');
     if (c.traitIds.length) TT.log(c, 'Tiên thiên: ' + c.traitIds.map(id => D.traitById[id].n).join(', ') + '.');
@@ -429,6 +447,11 @@
     TT.log(c, 'Bạn bước chân vào con đường tu tiên.', 'age');
     TT.fac.welcome(c);
     TT.news('Một người mới ra đời ở ' + reg.n + ': ' + c.name + ' (bạn).', 'good', [c.id]);
+    // Xuất thân v2 (9A): dựng cha mẹ thật. createChar của cha mẹ rút rng nên việc này đặt SAU mọi lần rút cũ ở trên (công tắc tắt thì không rút gì thêm).
+    if (c.origin2) {
+      TT.origin.spawnParents(c);
+      TT.log(c, TT.origin.parentsText(c) + ' Gánh nặng: ' + TT.origin.burden(c), 'age');
+    }
     TT.bus.emit('reincarnate', { id: c.id, kind: 'new', first: !prev });
     // Tuổi thơ (8A3): hộp Đời mới đang mở thì hộp tuổi thơ chạy sau khi xác nhận; không thì chạy tự động (Tự động, kiểm thử).
     if (!(TT.ui && TT.ui.newLife && TT.ui.newLife.isOpen())) TT.childhood.auto(c);

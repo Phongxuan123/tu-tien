@@ -16,7 +16,13 @@
     tu_khi_dan: { kind: 'pill', col: '#4aa3ff' }, pha_canh_dan: { kind: 'pill', col: '#f0a840' },
     ho_than_bua: { kind: 'bua', col: '#4a8ed8' }, thoat_than_bua: { kind: 'bua', col: '#58b36a' }, cong_kich_bua: { kind: 'bua', col: '#d8302a' },
     linh_thao: { kind: 'thao' }, quang_thach: { kind: 'khoang', ore: 0 }, tinh_thiet: { kind: 'khoang', ore: 1 }, huyen_thiet: { kind: 'khoang', ore: 2 }, thien_thach: { kind: 'khoang', ore: 3 },
-    phu_giay: { kind: 'giay' }, yeu_dan: { kind: 'yeu' }
+    phu_giay: { kind: 'giay' }, yeu_dan: { kind: 'yeu' },
+    chan_day: { kind: 'tamdac', col: '#b08a5a' }, giay_rom: { kind: 'da', col: '#c9b27a' }, thu_cu: { kind: 'giay' }, kiem_go: { kind: 'kiem', tier: 0 }, chuoi_hat: { kind: 'ngoc', tier: 0 }, // vật kỷ niệm (K1)
+    bat_su_me: { kind: 'da', col: '#d8d2c4' }, dep_rom: { kind: 'tamdac', col: '#c9b27a' }, dong_xu: { kind: 'ngoc', tier: 0 }, dai_lua: { kind: 'tamdac', col: '#b9a3d6' }, luoc_go: { kind: 'tamdac', col: '#9a7447' }, kiem_go_su: { kind: 'kiem', tier: 0 }, // vật của khuôn kiêu hãnh (AI1a)
+    luoc_bac: { kind: 'tamdac', col: '#c8ccd6' }, con_dao_te: { kind: 'kiem', tier: 0 }, but_son: { kind: 'tamdac', col: '#b8323a' }, cay_sao_truc: { kind: 'tamdac', col: '#c9a86a' },
+    day_toc_do: { kind: 'tamdac', col: '#b8323a' }, cai_duc_go: { kind: 'tamdac', col: '#8a6a44' }, ve_doi: { kind: 'giay' }, quan_co_ngoc: { kind: 'ngoc', tier: 0 }, // vật của bốn khuôn K3a
+    chen_tra: { kind: 'da', col: '#d8d2c4' }, den_long: { kind: 'giay' }, xuc_sac: { kind: 'ngoc', tier: 0 }, chieu_thien_bang: { kind: 'tamdac', col: '#9fd3e6' },
+    thuyen_nan: { kind: 'tamdac', col: '#a0784c' }, dieu_hai_mau: { kind: 'tamdac', col: '#c85a4a' }, la_co: { kind: 'tamdac', col: '#d8302a' } // vật của bốn khuôn K3b
   };
 
   function spec(id) {

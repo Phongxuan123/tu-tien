@@ -72,7 +72,7 @@
       let over = c.log.length - cap;
       if (c.kind === 'player' && over > 0) {
         const keep = [];
-        for (let i = 0; i < c.log.length; i++) { if (over > 0 && !c.log[i].star) over--; else keep.push(c.log[i]); }
+        for (let i = 0; i < c.log.length; i++) { if (over > 0 && !c.log[i].star && !c.log[i].mm) over--; else keep.push(c.log[i]); } // mục có sao và dòng manh mối (mm, AI1a) không bị cắt, để "Nhìn lại" còn thấy
         c.log.length = 0; Array.prototype.push.apply(c.log, keep);
       } else c.log.splice(0, over);
     }
