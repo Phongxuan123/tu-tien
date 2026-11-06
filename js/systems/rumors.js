@@ -88,7 +88,12 @@
         const text = 'Tin đồn: ' + (def.tag === 'Bí cảnh' ? place.n : def.tag + ' tại ' + place.n) + ' ' + def.verb + ' sau khoảng ' + Math.round(lead / 12 * 10) / 10 + ' năm.';
         const o = rumors.add({ kind: k, region: rid, place: place.id, open, close, name, text });
         TT.news(text, 'age', []);
-        TT.log(p, text, 'age');
+        const G = D.STORY && D.STORY.logGom, key = k + ':' + place.id;
+        p.rumorSeen = p.rumorSeen || {};
+        if (G && G.on && p.rumorSeen[key] != null && w.months - p.rumorSeen[key] < G.rumorMonths * 1) {
+          (p.qRumor = p.qRumor || []).push(name); // tin lặp: không ghi riêng, gộp vào dòng cuối năm (world.js)
+        } else TT.log(p, text, 'age');
+        p.rumorSeen[key] = w.months;
         return o;
       }
       return null;

@@ -94,11 +94,17 @@
   // Sẵn sàng đột phá: đủ tu vi và đủ cơ duyên.
   S.ready = c => S.canBreak(c) && S.gateOk(c);
 
+  // Giai đoạn trong cảnh giới: 0 sơ kỳ, 1 trung kỳ, 2 hậu kỳ (phàm nhân là 0, cảnh giới cuối là 2).
+  S.stage = function (c) {
+    if (c.realm === 0) return 0;
+    if (c.realm >= 6) return 2;
+    return Math.min(2, Math.floor(c.xp / D.NEED[c.realm] * 3));
+  };
   // Tên cảnh giới kèm sơ/trung/hậu kỳ.
   S.realmName = function (c) {
     const base = D.REALM_NAMES[c.realm];
     if (c.realm === 0 || c.realm >= 6) return base;
-    const st = Math.min(2, Math.floor(c.xp / D.NEED[c.realm] * 3));
+    const st = S.stage(c);
     return base + ' ' + D.STAGE_NAMES[st];
   };
 })();

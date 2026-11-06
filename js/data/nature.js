@@ -24,7 +24,9 @@
     roll: { max: 8, minAxes: 2, minAbs: 3 },
     budget: 4,                  // ngân sách chỉnh ở hộp "Đời mới"
     yearCap: 3, bigCap: 6,      // trần dịch mỗi trục mỗi năm (biến cố lớn: bigCap)
-    extremeMul: 0.6,            // đi tiếp vào dải cực thì đổi chậm hơn
+    extremeMul: 0.3,            // đi tiếp vào dải cực thì đổi chậm hơn (8B2: 0,6 → 0,3 để không trôi hết về một cực)
+    dailyMul: 0.5,              // dịch trục từ sự kiện thường ngày (không phải chặng truyện, không phải tuổi thơ) nhân hệ số này (8B2)
+    autoRandom: true,           // người chơi ở Tự động/Cân bằng: chọn mặc định bốc ngẫu nhiên theo trọng số độ hợp, quy tắc nếu-thì vẫn đè (8B2)
     logCap: 30,
     recentMonths: 12,           // vừa đổi gần đây (hiện xanh)
     // Nhãn kind của lựa chọn → hướng dịch trục (độ ±0,25 đến 1, Q 6.4).

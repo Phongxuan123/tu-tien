@@ -7,6 +7,7 @@
   const D = TT.data, h = ui.h, $ = ui.$;
 
   const CATS = { tu: ['☯', 'Tu luyện'], chien: ['⚔', 'Chiến đấu'], tien: ['◈', 'Tiền bạc, đồ'], nguoi: ['♥', 'Người quen'], tong: ['⌂', 'Tông môn, nghề'], nv: ['✦', 'Nhiệm vụ'], kp: ['➶', 'Khám phá, đi lại'], the: ['☼', 'Thế giới, khác'] };
+  CATS.dev = ['🛠', 'Thử nghiệm']; // mục nhật ký do bảng chỉnh nhân vật ghi (có thể nằm trong bản lưu dù công cụ đang tắt)
   const FILTERS = [['all', 'Tất cả'], ['big', 'Việc lớn'], ['star', '★ Đánh dấu'], ['tu', '☯ Tu luyện'], ['nguoi', '♥ Người'], ['tien', '◈ Tiền'], ['nv', '✦ Nhiệm vụ'], ['chien', '⚔ Chiến đấu']];
   const MERGE_NAME = { kp: 'Đi lại', tong: 'Việc tông môn, nghề', tien: 'Luyện nghề, trang bị', tu: 'Tu luyện', nguoi: 'Giao du', chien: 'Chữa trị', nv: 'Việc nhiệm vụ', the: 'Việc vặt' };
   const MAX_STAR = 60;
@@ -30,7 +31,10 @@
     TT.logMeta(e);
     const d = h('div', { class: 'jev ' + (e.lv === 'big' ? 'big' : e.lv === 'minor' ? 'minor' : 'norm') + ' ' + (e.tone || '') + ' c-' + e.cat });
     const ic = h('div', { class: 'jic', title: CATS[e.cat][1] }, CATS[e.cat][0]);
+    const hieu = TT.kb && TT.kb.nhinLai ? TT.kb.nhinLai(c, e) : ''; // AI1a: "Nhìn lại" sau cú lật, dòng từng là manh mối được tô màu
+    if (hieu) d.classList.add('jmm');
     const tx = h('div', { class: 'jtx' }, e.t);
+    if (hieu) tx.appendChild(h('div', { class: 'jhieu' }, 'Giờ bạn đã hiểu: ' + hieu));
     const star = h('span', { class: 'jstar' + (e.star ? ' on' : ''), title: e.star ? 'Bỏ đánh dấu' : 'Đánh dấu mục này (xem lại ở tab Hồ sơ)', onclick: ev => {
       ev.stopPropagation();
       if (!e.star && c.log.filter(x => x.star).length >= MAX_STAR) { note = 'Đã đánh dấu tối đa ' + MAX_STAR + ' mục, hãy bỏ bớt.'; bump(); return; }

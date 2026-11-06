@@ -16,12 +16,17 @@
     // ---------------- quan hệ ----------------
     {
       id: 'rel_ket_nghia', tier: 2, manual: true, cool: 0, title: 'Kết nghĩa',
-      text: (c, ctx) => { const o = other(ctx); return o.name + ' (' + realmName(o) + ', tính ' + persName(o) + ') ngỏ lời: "Đạo hữu với ta hợp nhau như vậy, chi bằng kết nghĩa huynh đệ, sống chết có nhau?"'; },
+      text: (c, ctx) => {
+        const o = other(ctx), rc = TT.bond.recall(c, o, 2);
+        if (rc) return o.name + ' (' + realmName(o) + ', tính ' + persName(o) + ') nhìn bạn rất lâu, rồi nhắc lại ' + rc + ': "Đi với nhau đến đây rồi, chi bằng kết nghĩa huynh đệ, sống chết có nhau?"';
+        return o.name + ' (' + realmName(o) + ', tính ' + persName(o) + ') ngỏ lời: "Đạo hữu với ta hợp nhau như vậy, chi bằng kết nghĩa huynh đệ, sống chết có nhau?"';
+      },
       choices: [
         {
           key: 'ket', label: 'Đồng ý kết nghĩa', kind: 'help', run: (c, ctx) => {
             const o = other(ctx); if (!o || !o.alive) return GONE;
             TT.rel.add(c, o, 15); TT.rel.setKind(c, o, 'ket_nghia'); dao(c, 2);
+            if (TT.bond.memOn()) { TT.bond.setType(c, o, 'ket_nghia'); TT.bond.shift(c, o, { trust: 10, respect: 10 }); TT.bond.remember(c, o, 'the', 'Cắt máu ăn thề kết nghĩa huynh đệ', 2); }
             return G('Hai người cắt máu ăn thề. ' + o.name + ' từ nay là huynh đệ kết nghĩa của bạn, đạo tâm bạn vững thêm.');
           }
         },
@@ -70,6 +75,7 @@
             const amt = ctx.amt || 20;
             gold(c, -amt); gold(o, amt); TT.rel.add(c, o, 12); TT.rep.add(c, 'chinh', 2);
             const r = TT.rel.get(c, o); r.debt = amt; r.cred = c.id;
+            TT.bond.remember(c, o, 'nho', 'Cho ' + o.name + ' mượn ' + amt + ' vàng lúc túng quẫn', 1);
             return G('Bạn cho ' + o.name + ' mượn ' + amt + ' vàng. Họ cảm kích ra mặt, nợ ân tình này được ghi nhớ.');
           }
         },
@@ -102,6 +108,7 @@
           key: 'danh', label: 'Ra tay giao chiến', kind: 'fight', run: (c, ctx) => {
             const o = other(ctx); if (!o || !o.alive) return GONE;
             const r = TT.combat.quick(c, o, { lethal: false, important: true, edgeB: D.DG.hunter });
+            const hp0 = TT.bond.duelHelper(c, o); if (hp0) TT.bond.assist(c, r, hp0.a, o.name, hp0.bro ? TT.data.BOND.kn.bro.helpBonus[0] : 0);
             if (r.win) {
               TT.rep.add(c, 'danh', 3);
               if (o.alive) TT.events.fire(c, D.eventById.rel_tha_giet, { otherId: o.id });
@@ -144,6 +151,7 @@
             const r = TT.combat.quick(a, o, { lethal: false });
             TT.rel.add(c, a, 10);
             TT.family.addDebt(c, a, 80 * (1 + a.realm), 'ra tay giúp bạn trước kẻ thù');
+            TT.bond.remember(c, a, 'cuu', 'Ra tay giúp bạn trước ' + o.name, 2);
             if (r.win) { o.huntWait = TT.world.months + 12; return G(a.name + ' kịp tới, đẩy lùi ' + o.name + '. Bạn nợ ân tình bạn thân này.'); }
             hp(a, -10); return B(a.name + ' không địch nổi ' + o.name + '. Hai người đành rút lui, ' + o.name + ' vẫn còn đó.');
           }
@@ -203,6 +211,7 @@
           key: 'nghe', label: 'Dâng lễ vật (20 vàng) nghe giảng', kind: 'help', disabled: c => (TT.ls.wealth(c) < 20 ? 'Không đủ vàng' : false), run: c => {
             gold(c, -20); xp(c, NR(c) * 0.08 * (0.7 + TT.ev.ngo(c) * 0.6)); dao(c, 2); TT.rep.add(c, 'danh', 1);
             const k = kyNgo(c, 0.12, ['tu_chat', 'lo', 'kv', 'xoa']);
+            TT.bond.shared(c, 'giang', 'Cùng {ten} nghe cao nhân giảng đạo', 2);
             return k || G('Bạn nghe giảng trọn ba ngày, ngộ ra nhiều điều. Tu vi tăng, đạo tâm vững hơn.');
           }
         },
@@ -216,7 +225,7 @@
         {
           key: 'mua', label: c => 'Đấu giá một viên Phá Cảnh Đan (' + TT.ls.fmt(Math.round(TT.stats.pillCost(c) * 0.7)) + ')', kind: 'pay',
           disabled: c => (TT.ls.wealth(c) < Math.round(TT.stats.pillCost(c) * 0.7) ? 'Không đủ vàng' : false),
-          run: c => { gold(c, -Math.round(TT.stats.pillCost(c) * 0.7)); TT.items.add(c, 'pha_canh_dan'); return G('Bạn đấu giá được một viên Phá Cảnh Đan giá hời, cất vào túi để dùng khi đột phá.'); }
+          run: c => { gold(c, -Math.round(TT.stats.pillCost(c) * 0.7)); TT.items.add(c, 'pha_canh_dan'); TT.bond.shared(c, 'giang', 'Cùng {ten} tranh nhau trả giá ở phiên đấu giá', 1); return G('Bạn đấu giá được một viên Phá Cảnh Đan giá hời, cất vào túi để dùng khi đột phá.'); }
         },
         { key: 'xem', label: 'Chỉ xem náo nhiệt', kind: 'safe', run: c => { const k = kyNgo(c, 0.05, ['lo', 'kv']); return k || 'Bạn xem người ta tranh nhau trả giá, nghe được kha khá chuyện giang hồ.'; } }
       ]
@@ -229,7 +238,7 @@
           key: 'du', label: 'Lên đài luận đạo', kind: 'risk', run: c => {
             const nl = TT.stats.nl(c), p = rng.clamp(nl / (nl + 16 + c.realm * 6) + (c.daoTam - 50) * 0.003, 0.15, 0.85);
             const folks = TT.social.here(c).filter(o => o.tier === 'core');
-            rng.shuffle(folks).slice(0, 2).forEach(o => TT.rel.add(c, o, 12));
+            rng.shuffle(folks).slice(0, 2).forEach(o => { TT.rel.add(c, o, 12); TT.bond.remember(c, o, 'giang', 'Cùng ' + o.name + ' luận đạo trên đài', 1); });
             if (P(p)) { xp(c, NR(c) * 0.05); dao(c, 2); c.daoDiem += 2; TT.rep.add(c, 'danh', 4); return G('Bạn bác được nhiều người, tiếng tăm nổi lên. Tu vi, đạo tâm tăng và quen thêm vài người.'); }
             dao(c, -2); return B('Bạn bị hỏi đến cứng họng. Đạo tâm dao động, nhưng cũng quen thêm vài người.');
           }

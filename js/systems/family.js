@@ -21,7 +21,7 @@
     attract(a, b) {
       if (family.isKin(a, b)) return 0;
       if (TT.age(a) < 18 || TT.age(b) < 18) return 0;
-      if (Math.abs(TT.age(a) - TT.age(b)) > 30) return 0;
+      if (!TT.bond.owns(a, b) && Math.abs(TT.age(a) - TT.age(b)) > 30) return 0; // cặp của người chơi: bỏ giới hạn chênh lệch tuổi (R 1.1)
       return a.gender !== b.gender ? 1 : 0.2;
     },
     // Có thể là đối tượng yêu đương không (NPC chỉ một đạo lữ, người chơi được nhiều).
@@ -29,6 +29,7 @@
       if (!a.alive || !b.alive || family.attract(a, b) <= 0) return false;
       const r = rel.get(a, b);
       if (r && r.k === 'dao_lu') return false;
+      if (TT.bond.owns(a, b) && family.partners(a.kind === 'player' ? a : b).length >= D.BOND.maxPartners) return false; // 1 chính + tối đa 2 phụ
       if (a.kind === 'npc' && family.partners(a).length >= 1) return false;
       if (b.kind === 'npc' && family.partners(b).length >= 1) return false;
       return true;
@@ -49,7 +50,8 @@
     // ---------- đạo lữ ----------
     pair(a, b) {
       const r = rel.ensure(a, b);
-      r.k = 'dao_lu'; r.love = 100; r.v = Math.max(r.v, 70); r.m = TT.world.months;
+      if (TT.bond.owns(a, b)) TT.bond.onPair(a, b, r); // cặp của người chơi: thanh Tình/Tin/Kính, đạo lữ chính hoặc phụ
+      else { r.k = 'dao_lu'; r.love = 100; r.v = Math.max(r.v, 70); r.m = TT.world.months; }
       const pl = a.kind === 'player' ? a : (b.kind === 'player' ? b : null);
       if (pl) {
         const o = pl === a ? b : a;
@@ -172,12 +174,14 @@
       const w = TT.world;
       // đạo lữ ở xa lâu thì nhạt dần; tình cảm hết thì chia tay
       family.partners(c).forEach(x => {
+        if (TT.bond.owns(c, x.c)) return; // cặp của người chơi: TT.bond.yearly lo (trôi thanh, rạn nứt, đạo lữ NPC tự chủ)
         const r = x.r;
         const apart = x.c.region !== c.region || x.c.place !== c.place;
         if (apart) r.love = Math.max(0, (r.love || 0) - 2);
         else r.love = Math.min(100, (r.love || 0) + 1);
         if (c.kind === 'npc' && r.love < 25 && r.v < 30 && rng.P(0.3)) family.unpair(c, x.c, 'tình cảm đã nhạt');
       });
+      if (c.kind === 'player') TT.bond.yearly(c);
       // trẻ nhỏ đi theo cha mẹ nếu cha mẹ còn sống ở vùng khác chỗ
       if (TT.age(c) < 12 && c.parents) {
         const par = c.parents.map(aliveChar).find(Boolean);

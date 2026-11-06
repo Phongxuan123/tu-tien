@@ -53,6 +53,10 @@
       const list = cand.length ? cand : TT.map.placesOf(regionId);
       placeId = rng.pick(list).id;
     }
+    // Người chơi (9A): xuất thân v2 bốc bằng băm (muối là trạng thái rng, chỉ đọc) sau mọi lần rút cũ; địa điểm sinh ưu tiên place_types.
+    // Các lần rút rng ở trên vẫn giữ nguyên để công tắc tắt trùng khít bản cũ.
+    const o2 = kind === 'player' && D.ORIGINS2 && D.ORIGINS2.on ? TT.origin.roll(w.seed != null ? w.seed : 0, w.nextId, rng.getState()) : null;
+    if (o2 && !opts.place) placeId = TT.origin.placeFor(o2, regionId, w.nextId, rng.getState()) || placeId;
 
     const c = {
       id: w.nextId++, kind, tier: opts.tier || (kind === 'player' ? 'player' : 'core'), role: opts.role || null,
@@ -86,6 +90,7 @@
     TT.map.ensureTaste(c);
     // Người chơi (8A): tính cách bốn trục bốc bằng băm (muối là trạng thái rng, chỉ đọc), điểm khí vận lấy đúng lần rút baseKv ở trên.
     if (kind === 'player' && D.NATURE.on) { TT.kv.ensure(c); TT.nature.ensure(c, rng.getState()); if (c.ring) TT.kv.add(c, 2, 'Nhẫn'); }
+    if (o2) TT.origin.apply(c, o2, origin);
     if (c.ring) c.baseKv += 30;
     c.hp = TT.stats.hpMax(c);
     w.chars[c.id] = c;

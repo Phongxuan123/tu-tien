@@ -54,7 +54,7 @@
       const dir = D.DIRECTIONS[c.direction] || D.DIRECTIONS.can_bang;
       const pers = D.personalityById[c.personality] || D.personalityById.trung_lap;
       const hpr = c.hp / S.hpMax(c);
-      const hasPartner = !!TT.family.partnerHere(c);
+      const hasPartner = !!TT.family.partnerHere(c) && !TT.bond.dualFull(c); // song tu: đủ số lần trong năm thì thôi (cặp của người chơi, R 5.3)
       const qm = c.kind === 'player' && TT.quests ? TT.quests.actMul(c) : {};
       const list = Object.keys(D.ACTIONS).map(a => {
         if (a === 'dual' && !hasPartner) return { a, w: 0 };   // song tu chỉ khi đạo lữ có mặt

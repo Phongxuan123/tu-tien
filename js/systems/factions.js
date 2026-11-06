@@ -463,8 +463,8 @@
         const x = fac.get(c.sect.id), war = x && fac.warOf(x);
         if (war && (c.flags.draftAt || -999) + 24 <= w.months && rng.P(0.7)) { c.flags.draftAt = w.months; TT.events.fire(c, D.eventById.fac_trieu_tap, { warId: war.id }); return; }
       }
-      // chiến loạn ở vùng bạn đang ở
-      if (fac.atFront(c.region) && c.realm >= 1 && !c.dungeon && (c.flags.warAt || -999) + 36 <= w.months && rng.P(0.45)) { c.flags.warAt = w.months; TT.events.fire(c, D.eventById.fac_chien_loan, {}); }
+      // chiến loạn ở vùng bạn đang ở (K1/N1b: người chơi từ 14 tuổi là gặp, không đòi Luyện Khí; tắt D.STORY.kbOn thì như cũ)
+      if (fac.atFront(c.region) && (D.STORY.kbOn ? TT.age(c) >= 14 : c.realm >= 1) && !c.dungeon && (c.flags.warAt || -999) + 36 <= w.months && rng.P(0.45)) { c.flags.warAt = w.months; TT.events.fire(c, D.eventById.fac_chien_loan, {}); }
     },
 
     // Tóm tắt những gì đã đổi kể từ lần chết trước (dùng khi bắt đầu đời mới).
