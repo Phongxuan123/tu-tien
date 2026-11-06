@@ -102,6 +102,7 @@
       }
       c.tri = { target, cost, guard: guard ? guard.id : 0, ho: !!ho, phase: 0, total: D.TRI.phases(target), hp0: Math.round(c.hp) };
       TT.log(c, 'Mây kiếp đen kịt cuộn trên đầu, sấm sét ngưng tụ. Thiên kiếp lên ' + D.REALM_NAMES[target] + ' sắp giáng xuống: ' + c.tri.total + ' đợt!', 'big');
+      TT.bus.emit('kiep:bat-dau', { id: c.id, target, total: c.tri.total });
       tri.present(c);
       return false;
     },
@@ -123,10 +124,12 @@
       dmg = Math.round(dmg);
       c.hp -= dmg;
       c.tri.phase++;
+      TT.bus.emit('kiep:set-danh', { id: c.id, phase: c.tri.phase, total: c.tri.total, how });
       const txt = 'Đợt kiếp ' + c.tri.phase + '/' + c.tri.total + ' giáng xuống: sinh lực -' + dmg + (notes.length ? ' (' + notes.join(', ') + ')' : '') + '.';
       if (c.hp <= 0) {
         const target = c.tri.target; c.tri = null;
         c.hp = 0;
+        TT.bus.emit('kiep:chet', { id: c.id, target });
         TT.life.die(c, 'chết trong thiên kiếp lên ' + D.REALM_NAMES[target]);
         return TT.ev.bad(txt + ' Bạn không chịu nổi.');
       }
@@ -134,6 +137,7 @@
         const g = c.tri.guard && TT.world.chars[c.tri.guard], cost = c.tri.cost;
         c.tri = null;
         TT.log(c, txt, 'big');
+        TT.bus.emit('kiep:vuot-qua', { id: c.id });
         TT.cult.breakSuccess(c, cost, g && g.alive ? g : null, true);
         return TT.ev.good('Bạn vượt qua thiên kiếp, hấp thụ thiên địa chi lực!');
       }
