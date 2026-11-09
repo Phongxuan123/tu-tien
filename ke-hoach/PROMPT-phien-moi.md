@@ -1,5 +1,8 @@
 # Prompt cho các phiên làm việc mới
 
+> **Từ 2026-11-09: nhánh `add-game-project` đã gộp hết vào `main` và bị xóa.** Mọi chỗ trong các prompt cũ còn nhắc `add-game-project` hiểu là: tạo nhánh mới `claude/<tên việc>` từ `origin/main`, cuối phiên mở PR nháp vào `main`, bạn merge. Chạy các phiên lần lượt, merge PR trước rồi mới chạy phiên sau.
+
+
 Dán từng prompt vào một phiên mới (theo đúng thứ tự). Quy ước chung nằm trong `CLAUDE.md` của repo (phiên mới tự đọc), nên prompt chỉ nêu việc cụ thể.
 Trạng thái lúc viết (2026-10-18): Đợt 0, 1 (S1), 2 (S2), 3 (S3) **đã xong**; F3 hoãn. Nhánh làm việc: `add-game-project`. Kiểm thử: 100 bài đạt.
 
@@ -254,7 +257,7 @@ Cuối: ghi "8B đã làm" vào Z, Q mục 22; KE-HOACH.md; push theo CLAUDE.md.
 ## 8B2. Sonnet: sửa lõi sau khi đọc life-sim (cần 8B)
 
 ```
-Repo: Phongxuan123/tu-tien. Gắn repo, clone nhánh `main` (trả lời tiếng Việt, ngắn gọn, xưng "mình", gọi tôi là "bạn"). Đọc CLAUDE.md. Làm trên nhánh `add-game-project` (tạo lại từ origin/main nếu PR Đợt 8 đã merge; nếu chưa merge thì checkout origin/add-game-project). TIẾT KIỆM: chỉ đọc đúng phần ghi dưới đây, chạy kiểm thử lọc theo từ khóa, chạy đầy đủ một lần cuối, Playwright tối đa 1 ảnh.
+Repo: Phongxuan123/tu-tien. Gắn repo, clone nhánh `main` (trả lời tiếng Việt, ngắn gọn, xưng "mình", gọi tôi là "bạn"). Đọc CLAUDE.md. Làm trên nhánh mới `claude/<tên việc>` tạo từ origin/main; cuối phiên mở PR nháp vào `main`. TIẾT KIỆM: chỉ đọc đúng phần ghi dưới đây, chạy kiểm thử lọc theo từ khóa, chạy đầy đủ một lần cuối, Playwright tối đa 1 ảnh.
 
 Đọc: Z mục "Đợt 8" phần "8B2" (bản chốt) và "8B đã làm"; js/data/story.js; js/data/stories/bb_a.js; js/systems/story.js (phần mở tuyến và kiểm điều kiện mo/khi); js/systems/nature.js (shift, quán tính, affinity); js/systems/events.js chooseIndex (dòng ~120-145); js/systems/stats.js 95-105 (sơ/trung/hậu kỳ); nơi ghi dòng tổng kết năm và tin đồn (grep "Tuổi ' +" và "Tin đồn").
 
@@ -424,7 +427,7 @@ Thứ tự: **AI1a (Sonnet)** → **K3a (Haiku)** → **K3b (Haiku)** → **AI1b
 ## AI1a. Sonnet: khuôn thành dữ liệu, thư viện kiểu lựa chọn, kịch bản cụ thể không cần AI
 
 ```
-Repo: Phongxuan123/tu-tien. Gắn repo, clone nhánh `main`. Trả lời tiếng Việt, ngắn gọn, xưng "mình", gọi tôi là "bạn". Đọc CLAUDE.md trước. Làm trên nhánh `add-game-project` (checkout origin/add-game-project). TIẾT KIỆM: chỉ đọc phần ghi dưới; kiểm thử lọc theo từ khóa, chạy đầy đủ một lần cuối; Playwright tối đa 1 ảnh. Cuối phiên ghi "AI1a đã làm" vào Z mục 7d, push theo CLAUDE.md, báo ngắn gọn.
+Repo: Phongxuan123/tu-tien. Gắn repo, clone nhánh `main`. Trả lời tiếng Việt, ngắn gọn, xưng "mình", gọi tôi là "bạn". Đọc CLAUDE.md trước. Làm trên nhánh mới `claude/<tên việc>` tạo từ origin/main; cuối phiên mở PR nháp vào `main`. TIẾT KIỆM: chỉ đọc phần ghi dưới; kiểm thử lọc theo từ khóa, chạy đầy đủ một lần cuối; Playwright tối đa 1 ảnh. Cuối phiên ghi "AI1a đã làm" vào Z mục 7d, push theo CLAUDE.md, báo ngắn gọn.
 
 Đọc: ke-hoach/Q-khuon-kich-ban.md (cả file); Z mục 7c ("K1 đã làm", "K2 đã làm"), 7d (cả mục) và dòng nhật ký 2026-10-23 về nhịp tuổi; Q-giong-truyen.md mục 4b (năm nhịp), 6e (ngân sách, mười luật dựng), 6f (plot twist, cơ chế); js/systems/story.js, js/data/story.js, js/data/stories/kb_mau.js, kb_mem_yeu.js (chỉ để xem định dạng K1), tools/story-lint.js, js/data/realms.js.
 
@@ -443,7 +446,7 @@ Công tắc D.STORY.khuonOn; tắt thì như sau K2 và baseline --check trùng 
 ## K3a, K3b. Haiku: chuyển tám khuôn thành dữ liệu (thiết kế đã xong ở Q-khuon-kich-ban mục 3 đến 10)
 
 ```
-Repo: Phongxuan123/tu-tien. Gắn repo, clone nhánh `main`. Trả lời tiếng Việt, ngắn gọn, xưng "mình", gọi tôi là "bạn". Đọc CLAUDE.md trước. Làm trên nhánh `add-game-project` (checkout origin/add-game-project). Điều kiện: Z mục 7d có "AI1a đã làm". TIẾT KIỆM: chỉ đọc phần ghi dưới. Cuối phiên ghi "K3a đã làm" (hoặc K3b) vào Z mục 7d, push theo CLAUDE.md, báo ngắn gọn.
+Repo: Phongxuan123/tu-tien. Gắn repo, clone nhánh `main`. Trả lời tiếng Việt, ngắn gọn, xưng "mình", gọi tôi là "bạn". Đọc CLAUDE.md trước. Làm trên nhánh mới `claude/<tên việc>` tạo từ origin/main; cuối phiên mở PR nháp vào `main`. Điều kiện: Z mục 7d có "AI1a đã làm". TIẾT KIỆM: chỉ đọc phần ghi dưới. Cuối phiên ghi "K3a đã làm" (hoặc K3b) vào Z mục 7d, push theo CLAUDE.md, báo ngắn gọn.
 Lượt này: K3a = mục 3 (tan_nhan), 4 (nhan_hau), 5 (nong_nay), 6 (muu_mo); K3b = mục 7 (tho_o), 8 (buong_tha), 9 (khac_ky), 10 (ba_phai).
 Đọc: ke-hoach/Q-khuon-kich-ban.md mục 0, 1, 2 (khuôn mẫu), "Quy ước chung cho tám khuôn", và đúng bốn mục của lượt này; Z "AI1a đã làm" (định dạng dữ liệu); js/data/khuon/kieu_hanh.js (mẫu dữ liệu, chép đúng cấu trúc).
 NHIỆM VỤ: chỉ DỮ LIỆU. Mỗi khuôn thành js/data/khuon/<id>.js, chép ĐÚNG nội dung của mục (không tự đổi câu hỏi, phương án, kiểu lựa chọn, manh mối, kết cục); mở phần theo bảng chung; kiểu lựa chọn đúng tên thư viện; "ngược" ghi thành kiểu ghi trong ngoặc (nếu chỉ ghi "ngược" thì chọn kiểu hợp nghĩa nhất trong thư viện và ghi chú); thêm dòng dự phòng 2 đến 3 câu cho mọi chặng (theo giọng Q-giong-truyen mục 6b, cao trào thì bám cảnh chuẩn được nêu). Đăng ký vào js/files.js như kieu_hanh.js.
@@ -453,7 +456,7 @@ Kiểm: story-lint sạch cho các khuôn mới; run-tests lọc "Khuôn"; life-
 ## AI1b. Sonnet: AI viết kịch bản và chữ lúc chơi (mặc định Gemini cả bộ, Claude tùy chọn)
 
 ```
-Repo: Phongxuan123/tu-tien. Gắn repo, clone nhánh `main`. Trả lời tiếng Việt, ngắn gọn, xưng "mình", gọi tôi là "bạn". Đọc CLAUDE.md trước. Làm trên nhánh `add-game-project` (checkout origin/add-game-project). Điều kiện: Z mục 7d có "AI1a đã làm" (K3 có thể chưa xong; khuôn nào có thì dùng). TIẾT KIỆM: chỉ đọc phần ghi dưới; kiểm thử dùng giả lập nhà cung cấp, KHÔNG gọi API thật trong kiểm thử. Cuối phiên ghi "AI1b đã làm" vào Z mục 7d, push theo CLAUDE.md, báo ngắn gọn (kèm hướng dẫn tôi nhập khóa và thử).
+Repo: Phongxuan123/tu-tien. Gắn repo, clone nhánh `main`. Trả lời tiếng Việt, ngắn gọn, xưng "mình", gọi tôi là "bạn". Đọc CLAUDE.md trước. Làm trên nhánh mới `claude/<tên việc>` tạo từ origin/main; cuối phiên mở PR nháp vào `main`. Điều kiện: Z mục 7d có "AI1a đã làm" (K3 có thể chưa xong; khuôn nào có thì dùng). TIẾT KIỆM: chỉ đọc phần ghi dưới; kiểm thử dùng giả lập nhà cung cấp, KHÔNG gọi API thật trong kiểm thử. Cuối phiên ghi "AI1b đã làm" vào Z mục 7d, push theo CLAUDE.md, báo ngắn gọn (kèm hướng dẫn tôi nhập khóa và thử).
 
 Đọc: Z mục 7d (cả mục, bản chốt); Z "AI1a đã làm"; Q-giong-truyen.md mục 6b, 6c, 6d, 6f và các bộ chuẩn cảnh (để soạn mẫu giọng); Q-khuon-kich-ban.md mục 0, 1, 2; js/systems/story.js, js/systems/kb (hoặc tệp AI1a tạo), js/ui/story.js, js/ui/devpanel.js (bảng 🛠), js/core/save.js, js/core/time.js (dừng thời gian), chỗ Cài đặt trong giao diện. Tra tài liệu chính thức để lấy đúng cách gọi: Anthropic Messages API từ trình duyệt (tùy chọn; cần header "anthropic-dangerous-direct-browser-access: true"; model mặc định claude-sonnet-5-5) và Gemini API (generateContent; MẶC ĐỊNH cho cả bộ: bản Flash hiện hành cho chặng nhỏ và hồ sơ, bản Pro hiện hành cho kịch bản cụ thể, cao trào, ký ức; cho phép đổi; cấu hình mức lọc an toàn). Gói Claude Pro không gồm API.
 
@@ -470,7 +473,7 @@ Công tắc tắt (mặc định) thì game như sau AI1a và baseline --check t
 ## K4. Haiku: chuyển tuyến viết tay hiện có thành khuôn phụ
 
 ```
-Repo: Phongxuan123/tu-tien. Gắn repo, clone nhánh `main`. Trả lời tiếng Việt, ngắn gọn, xưng "mình", gọi tôi là "bạn". Đọc CLAUDE.md trước. Làm trên nhánh `add-game-project` (checkout origin/add-game-project). Điều kiện: Z mục 7d có "AI1a đã làm" (định dạng khuôn phụ). TIẾT KIỆM. Cuối phiên ghi "K4 đã làm" vào Z mục 7d, push theo CLAUDE.md, báo ngắn gọn.
+Repo: Phongxuan123/tu-tien. Gắn repo, clone nhánh `main`. Trả lời tiếng Việt, ngắn gọn, xưng "mình", gọi tôi là "bạn". Đọc CLAUDE.md trước. Làm trên nhánh mới `claude/<tên việc>` tạo từ origin/main; cuối phiên mở PR nháp vào `main`. Điều kiện: Z mục 7d có "AI1a đã làm" (định dạng khuôn phụ). TIẾT KIỆM. Cuối phiên ghi "K4 đã làm" vào Z mục 7d, push theo CLAUDE.md, báo ngắn gọn.
 Đọc: Z mục 7d ("Các tuyến khác", "AI1a đã làm"); Q-khuon-kich-ban.md mục 0 (thư viện kiểu); js/data/khuon/phu_chien_su.js (mẫu); các tệp js/data/stories/tp_tan_tu.js, tp_dao_tong.js, tp_thuong_nhan.js, tg_chien_su.js, dao_lu.js và sự kiện kết nghĩa của 9K.
 NHIỆM VỤ: chỉ DỮ LIỆU. Mỗi tuyến cũ thành một khuôn phụ js/data/khuon/phu_<id>.js: giữ ý truyện, chia 2 đến 3 phần × 3 chặng, gán kiểu lựa chọn từ thư viện (không tự chế cơ chế), vai lấy từ dàn, khai báo phần khuôn chính mà nó đổ vào, chữ cũ rút gọn thành dòng dự phòng 2 đến 3 câu. Không xóa tệp cũ (bộ máy dùng tệp cũ khi D.STORY.khuonOn tắt).
 Kiểm: story-lint sạch; run-tests lọc "Khuôn"; baseline --check trùng khít.
@@ -479,7 +482,7 @@ Kiểm: story-lint sạch; run-tests lọc "Khuôn"; baseline --check trùng kh�
 ## K5. Haiku: chuyển mô tả nội dung trong Q thành khuôn phụ (chạy nhiều lượt, mỗi lượt khoảng 6 tuyến)
 
 ```
-Repo: Phongxuan123/tu-tien. Gắn repo, clone nhánh `main`. Trả lời tiếng Việt, ngắn gọn, xưng "mình", gọi tôi là "bạn". Đọc CLAUDE.md trước. Làm trên nhánh `add-game-project`. Điều kiện: Z có "K4 đã làm". TIẾT KIỆM: chỉ đọc đúng mục của các tuyến trong lượt này (grep tên tuyến trong ke-hoach/Q-cot-truyen.md rồi đọc theo offset). Cuối phiên ghi "K5 lượt N đã làm" (danh sách tuyến) vào Z mục 7d, push.
+Repo: Phongxuan123/tu-tien. Gắn repo, clone nhánh `main`. Trả lời tiếng Việt, ngắn gọn, xưng "mình", gọi tôi là "bạn". Đọc CLAUDE.md trước. Làm trên nhánh mới `claude/<tên việc>` tạo từ origin/main; cuối phiên mở PR nháp vào `main`. Điều kiện: Z có "K4 đã làm". TIẾT KIỆM: chỉ đọc đúng mục của các tuyến trong lượt này (grep tên tuyến trong ke-hoach/Q-cot-truyen.md rồi đọc theo offset). Cuối phiên ghi "K5 lượt N đã làm" (danh sách tuyến) vào Z mục 7d, push.
 Lượt này: <ghi 6 tuyến, ví dụ lượt 1: T3 Đan sư, T4 Luyện khí, T9 Báo thù, T13 Móc mắt, T14 Đào cốt, W3; lượt 2: T15, T17, T18, W13, W16, W18; lượt 3: cụm 23 Thanh Xà (T22), cụm 24 và W25 Phù Lệnh, W20, cụm 11, 12; lượt 4: 12 sự kiện nghịch lý của chín tông...>.
 NHIỆM VỤ: chỉ DỮ LIỆU. Mỗi tuyến thành một khuôn phụ đúng định dạng AI1a (2 đến 3 phần × 3 chặng, kiểu lựa chọn từ thư viện, điều kiện mở bằng khóa thân phận hoặc biến cố mô phỏng có thật trong mã, vai từ dàn, phần khuôn chính nó đổ vào, dòng dự phòng). Tôn giáo thật viết theo S mục 3 (tôn trọng). Thang sức mạnh và tuổi theo Q-khuon-kich-ban 2.4 (50 tuổi Luyện Khí, 130 tuổi Trúc Cơ). Không viết văn dài (AI lúc chơi viết chữ).
 Kiểm: story-lint sạch; run-tests lọc "Khuôn".
@@ -488,12 +491,12 @@ Kiểm: story-lint sạch; run-tests lọc "Khuôn".
 ---
 
 # Tiên thiên làm mới (ke-hoach/Q-tien-thien.md, chốt 2026-11-06)
-Thứ tự: **TT-d (Haiku)** → **TT (Sonnet)**. Nhánh `add-game-project`.
+Thứ tự: **TT-d (Haiku)** → **TT (Sonnet)**. Mỗi phiên một nhánh mới từ `main`, PR vào `main`.
 
 ## TT-d. Haiku: dữ liệu tiên thiên mới
 
 ```
-Repo: Phongxuan123/tu-tien. Gắn repo, clone nhánh `main`. Trả lời tiếng Việt, ngắn gọn, xưng "mình", gọi tôi là "bạn". Đọc CLAUDE.md trước. Làm trên nhánh `add-game-project` (checkout origin/add-game-project). TIẾT KIỆM: chỉ đọc phần ghi dưới. Cuối phiên ghi "TT-d đã làm" vào ke-hoach/Q-tien-thien.md mục 11, push theo CLAUDE.md, báo ngắn gọn.
+Repo: Phongxuan123/tu-tien. Gắn repo, clone nhánh `main`. Trả lời tiếng Việt, ngắn gọn, xưng "mình", gọi tôi là "bạn". Đọc CLAUDE.md trước. Làm trên nhánh mới `claude/<tên việc>` tạo từ origin/main; cuối phiên mở PR nháp vào `main`. TIẾT KIỆM: chỉ đọc phần ghi dưới. Cuối phiên ghi "TT-d đã làm" vào ke-hoach/Q-tien-thien.md mục 11, push theo CLAUDE.md, báo ngắn gọn.
 Đọc: ke-hoach/Q-tien-thien.md (cả file); js/data/traits.js (kiểu viết dữ liệu cũ); js/systems/stats.js phần S.mod (tên khóa hiệu chỉnh số có sẵn).
 NHIỆM VỤ: chỉ DỮ LIỆU js/data/tienthien.js: D.TIEN_THIEN đúng cấu trúc mục 2, đủ 33 mục của mục 3 (26 chuẩn + 7 tật), chép ĐÚNG tên, ô, phẩm, hiệu ứng, khóa luật, lời nguyền; viết mô tả 1 câu và dấu hiệu khi ẩn 1 câu (mơ hồ, gợi hình, không nói thẳng tên) cho mọi tiên thiên Hiếm trở lên; thẻ xuất thân và vai hợp lý; D.TIEN_THIEN_RULES (tỉ lệ phẩm, giảm một nửa, số lượng, ẩn theo phẩm, cửa thức tỉnh, trần Quý/Thiên = 3, bảng chuyển bản cũ mục 9). Không sửa js/systems. Đăng ký trong js/files.js sau js/data/traits.js.
 Kiểm: bài kiểm thử "Dữ liệu tiên thiên (TT-d)" trong tests.html: đủ 33, id không trùng, mỗi ô có ít nhất một Thường hoặc Hiếm, mọi mục phẩm ≥ Quý có nguyen, mọi khóa m thuộc danh sách S.mod, mọi khóa luat thuộc bảng mục 4, bảng chuyển bản cũ trỏ đúng id; run-tests lọc "tiên thiên"; baseline --check trùng khít.
@@ -502,7 +505,7 @@ Kiểm: bài kiểm thử "Dữ liệu tiên thiên (TT-d)" trong tests.html: đ
 ## TT. Sonnet: cơ chế tiên thiên mới (cần TT-d)
 
 ```
-Repo: Phongxuan123/tu-tien. Gắn repo, clone nhánh `main`. Trả lời tiếng Việt, ngắn gọn, xưng "mình", gọi tôi là "bạn". Đọc CLAUDE.md trước. Làm trên nhánh `add-game-project` (checkout origin/add-game-project). Điều kiện: ke-hoach/Q-tien-thien.md mục 11 có "TT-d đã làm". TIẾT KIỆM: chỉ đọc phần ghi dưới; kiểm thử lọc theo từ khóa, chạy đầy đủ một lần cuối; Playwright tối đa 2 ảnh. Cuối phiên ghi "TT đã làm" vào Q-tien-thien.md mục 11 (kèm số đo mục 8), push theo CLAUDE.md, báo ngắn gọn.
+Repo: Phongxuan123/tu-tien. Gắn repo, clone nhánh `main`. Trả lời tiếng Việt, ngắn gọn, xưng "mình", gọi tôi là "bạn". Đọc CLAUDE.md trước. Làm trên nhánh mới `claude/<tên việc>` tạo từ origin/main; cuối phiên mở PR nháp vào `main`. Điều kiện: ke-hoach/Q-tien-thien.md mục 11 có "TT-d đã làm". TIẾT KIỆM: chỉ đọc phần ghi dưới; kiểm thử lọc theo từ khóa, chạy đầy đủ một lần cuối; Playwright tối đa 2 ảnh. Cuối phiên ghi "TT đã làm" vào Q-tien-thien.md mục 11 (kèm số đo mục 8), push theo CLAUDE.md, báo ngắn gọn.
 Đọc: ke-hoach/Q-tien-thien.md (cả file, bản chốt); js/data/tienthien.js; js/systems/stats.js (S.mod), js/systems/character.js (rollTraits, createChar), js/systems/childhood.js (wake, bad), js/systems/events.js 60-100 (cộng/xóa tiên thiên), js/systems/fate.js 55-70, js/systems/family.js 90-120, js/systems/story.js (dàn, cảnh lớn, kiểu lựa chọn, tâm ma), js/systems/nature.js (shift), js/systems/kb (kế hoạch lật, manh mối), js/systems/world.js (chết, đầu thai), js/ui/newlife.js, js/ui/panels.js, js/ui/devpanel.js.
 NHIỆM VỤ (chỉ người chơi; NPC giữ D.TRAITS và traitIds cũ):
 1. TT.tt: bốc lúc sinh theo mục 6 bằng băm (không gọi rng), c.tt = [{ id, an, thuc_tinh_luc }], tật riêng; hàm đọc TT.tt.list(c), has(c, id), luat(c, khoa), hieu_ung(c) (chỉ tính tiên thiên đã thức tỉnh). S.mod của người chơi đọc c.tt thay traitIds.
