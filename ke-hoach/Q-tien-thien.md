@@ -181,3 +181,4 @@ Chia bậc: 6 Thường, 7 Hiếm, 5 Quý, 2 Thiên. Nhóm **Tài** nối với 
 ## 11. Nhật ký
 - 2026-11-06: lập kế hoạch làm mới, bạn chốt bốn điểm ở mục 1.
 - 2026-11-09: bạn chốt thêm **3 nhóm ngoài (Tài, Duyên, Dị) với 20 tiên thiên chia bậc** (mục 3b), tổng 9 nhóm, 46 chuẩn + 7 tật; nhắc lại mỗi người chỉ 1 đến 3 tiên thiên, đa số 1 hoặc 2.
+- TT-d đã làm: `js/data/tienthien.js` (`D.TIEN_THIEN` 53 mục, `D.tienThienById`, `D.TIEN_THIEN_RULES` gồm tỉ lệ, giảm một nửa, số lượng, ẩn, cửa thức tỉnh, trần 3, 9 nhóm, bảng chuyển bản cũ); đăng ký trong `js/files.js` sau `traits.js`; bài "Dữ liệu tiên thiên (TT-d)" trong `tests.html` (7 bài, đạt); `baseline --check` trùng khít. Chưa làm: hiệu ứng số của các mục chỉ có chữ (không có khóa trong S.mod) và số trong lời nguyền, chờ chặng TT đấu nối; luật `m`/`luat` dùng object, giá trị là hệ số nhân hoặc `true`.
