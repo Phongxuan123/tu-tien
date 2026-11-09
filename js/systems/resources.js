@@ -58,7 +58,7 @@
       const pid = res.siteId(c);
       if (!pid) return RR.mul[0];
       const lv = res.levels(pid)[kind] || 0, st = res.stock(pid, kind);
-      return RR.mul[lv] * (st < 15 ? 0.3 : 0.4 + 0.6 * st / 100);
+      return RR.mul[lv] * (st < 15 ? 0.3 : 0.4 + 0.6 * st / 100) * TT.tt.mul(c, 'tim');
     },
     // Nơi đang thu hoạch: khu tài nguyên nếu đang ở khu, không thì địa điểm đang đứng (null nếu đang đi đường).
     siteId(c) {

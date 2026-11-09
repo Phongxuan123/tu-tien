@@ -5,7 +5,7 @@
   const S = TT.stats = {};
 
   // Hiệu chỉnh chỉ số: tiên thiên, trang bị, công pháp và tâm pháp, kiếm đạo (chỉ người chơi có các phần sau).
-  S.mod = (c, k) => c.traitIds.reduce((a, id) => a + ((D.traitById[id].m[k]) || 0), 0) +
+  S.mod = (c, k) => (TT.tt && TT.tt.active(c) ? TT.tt.mod(c, k) : c.traitIds.reduce((a, id) => a + ((D.traitById[id].m[k]) || 0), 0)) +
     (c.kind === 'player' ? TT.items.mod(c, k) + TT.tech.mod(c, k) + TT.craft.mod(c, k) : 0);
   S.hpMax = c => Math.max(20, Math.round((100 + c.realm * 40 + S.mod(c, 'hpMax') + c.trainHp) * (TT.loss ? TT.loss.hpMul(c) : 1)));
   S.atk = c => Math.max(1, Math.round(c.baseAtk + c.realm * 10 + S.mod(c, 'atk') + c.trainAtk));
@@ -67,6 +67,7 @@
       { n: 'Tiên thiên và pháp khí', v: S.mod(c, 'brk') + (c.ring ? 0.05 : 0) },
       { n: 'Tông môn hỗ trợ', v: TT.sect ? TT.sect.breakBonus(c) : 0 },
       { n: 'Thiên phạt (Nghịch Thiên)', v: c.thienPhat ? -0.10 : 0 },
+      { n: 'Thiên Đạo nhìn bạn (tiên thiên)', v: TT.tt && TT.tt.luat(c, 'thien_mang') ? -0.04 : 0 },
       { n: 'Phản phệ quốc vận', v: TT.nation ? -TT.nation.brkPenalty(c) : 0 },
       { n: 'Thương tích chưa lành', v: -TT.loss.brkPenalty(c) },
       { n: 'Phá Cảnh Đan x' + c.aid.pill, v: D.AID.pillBonus * c.aid.pill },
@@ -84,7 +85,7 @@
 
   S.lifeSpan = function (c) {
     const L = D.LIFE[c.realm];
-    return L === Infinity ? L : Math.max(20, Math.round(L * (1 + S.mod(c, 'life') + (c.ntLife || 0))) + (c.lifeBonus || 0));
+    return L === Infinity ? L : Math.max(20, Math.round(L * (1 + S.mod(c, 'life') + (c.ntLife || 0)) * (TT.tt ? TT.tt.danLife(c) : 1)) + (c.lifeBonus || 0));
   };
   S.need = c => (c.realm < 6 ? D.NEED[c.realm] : Infinity);
   // Đủ tu vi để đột phá (có thể vẫn kẹt bình cảnh nếu thiếu cơ duyên).

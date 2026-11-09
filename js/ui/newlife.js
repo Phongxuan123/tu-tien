@@ -64,7 +64,9 @@
     const c = TT.player(); if (!c) return close();
     const v = vec(), t = c.tuchat, reg = TT.map.region(c.region), pl = TT.map.place(c.place), o2 = TT.origin.get(c);
     const attrs = t.attrs.slice().sort((x, y) => y.p - x.p).map(x => x.n + ' ' + x.p).join(', ');
-    const traits = c.traitIds.length ? c.traitIds.map(id => { const x = D.traitById[id]; return h('span', { class: 'chip q' + x.q + (x.g ? '' : ' bad'), title: x.d }, (x.g ? '▲ ' : '▼ ') + x.n); }) : [h('span', { class: 'small' }, 'Không có')];
+    const ttv = TT.tt.active(c) ? TT.tt.view(c) : null;
+    const ttChip = x => h('span', { class: 'chip q' + x.p + (x.o === 'tat' ? ' bad' : ''), title: x.d + ' (phẩm ' + x.pham.toLowerCase() + ', ' + x.mau + ')' + (x.nguyen ? ' Lời nguyền: ' + x.nguyen : '') }, (x.o === 'tat' ? '' : (ttv.groups.find(g => g.o === x.o) || {}).n + ': ') + x.n);
+    const traits = ttv ? ttv.groups.reduce((a, g) => a.concat(g.items.map(ttChip)), []).concat(ttv.tat.map(ttChip), ttv.hidden.length ? [h('span', { class: 'chip an', title: 'Còn ' + ttv.hidden.length + ' điều bạn chưa hiểu về chính mình. Chúng sẽ lộ dần.' }, '??? ×' + ttv.hidden.length)] : []) : c.traitIds.length ? c.traitIds.map(id => { const x = D.traitById[id]; return h('span', { class: 'chip q' + x.q + (x.g ? '' : ' bad'), title: x.d }, (x.g ? '▲ ' : '▼ ') + x.n); }) : [h('span', { class: 'small' }, 'Không có')];
     const left = D.NATURE.budget - used();
     const card = h('div', { class: 'nl-card', role: 'dialog', 'aria-modal': 'true', 'aria-label': 'Đời mới' },
       h('div', { class: 'nl-title' }, 'Đời mới'),

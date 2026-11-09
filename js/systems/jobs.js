@@ -24,6 +24,7 @@
       const st = c.job.lv[id] || { lv: 0, xp: 0 }; return { xp: st.xp, need: need(st.lv) };
     },
     addXp(c, id, g) {
+      g *= TT.tt.mul(c, 'nghe_' + id); // tiên thiên nghề (Tài): lên cấp nhanh hơn
       if (D.JOBS[id].craft) { TT.craft.addXp(c, D.JOBS[id].craft, g); return; }
       const j = job.ensure(c), st = j.lv[id] = j.lv[id] || { lv: 0, xp: 0 }, cap = job.cap(c, id);
       if (st.lv >= cap) { st.xp = Math.min(st.xp, need(st.lv)); return; }
@@ -62,6 +63,8 @@
       if (j.main) m *= D.JOBS[j.main].inc * (1 + D.JOB_MAIN_LV * job.level(c, j.main));
       if (j.sub) m *= 1 + (D.JOBS[j.sub].inc - 1) * 0.5 + D.JOB_MAIN_LV * 0.5 * job.level(c, j.sub);
       if (TT.world.months < j.adapt) m = 1 + (m - 1) * 0.5;
+      if (j.main) m *= TT.tt.mul(c, 'nghe_' + j.main);
+      if (j.sub) m *= 1 + (TT.tt.mul(c, 'nghe_' + j.sub) - 1) * 0.5;
       return m;
     },
     buyMul(c) { const j = c.job; if (!j || c.kind !== 'player') return 1; const lv = (j.main === 'thuong_nhan' ? job.level(c, 'thuong_nhan') : j.sub === 'thuong_nhan' ? job.level(c, 'thuong_nhan') * 0.5 : 0); return 1 - Math.min(0.15, 0.015 * lv); },

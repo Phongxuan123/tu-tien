@@ -24,7 +24,7 @@
       if (c.kind !== 'player' || !sev) return '';
       const cur = loss.active(c), now = TT.world.months;
       const s = cur ? Math.min(3, Math.max(cur.sev, sev) + (cur.sev === sev && sev < 3 ? 1 : 0)) : sev;
-      const until = Math.max(cur ? cur.until : 0, now + D.WOUND[s].months);
+      const until = Math.max(cur ? cur.until : 0, now + Math.max(1, Math.round(D.WOUND[s].months * TT.tt.mul(c, 'lanh'))));
       c.wound = { sev: s, until }; if (s >= 2) TT.report.mark(c, 'hurt', D.WOUND[s].n);
       c.hp = Math.min(c.hp, TT.stats.hpMax(c));
       TT.log(c, D.WOUND[s].n + ': sinh lực tối đa -' + Math.round(D.WOUND[s].hp * 100) + '%, tu luyện chậm ' + Math.round(D.WOUND[s].train * 100) + '% trong ' + (until - now) + ' tháng (nghỉ ngơi lành nhanh gấp đôi).', 'bad');

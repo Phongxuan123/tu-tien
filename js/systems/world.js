@@ -43,6 +43,8 @@
   // Cái chết thường đi qua đề nghị Nghịch Thiên (chỉ người chơi, nếu còn lượt và Thiên cơ điểm).
   life.die = function (c, cause) {
     if (!c.alive) return;
+    if (c.kind === 'player' && TT.tt && TT.tt.nietBan(c)) return; // Phượng huyết: sống lại một lần
+    if (c.kind !== 'player' && TT.tt && TT.tt.cuu(c, cause)) return; // Thần y thủ: cứu người trong dàn
     if (c.kind === 'player' && TT.nt.offer(c, cause)) return;
     life.dieNow(c, cause);
   };
@@ -440,7 +442,8 @@
       : 'Bạn được sinh ra là ' + c.origin + ' tại ' + pl.n + ' (' + pl.faction + '), vùng ' + reg.n + '.', 'big');
     TT.log(c, 'Môi trường nơi đây: ' + reg.env.name + '. ' + reg.env.desc);
     TT.log(c, 'Tư chất của bạn: ' + c.tuchat.total + ' điểm (' + c.tuchat.attrs.map(a => a.n + ' ' + a.p).join(', ') + ').');
-    if (c.traitIds.length) TT.log(c, 'Tiên thiên: ' + c.traitIds.map(id => D.traitById[id].n).join(', ') + '.');
+    if (TT.tt && TT.tt.active(c)) TT.log(c, 'Tiên thiên: ' + TT.tt.lines(c) + '.');
+    else if (c.traitIds.length) TT.log(c, 'Tiên thiên: ' + c.traitIds.map(id => D.traitById[id].n).join(', ') + '.');
     if (c.ring) TT.log(c, 'Chiếc nhẫn trên ngón tay bạn phát sáng. Có tiếng thì thầm của một lão gia gia. Mệnh Long Ngạo Thiên!', 'big');
     TT.social.childhood(c);
     if (c.equip && c.equip.relic) TT.log(c, 'Pháp bảo bản mệnh ' + D.ITEMS[c.equip.relic].n + ' theo bạn qua kiếp, nhưng đã yếu đi nhiều.', 'good');
@@ -462,6 +465,7 @@
   life.inherit = function (prev, heir) {
     const w = TT.world, rel = TT.rel;
     heir.kind = 'player'; heir.tier = 'player'; heir.role = null;
+    if (TT.tt) TT.tt.migrate(heir);
     w.playerId = heir.id;
     heir.direction = 'can_bang'; heir.job = null; heir.path = null; heir.pathAsked = false; heir.pathMo = {}; heir.autoMove = true; heir.focus = 'train';
     heir.rules = prev.rules ? JSON.parse(JSON.stringify(prev.rules)) : TT.rules.defaults();

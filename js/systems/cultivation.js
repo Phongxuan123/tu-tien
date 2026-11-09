@@ -228,6 +228,7 @@
         c.hp = S.hpMax(c);
         TT.log(c, 'Đột phá thành công! Bạn đã đạt cảnh giới ' + D.REALM_NAMES[c.realm] + '.', 'big', c.brkNote); c.brkNote = null; TT.report.mark(c, 'realm', 'Đột phá lên ' + D.REALM_NAMES[c.realm]);
         if (c.kind === 'player') TT.bus.emit('dotpha:thanh-cong', { id: c.id, realm: c.realm });
+        if (c.kind === 'player') TT.tt.onBreak(c); // thức tỉnh tiên thiên ẩn (50%), Thiên đố anh tài
         TT.rep.add(c, 'danh', c.realm * 6);
         if (c.kind === 'player') { c.tcd += c.realm; TT.log(c, 'Thiên cơ điểm +' + c.realm + '.', 'good'); }
         if (guard) { TT.rel.add(c, guard, 6); TT.log(c, guard.name + ' hộ pháp trọn vẹn, ơn này bạn ghi nhớ.', 'good'); }

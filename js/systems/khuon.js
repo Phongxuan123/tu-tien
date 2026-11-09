@@ -68,7 +68,7 @@
   };
 
   // tam_ma chỉ hiện khi đạo tâm thấp hoặc đang mang tâm ma (đọc thuần).
-  kb.tamMaHien = c => { const T = K().tamMa || {}; return !!c && (c.daoTam < (T.daoTam == null ? 35 : T.daoTam) || (c.traitIds || []).indexOf(T.trait || 'tam_ma') >= 0); };
+  kb.tamMaHien = c => { const T = K().tamMa || {}; return !!c && (c.daoTam < (T.daoTam == null ? 35 : T.daoTam) * TT.tt.mul(c, 'vung') || TT.tt.hasOld(c, T.trait || 'tam_ma') || !!TT.tt.luat(c, 'tam_ma')); }; // tiên thiên: tam_ma luôn hiện, vung khó hiện hơn
 
   function cuThe(c, kh, ov) { // ov (AI1b): AI chọn phương án theo id { vet, muon, vat, vat_guong, vat_su, lat, ra_mat, noi_cam }; không có thì bốc bằng băm
     ov = ov || EMPTY;
@@ -105,6 +105,8 @@
         if (src.d_pham) ch.d_pham = addClue(sub(src.d_pham));
         if (src.lon) ch.lon = true;
         if (src.canh) ch.canh = clean(src.canh);
+        if (src.nghe) ch.nghe = src.nghe;
+        if (src.linh) ch.linh = src.linh;
         if (src.can_gan_bo) ch.can_gan_bo = clean(src.can_gan_bo);
         if (src.ep) ch.ep = clean(src.ep);
         if (src.bien) ch.bien = src.bien.map(b => ({ khi: clean(b.khi), d: addClue(sub(b.d)) }));
@@ -115,7 +117,7 @@
         else ch.lc = (nol ? lat.no.lc : src.lc).map(mk);
         return ch;
       });
-      return { i: n, id: P.id, n: P.n, tuoi: P.tuoi != null ? P.tuoi : K().tuoiPhan[pi], canh: clean(P.canh), tho: P.tho, cau_hoi: P.cau_hoi, biet: P.biet, chang: chs };
+      return { i: n, id: P.id, n: P.n, tuoi: P.tuoi != null ? P.tuoi : K().tuoiPhan[pi], canh: clean(P.canh), tho: P.tho, thay: P.thay, mo: P.mo, cau_hoi: P.cau_hoi, biet: P.biet, chang: chs };
     });
     return {
       v: 1, khuon: kh.id, arc: 'kbc_' + c.id, kd: kh.khuyet_diem, guong: guongVai, roleDan,
@@ -331,6 +333,10 @@
       const t = TT.story.fmt(c, st, m.t);
       S.manhMoi.push({ id, m: TT.world.months, chang: chId, phan: ph.i, t, hieu: TT.story.fmt(c, st, m.hieu) });
       TT.log(c, t, 'age'); const le = c.log[c.log.length - 1]; if (le && le.t === t) le.mm = 1; // giữ dòng nhật ký manh mối (không bị cắt khi nhật ký đầy)
+      if (TT.tt.luat(c, 'manh')) { // Trùng đồng, Thiên nhãn: đánh dấu manh mối ngay khi gặp (tô màu); Trùng đồng dùng nhiều thì đau đầu
+        const mx = S.manhMoi[S.manhMoi.length - 1]; if (mx) mx.dau = 1; if (le && le.t === t) le.mmx = 1;
+        if (TT.tt.has(c, 'trung_dong')) c.daoTam = Math.max(0, c.daoTam - 1);
+      }
     });
     if (ch.lat && !kbc.lat.da_no) {
       kbc.lat.da_no = true; kbc.lat.m = TT.world.months; if (kbc.biet.indexOf('lat') < 0) kbc.biet.push('lat');

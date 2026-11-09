@@ -60,8 +60,10 @@
       c.ntLife = (c.ntLife || 0) + D.NT.life[k];
       const costs = ['nghiệp +' + D.NT.nghiep[k], 'đạo tâm ' + D.NT.dao[k], 'thọ nguyên ' + Math.round(D.NT.life[k] * 100) + '%'];
       if (k === 1) {
-        const good = c.traitIds.filter(id => D.traitById[id].g).sort((a, b) => D.traitById[b].q - D.traitById[a].q)[0];
-        if (good) { c.traitIds.splice(c.traitIds.indexOf(good), 1); costs.push('mất tiên thiên "' + D.traitById[good].n + '"'); }
+        const lostTT = TT.tt.active(c) ? TT.tt.lose(c) : null;
+        const good = lostTT ? null : c.traitIds.filter(id => D.traitById[id].g).sort((a, b) => D.traitById[b].q - D.traitById[a].q)[0];
+        if (lostTT) costs.push('mất tiên thiên "' + lostTT.n + '"');
+        else if (good && !TT.tt.active(c)) { c.traitIds.splice(c.traitIds.indexOf(good), 1); costs.push('mất tiên thiên "' + D.traitById[good].n + '"'); }
         else { nt.shrinkTuChat(c, 0.85); costs.push('mất 15% tư chất'); }
       } else if (k === 2) {
         nt.shrinkTuChat(c, 0.7); c.thienPhat = true; costs.push('mất 30% tư chất', 'thiên phạt');

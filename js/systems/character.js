@@ -91,6 +91,8 @@
     // Người chơi (8A): tính cách bốn trục bốc bằng băm (muối là trạng thái rng, chỉ đọc), điểm khí vận lấy đúng lần rút baseKv ở trên.
     if (kind === 'player' && D.NATURE.on) { TT.kv.ensure(c); TT.nature.ensure(c, rng.getState()); if (c.ring) TT.kv.add(c, 2, 'Nhẫn'); }
     if (o2) TT.origin.apply(c, o2, origin);
+    // Người chơi: tiên thiên làm mới bốc bằng băm (muối là trạng thái rng, chỉ đọc); traitIds cũ vẫn bốc ở trên để dòng rng không đổi.
+    if (kind === 'player' && TT.tt && TT.tt.on(c)) TT.tt.roll(c, rng.getState());
     if (c.ring) c.baseKv += 30;
     c.hp = TT.stats.hpMax(c);
     w.chars[c.id] = c;

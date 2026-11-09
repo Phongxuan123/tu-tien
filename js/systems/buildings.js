@@ -93,8 +93,8 @@
     }) });
     out.options.push({ label: 'Nghe giảng, tụng kinh (' + TT.ls.fmt(feeKinh) + ')', disabled: once('kinhAt'), run: pay(feeKinh, () => {
       fl.kinhAt = now; c.daoTam = Math.min(100, (c.daoTam == null ? 50 : c.daoTam) + Sv.daoKinh); fl.kinh = (fl.kinh || 0) + 1;
-      if (c.traitIds.indexOf('tam_ma') >= 0 && fl.kinh >= Sv.kinhForTamMa) { c.traitIds = c.traitIds.filter(t => t !== 'tam_ma'); fl.kinh = 0; TT.log(c, 'Nghe giảng và tụng kinh đều đặn, tâm ma của bạn tan dần.', 'good'); return 'Tâm ma đã tan. Đạo tâm +' + Sv.daoKinh; }
-      return 'Tâm tĩnh hơn. Đạo tâm +' + Sv.daoKinh + (c.traitIds.indexOf('tam_ma') >= 0 ? ' (tâm ma cần nghe giảng thêm ' + Math.max(1, Sv.kinhForTamMa - fl.kinh) + ' lần)' : '');
+      if (TT.tt.hasOld(c, 'tam_ma') && fl.kinh >= Sv.kinhForTamMa) { TT.tt.dropOld(c, 'tam_ma'); fl.kinh = 0; TT.log(c, 'Nghe giảng và tụng kinh đều đặn, tâm ma của bạn tan dần.', 'good'); return 'Tâm ma đã tan. Đạo tâm +' + Sv.daoKinh; }
+      return 'Tâm tĩnh hơn. Đạo tâm +' + Sv.daoKinh + (TT.tt.hasOld(c, 'tam_ma') ? ' (tâm ma cần nghe giảng thêm ' + Math.max(1, Sv.kinhForTamMa - fl.kinh) + ' lần)' : '');
     }) });
     const need = fa.crisis(c.region) > 0 || TT.fac.atFront(c.region) || c.hp < TT.stats.hpMax(c) * 0.7;
     out.options.push({ label: 'Xin cứu trợ và nơi trú ngụ', disabled: once('cuuAt') || (need ? false : 'Hiện không có thiên tai, chiến loạn hay thương tích'), run: () => {

@@ -84,14 +84,19 @@
     // Áp hiệu ứng chỉ số: cộng dồn c.childFx, kẹp theo D.CHILDHOOD.cap; trả về mức thật đã áp.
     fx(c, key, d, ban) {
       const K = C().cap, fx = c.childFx = c.childFx || {}, k = c.child;
-      if (key === 'wake') return 0; // chờ 8C
+      if (key === 'wake') { // cửa thức tỉnh của tuổi thơ (Q-tien-thien mục 5): băm theo bước, không gọi rng
+        if (!(d > 0) || !TT.tt || !TT.tt.active(c)) return 0;
+        const n = (c.child && c.child.i) || 0;
+        return TT.tt.hidden(c).length && TT.tt.mk(TT.tt.hash((TT.world.seed || 0) + ':' + c.id + ':wake:' + n))() < 0.5 && TT.tt.wakeOne(c, 'tuổi thơ') ? 1 : 0;
+      }
       if (key === 'ban') {
         const o = ban && TT.world.chars[ban]; if (!o) return 0;
         const r = TT.rel.ensure(c, o), v = Math.max(-100, Math.min(100, r.v + d)); const got = v - r.v; r.v = v; fx.ban = (fx.ban || 0) + got; return got;
       }
       if (key === 'bad') {
-        if ((fx.bad || 0) >= K.bad || !D.traitById[d] || c.traitIds.indexOf(d) >= 0) return 0;
-        c.traitIds.push(d); fx.bad = (fx.bad || 0) + 1; fx.badId = d; return 1;
+        if ((fx.bad || 0) >= K.bad || !D.traitById[d] || TT.tt.hasOld(c, d) || TT.tt.owns(c, TT.tt.old2new(d))) return 0;
+        if (!TT.tt.addOld(c, d)) return 0;
+        fx.bad = (fx.bad || 0) + 1; fx.badId = d; return 1;
       }
       const cur = fx[key] || 0; let lo = -(K[key] != null ? K[key] : 0), hi = K[key] != null ? K[key] : 0;
       if (key === 'gold') { lo = -(k ? k.gold0 : c.gold); hi = k ? k.gold0 : c.gold; }
@@ -134,6 +139,7 @@
     finish(c) {
       if (!c.child || c.child.done) return;
       c.child.done = true;
+      if (TT.tt && TT.tt.active(c)) TT.tt.wakeRoll(c, TT.data.TIEN_THIEN_RULES.cuaThucTinh.tongKet12, 'tổng kết 12 tuổi'); // mỗi tiên thiên ẩn 30%
       [1, 2, 3].forEach(h => {
         const l = (c.childLog || []).filter(e => e.hoi === h);
         if (l.length) TT.log(c, 'Tuổi thơ (' + HOI[h] + '): ' + l.map(e => e.t + ' — ' + e.label).join('; ') + '.', 'age');
