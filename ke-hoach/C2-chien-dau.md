@@ -18,6 +18,8 @@ Tài liệu thiết kế, chưa có code. Phiên thiết kế bắt đầu 2026-
 
 Chưa chốt (còn hỏi): xem mục "Câu hỏi mở".
 
+**Công pháp và tâm pháp** được thiết kế chi tiết và lập kế hoạch ở `C3-cong-phap-tam-phap.md` (làm trước lõi trận). Các phiên C2-6 và C2-7 bên dưới được gộp vào C3 (CP1 đến CP6).
+
 ## Bản thiết kế (đề xuất, chờ duyệt)
 
 ### 1. Cấu trúc trận
