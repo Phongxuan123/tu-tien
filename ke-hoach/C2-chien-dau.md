@@ -12,6 +12,8 @@ Tài liệu thiết kế, chưa có code. Phiên thiết kế bắt đầu 2026-
 6. **Công pháp là bộ chiêu thức, không chỉ buff.** Có 3 loại: **Công, Thủ, Tụ**. Mỗi hệ ngũ hành có "chất" chiêu riêng (ví dụ Mộc: độc, Hỏa: thiêu đốt, Kim: sốc nhưng bị phản phệ, Thủy: nhiều đòn nhỏ, Thổ: rải cạm bẫy tạo môi trường). Các ví dụ là gợi ý, được đổi cho hợp.
 7. **Tâm pháp chính là đạo của người chơi, tự hoàn thiện bằng các lựa chọn đạo:** không phải bỏ đạo này chọn đạo khác. Khổ tu chọn đầu đời thì sau này đổi sang luyện nghề, phần khổ tu vẫn giữ. Cơ chế phạt khi bỏ đạo giữ nguyên (xem mục 11).
 8. **Tâm pháp: một chính và ba phụ.** Cách phát triển (tầng ngộ, cộng hưởng, đánh đổi) đã duyệt.
+10. **Giữ nguyên đặc trưng ngũ hành** (khắc chế, chất chiêu riêng từng hệ).
+11. **Bốn câu hỏi mở cũ (sổ quái liên đời, Giết/Tha, hàng, Cướp) để sau khi thiết kế xong lõi.**
 9. **Tụ phải thiết kế lại:** không được vừa mất nhịp vừa tốn khí (phạt đôi), và không được để khí làm sụp tam giác (xem mục 2 và 3).
 
 Chưa chốt (còn hỏi): xem mục "Câu hỏi mở".
@@ -20,8 +22,8 @@ Chưa chốt (còn hỏi): xem mục "Câu hỏi mở".
 
 ### 1. Cấu trúc trận
 - Tệp mới `js/systems/duel.js` (`TT.duel`), tách khỏi `combat.js`. Công tắc `D.DUEL.on`. Tắt thì mọi nơi dùng `combat.run()` như cũ và `node tools/baseline.js --check` trùng khít.
-- **3 nhịp**, mỗi nhịp người chơi chọn một thế. Sau 3 nhịp, bên còn tỉ lệ máu cao hơn thắng (cùng luật `combat.run`). Hết máu sớm thì dừng sớm.
-- Sau nhịp 2, nếu máu dưới 35%, được **hàng/rút** (giống `yield` hiện có, hoặc chạy theo luật `flee` hiện có).
+- **5 nhịp tiêu chuẩn** (đề xuất, xem mục 13), mỗi nhịp người chơi chọn một thế. Thủ lĩnh 6 nhịp với pha 2 từ nhịp 4. Sau hết nhịp, bên còn tỉ lệ máu cao hơn thắng (cùng luật `combat.run`). Hết máu sớm thì dừng sớm.
+- Từ nhịp 3 trở đi, nếu máu dưới 35%, được **hàng/rút** (giống `yield` hiện có, hoặc chạy theo luật `flee` hiện có).
 - Trạng thái là dữ liệu thuần trong `w.pending { type: 'duel' }` (lưu/tải giữa trận được, giống `wheel.js`). `rng` chỉ gọi khi tạo trận và khi phân xử một nhịp. Hàm đọc (ý đồ, mô tả) không gọi `rng`.
 
 ### 2. Tam giác thế và sát thương
@@ -127,6 +129,25 @@ Vấn đề của bản cũ: Tụ vừa mất nhịp vừa tốn khí là phạt
 - **Đánh đổi (đã duyệt):** mạch hoặc tâm pháp phụ có giá thật (ví dụ Thái Thượng Vong Tình: tu luyện nhanh nhưng giảm gắn bó).
 - **Ba phụ:** 8 tâm pháp hiện có (mua bằng đạo điểm) trở thành phụ, tối đa 3 chỗ (mở theo cảnh giới). Đổi phụ phải bế quan một thời gian.
 - **Ranh giới:** tâm pháp không cộng sát thương trực tiếp. Hai kênh nối sang chiến đấu là tốc độ nạp và điểm đọc.
+
+### 13. Bao nhiêu nhịp? (mô phỏng 2026-11-09)
+Mô hình rút gọn (ba thế, tam giác, Tụ nạp-bung, quái có tính cố định), 40.000 trận mỗi dòng, so người chơi chọn ngẫu nhiên và người chơi đọc được ý đồ quái 40%:
+| Số nhịp | Ngẫu nhiên thắng | Đọc 40% thắng | Cách biệt |
+|---|---|---|---|
+| 3 | 50% | 86% | 36 điểm |
+| 4 | 50% | 89% | 39 điểm |
+| 5 | 50% | 90% | 40 điểm |
+| 6 | 50% | 92% | 42 điểm |
+| 8 | 50% | 95% | 44 điểm |
+| 10 | 50% | 96% | 46 điểm |
+**Kết luận:** cách biệt giữa người đọc giỏi và người đoán bừa gần như bão hòa từ 4 đến 5 nhịp (gấp đôi độ dài chỉ thêm 4 đến 6 điểm). 8 đến 10 nhịp không sâu hơn mà chỉ mệt hơn. **Chọn 5 nhịp.** 5 nhịp đủ hai chu kỳ nạp-bung và để trạng thái (kéo dài 2 nhịp) có hiệu quả. 3 nhịp thì quá ngắn cho trạng thái.
+
+**Cảnh báo từ mô phỏng:** người đọc 40% đã thắng khoảng 90%, quá chắc. Chiều sâu không được tạo bằng độ dài mà bằng nội dung. Các biện pháp (đề xuất):
+1. **Quái thích nghi:** quái "xảo" phản lại thế người chơi vừa dùng với một xác suất, nên không thể bấm mãi một thế dù đã đọc. Người chơi phải tự đổi (chiến lược trộn), đây mới là chiều sâu thật của kéo búa bao.
+2. **Quái có chiêu riêng** (độc, băng, lửa...) theo hệ của nó, nên quái tạo trạng thái lên người chơi chứ không chỉ chọn thế. Quái thường 1 chiêu, thủ lĩnh 3 đến 4 chiêu và 2 pha.
+3. **Bộ ba công pháp:** mỗi người mang 3 công pháp, mỗi loại (Công, Thủ, Tụ) một cái, nên mỗi thế có chiêu riêng và hệ có thể pha trộn (Kim Công, Thủy Thủ, Hỏa Tụ). Thay cho "một công pháp chính duy nhất". Kho công pháp đã học vẫn là nơi đổi.
+4. **Kích nổ ngũ hành:** chiêu của hệ khắc trúng mục tiêu đang mang trạng thái của hệ bị khắc thì tiêu trạng thái đó và nổ hết sát thương còn lại cộng hiệu ứng (ví dụ Thủy dập Hỏa, Hỏa đốt cháy Mộc độc). Rẻ để làm, thưởng cho người biết ngũ hành.
+5. **Chế độ tự động:** game đã có chế độ để máy chọn thay (setMode, resolveDefault), nên `duel()` phải có người chơi máy chọn thế mặc định theo tính cách. Người không muốn bấm vẫn đi tiếp được.
 
 ### 12. Phiên code đề xuất
 | Phiên | Model | Việc |
