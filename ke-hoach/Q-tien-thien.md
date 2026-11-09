@@ -9,13 +9,13 @@
 2. **Tiên thiên đổi luật truyện**, không chỉ đổi số (mục 4).
 3. **Ô Huyết giữ** với 3 huyết mạch đơn giản, mỗi cái có lời nguyền; xương sống "huyết mạch" vẫn hoãn.
 4. **Người trong dàn định mệnh có một tiên thiên hiển thị** để kể chuyện (mục 7), không đổi mô phỏng NPC.
-5. Giữ từ kế hoạch cũ: **6 ô** (Thể, Cốt, Đồng, Huyết, Mệnh, Tâm) + **tật** không chiếm ô; **4 phẩm**; tỉ lệ **Thiên 5%, Quý 15%, Hiếm 30%, Thường 50%**, mỗi lần ra một cái Quý hoặc Thiên thì lần bốc sau tỉ lệ hai phẩm ấy **giảm một nửa**; bốc **1 đến 3** tiên thiên chuẩn + **0 đến 2** tật; xuất thân nghiêng loại hay ra; chỉ người chơi (NPC giữ cách cũ, `baseline --check` phải trùng khít).
+5. Giữ từ kế hoạch cũ: **6 ô** (Thể, Cốt, Đồng, Huyết, Mệnh, Tâm), **thêm 3 nhóm ngoài** (Tài, Duyên, Dị; bạn chốt 2026-11-09, mục 3b), tổng **9 nhóm**, mỗi nhóm tối đa một tiên thiên, + **tật** không chiếm nhóm; **mỗi người chỉ có 1 đến 3 tiên thiên, đa số 1 hoặc 2**, không ai có đủ các nhóm; **4 phẩm**; tỉ lệ **Thiên 5%, Quý 15%, Hiếm 30%, Thường 50%**, mỗi lần ra một cái Quý hoặc Thiên thì lần bốc sau tỉ lệ hai phẩm ấy **giảm một nửa**; bốc **1 đến 3** tiên thiên chuẩn + **0 đến 2** tật; xuất thân nghiêng loại hay ra; chỉ người chơi (NPC giữ cách cũ, `baseline --check` phải trùng khít).
 6. **Phẩm Quý và Thiên bắt buộc có lời nguyền** (luật 4).
 7. Hiệu ứng số **nhỏ** (thế giới tu chậm có chủ ý: khoảng 50 tuổi Luyện Khí, 130 tuổi Trúc Cơ): Quý khoảng +20 đến 30% tu luyện, Thiên khoảng +40 đến 45% kèm lời nguyền nặng.
 
 ## 2. Cấu trúc một tiên thiên
 ```
-{ id, n (tên), o: 'the'|'cot'|'dong'|'huyet'|'menh'|'tam'|'tat', p: 0 Thường | 1 Hiếm | 2 Quý | 3 Thiên,
+{ id, n (tên), o: 'the'|'cot'|'dong'|'huyet'|'menh'|'tam'|'tai'|'duyen'|'di'|'tat', p: 0 Thường | 1 Hiếm | 2 Quý | 3 Thiên,
   d (mô tả 1 câu), m: { hiệu chỉnh số, dùng khóa có sẵn của S.mod: hpMax, atk, nl, kv, luck, gold, train, brk, life },
   luat: { khóa luật truyện hoặc mô phỏng người chơi, mục 4 },
   nguyen (lời nguyền, bắt buộc với p ≥ 2: một câu cho người chơi + khóa luat thi hành),
@@ -24,7 +24,7 @@
   vai (vai trong dàn hợp với tiên thiên này, cho mục 7) }
 ```
 
-## 3. Danh sách đợt đầu (26 tiên thiên chuẩn + 7 tật = 33)
+## 3. Danh sách đợt đầu: sáu nhóm gốc (26 tiên thiên chuẩn + 7 tật = 33; thêm 20 ở mục 3b, tổng 53)
 Số liệu là đề xuất, phiên code chỉnh bằng life-sim (mục 8).
 
 ### Thể
@@ -88,6 +88,41 @@ Số liệu là đề xuất, phiên code chỉnh bằng life-sim (mục 8).
 | Thọ ngắn | Hiếm | thọ −15% |
 | Tâm ma quấn thân | Hiếm | đột phá −6%; **luật `tam_ma`**: lựa chọn tâm ma 🜏 hiện cả khi đạo tâm chưa thấp |
 
+## 3b. Ba nhóm ngoài: Tài, Duyên, Dị (20 tiên thiên; bạn chốt 2026-11-09)
+Chia bậc: 6 Thường, 7 Hiếm, 5 Quý, 2 Thiên. Nhóm **Tài** nối với nghề có sẵn (`js/data/jobs.js`: kiem, khi, dan, bua, tho_mo, tho_san, thuong_nhan, linh_danh, y_su).
+
+### Tài (thiên phú nghề)
+| Tên | Phẩm | Hiệu ứng | Lời nguyền / ghi chú |
+|---|---|---|---|
+| Tay khéo | Thường | nghề khí, bùa +15%; vàng kiếm được +10% | |
+| Mũi thính thảo dược | Thường | nghề đan +15%; tìm linh thảo +20% | |
+| Có khiếu buôn | Thường | mua rẻ hơn 5%, bán đắt hơn 5%; thiện cảm thương hội + | |
+| Kiếm tâm bẩm sinh | Hiếm | nghề kiếm +25%; thắng trận +5% | |
+| Đan tâm | Hiếm | luyện đan thành công +, phẩm đan cao hơn một bậc thỉnh thoảng | |
+| Phù thủ | Hiếm | nghề bùa +25%, vẽ bùa nhanh gấp rưỡi | |
+| Thần y thủ | Quý | nghề y +40%; **luật `cuu`**: cứu một người trong dàn khỏi một lần chết vì bệnh hoặc thương | **Y giả không tự y**: thương tật của chính bạn lành chậm ×1,5; người cầu y tìm đến không dứt (sự kiện cầu cứu tốn thời gian, từ chối thì mất danh) |
+| Thiên công | Thiên | mọi nghề +40%; thỉnh thoảng làm ra vật phẩm phẩm cao hiếm | **Vật hơn người**: mỗi món phẩm cao bạn làm ra kéo tới một kẻ tranh đoạt (`tranh_doat`); nghề ăn mất thời gian tu (tu luyện −15%) |
+
+### Duyên (người và xã hội)
+| Tên | Phẩm | Hiệu ứng | Lời nguyền / ghi chú |
+|---|---|---|---|
+| Miệng ngọt | Thường | thiện cảm khi giao du +20% | |
+| Mặt mũi dễ tin | Thường | thuyết phục, mặc cả, lừa dễ hơn; người ta hay nhờ vả bạn | |
+| Quý nhân phù trợ | Hiếm | **luật `quy_nhan`**: mỗi phần kịch bản có một lần người lạ giúp ở cửa ải (thử thách có hạn giảm 20% yêu cầu) | |
+| Khí chất lãnh tụ | Hiếm | thu đồ đệ dễ; công đóng góp tông +15%; thăng bậc tông nhanh hơn | |
+| Đào hoa | Quý | **luật `duyen` mạnh**: nhiều người nảy tình với bạn | **Nợ tình**: người bị bạn từ chối có thể thành tình địch hoặc kẻ thù; đạo lữ dễ ghen, gắn bó với đạo lữ khó giữ |
+| Hiệp danh | Quý | danh vọng ×2 khi làm việc nghĩa | **Danh lớn thì giặc nhiều**: kẻ thách đấu, kẻ ghen danh tìm tới; từ chối người cầu cứu thì mất danh gấp đôi |
+
+### Dị (dị năng)
+| Tên | Phẩm | Hiệu ứng | Lời nguyền / ghi chú |
+|---|---|---|---|
+| Ngủ ít | Thường | nghỉ ngơi ngắn hơn; tu luyện +5% | |
+| Giấc mơ báo trước | Hiếm | **luật `mo_bao`**: mỗi phần có một giấc mơ mơ hồ về điều sắp tới (bản nhẹ của Thiên nhãn, không có lời nguyền) | |
+| Thú ngữ | Hiếm | yêu thú ít tấn công (gặp yêu thú −25%); có thể thuần một linh thú qua sự kiện | |
+| Thông linh | Quý | **luật `thong_linh`**: ở chặng gặt và cao trào, người trong dàn đã chết có thể "nói" một câu | **Âm khí**: thọ −10%; tâm ma đến nhiều hơn; tà tông luyện hồn để ý bạn |
+| Bách độc bất xâm | Quý | miễn độc (mưa độc, độc trong sự kiện); sống khỏe ở vùng đầm độc | **Thuốc cũng không vào**: đan dược hồi phục và đột phá chỉ còn nửa hiệu quả |
+| Luân hồi ký ức | Thiên | khởi đầu nhớ một công pháp kiếp trước; **luật `tien_kiep`**: mỗi phần hé lộ một mảnh ký ức kiếp trước (đọc Sổ đời nếu có, không thì từ dữ liệu viết sẵn) | **Nợ kiếp trước**: kẻ thù kiếp trước tìm đến (kẻ thù định mệnh dựng sớm); tính cách bị kéo dần về phía tính cách kiếp trước |
+
 ## 4. Luật truyện và luật người chơi (bộ máy đọc cờ, rẻ)
 | Khóa | Chỗ đọc | Tác dụng |
 |---|---|---|
@@ -106,6 +141,14 @@ Số liệu là đề xuất, phiên code chỉnh bằng life-sim (mục 8).
 | `niet_ban` | chết | sống lại một lần, mất tu vi cảnh giới, quên một người |
 | `vo_tinh` | gắn bó, kiểu `hy_sinh` | gắn bó ×0,5; khóa `hy_sinh` vì người có gắn bó < 3 |
 | `lanh`, `ne`, `tim`, `chien`, `yeu`, `ky_ngo` | mô phỏng người chơi | hệ số thương lành, né nguy, tìm đồ, thắng trận, gặp yêu thú, kỳ ngộ |
+| `nghe_<id>` | nghề (`TT.job`, `c.craft`) | hệ số nghề theo id nghề (kiem, khi, dan, bua, y_su...) |
+| `cuu` | dàn, chết vì bệnh hoặc thương | cứu một người trong dàn một lần |
+| `tranh_doat` | làm ra vật phẩm phẩm cao | sự kiện kẻ tranh đoạt |
+| `quy_nhan` | thử thách có hạn | mỗi phần một lần giảm 20% yêu cầu |
+| `mo_bao` | mở phần | một giấc mơ mơ hồ (trường `mo` trong khuôn; thiếu thì lấy dòng `thay`) |
+| `thong_linh` | chặng gặt, cao trào | một câu của người đã chết trong dàn (trường `linh` trong chặng; thiếu thì bỏ qua) |
+| `tien_kiep` | mở phần | một mảnh ký ức kiếp trước |
+| `dao_hoa`, `hiep_danh`, `y_gia` | quan hệ, danh, sự kiện | các lời nguyền tương ứng ở mục 3b |
 
 ## 5. Ẩn và thức tỉnh
 - Ẩn theo `an`; khi ẩn, Hồ sơ hiện ô "???" với **dấu hiệu** (ví dụ Trùng đồng: "Đôi lúc nhìn vào gương, bạn thấy mắt mình có hai đồng tử."), hiệu ứng số **chưa** có, luật truyện **chưa** có, lời nguyền **chưa** có.
@@ -113,7 +156,7 @@ Số liệu là đề xuất, phiên code chỉnh bằng life-sim (mục 8).
 - **Mất:** chỉ qua hậu quả truyện `fx.tt_mat` (ví dụ cấm thuật phản phệ ở khuôn "kiêu hãnh" phần 4).
 
 ## 6. Bốc lúc sinh
-- Số tiên thiên chuẩn: 1 (50%), 2 (35%), 3 (15%); mỗi lần bốc: chọn phẩm theo tỉ lệ (có giảm một nửa), rồi chọn tiên thiên trong phẩm ấy **ở ô còn trống**, trọng số ×2 nếu khớp thẻ xuất thân. Tật: 0 (55%), 1 (35%), 2 (10%).
+- Số tiên thiên chuẩn: 1 (50%), 2 (35%), 3 (15%), nên **đa số người có 1 hoặc 2**; mỗi lần bốc: chọn phẩm theo tỉ lệ (có giảm một nửa), rồi chọn tiên thiên trong phẩm ấy **ở nhóm còn trống** (9 nhóm), trọng số ×2 nếu khớp thẻ xuất thân. Tật: 0 (55%), 1 (35%), 2 (10%).
 - Bốc bằng **băm** (hạt giống thế giới + id), không gọi `rng`, như tính cách 8A; nút "Bốc lại" trong hộp Đời mới bốc lại cả tiên thiên.
 - Tổng số Quý và Thiên tối đa 3.
 
@@ -132,8 +175,9 @@ Số liệu là đề xuất, phiên code chỉnh bằng life-sim (mục 8).
 ## 10. Chặng làm
 | Chặng | Model | Việc |
 |---|---|---|
-| **TT-d** | Haiku | dữ liệu `js/data/tienthien.js` (`D.TIEN_THIEN`) đúng mục 2, 3: tên, ô, phẩm, mô tả, hiệu ứng, luật, lời nguyền, ẩn, dấu hiệu, thẻ, vai; bài kiểm cú pháp |
+| **TT-d** | Haiku | dữ liệu `js/data/tienthien.js` (`D.TIEN_THIEN`) đúng mục 2, 3, 3b (53 mục): tên, ô, phẩm, mô tả, hiệu ứng, luật, lời nguyền, ẩn, dấu hiệu, thẻ, vai; bài kiểm cú pháp |
 | **TT** | Sonnet | cơ chế: bốc (mục 6), ẩn và thức tỉnh (5), luật (4), dàn (7), chuyển bản cũ (9), giao diện (Hồ sơ 6 ô + hàng tật, chip màu theo phẩm, ô ẩn với dấu hiệu, lời nguyền hiện khi đã thức tỉnh; hộp Đời mới; bảng 🛠), đo (8) |
 
 ## 11. Nhật ký
 - 2026-11-06: lập kế hoạch làm mới, bạn chốt bốn điểm ở mục 1.
+- 2026-11-09: bạn chốt thêm **3 nhóm ngoài (Tài, Duyên, Dị) với 20 tiên thiên chia bậc** (mục 3b), tổng 9 nhóm, 46 chuẩn + 7 tật; nhắc lại mỗi người chỉ 1 đến 3 tiên thiên, đa số 1 hoặc 2.
