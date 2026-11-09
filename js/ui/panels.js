@@ -17,7 +17,13 @@
     const attrs = c.tuchat.attrs.slice().sort((a, b) => b.p - a.p).map(a =>
       '<div>' + a.n + (a.di ? ' (biến dị)' : '') + ': <b>' + a.p + '</b><div class="bar ' + (a.di ? 'di' : 'el') +
       '"><i style="width:' + Math.min(100, a.p / 2) + '%"></i></div></div>').join('');
-    const traits = c.traitIds.length
+    const ttv = TT.tt.active(c) ? TT.tt.view(c) : null;
+    const traits = ttv ? (ttv.groups.length || ttv.tat.length || ttv.hidden.length
+      ? ttv.groups.map(g => '<div class="ttg"><b>' + g.n + '</b> ' + g.items.map(x => TT.tt.chipHtml(x, ui.esc)).join('') + '</div>').join('') +
+        (ttv.tat.length ? '<div class="ttg"><b>Tật</b> ' + ttv.tat.map(x => TT.tt.chipHtml(x, ui.esc)).join('') + '</div>' : '') +
+        ttv.hidden.map(x => '<div class="ttg"><span class="chip an" title="' + ui.esc(x.dau) + '">???</span> <span class="small">' + ui.esc(x.dau) + '</span></div>').join('')
+      : '<span class="small">Không có</span>')
+      : c.traitIds.length
       ? c.traitIds.map(id => {
         const x = D.traitById[id];
         return '<span class="chip q' + x.q + (x.g ? '' : ' bad') + '" title="' + ui.esc(x.d) + ' (phẩm ' + D.QNAME[x.q] + ')">' +
@@ -140,6 +146,8 @@
     const body = h('div', { class: 'mbody' });
     body.appendChild(h('h3', { class: 'mtitle' }, d.title));
     String(d.text || '').split('\n').filter(x => x.trim()).forEach(line => body.appendChild(h('p', { class: 'mtext' }, line)));
+    if (d.nghe) body.appendChild(h('p', { class: 'mtext nghe' }, '👂 Điều bạn nghe được: ' + d.nghe)); // luật `nghe` (Thiên lý nhĩ)
+    if (d.linh) body.appendChild(h('p', { class: 'mtext nghe' }, '👻 Người đã khuất nói: ' + d.linh)); // luật `thong_linh`
     // hoàn cảnh hiện tại (để quyết định có cơ sở)
     const S = TT.stats, ctx = ['Sinh lực ' + Math.round(c.hp) + '/' + S.hpMax(c), 'Tu vi ' + Math.floor(c.xp) + '/' + (c.realm < 6 ? D.NEED[Math.min(5, c.realm)] : '∞'), 'Linh thạch ' + (TT.ls ? TT.ls.fmt(TT.ls.wealth(c)) : Math.floor(c.gold))];
     if (TT.loss && TT.loss.active(c)) ctx.push(D.WOUND[c.wound.sev].n + ' còn ' + TT.loss.left(c) + ' tháng');

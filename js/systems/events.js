@@ -24,7 +24,7 @@
     // Đánh nhanh một đối thủ có sức mạnh "enemy". M6 sẽ thay bằng chiến đấu theo hiệp.
     fight(c, enemy) {
       const a = S.atk(c);
-      return rng.P(rng.clamp(a / (a + enemy) + S.luck(c) * 0.005, 0.05, 0.95));
+      return rng.P(rng.clamp((a / (a + enemy) + S.luck(c) * 0.005) * TT.tt.mul(c, 'chien'), 0.05, 0.95));
     },
     dao(c, n) { c.daoTam = rng.clamp(c.daoTam + n, 0, 100); },
     // Tặng vật phẩm vào túi (chỉ người chơi dùng túi). Trả về tên để ghép vào chữ.
@@ -65,11 +65,13 @@
     },
     addGoodTrait(c) {
       const maxQ = rng.P(0.12) ? 2 : 1;
+      if (TT.tt.active(c)) { const t = TT.tt.addRandom(c, maxQ); return t ? { n: t.n, q: t.p, ttPham: TT.tt.PHAM[t.p].toLowerCase() } : null; } // tiên thiên làm mới: nhóm còn trống, đã thức tỉnh
       const pool = D.TRAITS.filter(t => t.g === 1 && t.q <= maxQ && c.traitIds.indexOf(t.id) < 0);
       if (!pool.length) return null;
       const t = rng.pick(pool); c.traitIds.push(t.id); return t;
     },
     removeBadTrait(c) {
+      if (TT.tt.active(c)) return TT.tt.removeBad(c);
       const bad = c.traitIds.filter(id => !D.traitById[id].g);
       if (!bad.length) return null;
       const id = rng.pick(bad); c.traitIds.splice(c.traitIds.indexOf(id), 1); return D.traitById[id];
@@ -78,7 +80,7 @@
     // Kỳ ngộ: với xác suất p (cộng thêm theo khí vận) xảy ra một đổi vận. "only" giới hạn loại kết quả.
     // Trả về {t, cls} hoặc null nếu không có kỳ ngộ.
     kyNgo(c, p, only) {
-      p = rng.clamp(p + Math.max(0, S.kv(c)) * 0.001, 0, 0.6);
+      p = rng.clamp(p * TT.tt.mul(c, 'ky_ngo') + Math.max(0, S.kv(c)) * 0.001, 0, 0.6);
       if (!rng.P(p)) return null;
       const opts = D.FATE.filter(f => (!only || only.indexOf(f.id) >= 0) && FATE[f.id].ok(c));
       if (!opts.length) return null;
@@ -93,10 +95,10 @@
   const FATE = {
     tu_chat: { ok: () => true, run: c => { const a = ev.addTuChat(c, rng.RI(6, 18)); return 'Linh khí tẩy luyện kinh mạch, tư chất hệ ' + a + ' tăng mạnh!'; } },
     di: { ok: c => !c.tuchat.attrs.some(a => a.di), run: c => 'Huyết mạch ẩn thức tỉnh, bạn có thêm thuộc tính biến dị hệ ' + ev.awakenDi(c) + '!' },
-    xoa: { ok: c => c.traitIds.some(id => !D.traitById[id].g), run: c => 'Nghiệp chướng "' + ev.removeBadTrait(c).n + '" được hóa giải, bạn nhẹ người hẳn!' },
+    xoa: { ok: c => (TT.tt.active(c) ? TT.tt.hasBad(c) : c.traitIds.some(id => !D.traitById[id].g)), run: c => 'Nghiệp chướng "' + ev.removeBadTrait(c).n + '" được hóa giải, bạn nhẹ người hẳn!' },
     tot: {
-      ok: c => c.traitIds.length < 5,
-      run: c => { const t = ev.addGoodTrait(c); return t ? 'Bạn nhận được tiên thiên "' + t.n + '" (phẩm ' + D.QNAME[t.q] + ')!' : 'Linh quang chợt lóe rồi tắt.'; }
+      ok: c => (TT.tt.active(c) ? TT.tt.list(c).filter(e => D.tienThienById[e.id].o !== 'tat').length < 3 : c.traitIds.length < 5),
+      run: c => { const t = ev.addGoodTrait(c); return t ? 'Bạn nhận được tiên thiên "' + t.n + '" (phẩm ' + (t.ttPham || D.QNAME[t.q]) + ')!' : 'Linh quang chợt lóe rồi tắt.'; }
     },
     // Người chơi (8A): +2 điểm khí vận thay cho baseKv += 3..8; vẫn rút số như cũ để dòng rng của thế giới không đổi.
     kv: { ok: () => true, run: c => { const g = rng.RI(3, 8); if (c.kind === 'player' && D.NATURE.on) TT.kv.add(c, 2, 'kỳ ngộ vận mệnh'); else c.baseKv += g; c.known.kv = true; return 'Khí vận của bạn tăng lên rõ rệt, và bạn cảm nhận được nó.'; } },

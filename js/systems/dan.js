@@ -53,13 +53,13 @@
     if (vai === 'su') return sty.pickNpc(c, { pick: 'su', dung_moi: true }, taken, null);
     if (vai === 'doi_thu') return sty.pickNpc(c, { pick: 'dong_ky', dung_moi: true }, taken, null);
     if (vai === 'huynh') return sty.pickNpc(c, { pick: 'ky_uc', dung_moi: true }, taken, null);
-    if (vai === 'thuong') return TT.bond.main(c);
+    if (vai === 'thuong') return TT.bond.main(c) || (TT.tt.luat(c, 'duyen') && TT.age(c) >= 18 ? sty.pickNpc(c, { pick: 'tinh' }, taken, null) : null); // Hồ huyết, Đào hoa: người thương xuất hiện sớm hơn
     if (vai === 'ke_thu') {
       let best = null;
       TT.rel.list(c).forEach(x => { if (x.r.k === 'thu' && x.c && x.c.alive && x.c.kind === 'npc' && taken.indexOf(x.c.id) < 0 && (!best || x.r.v < best.r.v)) best = x; });
-      if (!best && c.story && c.story.kbc && c.story.kbc.dung_ke_thu) { // AI1a: kịch bản cụ thể cần kẻ bóng tối ra mắt từ phần 1: dựng người cùng nơi, cùng lứa
+      if (!best && ((c.story && c.story.kbc && c.story.kbc.dung_ke_thu) || (TT.tt.luat(c, 'thien_mang') && TT.age(c) >= 14))) { // Thiên Đạo nhìn bạn / nợ kiếp trước: kẻ thù định mệnh dựng sớm, hơn một bậc // AI1a: kịch bản cụ thể cần kẻ bóng tối ra mắt từ phần 1: dựng người cùng nơi, cùng lứa
         const n = TT.life.spawnNpc(Math.max(13, TT.age(c) + TT.rng.RI(-2, 3)), c.region);
-        if (n) { n.place = c.place; n.dest = null; n.travel = null; }
+        if (n) { n.place = c.place; n.dest = null; n.travel = null; if (TT.tt.luat(c, 'thien_mang') && n.realm < 3) { n.realm++; n.xp = 0; n.hp = TT.stats.hpMax(n); } }
         return n;
       }
       return best && best.c;
@@ -83,7 +83,7 @@
       if (!spec) return true;
       if (Array.isArray(spec)) return spec.every(x => dan.ok(c, x));
       if (spec.hoac) return spec.hoac.some(x => dan.ok(c, x));
-      return dan.gan(c, spec.dan) >= (spec.min != null ? spec.min : KC().gb);
+      return dan.gan(c, spec.dan) >= (spec.min != null ? spec.min : KC().gb - (TT.tt.luat(c, 'co') ? 1 : 0)); // Mệnh cô tinh: luật ba lần hạ còn hai
     },
     // Người trong dàn đang ở cùng vùng, để hiện trên cảnh: [NPC].
     people(c) {
@@ -94,7 +94,7 @@
     // Dòng cho tab Nhiệm vụ: [{ vai, ten, n (tên vai), gb, sp, alive }].
     rows(c) {
       const s = S(c);
-      return K().dan.vai.filter(v => s.dan[v] || s.sp[v]).map(v => { const o = dan.get(c, v); return { vai: v, n: K().dan.ten[v], ten: o ? o.name : '?', gb: s.gb[v] || 0, sp: s.sp[v] || '', alive: !!(o && o.alive && !o.left) }; });
+      return K().dan.vai.filter(v => s.dan[v] || s.sp[v]).map(v => { const o = dan.get(c, v); return { vai: v, n: K().dan.ten[v], ten: o ? o.name : '?', tt: TT.tt.vaiName(c, v), gb: s.gb[v] || 0, sp: s.sp[v] || '', alive: !!(o && o.alive && !o.left) }; });
     },
     nhap: (c) => S(c).no.slice(),
 
@@ -113,6 +113,7 @@
     gain(c, vai, d, why) {
       const s = ensure(c); if (!s || !K().dan.vai.includes(vai)) return 0;
       const o = dan.dung(c, vai); if (!o) return 0;
+      if (d > 0) d *= TT.tt.mul(c, 'vo_tinh'); // Vô tình đạo tâm: gắn bó tăng chậm một nửa
       s.gb[vai] = Math.max(0, Math.min(30, (s.gb[vai] || 0) + d));
       return d;
     },
@@ -188,7 +189,7 @@
       const age = TT.age(c);
       if (age >= 6) { dan.dung(c, 'than_nhan'); dan.dung(c, 'ban'); }
       if (s.arcs.bb_a1 || age >= 16) { dan.dung(c, 'su'); dan.dung(c, 'doi_thu'); dan.dung(c, 'huynh'); }
-      if (!s.dan.thuong && !s.sp.thuong && TT.bond.main(c)) dan.dung(c, 'thuong');
+      if (!s.dan.thuong && !s.sp.thuong && (TT.bond.main(c) || (TT.tt.luat(c, 'duyen') && age >= 18))) dan.dung(c, 'thuong');
       if (!s.dan.ke_thu && !s.sp.ke_thu) dan.dung(c, 'ke_thu');
       if (!s.dan.ke_thua && !s.sp.ke_thua) dan.dung(c, 'ke_thua');
     },
@@ -215,10 +216,10 @@
           y.am = yr;
           TT.log(c, t.t.replace(/\{vai\}/g, o.name).replace(/\{ten\}/g, c.name), 'good');
         }
-        s.gb[v] = Math.min(30, (s.gb[v] || 0) + 1);
+        s.gb[v] = Math.min(30, (s.gb[v] || 0) + TT.tt.mul(c, 'vo_tinh'));
         TT.rel.add(c, o, 2, 'khoảnh khắc ấm');
       });
     },
-    tick(c) { if (!ensure(c)) return; dan.build(c); dan.sync(c); dan.warm(c); }
+    tick(c) { if (!ensure(c)) return; dan.build(c); dan.sync(c); dan.warm(c); TT.tt.yearly(c); }
   };
 })();

@@ -114,6 +114,22 @@
     dev.mark(p, 'Bốc lại tư chất → tổng ' + p.tuchat.total);
     return true;
   };
+  // Tiên thiên làm mới (c.tt): thêm/bớt, ép thức tỉnh hoặc ẩn lại.
+  dev.toggleTT = function (id) {
+    const p = P(), t = D.tienThienById && D.tienThienById[id]; if (!p || !t || !TT.tt.active(p)) return false;
+    const i = p.tt.findIndex(e => e.id === id);
+    if (i >= 0) { TT.tt.undoWake(p, p.tt[i]); p.tt.splice(i, 1); }
+    else { const e = { id, an: 0, thuc_tinh_luc: TT.world.months }; const j = p.tt.findIndex(x => D.tienThienById[x.id].o === t.o && t.o !== 'tat'); if (j >= 0) { TT.tt.undoWake(p, p.tt[j]); p.tt.splice(j, 1); } p.tt.push(e); TT.tt.applyWake(p, e, true); }
+    dev.hpFix(p);
+    dev.mark(p, 'Tiên thiên «' + t.n + '» → ' + (i >= 0 ? 'bỏ' : 'thêm'));
+    return true;
+  };
+  dev.wakeTT = function (id, hide) {
+    const p = P(); if (!p || !TT.tt.active(p)) return false;
+    const ok = TT.tt.force(p, id, !!hide); dev.hpFix(p);
+    dev.mark(p, 'Tiên thiên «' + TT.tt.name(id) + '» → ' + (hide ? 'ẩn lại' : 'ép thức tỉnh'));
+    return ok;
+  };
   dev.toggleTrait = function (id) {
     const p = P(), t = D.traitById && D.traitById[id]; if (!p || !t) return false;
     const i = p.traitIds.indexOf(id);
@@ -413,7 +429,14 @@
       box.appendChild(h('button', { onclick: () => act(() => dev.rerollTuchat()) }, 'Bốc lại tư chất'));
     });
 
-    sec('traits', 'Tiên thiên (' + p.traitIds.length + ')', box => {
+    if (TT.tt.active(p)) sec('traits', 'Tiên thiên mới (' + p.tt.length + ')', box => {
+      D.TIEN_THIEN.forEach(t => {
+        const e = p.tt.find(x => x.id === t.id), on = !!e;
+        const row = h('div', { class: 'tr' }, h('label', { title: t.d + (t.nguyen ? ' Lời nguyền: ' + t.nguyen : '') }, h('input', { type: 'checkbox', checked: on ? 'checked' : null, onchange: () => act(() => dev.toggleTT(t.id)) }), ' ' + t.n + ' (' + TT.tt.PHAM[t.p] + (t.o === 'tat' ? ', tật' : '') + ')' + (on && e.an ? ' [ẩn]' : '')));
+        if (on) row.appendChild(h('button', { class: 'sm', onclick: () => act(() => dev.wakeTT(t.id, !e.an)) }, e.an ? 'Thức tỉnh' : 'Ẩn lại'));
+        box.appendChild(row);
+      });
+    }); else sec('traits', 'Tiên thiên (' + p.traitIds.length + ')', box => {
       D.TRAITS.forEach(t => {
         const on = p.traitIds.indexOf(t.id) >= 0;
         box.appendChild(h('label', { class: 'tr', title: t.d }, h('input', { type: 'checkbox', checked: on ? 'checked' : null, onchange: () => act(() => dev.toggleTrait(t.id)) }), ' ' + t.n + (t.g ? '' : ' ✗')));

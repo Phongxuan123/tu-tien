@@ -21,6 +21,7 @@
   function fmt(c, st, text) {
     return String(text || '').replace(SLOT, (m, k) => {
       if (k === 'ten') return c.name;
+      if (k === 'tt_vai') return (TT.tt && TT.tt.slotVai(c, st)) || 'một điều khó gọi tên'; // tiên thiên hiển thị của người ở vai (Q-tien-thien mục 7)
       if (st && st.khe && st.khe[k]) return st.khe[k]; // K1: khe kịch bản (thế lực, vật)
       const id = st && st.vai && st.vai[k], o = id && TT.world.chars[id];
       return o ? o.name : (st && st.ten && st.ten[k]) || 'người ấy'; // st.ten (AI1a): tên đã nhớ khi người ở vai mất, bị xóa khỏi thế giới
@@ -107,10 +108,12 @@
     if (fx.hp) { c.hp = Math.max(1, Math.min(S.hpMax(c), c.hp + fx.hp)); ghi('Sinh lực ' + sgn(fx.hp)); }
     if (fx.daoTam) { c.daoTam = Math.max(0, Math.min(100, c.daoTam + fx.daoTam)); ghi('Đạo tâm ' + sgn(fx.daoTam)); }
     if (fx.nghiep) { c.nghiep = Math.max(0, (c.nghiep || 0) + fx.nghiep); ghi('Nghiệp ' + sgn(fx.nghiep)); }
-    if (fx.rep) Object.keys(fx.rep).forEach(k => { TT.rep.add(c, k, fx.rep[k]); ghi((k === 'danh' ? 'Danh ' : 'Chính khí ') + sgn(fx.rep[k])); });
+    if (fx.rep) Object.keys(fx.rep).forEach(k => { const v = k === 'danh' && fx.rep[k] > 0 && TT.tt.luat(c, 'hiep_danh') ? fx.rep[k] * 2 : fx.rep[k]; TT.rep.add(c, k, v); ghi((k === 'danh' ? 'Danh ' : 'Chính khí ') + sgn(v)); }); // Hiệp danh: danh vọng ×2 khi làm việc nghĩa
     if (fx.rel) { const o = st && st.vai && TT.world.chars[st.vai[fx.rel.vai]]; if (o) { TT.rel.add(c, o, fx.rel.d, why); ghi('Thiện cảm với ' + o.name + ' ' + sgn(fx.rel.d)); } }
     if (fx.flag) [].concat(fx.flag).forEach(f => { c.flags[f] = 1; });
     if (fx.kv) { if (fx.kv > 0) TT.kv.add(c, fx.kv, why); else if (TT.kv.can(c, -fx.kv)) TT.kv.spend(c, -fx.kv, why); ghi('Khí vận ' + sgn(fx.kv)); }
+    if (fx.tt_thuc) { const e = TT.tt.wakeOne(c, 'trong truyện', fx.tt_thuc === true ? null : fx.tt_thuc); if (e) ghi('Tiên thiên thức tỉnh: ' + TT.tt.name(e.id)); } // hậu quả truyện đánh thức tiên thiên ẩn (mạnh nhất, hoặc id chỉ định)
+    if (fx.tt_mat) { const t = TT.tt.lose(c, fx.tt_mat === true ? null : fx.tt_mat, 'hậu quả trong truyện'); if (t) ghi('Mất tiên thiên: ' + t.n); }
     if (fx.ax) Object.keys(fx.ax).forEach(a => TT.nature.shift(c, a, fx.ax[a], why, true));
     if (isKb(c)) { // K1: hậu quả thật lên người trong dàn định mệnh, vật kỷ niệm, bậc tông
       const dn = v => TT.dan.name(c, v), dd = TT.dan;
@@ -166,6 +169,11 @@
       if (a.kv) { parts.push(a.kv + ' khí vận'); if (!mc && !o.disabled && !TT.kv.can(c, a.kv)) { o.disabled = true; o.why = 'Cần ' + a.kv + ' điểm khí vận (bạn có ' + TT.kv.pts(c) + ').'; } }
       o.giaText = 'Giá: ' + parts.join(', ');
     }
+    // Vô tình đạo tâm: lựa chọn `hy_sinh` vì người có gắn bó dưới 3 bị khóa (Q-tien-thien mục 4).
+    if (!o.disabled && TT.tt.luat(c, 'vo_tinh') && lc.key === 'hy_sinh' && TT.dan.on(c)) {
+      const v = lc.fx && lc.fx.gan_bo && lc.fx.gan_bo.dan;
+      if (v && TT.dan.gan(c, v) < 3) { o.disabled = true; o.why = 'Vô tình đạo tâm: bạn chưa đủ gắn bó với người ấy để hy sinh vì họ.'; }
+    }
     // Khoảng cách tính cách: điểm trục ngược chiều hướng lựa chọn. Đủ xa thì khóa (trừ lựa chọn mặc định `mac`, để luôn còn đường đi).
     const dist = oppose(c, lc);
     o.dist = dist.v;
@@ -196,6 +204,10 @@
     let def = -1, bv = -Infinity;
     choices.forEach((x, i) => { if (!x.disabled && x.fit > bv + 1e-9) { bv = x.fit; def = i; } });
     const d = { type: 'story', charId: c.id, tier: 2, timeout: kb && ch.lon ? K().kbc.lonGiay : K().timeout, arc: arc.id, ch: chId, title: fmt(c, st, ch.t), text: fmt(c, st, dText(c, ch)), choices, def: def < 0 ? 0 : def };
+    if (kb && ch.lon) { // Thiên lý nhĩ / Thông linh: thêm một dòng cho cảnh lớn (chữ viết sẵn trong chặng, thiếu thì bỏ qua)
+      if (ch.nghe && TT.tt.luat(c, 'nghe')) d.nghe = fmt(c, st, ch.nghe);
+      if (ch.linh && TT.tt.luat(c, 'thong_linh') && TT.dan.on(c) && ['dao', 'cao_trao'].indexOf((TT.kb.phanOf(arc, chId) || {}).nhip) >= 0 && Object.keys(c.story.sp || {}).some(v => c.story.sp[v] === 'chet')) d.linh = fmt(c, st, ch.linh);
+    }
     if (kb && ch.lon) { d.lon = true; if (ch.canh) d.canh = { gio: ch.canh.gio || '', thoi_tiet: ch.canh.thoi_tiet || '' }; }
     return d;
   }

@@ -93,7 +93,7 @@
     },
     mixTraits(parents) {
       const out = TT.rollTraits();
-      parents.forEach(par => par.traitIds.forEach(id => {
+      parents.forEach(par => TT.tt.ids(par).forEach(id => {
         const t = D.traitById[id];
         if (out.indexOf(id) < 0 && rng.P(t.g ? 0.15 : 0.06)) out.push(id);
       }));

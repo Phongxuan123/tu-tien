@@ -52,6 +52,7 @@ const TT = window.TT, D = TT.data, S = TT.stats;
 D.STORY.nhip.on = false; // bộ điều nhịp hộp (N1b) tắt cho các bài cũ (mỗi bài đo cơ chế riêng); bài "Nhịp quyết định" và K1 bật lại khi cần
 TT.config.autosaveMonths = 1e12; // không để bài kiểm thử ghi đè bản lưu của game thật
 TT.config.persistMeta = false;   // và không làm bẩn bộ sưu tập kết cục thật
+D.TIEN_THIEN_RULES.on = false; // tiên thiên làm mới tắt cho các bài cũ (chúng đo cơ chế riêng và sửa c.traitIds của người chơi); bài "Tiên thiên (TT)" tự bật qua ttOn()
 const Y100 = 1200;
 
 function fingerprint() {
@@ -5523,6 +5524,124 @@ test('Dữ liệu tiên thiên (TT-d): bảng tỉ lệ đủ 100%, trần Quý/
     ok(D.tienThienById[moi], 'id mới không có: ' + cu + ' -> ' + moi);
   }
 });
+
+// ================= Tiên thiên làm mới (TT): bốc, ẩn/thức tỉnh, luật, chuyển bản, công tắc =================
+const ttOn = fn => () => { D.TIEN_THIEN_RULES.on = true; try { fn(); } finally { D.TIEN_THIEN_RULES.on = false; } };
+const TTX = () => TT.tt, ttSet = (p, ids) => { p.tt = ids.map(i => ({ id: i, an: 0, thuc_tinh_luc: 0 })); return p; };
+test('Tiên thiên (TT): bốc bằng băm: không đụng rng, tái lập, 1-3 chuẩn, mỗi nhóm một, tối đa 3 Quý/Thiên, tật 0-2', ttOn(() => {
+  TT.life.createWorld(5);
+  const st0 = TT.rng.getState();
+  const mkc = i => ({ id: i, kind: 'player', birthMonth: 0, origin2: 'p1', daoTam: 50, tt: null });
+  let bad = 0, nQT = 0;
+  for (let i = 1; i <= 2000; i++) {
+    const c = mkc(i); TTX().roll(c, i); const c2 = mkc(i); TTX().roll(c2, i);
+    if (JSON.stringify(c.tt) !== JSON.stringify(c2.tt)) bad++;
+    const ch = c.tt.filter(e => D.tienThienById[e.id].o !== 'tat'), tat = c.tt.filter(e => D.tienThienById[e.id].o === 'tat');
+    const grp = ch.map(e => D.tienThienById[e.id].o);
+    ok(ch.length >= 1 && ch.length <= 3, 'số chuẩn ' + ch.length); ok(new Set(grp).size === grp.length, 'trùng nhóm');
+    ok(tat.length <= 2, 'số tật'); nQT = ch.filter(e => D.tienThienById[e.id].p >= 2).length; ok(nQT <= 3, 'Quý/Thiên > 3');
+    ok(tat.every(e => !e.an), 'tật không ẩn');
+  }
+  eq(bad, 0, 'cùng đầu vào phải cùng kết quả'); eq(TT.rng.getState(), st0, 'bốc tiên thiên không được gọi rng');
+}));
+test('Tiên thiên (TT): tỉ lệ phẩm lần đầu ≈ 50/30/15/5 và giảm một nửa sau Quý/Thiên (10.000 lần băm)', ttOn(() => {
+  TT.life.createWorld(6);
+  const cnt = [0, 0, 0, 0], sec = { qt: [0, 0], lo: [0, 0] };
+  for (let i = 1; i <= 10000; i++) {
+    const c = { id: i, kind: 'player', birthMonth: 0, origin2: 't6', daoTam: 50 }; TTX().roll(c, i * 7);
+    const ch = c.tt.filter(e => D.tienThienById[e.id].o !== 'tat').map(e => D.tienThienById[e.id].p);
+    cnt[ch[0]]++;
+    if (ch.length >= 2) { const k = ch[0] >= 2 ? 'qt' : 'lo'; sec[k][1]++; if (ch[1] >= 2) sec[k][0]++; }
+  }
+  const f = k => cnt[k] / 10000;
+  ok(Math.abs(f(0) - 0.5) < 0.03 && Math.abs(f(1) - 0.3) < 0.03 && Math.abs(f(2) - 0.15) < 0.025 && Math.abs(f(3) - 0.05) < 0.02, 'tỉ lệ phẩm lệch: ' + cnt.join('/'));
+  ok(sec.qt[1] > 100 && sec.lo[1] > 100, 'mẫu quá ít');
+  ok(sec.qt[0] / sec.qt[1] < 0.75 * sec.lo[0] / sec.lo[1], 'sau Quý/Thiên tỉ lệ Quý/Thiên lần sau phải giảm: ' + (sec.qt[0] / sec.qt[1]).toFixed(3) + ' vs ' + (sec.lo[0] / sec.lo[1]).toFixed(3));
+}));
+test('Tiên thiên (TT): người chơi mới có c.tt, NPC giữ traitIds, S.mod đọc c.tt và chỉ tính tiên thiên đã thức tỉnh', ttOn(() => {
+  const p = freshPlayer(11); ok(Array.isArray(p.tt) && p.tt.length >= 1, 'người chơi phải có c.tt');
+  const npc = Object.values(TT.world.chars).find(c => c.kind === 'npc'); ok(!npc.tt && Array.isArray(npc.traitIds), 'NPC không có c.tt');
+  p.baseAtk = 5; p.trainHp = 0; ttSet(p, ['than_nhu_sat']); eq(S.mod(p, 'hpMax'), 25, 'hpMax +25');
+  p.tt[0].an = 1; eq(S.mod(p, 'hpMax'), 0, 'còn ẩn thì chưa có hiệu ứng');
+  ttSet(p, ['thien_cong']); eq(TTX().mul(p, 'nghe_y_su'), 1.4); ok(Math.abs(TTX().mod(p, 'train') + 0.15) < 1e-9, 'lời nguyền tu luyện −15%');
+  ttSet(p, ['chi_am_chi_duong_the', 'ngu_hanh_linh_the', 'menh_co_tinh']); ok(TTX().mod(p, 'train') <= 0.5 + 1e-9, 'train từ tiên thiên không quá +50%');
+}));
+test('Tiên thiên (TT): ẩn và thức tỉnh: wakeOne chọn phẩm cao nhất, lời nguyền hiện khi thức tỉnh, mất qua tt_mat, tt_thuc trong truyện', ttOn(() => {
+  const p = freshPlayer(12); ttSet(p, ['mat_tinh', 'dao_cot']); p.tt.forEach(e => { e.an = 1; e.thuc_tinh_luc = null; });
+  eq(TTX().hidden(p).length, 2); eq(TTX().mod(p, 'brk'), 0); eq(TTX().luat(p, 'san:dao_cot'), false);
+  const e = TTX().wakeOne(p, 'thử'); eq(e.id, 'dao_cot', 'phẩm cao nhất thức tỉnh trước'); ok(e.an === 0 && e.thuc_tinh_luc != null);
+  ok(p.log.slice(-3).some(l => /Lời nguyền/.test(l.t)), 'phải ghi lời nguyền khi thức tỉnh'); eq(TTX().luat(p, 'san:dao_cot'), true);
+  TT.story.applyFx(p, null, { tt_thuc: true }, 'thử'); eq(TTX().hidden(p).length, 0, 'fx.tt_thuc đánh thức cái ẩn còn lại');
+  TT.story.applyFx(p, null, { tt_mat: 'dao_cot' }, 'thử'); ok(!TTX().owns(p, 'dao_cot'), 'fx.tt_mat làm mất');
+  ttSet(p, ['mat_tinh']); p.tt[0].an = 1; TT.life.createWorld(12); const q = TT.player(); ttSet(q, ['dao_cot', 'ngo_tinh']); q.tt.forEach(x => { x.an = 1; });
+  let n = 0; for (let m = 0; m < 200 && TTX().hidden(q).length; m++) { TT.world.months++; n += TTX().wakeRoll(q, 0.3, 'tổng kết 12 tuổi'); } ok(n === 2, 'wakeRoll 30% rồi cũng thức tỉnh hết');
+  const r = freshPlayer(13); ttSet(r, ['trung_dong']); r.tt[0].an = 1; D.CHILDHOOD.on = true; r.child = { i: 1, steps: [], done: false, gold0: 0 };
+  let woke = 0; for (let i = 0; i < 30 && TTX().hidden(r).length; i++) { r.child.i = i; woke += TT.childhood.fx(r, 'wake', 1, 0); } ok(woke === 1, 'wake của tuổi thơ phải thức tỉnh được');
+}));
+test('Tiên thiên (TT): đột phá thành công thức tỉnh tiên thiên ẩn (50%) và thiên đố làm một người trong dàn gặp họa', ttOn(() => {
+  let hit = 0;
+  for (let s = 0; s < 12; s++) { const p = freshPlayer(30 + s, { realm: 1 }); ttSet(p, ['kiem_cot']); p.tt[0].an = 1; TT.world.months += s * 3; TTX().onBreak(p); if (!p.tt[0].an) hit++; }
+  ok(hit >= 2 && hit <= 10, 'đột phá thức tỉnh khoảng một nửa: ' + hit + '/12');
+  const p = freshPlayer(50); ttSet(p, ['tien_cot']); const before = p.log.length; TTX().onBreak(p); ok(p.log.length >= before, 'không lỗi khi không có dàn');
+}));
+test('Tiên thiên (TT): khóa luật đọc đúng và hệ số nhân dồn', ttOn(() => {
+  const p = freshPlayer(14);
+  ttSet(p, ['dao_tam_vung', 'thu_ngu', 'kiem_cot']); ok(Math.abs(TTX().mul(p, 'vung') - 0.7) < 1e-9); ok(Math.abs(TTX().mul(p, 'yeu') - 0.75) < 1e-9); ok(Math.abs(TTX().mul(p, 'chien') - 1.08) < 1e-9);
+  ttSet(p, ['tam_ma']); eq(TTX().luat(p, 'tam_ma'), true); ok(TT.kb.tamMaHien(p), 'tật tâm ma: lựa chọn tâm ma hiện cả khi đạo tâm cao');
+  p.daoTam = 80; ttSet(p, ['tam_tinh']); ok(!TT.kb.tamMaHien(p), 'đạo tâm cao và không tâm ma thì không hiện');
+  ttSet(p, ['menh_co_tinh']); eq(TTX().luat(p, 'co'), true); ok(TT.dan.ok(p, { dan: 'ban' }) === false);
+  ttSet(p, ['that_khieu_linh_lung']); ok(Math.abs(TTX().mul(p, 'da_tu') - 1.3) < 1e-9);
+  ttSet(p, ['phuc_duyen']); eq(TTX().wheelBonus(p), 3); ttSet(p, ['thien_menh_chi_tu']); eq(TTX().wheelBonus(p), 6);
+  ttSet(p, ['thien_ly_nhi']); eq(TTX().luat(p, 'nghe'), true); ttSet(p, ['than_nhu_sat']); eq(TTX().luat(p, 'nghe'), false);
+  ttSet(p, ['coc_nhuc_mau_lanh']); p.wound = null; TT.loss.hurt(p, 1); eq(p.wound.until - TT.world.months, Math.round(D.WOUND[1].months * 0.6), 'lành nhanh ×0,6');
+}));
+test('Tiên thiên (TT): nghề nghe_<id> và Thiên công: thu nhập và kinh nghiệm nghề', ttOn(() => {
+  const p = freshPlayer(15); TT.job.set(p, 'main', 'y_su'); ttSet(p, []); const base = TT.job.incomeMul(p);
+  ttSet(p, ['than_y_thu']); ok(Math.abs(TT.job.incomeMul(p) / base - 1.4) < 1e-6, 'nghề y +40%');
+  ttSet(p, ['thien_cong']); ok(Math.abs(TT.job.incomeMul(p) / base - 1.4) < 1e-6, 'Thiên công: mọi nghề +40%');
+}));
+test('Tiên thiên (TT): thử thách có hạn: Quý nhân phù trợ giảm 20% yêu cầu, mỗi phần một lần', ttOn(() => {
+  const p = freshPlayer(16); ttSet(p, ['quy_nhan_phu_tro']); TT.story.ensure(p);
+  const arc = { n: 'x', chang: {} }, st = { st: 'c', phan: 0 }, lc = { key: 'k', label: 'thử', thu_thach: { han: 12, can: { gold: 100, cong: 50 }, dat: 'a', truot: 'b' } };
+  TT.kb.ttStart(p, arc, st, {}, lc); eq(st.tt.can.gold, 80); eq(st.tt.can.cong, 40);
+  delete st.tt; TT.kb.ttStart(p, arc, st, {}, lc); eq(st.tt.can.gold, 100, 'lần thứ hai trong cùng phần không giảm');
+}));
+test('Tiên thiên (TT): Phượng huyết sống lại một lần (mất tu vi), Thần y thủ cứu người trong dàn, Mệnh cô tinh rút ngắn thọ người trong dàn', ttOn(() => {
+  const p = freshPlayer(17); ttSet(p, ['phuong_huyet']); p.xp = 500; TT.life.die(p, 'bị giết'); ok(p.alive, 'phải sống lại'); eq(p.xp, 0); ok(p.tt[0].used === 1);
+  p.hp = 0; TT.world.pending = null; TT.life.die(p, 'bị giết'); ok(!p.alive || TT.world.pending, 'lần hai không còn niết bàn');
+  const q = freshPlayer(18); ttSet(q, ['menh_co_tinh']); const o = Object.values(TT.world.chars).find(c => c.kind === 'npc' && c.alive);
+  q.story = { dan: { ban: o.id }, sp: {}, gb: {}, arcs: {}, due: [], done: [], box: -99 }; D.STORY.kbOn = true;
+  const L = S.lifeSpan(o); ttSet(q, []); const L0 = S.lifeSpan(o); ok(L < L0 || L0 === Infinity, 'Mệnh cô tinh: thọ ×0,8 (' + L + ' < ' + L0 + ')');
+}));
+test('Tiên thiên (TT): tiên thiên hiển thị của người trong dàn: băm, ổn định, không đổi mô phỏng NPC', ttOn(() => {
+  const p = freshPlayer(19); const o = Object.values(TT.world.chars).find(c => c.kind === 'npc');
+  const t1 = TTX().vai(p, 'su', o), t2 = TTX().vai(p, 'su', o); ok(t1 && t1.id === t2.id, 'ổn định'); const tr = o.traitIds.slice(), st0 = TT.rng.getState();
+  TTX().vai(p, 'ban', o); eq(JSON.stringify(o.traitIds), JSON.stringify(tr)); eq(TT.rng.getState(), st0);
+  eq(TTX().slotVai(p, { vai: { su: o.id } }).length > 0, true, 'khe {tt_vai}'); eq(TT.story.fmt(p, { vai: { su: o.id } }, 'Người có {tt_vai}.').indexOf('{') < 0, true);
+}));
+test('Tiên thiên (TT): chuyển bản lưu cũ: traitIds → c.tt một lần, lưu/tải giữ nguyên', ttOn(() => {
+  const p = freshPlayer(20); p.traitIds = ['than_cuong', 'tay_kheo', 'xui_xeo', 'cot_cach']; delete p.tt;
+  ok(TTX().migrate(p)); eq(p.tt.map(e => e.id).sort().join(','), 'cot_cach_kha,mat_tinh,than_nhu_sat,xui_xeo'); ok(!TTX().migrate(p), 'chỉ một lần');
+  const snap = TT.save.snapshot(); TT.save.restore(snap); eq(TT.player().tt.map(e => e.id).sort().join(','), 'cot_cach_kha,mat_tinh,than_nhu_sat,xui_xeo', 'lưu/tải');
+  const j = JSON.parse(snap); delete j.world.chars[j.world.playerId].tt; TT.save.restore(JSON.stringify(j)); ok(Array.isArray(TT.player().tt) && TT.player().tt.length === 4, 'bản lưu không có c.tt được chuyển lúc tải');
+}));
+test('Tiên thiên (TT): cầu nối mã cũ: kỳ ngộ thêm/xóa, tật tuổi thơ, tam_ma, da_benh đều đi qua c.tt', ttOn(() => {
+  const p = freshPlayer(21); ttSet(p, ['luoi_bieng']); ok(TT.ev.removeBadTrait(p).id === 'luoi_bieng' && p.tt.length === 0, 'xóa tật');
+  const g = TT.ev.addGoodTrait(p); ok(g && p.tt.length === 1, 'thêm tiên thiên tốt'); ok(!TT.tt.hasBad(p));
+  ttSet(p, []); D.CHILDHOOD.on = true; p.child = { i: 0, steps: [], done: false, gold0: 0 }; p.childFx = {}; eq(TT.childhood.fx(p, 'bad', 'the_nhuoc', 0), 1); ok(TTX().owns(p, 'the_nhuoc'));
+  eq(TTX().hasOld(p, 'the_nhuoc'), true); ttSet(p, ['da_benh']); eq(TTX().hasOld(p, 'da_benh'), true); TTX().dropOld(p, 'da_benh'); eq(p.tt.length, 0);
+}));
+test('Tiên thiên (TT): công tắc D.TIEN_THIEN_RULES.on = false: người chơi dùng traitIds cũ', ttOn(() => {
+  const R = D.TIEN_THIEN_RULES; R.on = false;
+  try { const p = freshPlayer(22); ok(!p.tt, 'không có c.tt'); p.traitIds = ['than_cuong']; eq(S.mod(p, 'hpMax') >= D.traitById.than_cuong.m.hpMax, true); ok(!TTX().active(p)); eq(TTX().ids(p)[0], 'than_cuong'); }
+  finally { R.on = true; }
+}));
+test('Tiên thiên (TT): giao diện Hồ sơ hiện 9 nhóm chỉ khi có, tật, ô ??? với dấu hiệu và lời nguyền', ttOn(() => {
+  const p = freshPlayer(23); ttSet(p, ['than_nhu_sat', 'dao_cot', 'the_nhuoc', 'trung_dong']); p.tt[3].an = 1;
+  const v = TTX().view(p); eq(v.groups.map(g => g.o).join(','), 'the,cot'); eq(v.tat.length, 1); eq(v.hidden.length, 1); ok(/hai đồng tử/.test(v.hidden[0].dau), 'dấu hiệu Trùng đồng');
+  const html = TT.ui.playerPanel ? '' : ''; const esc = s => String(s); const chip = TTX().chipHtml(v.groups[1].items[0], esc); ok(/q2/.test(chip) && /Lời nguyền/.test(chip), 'chip phẩm vàng có lời nguyền');
+  TTX().wakeOne(p, 'thử'); eq(TTX().view(p).hidden.length, 0); eq(TTX().view(p).groups.length, 3);
+}));
 
 runNext();
 </script>

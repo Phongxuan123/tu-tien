@@ -37,6 +37,7 @@
         else { pts = TT.kv.pts(c) * 3; why = 'khí vận ' + TT.kv.pts(c) + ' điểm'; }
       }
       pts = clamp(Math.round(pts), K.min, Math.min(y.tran, K.max));
+      const tb = TT.tt ? TT.tt.wheelBonus(c) : 0; if (tb) { pts = clamp(pts + tb, K.min, K.max); why += (why ? '; ' : '') + 'tiên thiên +' + tb; } // Phúc duyên, Thiên mệnh chi tử: mọi vòng quay, vẫn trần K.max
       return { pts, why };
     },
 

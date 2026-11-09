@@ -95,7 +95,7 @@
       k *= 1 - Math.max(0, (c.daoTam - 50)) / 250;
       k *= 1 - 0.04 * Math.min(c.realm, 5);
       if (TT.age(c) > 60) k *= 0.85;
-      d *= k;
+      d *= k * (TT.tt && c.kind === 'player' ? TT.tt.mul(c, 'vung') * TT.tt.mul(c, 'da_tu') : 1);
       const yr = Math.floor(w.months / 12), free = big === 'free'; // 'free': tuổi thơ (8A3), không tính trần năm và không ghi nhật ký đổi dải từng lần
       if (!c.natureYr || c.natureYr.y !== yr) c.natureYr = { y: yr };
       const cap = big ? K.bigCap : K.yearCap, used = c.natureYr[ax] || 0;

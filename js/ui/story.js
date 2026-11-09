@@ -68,7 +68,7 @@
     if (dan.length && !tt) { // K1: người đi cùng đời bạn (dàn định mệnh) và mức gắn bó
       const dc = h('div', { class: 'card story-card' });
       dc.appendChild(h('div', { class: 'qtop' }, h('b', null, 'Người đi cùng bạn')));
-      dan.forEach(r => dc.appendChild(h('div', { class: 'dan-row' + (r.alive ? '' : ' mat') }, h('span', null, r.n + ': ' + r.ten + (r.sp === 'chet' ? ' (đã mất)' : r.sp === 'roi' ? ' (đã bỏ đi)' : r.sp === 'thu' ? ' (kẻ thù)' : '')), h('span', null, 'gắn bó ' + r.gb))));
+      dan.forEach(r => dc.appendChild(h('div', { class: 'dan-row' + (r.alive ? '' : ' mat') }, h('span', { title: r.tt ? 'Tiên thiên của người ấy: ' + r.tt : null }, r.n + ': ' + r.ten + (r.tt ? ' · ' + r.tt : '') + (r.sp === 'chet' ? ' (đã mất)' : r.sp === 'roi' ? ' (đã bỏ đi)' : r.sp === 'thu' ? ' (kẻ thù)' : '')), h('span', null, 'gắn bó ' + r.gb))));
       box.appendChild(dc);
     }
     if (!rows.length) { box.appendChild(h('div', { class: 'small' }, 'Chuyện của đời bạn mới bắt đầu.')); return; }

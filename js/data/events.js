@@ -113,7 +113,7 @@
       ]
     },
     {
-      id: 'benh_tat', tier: 2, w: c => (c.traitIds.indexOf('da_benh') >= 0 ? 5 : 2), cool: 36, npc: 0.5, title: 'Bệnh tật', when: c => c.realm === 0,
+      id: 'benh_tat', tier: 2, w: c => (TT.tt.hasOld(c, 'da_benh') ? 5 : 2), cool: 36, npc: 0.5, title: 'Bệnh tật', when: c => c.realm === 0,
       text: 'Bạn đổ bệnh nặng. Thân phàm nhân mong manh hơn bạn nghĩ.',
       choices: [
         { key: 'chua', label: 'Chữa trị (20 vàng)', kind: 'pay', run: c => { if (TT.ls.wealth(c) >= 20) { gold(c, -20); return G('Thầy thuốc chữa khỏi cho bạn.'); } hp(c, -40); return B('Bạn không đủ tiền. Sinh lực -40.'); } },

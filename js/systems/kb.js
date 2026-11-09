@@ -99,6 +99,7 @@
     enter(c, arc, st, chId) {
       const pm = arc.phan && phanMap(arc)[chId]; if (!pm) return;
       st.phan = pm.i; st.nhip = pm.nhip;
+      if (pm.nhip === 'moc' && TT.tt.active(c)) TT.tt.moPhan(c, arc.dyn && c.story.kbc && !arc.phu ? c.story.kbc.phan[pm.i] : arc.phan[pm.i], pm.i, st); // thay_truoc, mo_bao, tien_kiep
       const S = c.story; if (pm.i > (S.phanMax || 0)) S.phanMax = pm.i;
       if (arc.dyn && !arc.phu && TT.kb.dynEnter) TT.kb.dynEnter(c, arc, st, chId); // AI1a: mở phần
     },
@@ -125,7 +126,15 @@
     ttStart(c, arc, st, ch, lc) {
       const T = lc.thu_thach, now = TT.world.months;
       st.w = null;
-      st.tt = { lc: lc.key, ten: TT.story.fmt(c, st, lc.label), ch: st.st, can: JSON.parse(JSON.stringify(T.can)), m0: now, m1: now + T.han, dat: T.dat, truot: T.truot, tieu: !!T.tieu };
+      const can0 = JSON.parse(JSON.stringify(T.can)), qn = TT.tt.mul(c, 'quy_nhan'), qk = 'q' + (st.phan || 0); // Quý nhân phù trợ: mỗi phần một lần giảm 20% yêu cầu
+      st.ttQn = st.ttQn || {};
+      if (qn < 1 && !st.ttQn[qk]) {
+        st.ttQn[qk] = 1;
+        ['gold', 'cong', 'xp'].forEach(k => { if (can0[k] != null) can0[k] = k === 'xp' ? Math.round(can0[k] * qn * 100) / 100 : Math.ceil(can0[k] * qn); });
+        if (can0.nghe && can0.nghe.lv > 1) can0.nghe.lv = Math.max(1, Math.ceil(can0.nghe.lv * qn));
+        TT.log(c, 'Đúng lúc bế tắc, một người lạ ra tay giúp bạn một phần ở cửa ải này.', 'good');
+      }
+      st.tt = { lc: lc.key, ten: TT.story.fmt(c, st, lc.label), ch: st.st, can: can0, m0: now, m1: now + T.han, dat: T.dat, truot: T.truot, tieu: !!T.tieu };
       TT.log(c, '[' + arc.n + '] Thử thách bắt đầu: ' + TT.story.fmt(c, st, lc.label) + ' (hạn ' + T.han + ' tháng, xem tab Nhiệm vụ).', 'big');
       TT.story.note(c, st, 'Thử thách: ' + TT.story.fmt(c, st, lc.label));
     },

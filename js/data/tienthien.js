@@ -90,6 +90,8 @@
 
   // Luật bốc và chuyển bản cũ (mục 4, 5, 6, 9). Tỉ lệ là xác suất mỗi lần bốc.
   D.TIEN_THIEN_RULES = {
+    // Công tắc: true thì người chơi dùng c.tt (tiên thiên làm mới); false thì dùng c.traitIds cũ như trước. NPC luôn dùng traitIds.
+    on: true,
     // Tỉ lệ phẩm (p -> xác suất). Mỗi lần bốc ra Quý hoặc Thiên thì tỉ lệ phẩm ấy giảm một nửa ở lần bốc sau.
     phamTiLe: { 0: 0.50, 1: 0.30, 2: 0.15, 3: 0.05 },
     giamMotNua: [2, 3],

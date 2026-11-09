@@ -123,6 +123,7 @@
         const q = rng.clamp(0.2 + rng.next() * 0.6 + 0.03 * (lv - req) + 0.1 * (apt - 1) + (pj.part ? 0.08 : 0) + 0.05 * furn, 0, 0.995);
         const id = pj.slot === 'relic' ? TT.gear.relicKey(pj.stat || 'atk', pj.tier, q, pj.elem, 0) : TT.gear.key(pj.slot, pj.tier, q, pj.elem);
         TT.items.add(c, id); c.craftMade = (c.craftMade || 0) + 1;
+        if (pj.tier >= 2) TT.tt.tranhDoat(c, D.ITEMS[id].n); // Thiên công: vật phẩm cao kéo kẻ tranh đoạt
         TT.log(c, 'Luyện khí thành công: ' + D.ITEMS[id].n + '. ' + D.ITEMS[id].desc.split('. ').slice(0, pj.slot === 'relic' ? 2 : 1).join('. '), 'big', 'Xác suất thành công ' + Math.round(p * 100) + '% (cấp nghề ' + lv + ', thiên phú x' + apt.toFixed(2) + ', lò bậc ' + furn + (craft.diaHoa(c) ? ', có địa hỏa' : '') + '). Chất lượng ' + Math.round(q * 100) + '/100 trong phẩm.');
         return { ok: true, id };
       }
