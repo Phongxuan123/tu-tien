@@ -5466,7 +5466,63 @@ test('AI kể chuyện (AI1b): công tắc tắt (mặc định): không gọi, 
   } finally { AIW.transport = t0; AIW.reset(); }
 }));
 
-
+// Dữ liệu tiên thiên làm mới (TT-d): đủ 53 mục, khóa hợp lệ, phẩm và ẩn đúng luật, bảng chuyển bản cũ.
+const TT_MOD_KEYS = ['hpMax', 'atk', 'nl', 'kv', 'luck', 'gold', 'train', 'brk', 'life']; // khóa của S.mod (js/systems/stats.js)
+const TT_LUAT_KEYS = ['nghe', 'manh', 'thay_truoc', 'co', 'tam_ma', 'vung', 'da_tu', 'duyen', 'thien_do', 'hut_van', 'thien_mang', 'niet_ban', 'vo_tinh', 'lanh', 'ne', 'tim', 'chien', 'yeu', 'ky_ngo', 'cuu', 'tranh_doat', 'quy_nhan', 'mo_bao', 'thong_linh', 'tien_kiep', 'dao_hoa', 'hiep_danh', 'y_gia', 'mo_bao'];
+const TT_TIEN = () => D.TIEN_THIEN, TT_RULES = () => D.TIEN_THIEN_RULES;
+test('Dữ liệu tiên thiên (TT-d): đủ 53 mục (46 chuẩn trong 9 nhóm + 7 tật), tật không chiếm ô', () => {
+  const all = TT_TIEN(), chuan = all.filter(t => t.o !== 'tat'), tat = all.filter(t => t.o === 'tat');
+  eq(all.length, 53, 'tổng mục'); eq(chuan.length, 46, 'mục chuẩn'); eq(tat.length, 7, 'số tật');
+  eq(new Set(chuan.map(t => t.o)).size, 9, 'số nhóm chuẩn');
+});
+test('Dữ liệu tiên thiên (TT-d): id không trùng, mỗi nhóm có ít nhất một Thường hoặc Hiếm', () => {
+  const all = TT_TIEN(), ids = all.map(t => t.id);
+  eq(new Set(ids).size, ids.length, 'id trùng');
+  for (const o of TT_RULES().nhom) ok(all.some(t => t.o === o && t.p <= 1), 'nhóm thiếu Thường/Hiếm: ' + o);
+});
+test('Dữ liệu tiên thiên (TT-d): khóa nghề trỏ đúng id trong js/data/jobs.js', () => {
+  for (const t of TT_TIEN()) for (const k of Object.keys(t.luat || {})) {
+    if (k.indexOf('nghe_') === 0) ok(D.JOBS[k.slice(5)], t.id + ' khóa nghề sai: ' + k);
+  }
+});
+test('Dữ liệu tiên thiên (TT-d): phẩm ≥ Quý có lời nguyền, mục Hiếm trở lên có mô tả và dấu hiệu', () => {
+  for (const t of TT_TIEN()) {
+    ok(typeof t.d === 'string' && t.d.length > 0, t.id + ' thiếu mô tả');
+    if (t.p >= 2) ok(typeof t.nguyen === 'string' && t.nguyen.length > 0, t.id + ' thiếu lời nguyền');
+    if (t.p >= 1) ok(typeof t.dau === 'string' && t.dau.length > 0, t.id + ' thiếu dấu hiệu');
+  }
+});
+test('Dữ liệu tiên thiên (TT-d): mọi khóa m thuộc S.mod, mọi khóa luat thuộc bảng mục 4', () => {
+  for (const t of TT_TIEN()) {
+    for (const k of Object.keys(t.m || {})) ok(TT_MOD_KEYS.indexOf(k) >= 0, t.id + ' khóa m lạ: ' + k);
+    for (const k of Object.keys(t.luat || {})) {
+      const ok1 = TT_LUAT_KEYS.indexOf(k) >= 0 || /^san:(lo_dinh|dao_cot|mat)$/.test(k) || (k.indexOf('nghe_') === 0 && D.JOBS[k.slice(5)]);
+      ok(ok1, t.id + ' khóa luat lạ: ' + k);
+    }
+  }
+});
+test('Dữ liệu tiên thiên (TT-d): ẩn đúng theo phẩm, tật không ẩn, thẻ xuất thân thuộc danh sách mục 2', () => {
+  const R = TT_RULES(), thes = ['p1', 'p2', 'p3', 'p5', 't1', 't3', 't6', 't10'];
+  for (const t of TT_TIEN()) {
+    if (t.o === 'tat') eq(t.an, 0, t.id + ' tật phải an = 0');
+    else eq(t.an, R.anTheoPham[t.p], t.id + ' tỉ lệ ẩn');
+    for (const th of t.the || []) ok(thes.indexOf(th) >= 0, t.id + ' thẻ lạ: ' + th);
+  }
+});
+test('Dữ liệu tiên thiên (TT-d): bảng tỉ lệ đủ 100%, trần Quý/Thiên = 3, chuyển bản cũ trỏ đúng id', () => {
+  const R = TT_RULES(), sum = o => Object.values(o).reduce((a, x) => a + x, 0);
+  ok(Math.abs(sum(R.phamTiLe) - 1) < 1e-9, 'tỉ lệ phẩm không đủ 100%');
+  ok(Math.abs(sum(R.soChuan) - 1) < 1e-9, 'tỉ lệ số tiên thiên không đủ 100%');
+  ok(Math.abs(sum(R.soTat) - 1) < 1e-9, 'tỉ lệ số tật không đủ 100%');
+  eq(R.phamTiLe[0] + R.phamTiLe[1] + R.phamTiLe[2] + R.phamTiLe[3], 1, 'tổng phẩm');
+  eq(R.soChuan[1], 0.5, 'số 1'); eq(R.soChuan[2], 0.35, 'số 2'); eq(R.soChuan[3], 0.15, 'số 3');
+  eq(R.tranQuyThien, 3, 'trần Quý/Thiên');
+  eq(R.nhom.length, 9, 'số nhóm');
+  for (const [cu, moi] of Object.entries(R.chuyenBanCu)) {
+    ok(D.traitById[cu], 'id cũ không có trong D.TRAITS: ' + cu);
+    ok(D.tienThienById[moi], 'id mới không có: ' + cu + ' -> ' + moi);
+  }
+});
 
 runNext();
 </script>
