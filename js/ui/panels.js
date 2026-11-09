@@ -179,6 +179,7 @@
     const foot = h('div', { class: 'mfoot' });
     if (TT.decisions.mode() !== 'thu_cong') foot.appendChild(h('button', { class: 'sm', onclick: () => { TT.decisions.setMode('thu_cong'); state.decKey = ''; ui.markDirty(); } }, 'Tắt tự động quyết định'));
     foot.appendChild(h('button', { class: 'sm', onclick: () => { try { localStorage.setItem('tt8b_popup', pop ? '0' : '1'); } catch (e) { /* bỏ qua */ } state.decKey = ''; ui.markDirty(); } }, pop ? 'Hiện thành khung thường' : 'Hiện dạng cửa sổ'));
+    if (ui.keys) foot.appendChild(h('span', { class: 'small kbdhint' }, ui.keys.hint(d)));
     body.appendChild(foot);
     box.appendChild(body);
   }

@@ -46,8 +46,9 @@
       thien_chua: { n: 'lễ Giáng sinh', m: 12, g: { thao: 0.06, dan: 0.04 } },
       hoi: { n: 'lễ Kết thúc Ramadan', m: 6, g: { dan: 0.05, thao: 0.04 } }
     },
-    // hạn dùng (tháng): chỉ túi đồ người chơi; giá trị bán giảm dần, 3 tháng cuối còn 40% giá gốc
-    life: { dan: 18, bua: 24, thao: 12 }, decay: { last: 3, floor: 0.4 },
+    // hạn dùng (tháng): chỉ túi đồ người chơi; giá trị bán giảm dần, 3 tháng cuối còn 40% giá gốc.
+    // Đợt T2 (2026-11-07): hạn dùng nhân khoảng 7 đến 8 lần (cũ: dan 18, bua 24, thao 12). rescue: số tháng cuối mà tự bán/hiến đồ sắp hỏng bắt đầu thử (khi đang ở nơi bán được).
+    life: { dan: 120, bua: 180, thao: 96 }, decay: { last: 3, floor: 0.4, rescue: 6 },
     // cú sốc ngẫu nhiên nối vào thế cuộc. lead: số tháng báo trước. d, s: nhân cầu và cung theo nhóm ('*' là mọi nhóm)
     shocks: {
       dot_pha: { n: 'mùa đột phá', chance: 0.0045, lead: [1, 3], dur: 4, d: { dan: 1.25, bua: 1.07 }, text: 'Mùa đột phá sắp tới, ai cũng tìm đan dược' },

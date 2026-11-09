@@ -174,7 +174,7 @@
       det.appendChild(h('div', { class: 'small' }, d.desc));
       det.appendChild(h('div', { style: 'margin:6px 0' }, (mode === 'buy' ? 'Giá mua: ' : 'Giá bán: ') + (it.price != null ? TT.ls.fmt(it.price) : '—') + ' / món'));
       det.appendChild(h('div', { class: 'small' }, mode === 'buy' ? 'Cửa hàng còn: ' + it.qty : 'Trong túi bạn: ' + it.qty));
-      if (mode === 'sell' && TT.items.life(it.id)) { const r = TT.items.remaining(c, it.id), f = TT.eco.fresh(c, it.id); det.appendChild(h('div', { class: 'small' + (r <= 3 ? ' bad' : '') }, 'Còn dùng được ' + Math.max(1, Math.round(r)) + ' tháng' + (f < 1 ? ' · giá bán chỉ còn ' + Math.round(f * 100) + '% vì sắp hết hạn' : '') + '.')); }
+      if (mode === 'sell' && TT.items.life(it.id)) { const r = TT.items.remaining(c, it.id), f = TT.eco.fresh(c, it.id); det.appendChild(h('div', { class: 'small' + (r <= 3 ? ' bad' : '') }, 'Còn dùng được ' + ui.monthsText(Math.max(1, Math.round(r))) + (f < 1 ? ' · giá bán chỉ còn ' + Math.round(f * 100) + '% vì sắp hết hạn' : '') + '.')); }
       if (mode === 'buy' && TT.items.life(it.id)) det.appendChild(h('div', { class: 'small' }, 'Hạn dùng ' + TT.items.life(it.id) + ' tháng kể từ lúc mua; càng gần hạn càng mất giá, 3 tháng cuối còn 40%.'));
       const mi = marketInfo(c, it.id); if (mi) det.appendChild(mi);
       const bt = h('div', { class: 'btns', style: 'margin-top:6px' });
