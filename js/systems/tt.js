@@ -119,11 +119,14 @@
       const tags = c.origin2 ? [c.origin2] : [];
       const wThe = t => ((t.the || []).some(x => tags.indexOf(x) >= 0) ? Rr.trongSoThe : 1);
       const chuan = D.TIEN_THIEN.filter(t => t.o !== 'tat'), tat = D.TIEN_THIEN.filter(t => t.o === 'tat');
+      // Tư chất càng cao (50 đến 200 điểm) thì phẩm cao và tật càng dễ ra: f từ 0 đến 1 (không có tư chất thì f = 0).
+      const f = c.tuchat && c.tuchat.total ? Math.max(0, Math.min(1, (c.tuchat.total - 50) / 150)) : 0;
+      const mulP = [1 - 0.5 * f, 1 + 0.3 * f, 1 + 1.5 * f, 1 + 2 * f], mulT = [1 - 0.5 * f, 1 + 0.3 * f, 1 + 1.5 * f];
       const n = wpick(r, Object.keys(Rr.soChuan).map(k => ({ w: Rr.soChuan[k], v: +k })));
       const used = {}, out = []; let qt = 0, giam = false;
       const mkE = t => { const hid = r() < (t.an || 0); return { id: t.id, an: hid ? 1 : 0, thuc_tinh_luc: hid ? null : now }; };
       for (let i = 0; i < n; i++) {
-        const rate = p => Rr.phamTiLe[p] * (giam && Rr.giamMotNua.indexOf(p) >= 0 ? 0.5 : 1) * (p >= 2 && qt >= Rr.tranQuyThien ? 0 : 1);
+        const rate = p => Rr.phamTiLe[p] * mulP[p] * (giam && Rr.giamMotNua.indexOf(p) >= 0 ? 0.5 : 1) * (p >= 2 && qt >= Rr.tranQuyThien ? 0 : 1);
         const pool = p => chuan.filter(t => t.p === p && !used[t.o]);
         let p = wpick(r, [0, 1, 2, 3].map(x => ({ w: rate(x), v: x })));
         let cand = pool(p);
@@ -135,10 +138,10 @@
         used[t.o] = 1; if (t.p >= 2) { qt++; giam = true; }
         out.push(mkE(t));
       }
-      const nt = wpick(r, Object.keys(Rr.soTat).map(k => ({ w: Rr.soTat[k], v: +k })));
+      const nt = wpick(r, Object.keys(Rr.soTat).map(k => ({ w: Rr.soTat[k] * mulT[+k], v: +k })));
       const tp = tat.slice();
       for (let i = 0; i < nt && tp.length; i++) {
-        const t = wpick(r, tp.map(x => ({ w: wThe(x), v: x }))); tp.splice(tp.indexOf(t), 1);
+        const t = wpick(r, tp.map(x => ({ w: wThe(x) * (x.p >= 1 ? 1 + 2 * f : 1), v: x }))); tp.splice(tp.indexOf(t), 1);
         out.push({ id: t.id, an: 0, thuc_tinh_luc: now });
       }
       c.tt = out;

@@ -5643,6 +5643,14 @@ test('Tiên thiên (TT): giao diện Hồ sơ hiện 9 nhóm chỉ khi có, tậ
   TTX().wakeOne(p, 'thử'); eq(TTX().view(p).hidden.length, 0); eq(TTX().view(p).groups.length, 3);
 }));
 
+test('Tiên thiên (TT): tư chất càng cao thì phẩm Quý/Thiên và tật càng dễ ra', ttOn(() => {
+  TT.life.createWorld(8);
+  const stat = total => { let qt = 0, tat = 0, n = 0; for (let i = 1; i <= 6000; i++) { const c = { id: i, kind: 'player', birthMonth: 0, origin2: 'p1', daoTam: 50, tuchat: { total, attrs: [{ n: 'Kim', p: total }] } }; TTX().roll(c, i); c.tt.forEach(e => { const t = D.tienThienById[e.id]; if (t.o === 'tat') tat++; else if (t.p >= 2) qt++; }); n++; } return { qt: qt / n, tat: tat / n }; };
+  const lo = stat(50), hi = stat(200);
+  ok(hi.qt > lo.qt * 1.6, 'tư chất cao: Quý/Thiên mỗi người ' + hi.qt.toFixed(2) + ' phải hơn nhiều ' + lo.qt.toFixed(2));
+  ok(hi.tat > lo.tat * 1.2, 'tư chất cao: tật mỗi người ' + hi.tat.toFixed(2) + ' phải hơn ' + lo.tat.toFixed(2));
+}));
+
 runNext();
 </script>
 </body>
