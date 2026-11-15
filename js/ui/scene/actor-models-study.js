@@ -58,7 +58,7 @@
     window.dispatchEvent(new Event('ink-model-ready'));
   };
   atlas.onerror = () => { document.getElementById('model-status').textContent = 'Không tải được mẫu nhân vật. Hãy tải lại trang.'; };
-  atlas.src = 'assets/characters/cultivators-oval-face.png?v=5';
+  atlas.src = 'assets/characters/cultivators-study.png?v=approved-face-6';
   function sprite(v, key) {
     if (!ready) return oldSprite(v, key);
     const index = key[0] === 'w' ? Number(key.slice(1)) % 4 : 1;
