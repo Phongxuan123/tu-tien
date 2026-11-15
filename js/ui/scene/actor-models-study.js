@@ -42,11 +42,18 @@
         frames[row].push(canvas);
       });
     }
+    // Mặt nữ dùng chung phần đầu từ Bước 1 ở mọi khung, tránh đổi nét khi đi.
+    const head = frames[1][0];
+    frames[1].slice(1).forEach(canvas => {
+      const q = canvas.getContext('2d'); q.imageSmoothingEnabled = false;
+      q.clearRect(0, 0, 48, 25);
+      q.drawImage(head, 0, 0, 48, 25, 0, 0, 48, 25);
+    });
     ready = true;
     window.dispatchEvent(new Event('ink-model-ready'));
   };
   atlas.onerror = () => { document.getElementById('model-status').textContent = 'Không tải được mẫu nhân vật. Hãy tải lại trang.'; };
-  atlas.src = 'assets/characters/cultivators-study.png';
+  atlas.src = 'assets/characters/cultivators-face-study.png';
   function sprite(v, key) {
     if (!ready) return oldSprite(v, key);
     const index = key[0] === 'w' ? Number(key.slice(1)) % 4 : 1;
