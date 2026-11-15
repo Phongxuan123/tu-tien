@@ -33,12 +33,12 @@
       }
       const height = Math.max(...bounds.map(b => b.bottom - b.top + 1));
       const width = Math.max(...bounds.map(b => b.right - b.left + 1));
-      const scale = Math.min(76 / height, 46 / width);
+      const scale = Math.min(152 / height, 92 / width);
       bounds.forEach(b => {
-        const canvas = document.createElement('canvas'); canvas.width = 48; canvas.height = 80;
+        const canvas = document.createElement('canvas'); canvas.width = 96; canvas.height = 160;
         const q = canvas.getContext('2d', { willReadFrequently: true }); q.imageSmoothingEnabled = false;
         const w = (b.right - b.left + 1) * scale, h = (b.bottom - b.top + 1) * scale;
-        q.drawImage(atlas, b.left, b.top, b.right - b.left + 1, b.bottom - b.top + 1, Math.round((48 - w) / 2), Math.round(79 - h), Math.round(w), Math.round(h));
+        q.drawImage(atlas, b.left, b.top, b.right - b.left + 1, b.bottom - b.top + 1, Math.round((96 - w) / 2), Math.round(159 - h), Math.round(w), Math.round(h));
         frames[row].push(canvas);
       });
     }
@@ -46,19 +46,19 @@
     // Khóa toàn bộ đầu, tóc trước và cổ từ Bước 1, cùng tọa độ ở mọi bước.
     const head = frames[1][0];
     let headPixels = null;
-    try { headPixels = head.getContext('2d').getImageData(0, 0, 48, 32); } catch (e) { /* file:// */ }
+    try { headPixels = head.getContext('2d').getImageData(0, 0, 96, 64); } catch (e) { /* file:// */ }
     frames[1].forEach(canvas => {
       if (!headPixels && canvas === head) return;
       const q = canvas.getContext('2d'); q.imageSmoothingEnabled = false;
-      q.clearRect(0, 0, 48, 32);
+      q.clearRect(0, 0, 96, 64);
       if (headPixels) q.putImageData(headPixels, 0, 0);
-      else q.drawImage(head, 0, 0, 48, 32, 0, 0, 48, 32);
+      else q.drawImage(head, 0, 0, 96, 64, 0, 0, 96, 64);
     });
     ready = true;
     window.dispatchEvent(new Event('ink-model-ready'));
   };
   atlas.onerror = () => { document.getElementById('model-status').textContent = 'Không tải được mẫu nhân vật. Hãy tải lại trang.'; };
-  atlas.src = 'assets/characters/cultivators-study.png?v=face-lock-4';
+  atlas.src = 'assets/characters/cultivators-oval-face.png?v=5';
   function sprite(v, key) {
     if (!ready) return oldSprite(v, key);
     const index = key[0] === 'w' ? Number(key.slice(1)) % 4 : 1;
@@ -74,7 +74,7 @@
     ctx.translate(Math.round(x), Math.round(fy));
     if (dir < 0) ctx.scale(-1, 1);
     ctx.imageSmoothingEnabled = false;
-    ctx.drawImage(image, 0, 0, 48, 80, -30, -100, 60, 100);
+    ctx.drawImage(image, 0, 0, 96, 160, -30, -100, 60, 100);
     // Ánh môi trường như các lớp cảnh gốc; không làm sáng riêng nhân vật.
     ctx.restore();
   }
