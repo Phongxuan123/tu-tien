@@ -25,3 +25,6 @@ Các bài đã đổi sang `.ogg` (Vorbis, 80 kbps, chuẩn hóa độ to khoả
 | `assets/audio/nhac/chien-2.ogg` | Giao chiến | `chien-2.mp3` | 1 phút 42 | 1,0 MB |
 
 Chưa có nhạc cho bối cảnh Thiên kiếp.
+# Giao diện thủy mặc
+
+`assets/ink-world.png` và `assets/ink-ornaments.png`: ảnh tạo bằng AI cho nền và họa tiết giao diện (2026-11-15).
