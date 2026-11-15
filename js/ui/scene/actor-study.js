@@ -20,6 +20,17 @@
     '....RrrwRrr', '....RrrwRrr', '...RrrrwRrrr',
     '...RrrrwRRrr', '..RrrrrwRRrrr', '..RrrrwwRRrrr', '..ttttwwtttt'
   ].map(pad16);
+  // Nữ có cấu trúc tóc, cổ áo, tay áo và tà váy riêng, không chỉ đổi màu.
+  const FEMALE_UP = [
+    '.....hhh', '....hhgHh', '....hHHhh', '....hhhss',
+    '....hhses', '....hhsss', '....hh.ss', '....hhwtw',
+    '....hRtwtr', '....hrrwrr', '...hRrrwRrr', '...hRrtwRrrs',
+    '....RbbgbRss', '....RrrwRrr', '....RrrwRRrr'
+  ].map(pad16);
+  const FEMALE_SK = [
+    '...RrrrwRRrr', '...RrrrwRRrr', '..RrrrrwRRrrr',
+    '..RrrrwwRRrrr', '.RrrrrwwRRrrrr', '.RrrrrwwRRrrrr', '.tttttwwtttttt'
+  ].map(pad16);
   const legsRow = (xs, foot) => { const a = Array(16).fill('.'); xs.forEach(x => { a[x] = 'k'; a[x + 1] = 'k'; if (foot) a[x + 2] = 'k'; }); return a.join(''); };
   const shiftRow = (s, d) => d > 0 ? '.'.repeat(d) + s.slice(0, 16 - d) : s.slice(-d) + '.'.repeat(-d);
   const setCh = (m, x, y, ch) => { const r = m[y]; if (r && x >= 0 && x < 16) m[y] = r.slice(0, x) + ch + r.slice(x + 1); };
@@ -27,7 +38,7 @@
 
   // key: i0 i1 (đứng thở), w0..w3 (đi), f0 f1 (bay), r0 r1 (đứng trên kiếm)
   function charMap(key, v) {
-    let sk = SK.slice(), xs = [5, 9], bob = 0;
+    let sk = (v.female ? FEMALE_SK : SK).slice(), xs = v.female ? [6, 9] : [5, 9], bob = 0;
     if (key === 'i1') bob = 1;
     if (key === 'w0') { sk = sk.map((r, i) => i >= 3 ? shiftRow(r, 1) : r); xs = [4, 10]; }
     if (key === 'w2') { sk = sk.map((r, i) => i >= 3 ? shiftRow(r, -1) : r); xs = [5, 9]; }
@@ -37,7 +48,7 @@
     if (key === 'r0') { sk = sk.map((r, i) => i >= 3 ? shiftRow(r, -1) : r); xs = [4, 10]; }
     if (key === 'r1') { sk = sk.map((r, i) => i >= 2 ? shiftRow(r, -2) : shiftRow(r, -1)); xs = [4, 10]; bob = 1; }
     const flying = key[0] === 'f';
-    const rows = UP.concat(sk); rows.push(legsRow(xs, false)); rows.push(legsRow(xs, true));
+    const rows = (v.female ? FEMALE_UP : UP).concat(sk); rows.push(legsRow(xs, false)); rows.push(legsRow(xs, true));
     let m = rows.slice(0, 24);
     if (bob) { m.unshift('.'.repeat(16)); m.splice(24, 1); } // hạ thân một nhịp thở / nhịp bước, giữ chân cố định
     while (m.length < 24) m.push('.'.repeat(16));
@@ -47,7 +58,13 @@
       for (let y = 4; y <= 21; y++) putIfEmpty(m, Math.round(2 - (y - 4) * 2 / 16), y, 'j');
       setCh(m, 2, 1, 'g'); [2, 3].forEach(y => { if (m[y][2] === '.') setCh(m, 2, y, y === 2 ? 'g' : 'c'); });
     }
-    if (v.female) for (let y = 6; y <= 14; y++) { putIfEmpty(m, 3, y, 'h'); if (y > 8) putIfEmpty(m, 2, y, 'h'); }
+    if (v.female) {
+      const tailShift = key === 'w0' || key === 'f1' ? -1 : 0;
+      for (let y = 6; y <= 16; y++) {
+        putIfEmpty(m, 3 + tailShift, y, y % 4 === 0 ? 'H' : 'h');
+        if (y > 11) putIfEmpty(m, 2 + tailShift, y, 'h');
+      }
+    }
     if (v.wound) { setCh(m, 8, 4, 'x'); setCh(m, 9, 4, 'x'); setCh(m, 10, 4, 'x'); setCh(m, 7, 11, 'x'); setCh(m, 8, 12, 'x'); }
     if (v.elder) for (let y = 9; y <= 23; y++) putIfEmpty(m, 15, y, 'W');
     if (v.kid) { // thấp hơn: bỏ bớt 6 hàng thân và váy, giữ mặt và chân
@@ -62,8 +79,28 @@
     const ck = [v.robe, v.hair, v.sash, v.skin, v.female ? 1 : 0, v.kid ? 1 : 0, v.elder ? 1 : 0, v.wound ? 1 : 0, key].join('|');
     let c = spriteCache[ck]; if (c) return c;
     const robe = v.robe || '#8a7a66', pc = { h: v.hair || '#17171e', s: v.skin || '#d9bf9d', e: '#1b1b22', r: robe, R: mix(robe, '#152321', 0.4), t: mix(robe, '#e8e8d8', 0.38), H: mix(v.hair || '#17171e', '#c6c8b0', 0.24), w: '#dedfd2', b: v.sash || mix(robe, '#c9a24a', 0.7), g: '#b9a373', j: '#5c3c2a', c: '#976550', k: '#101014', x: '#d8443a', W: '#8a6a3a' };
-    c = mk(16, 24); const q = c.getContext('2d'), m = charMap(key, v);
-    m.forEach((row, y) => { for (let x = 0; x < 16; x++) { const ch = row[x]; if (ch !== '.' && pc[ch]) { q.fillStyle = pc[ch]; q.fillRect(x, y, 1, 1); } } });
+    c = mk(32, 48); const q = c.getContext('2d'), m = charMap(key, v);
+    m.forEach((row, y) => { for (let x = 0; x < 16; x++) {
+      const ch = row[x]; if (ch === '.' || !pc[ch]) continue;
+      const px = x * 2, py = y * 2;
+      q.fillStyle = pc[ch]; q.fillRect(px, py, 2, 2);
+      // Nét nhỏ trong sprite 32 × 48: tóc, ánh vải, đường khâu và bóng cằm.
+      if ((ch === 'r' || ch === 'w') && (x + y) % 3 === 0) {
+        q.fillStyle = mix(pc[ch], '#ede9d5', .18); q.fillRect(px, py, 1, 2);
+      }
+      if (ch === 'h' && row[x + 1] !== 'h' && row[x + 1] !== 'H') {
+        q.fillStyle = mix(pc.h, '#a3a48e', .22); q.fillRect(px + 1, py, 1, 2);
+      }
+      if (ch === 's' && y >= 5 && y <= 6) {
+        q.fillStyle = mix(pc.s, '#675c47', .16); q.fillRect(px, py + 1, 2, 1);
+      }
+      if (ch === 't') { q.fillStyle = mix(pc.t, '#f2ebd4', .25); q.fillRect(px + 1, py, 1, 2); }
+    } });
+    if (v.female && !v.kid) {
+      // Trâm ngang và dải buộc tóc vẫn rõ khi áo nam/nữ cùng màu.
+      q.fillStyle = '#c0ad7c'; q.fillRect(7, 3, 9, 1);
+      q.fillStyle = '#8fae9c'; q.fillRect(8, 5, 1, 5);
+    }
     if (Object.keys(spriteCache).length > 400) Object.keys(spriteCache).forEach(k => delete spriteCache[k]);
     return spriteCache[ck] = c;
   }
@@ -71,7 +108,7 @@
   const REALM_ROBE = ['#827e66', '#718b94', '#638c7d', '#8b829c', '#b2a075', '#a17c84', '#dedfd2'];
   const AURA = ['', '', '#8affd8', '#c9a8ff', '#ffe08a', '#ff9ab8', '#ffffff'];
   const HAIRS = ['#17171e', '#3a2418', '#14141c', '#5a3a22'];
-  const tc = mk(16, 24), tq = tc.getContext('2d');
+  const tc = mk(32, 48), tq = tc.getContext('2d');
 
   // ---------- trạng thái chuyển động ----------
   // mode: stand | walk | rest | fly | ride; alt: độ cao so với mặt đất (px)
@@ -149,15 +186,15 @@
   // vẽ một người: x giữa chân, fy y chân; opts: dir, glow, aura, auraCol, t
   function blit(ctx, pal, v, key, x, fy, dir, o) {
     o = o || {};
-    const spr = sprite(v, key); tq.clearRect(0, 0, 16, 24); tq.drawImage(spr, 0, 0);
-    tq.globalCompositeOperation = 'source-atop'; tq.globalAlpha = clamp(pal.amb * 0.7, 0, 0.5); tq.fillStyle = pal.m3; tq.fillRect(0, 0, 16, 24);
-    if (o.glow > 0.01) { tq.globalAlpha = clamp(o.glow, 0, 1); tq.fillStyle = '#d8fff4'; tq.fillRect(0, 0, 16, 24); }
+    const spr = sprite(v, key); tq.clearRect(0, 0, 32, 48); tq.drawImage(spr, 0, 0);
+    tq.globalCompositeOperation = 'source-atop'; tq.globalAlpha = clamp(pal.amb * 0.7, 0, 0.5); tq.fillStyle = pal.m3; tq.fillRect(0, 0, 32, 48);
+    if (o.glow > 0.01) { tq.globalAlpha = clamp(o.glow, 0, 1); tq.fillStyle = '#d8fff4'; tq.fillRect(0, 0, 32, 48); }
     tq.globalAlpha = 1; tq.globalCompositeOperation = 'source-over';
     const gx = Math.round(x), gfy = Math.round(fy);
     if (o.aura) { const a = 0.14 + 0.08 * Math.sin((o.t || 0) * 2.2 + (o.ph || 0)); ctx.globalAlpha = a; sc.use(ctx); sc.ell(gx, gfy - 22, 20, 28, o.auraCol || '#ffe08a'); ctx.globalAlpha = a * 1.2; sc.ell(gx, gfy - 22, 12, 20, o.auraCol || '#ffe08a'); ctx.globalAlpha = 1; }
     ctx.save(); ctx.translate(gx, gfy);
     const wd = sc.actor.wind || 0; if (Math.abs(wd) > 0.08 && !o.noWind) ctx.transform(1, 0, -wd * 0.16, 1, 0, 0); // gió nghiêng người và tà áo về phía thổi
-    ctx.translate(0, -24 * K); if (dir < 0) ctx.scale(-1, 1); ctx.drawImage(tc, 0, 0, 16, 24, -8 * K, 0, 16 * K, 24 * K); ctx.restore();
+    ctx.translate(0, -24 * K); if (dir < 0) ctx.scale(-1, 1); ctx.drawImage(tc, 0, 0, 32, 48, -8 * K, 0, 16 * K, 24 * K); ctx.restore();
   }
   const shadow = (ctx, pal, x, y, a) => { ctx.globalAlpha = 0.3 * a; ctx.fillStyle = pal.ink; ctx.fillRect(Math.round(x) - 10, Math.round(y) - 1, 20, 1); ctx.fillRect(Math.round(x) - 7, Math.round(y), 14, 1); ctx.globalAlpha = 1; };
   // kiếm dưới chân + quầng sáng
