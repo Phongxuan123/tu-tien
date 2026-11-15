@@ -13,3 +13,4 @@
 Tài nguyên `assets/ink-world.png` và `assets/ink-ornaments.png` là ảnh tạo bằng AI cho giao diện; không thay các lớp cảnh pixel phản ánh trạng thái mô phỏng.
 
 Kiểm tra giao diện: cài Playwright, đặt `NODE_PATH` nếu cần và `CHROMIUM_PATH` đến trình duyệt, chạy `node tools/check-ink-ui.js`.
+- Bộ kiểm thử tổng run-tests.js: chưa xác nhận; tiến trình chạy kéo dài không trả kết quả, đã dừng. Kiểm tra giao diện riêng và baseline hoàn tất.
