@@ -72,16 +72,59 @@
     const image = frames[row][index];
     ctx.save();
     ctx.globalAlpha = .3; ctx.fillStyle = pal.ink;
-    ctx.beginPath(); ctx.ellipse(x, fy, 18, 2.5, 0, 0, Math.PI * 2); ctx.fill();
+    ctx.beginPath(); ctx.ellipse(x, fy, 9, 1.5, 0, 0, Math.PI * 2); ctx.fill();
     ctx.globalAlpha = 1;
     ctx.translate(Math.round(x), Math.round(fy));
     if (dir < 0) ctx.scale(-1, 1);
     ctx.imageSmoothingEnabled = false;
-    ctx.drawImage(image, 0, 0, 96, 160, -30, -100, 60, 100);
+    ctx.drawImage(image, 0, 0, 96, 160, -15, -50, 30, 50);
     // Ánh môi trường như các lớp cảnh gốc; không làm sáng riêng nhân vật.
     ctx.restore();
   }
   actor.sprite = sprite;
+  let castAt = -Infinity;
+  actor.castFormation = function () { if (!ready || performance.now() - castAt < 6200) return false; castAt = performance.now(); return true; };
+  actor.isCasting = () => performance.now() - castAt < 6200;
+  function sword(ctx, x, y, angle, scale, alpha) {
+    ctx.save(); ctx.translate(x, y); ctx.rotate(angle); ctx.scale(scale, scale); ctx.globalAlpha = alpha;
+    ctx.fillStyle = '#394f4b'; ctx.fillRect(-2, -17, 4, 20);
+    ctx.fillStyle = '#dbe7d7'; ctx.beginPath(); ctx.moveTo(0, -22); ctx.lineTo(1, -17); ctx.lineTo(1, 1); ctx.lineTo(-1, 1); ctx.lineTo(-1, -17); ctx.fill();
+    ctx.fillStyle = '#af9563'; ctx.fillRect(-4, 2, 8, 2); ctx.fillRect(-1, 4, 2, 5); ctx.restore();
+  }
+  function formation(ctx, p, age) {
+    if (age < 0 || age > 6.2) return;
+    const x = p.x, ground = actor.FY, fade = Math.min(1, age * 2, (6.2 - age) * 2);
+    ctx.save(); ctx.globalAlpha = fade;
+    // Trận đồ nằm trên mặt đất; kiếm có đường bay riêng, không đổi mặt nhân vật.
+    ctx.fillStyle = '#122a28'; ctx.globalAlpha = fade * .22;
+    ctx.fillRect(0, 0, ctx.canvas.width, ctx.canvas.height);
+    ctx.globalAlpha = fade * .8; ctx.strokeStyle = '#bba678'; ctx.lineWidth = .7;
+    for (const radius of [36, 47]) { ctx.beginPath(); ctx.ellipse(x, ground, radius, radius * .19, 0, 0, Math.PI * 2); ctx.stroke(); }
+    for (let i = 0; i < 8; i++) {
+      const a = i * Math.PI / 4 + age * .28;
+      ctx.beginPath(); ctx.moveTo(x + Math.cos(a) * 37, ground + Math.sin(a) * 7);
+      ctx.lineTo(x + Math.cos(a + Math.PI * .75) * 37, ground + Math.sin(a + Math.PI * .75) * 7); ctx.stroke();
+    }
+    for (let i = 0; i < 12; i++) {
+      const a = i * Math.PI / 6 + Math.min(age, 3) * .65;
+      const rise = Math.min(1, age / 1.3), release = Math.max(0, Math.min(1, (age - 3.1 - i * .055) / .75));
+      const sx = x + Math.cos(a) * 43, sy = ground - 30 + Math.sin(a) * 14;
+      const tx = x + 125, ty = ground - 23;
+      const px = sx + (tx - sx) * release, py = ground - (ground - sy) * rise + (ty - sy) * release;
+      const angle = release > 0 ? Math.atan2(ty - sy, tx - sx) + Math.PI / 2 : Math.sin(age * 2 + i) * .12;
+      if (release < 1) {
+        ctx.globalAlpha = fade * .25; ctx.strokeStyle = '#a7c8b4'; ctx.beginPath(); ctx.moveTo(sx, sy); ctx.lineTo(px, py + 10); ctx.stroke();
+        sword(ctx, px, py, angle, .65, fade * (1 - release * .65));
+      }
+    }
+    const hit = age - 3.75;
+    if (hit > 0 && hit < 1.3) {
+      ctx.globalAlpha = (1 - hit / 1.3) * .85; ctx.strokeStyle = '#cbb78a';
+      ctx.beginPath(); ctx.ellipse(x + 125, ground - 23, 6 + hit * 28, 10 + hit * 21, 0, 0, Math.PI * 2); ctx.stroke();
+      for (let i = 0; i < 14; i++) { const a = i * 2.4; ctx.fillStyle = i % 2 ? '#9c4f42' : '#d0c295'; ctx.fillRect(x + 125 + Math.cos(a) * hit * 37, ground - 23 + Math.sin(a) * hit * 25, 1, 2); }
+    }
+    ctx.restore();
+  }
   actor.draw = function (ctx, s, pal, t) {
     if (!ready) return oldDraw(ctx, s, pal, t);
     const p = actor.P, fy = actor.FY - Math.round(p.alt);
@@ -90,10 +133,11 @@
       drawOne(ctx, pal, person.c.gender === 'nu' ? 1 : 0, f.x, actor.FY, f.dir, f.moving ? 'walk' : 'rest', f.tm);
     });
     if (p.mode === 'ride') {
-      ctx.save(); ctx.fillStyle = '#b5d5d0'; ctx.fillRect(p.x - 23, fy + 1, 46, 1);
-      ctx.fillStyle = '#a49a70'; ctx.fillRect(p.x - p.dir * 20, fy, 3, 3); ctx.restore();
+      ctx.save(); ctx.fillStyle = '#b5d5d0'; ctx.fillRect(p.x - 12, fy + 1, 24, 1);
+      ctx.fillStyle = '#a49a70'; ctx.fillRect(p.x - p.dir * 10, fy, 2, 2); ctx.restore();
     }
     drawOne(ctx, pal, s.c.gender === 'nu' ? 1 : 0, p.x, fy, p.dir, p.mode, p.tm);
+    formation(ctx, p, (performance.now() - castAt) / 1000);
   };
   actor.modelReady = () => ready;
   sc.actor = actor;
