@@ -10,6 +10,13 @@
   try { const raw = localStorage.getItem(KEY); fresh = !raw; st = JSON.parse(raw || '{}'); } catch (e) { st = {}; }
   st.scene = Object.assign({ fl: false, x: 60, y: 200, s: 1 }, st.scene || {});
   st.stat = Object.assign({ x: null, y: null, docked: false, folded: false }, st.stat || {});
+  // Một lần khi chuyển bố cục: tránh khôi phục cảnh nổi che nội dung.
+  if (st.inkLayout !== 1) {
+    st.scene.fl = false;
+    st.stat.docked = true;
+    st.inkLayout = 1;
+    try { localStorage.setItem(KEY, JSON.stringify(st)); } catch (e) { /* chặn lưu trữ */ }
+  }
   if (fresh && window.matchMedia('(max-width:800px)').matches) st.stat.folded = true; // điện thoại: thẻ trạng thái mặc định thu gọn để khỏi che màn hình
   const save = () => { try { localStorage.setItem(KEY, JSON.stringify(st)); } catch (e) { /* bỏ qua */ } };
   const $ = id => document.getElementById(id);
