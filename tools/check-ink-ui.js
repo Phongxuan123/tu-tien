@@ -30,10 +30,31 @@ const { chromium } = require('playwright');
   if (!await page.locator('#btn-export').isVisible()) throw Error('Options inaccessible');
   await page.locator('.ink-options > summary').click();
   await page.locator('#side-tabs button').nth(1).click();
+  // Bảo đảm cột đủ dài để thử cuộn cả ở cuối cột (không truyền cuộn).
+  await page.evaluate(() => document.querySelectorAll('.layout > .col').forEach(c => {
+    const filler = document.createElement('div'); filler.className = 'scroll-test-filler';
+    filler.style.height = '1400px'; c.append(filler);
+  }));
+  for (const id of ['col-left', 'col-mid', 'col-right']) {
+    await page.evaluate(() => document.querySelectorAll('.layout > .col').forEach(c => c.scrollTop = 0));
+    const rect = await page.locator('#' + id).boundingBox();
+    await page.mouse.move(rect.x + rect.width / 2, rect.y + rect.height / 2);
+    await page.mouse.wheel(0, 400); await page.waitForTimeout(250);
+    const scroll = await page.evaluate(() => Object.fromEntries([...document.querySelectorAll('.layout > .col')].map(c => [c.id, c.scrollTop])));
+    if (scroll[id] <= 0 || Object.entries(scroll).some(([key, value]) => key !== id && value !== 0)) throw Error('Scroll isolation: ' + JSON.stringify(scroll));
+    await page.evaluate(id => { const c = document.getElementById(id); c.scrollTop = c.scrollHeight; }, id);
+    await page.mouse.wheel(0, 500); await page.waitForTimeout(150);
+    if (await page.evaluate(id => window.scrollY !== 0 || [...document.querySelectorAll('.layout > .col')].some(c => c.id !== id && c.scrollTop !== 0), id)) throw Error('Scroll chained at boundary');
+  }
+  await page.evaluate(() => {
+    document.querySelectorAll('.scroll-test-filler').forEach(n => n.remove());
+    document.querySelectorAll('.layout > .col').forEach(c => c.scrollTop = 0);
+  });
   await page.screenshot({ path: path.join(__dirname, '..', '.test-tools', 'desktop.png'), fullPage: true });
   await page.setViewportSize({ width: 390, height: 844 });
   await page.waitForTimeout(300);
   if (await page.evaluate(() => document.documentElement.scrollWidth > innerWidth)) throw Error('Mobile overflow');
+  if (await page.evaluate(() => getComputedStyle(document.body).overflowY === 'hidden')) throw Error('Mobile page locked');
   await page.locator('.ink-options > summary').click();
   if (!await page.locator('#btn-keys').isVisible()) throw Error('Mobile options inaccessible');
   await page.screenshot({ path: path.join(__dirname, '..', '.test-tools', 'mobile.png'), fullPage: true });

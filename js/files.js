@@ -23,6 +23,6 @@
   window.TT_SCENE = function () { scene.forEach(function (f) { document.write('<script src="' + f + '"><\/script>'); }); };
   if (devOn) ui.splice(ui.indexOf('js/main.js'), 0, 'js/ui/devpanel.js');
   window.TT_LOAD = function (withUi) {
-    core.concat(withUi ? ui : []).forEach(function (f) { document.write('<script src="' + f + '?v=ink-20261115b"><\/script>'); });
+    core.concat(withUi ? ui : []).forEach(function (f) { document.write('<script src="' + f + '?v=ink-20261115c"><\/script>'); });
   };
 })();

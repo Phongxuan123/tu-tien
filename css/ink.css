@@ -29,3 +29,17 @@ body{background:#626b60}body:before{background:linear-gradient(#3f4b3c66,#303f32
 .panel{background:linear-gradient(135deg,#333c32fa,#2b342dfa);border-color:#647259}.panel:before{opacity:.09}#report{background:#343c2e;border-color:#736e50}#scene-wrap .fgrip{background:#aab99a;color:#3a5030}#scene-wrap .fgrip .cap,#scene-wrap .fgrip .lnk{color:#3a5030}#scene{filter:brightness(.84) saturate(.82)}
 .pf-card{background:linear-gradient(135deg,#394632,#303930);border-color:#647657}.pf-tile,.pf-rel,.pf-ac,.pf-life,.pf-rec div{background:#2e382e;border-color:#56694c}#map-svg{filter:brightness(.85) saturate(.78)}#map-env{background:#303d2d}#log .jev.big{background:#38432f}h2{color:#d5ddc9}.floatcard{background:#303a2f}.ink-options .fgroup{background:transparent}
 @media(max-width:800px){.top .ink-menu{margin-top:10px;padding:5px}.top .tabsrow{display:flex;flex-wrap:wrap;gap:3px}.top .tabsrow button{padding:6px 9px;font-size:12px}.ink-option-body{top:100px}}
+/* Màn hình rộng: ba vùng cuộn riêng, không truyền cuộn sang cột khác. */
+@media(min-width:1101px){
+ html{height:100%;overflow:hidden}
+ body{height:100dvh;min-height:0;display:flex;flex-direction:column;overflow:hidden}
+ .top{position:relative;flex:0 0 auto;z-index:30}
+ .layout{flex:1 1 0;width:100%;min-height:0;overflow:hidden;align-items:stretch;padding-top:18px;padding-bottom:18px}
+ .layout>.col{height:100%;min-height:0;overflow-y:auto;overflow-x:hidden;overscroll-behavior-y:contain;scrollbar-gutter:stable;padding-right:7px;scrollbar-width:thin;scrollbar-color:#819075 #29352c;outline:none}
+ .layout>.col:focus-visible{outline:1px solid #9fb18c;outline-offset:3px}
+ .layout>.col::-webkit-scrollbar{width:7px}.layout>.col::-webkit-scrollbar-track{background:#29352c66;border-radius:6px}.layout>.col::-webkit-scrollbar-thumb{background:#81907599;border-radius:6px}
+ .col .scroll{max-height:none;overflow:visible}
+ #scene-wrap:not(.floating){position:relative;top:auto}
+ .col>.panel:last-child{margin-bottom:0}
+}
+@media(max-width:1100px){html,body{height:auto;overflow:visible}.layout>.col{height:auto;overflow:visible;scrollbar-gutter:auto}}

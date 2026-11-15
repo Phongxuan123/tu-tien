@@ -4,6 +4,11 @@
   function init() {
     const left = $('col-left'), mid = $('col-mid'), right = $('col-right');
     if (!left || !mid || !right) return;
+    [[left, 'Hồ sơ và thông tin nhân vật'], [mid, 'Cảnh và nhật ký'], [right, 'Bản đồ và người xung quanh']].forEach(([column, label]) => {
+      column.setAttribute('tabindex', '0');
+      column.setAttribute('role', 'region');
+      column.setAttribute('aria-label', label);
+    });
     const menu = document.createElement('div');
     menu.className = 'ink-menu';
     menu.setAttribute('aria-label', 'Các mục tu hành');
