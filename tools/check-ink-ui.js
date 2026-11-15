@@ -20,11 +20,12 @@ const { chromium } = require('playwright');
     floating: document.querySelector('#scene-wrap').classList.contains('floating'),
     last: document.querySelector('#col-right').lastElementChild.id,
     tabs: document.querySelectorAll('#side-tabs button').length,
+    horizontalMenu: document.querySelector('#topbar .ink-menu #side-tabs') !== null,
     save: document.querySelector('#btn-save').closest('.bar-controls') !== null,
     options: ['btn-export', 'btn-import', 'btn-new', 'btn-keys', 'btn-ai', 'audio-box'].every(id => document.querySelector('.ink-options').contains(document.getElementById(id))),
     overflow: document.documentElement.scrollWidth > innerWidth
   }));
-  if (state.scene !== 'col-mid' || state.floating || state.last !== 'lifemap-card' || !state.tabs || !state.save || !state.options || state.overflow) throw Error(JSON.stringify(state));
+  if (state.scene !== 'col-mid' || state.floating || state.last !== 'lifemap-card' || !state.tabs || !state.horizontalMenu || !state.save || !state.options || state.overflow) throw Error(JSON.stringify(state));
   await page.locator('.ink-options > summary').click();
   if (!await page.locator('#btn-export').isVisible()) throw Error('Options inaccessible');
   await page.locator('.ink-options > summary').click();

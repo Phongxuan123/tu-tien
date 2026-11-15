@@ -4,10 +4,10 @@
   function init() {
     const left = $('col-left'), mid = $('col-mid'), right = $('col-right');
     if (!left || !mid || !right) return;
-    const menu = document.createElement('details');
-    menu.className = 'ink-menu'; menu.open = true;
-    const summary = document.createElement('summary'); summary.textContent = 'Các mục tu hành';
-    menu.append(summary, $('side-tabs')); left.prepend(menu);
+    const menu = document.createElement('div');
+    menu.className = 'ink-menu';
+    menu.setAttribute('aria-label', 'Các mục tu hành');
+    menu.append($('side-tabs')); $('topbar').append(menu);
     mid.prepend($('scene-ph'), $('scene-wrap'));
     right.append($('lifemap-card'));
     const controls = document.querySelector('.bar-controls');

@@ -14,3 +14,4 @@ Tài nguyên `assets/ink-world.png` và `assets/ink-ornaments.png` là ảnh t�
 
 Kiểm tra giao diện: cài Playwright, đặt `NODE_PATH` nếu cần và `CHROMIUM_PATH` đến trình duyệt, chạy `node tools/check-ink-ui.js`.
 - Bộ kiểm thử tổng run-tests.js: chưa xác nhận; tiến trình chạy kéo dài không trả kết quả, đã dừng. Kiểm tra giao diện riêng và baseline hoàn tất.
+- Điều chỉnh theo ảnh người chơi: menu tu hành ngang dưới điều khiển; giảm sáng thanh đầu, cảnh và bản đồ; giảm họa tiết; kiểm tra desktop/mobile đạt, không tràn ngang. Mã tài nguyên ink-20261115b.
