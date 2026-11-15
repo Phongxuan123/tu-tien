@@ -1,13 +1,14 @@
 // Bản thử dùng hai mẫu đã duyệt; không nạp trong danh sách game chính.
 (function () {
   const sc = TT.ui.sc, actor = Object.assign({}, sc.actor), oldSprite = actor.sprite, oldDraw = actor.draw;
-  const atlas = new Image(), frames = [[], []];
+  const atlas = new Image(), femaleAtlas = new Image(), frames = [[], []];
   let ready = false;
   atlas.onload = function () {
     const source = document.createElement('canvas');
     source.width = atlas.width; source.height = atlas.height;
     const g = source.getContext('2d', { willReadFrequently: true });
     g.drawImage(atlas, 0, 0);
+    g.drawImage(femaleAtlas, 0, femaleAtlas.height / 2, femaleAtlas.width, femaleAtlas.height / 2, 0, source.height / 2, source.width, source.height / 2);
     let pixels = null;
     // Trang file:// có thể chặn đọc pixel; vẫn vẽ atlas theo ô chuẩn.
     try { pixels = g.getImageData(0, 0, source.width, source.height).data; } catch (e) { /* dùng lưới */ }
@@ -38,11 +39,11 @@
         const canvas = document.createElement('canvas'); canvas.width = 96; canvas.height = 160;
         const q = canvas.getContext('2d', { willReadFrequently: true }); q.imageSmoothingEnabled = false;
         const w = (b.right - b.left + 1) * scale, h = (b.bottom - b.top + 1) * scale;
-        q.drawImage(atlas, b.left, b.top, b.right - b.left + 1, b.bottom - b.top + 1, Math.round((96 - w) / 2), Math.round(159 - h), Math.round(w), Math.round(h));
+        q.drawImage(source, b.left, b.top, b.right - b.left + 1, b.bottom - b.top + 1, Math.round((96 - w) / 2), Math.round(159 - h), Math.round(w), Math.round(h));
         frames[row].push(canvas);
       });
     }
-    // Dùng lại atlas gốc đã duyệt, không dùng các mặt được tạo lại.
+    // Nữ vén mái, hở thái dương; nam vẫn dùng atlas gốc.
     // Khóa toàn bộ đầu, tóc trước và cổ từ Bước 1, cùng tọa độ ở mọi bước.
     const head = frames[1][0];
     let headPixels = null;
@@ -58,7 +59,9 @@
     window.dispatchEvent(new Event('ink-model-ready'));
   };
   atlas.onerror = () => { document.getElementById('model-status').textContent = 'Không tải được mẫu nhân vật. Hãy tải lại trang.'; };
-  atlas.src = 'assets/characters/cultivators-study.png?v=approved-face-6';
+  femaleAtlas.onload = () => { atlas.src = 'assets/characters/cultivators-study.png?v=approved-face-6'; };
+  femaleAtlas.onerror = atlas.onerror;
+  femaleAtlas.src = 'assets/characters/cultivators-open-temple.png?v=7';
   function sprite(v, key) {
     if (!ready) return oldSprite(v, key);
     const index = key[0] === 'w' ? Number(key.slice(1)) % 4 : 1;
