@@ -57,12 +57,12 @@
     const image = frames[row][index];
     ctx.save();
     ctx.globalAlpha = .3; ctx.fillStyle = pal.ink;
-    ctx.beginPath(); ctx.ellipse(x, fy, 9, 1.5, 0, 0, Math.PI * 2); ctx.fill();
+    ctx.beginPath(); ctx.ellipse(x, fy, 18, 2.5, 0, 0, Math.PI * 2); ctx.fill();
     ctx.globalAlpha = 1;
     ctx.translate(Math.round(x), Math.round(fy));
     if (dir < 0) ctx.scale(-1, 1);
     ctx.imageSmoothingEnabled = false;
-    ctx.drawImage(image, 0, 0, 48, 80, -15, -50, 30, 50);
+    ctx.drawImage(image, 0, 0, 48, 80, -30, -100, 60, 100);
     // Ánh môi trường như các lớp cảnh gốc; không làm sáng riêng nhân vật.
     ctx.restore();
   }
