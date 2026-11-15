@@ -36,24 +36,29 @@
       const scale = Math.min(76 / height, 46 / width);
       bounds.forEach(b => {
         const canvas = document.createElement('canvas'); canvas.width = 48; canvas.height = 80;
-        const q = canvas.getContext('2d'); q.imageSmoothingEnabled = false;
+        const q = canvas.getContext('2d', { willReadFrequently: true }); q.imageSmoothingEnabled = false;
         const w = (b.right - b.left + 1) * scale, h = (b.bottom - b.top + 1) * scale;
         q.drawImage(atlas, b.left, b.top, b.right - b.left + 1, b.bottom - b.top + 1, Math.round((48 - w) / 2), Math.round(79 - h), Math.round(w), Math.round(h));
         frames[row].push(canvas);
       });
     }
-    // Mặt nữ dùng chung phần đầu từ Bước 1 ở mọi khung, tránh đổi nét khi đi.
+    // Dùng lại atlas gốc đã duyệt, không dùng các mặt được tạo lại.
+    // Khóa toàn bộ đầu, tóc trước và cổ từ Bước 1, cùng tọa độ ở mọi bước.
     const head = frames[1][0];
-    frames[1].slice(1).forEach(canvas => {
+    let headPixels = null;
+    try { headPixels = head.getContext('2d').getImageData(0, 0, 48, 32); } catch (e) { /* file:// */ }
+    frames[1].forEach(canvas => {
+      if (!headPixels && canvas === head) return;
       const q = canvas.getContext('2d'); q.imageSmoothingEnabled = false;
-      q.clearRect(0, 0, 48, 25);
-      q.drawImage(head, 0, 0, 48, 25, 0, 0, 48, 25);
+      q.clearRect(0, 0, 48, 32);
+      if (headPixels) q.putImageData(headPixels, 0, 0);
+      else q.drawImage(head, 0, 0, 48, 32, 0, 0, 48, 32);
     });
     ready = true;
     window.dispatchEvent(new Event('ink-model-ready'));
   };
   atlas.onerror = () => { document.getElementById('model-status').textContent = 'Không tải được mẫu nhân vật. Hãy tải lại trang.'; };
-  atlas.src = 'assets/characters/cultivators-face-study.png';
+  atlas.src = 'assets/characters/cultivators-study.png?v=face-lock-4';
   function sprite(v, key) {
     if (!ready) return oldSprite(v, key);
     const index = key[0] === 'w' ? Number(key.slice(1)) % 4 : 1;
