@@ -28,3 +28,4 @@ Chưa có nhạc cho bối cảnh Thiên kiếp.
 # Giao diện thủy mặc
 
 `assets/ink-world.png` và `assets/ink-ornaments.png`: ảnh tạo bằng AI cho nền và họa tiết giao diện (2026-11-15).
+`assets/characters/cultivators-study.png`: atlas AI nam/nữ cho trang thử `demo-nam-nu-thanh-tu.html`, bốn khung bước mỗi mẫu. Chưa nạp vào cảnh game chính.
